@@ -1,0 +1,13 @@
+# أسرار محلية — لا تُرفع أبدًا
+.env
+.dev.vars
+*.bak
+
+# بايثون
+__pycache__/
+*.pyc
+
+# مخرجات وقت التشغيل
+logs/
+reports/
+products/prompt_packs/*.zip
