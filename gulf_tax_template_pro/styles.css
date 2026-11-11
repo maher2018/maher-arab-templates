@@ -4,6 +4,7 @@
   --radius:18px;--shadow:0 20px 50px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{
   margin:0;background:radial-gradient(1200px 700px at 80% -10%,#123b4a 0%,transparent 55%),var(--bg);
