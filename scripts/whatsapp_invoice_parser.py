@@ -144,13 +144,24 @@ def first_amount(text: str) -> float | None:
 NET_PREFIXES = ("قبل ", "بعد ", "غير ", "بدون ", "بلا ", "شامل ")
 
 
+QUALIFIERS = (
+    "قبل الضريبة", "بعد الضريبة", "بدون الضريبة", "قبل الخصم", "بعد الخصم",
+    "غير شامل", "شامل الضريبة", "قبل الرسوم", "Net ", "Before Tax", "Incl",
+)
+
+
 def value_after(line: str, label: str) -> str | None:
     """قيمة التسمية في السطر، مع تجاهل «قبل الضريبة» و«بعد الضريبة»."""
     for match in re.finditer(re.escape(label) + r"\s*[:：]?\s*(.+)$", line, re.IGNORECASE):
         before = line[: match.start()].rstrip()
         if any(before.endswith(prefix.strip()) for prefix in NET_PREFIXES):
             continue
-        return match.group(1).strip()
+        rest = match.group(1).strip()
+
+        # «الإجمالي قبل الضريبة» ليس إجماليًا: التسمية جزء من عبارة أطول، فنتخطاها.
+        if any(rest.startswith(q) for q in QUALIFIERS):
+            continue
+        return rest
     return None
 
 

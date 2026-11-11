@@ -11,3 +11,6 @@ __pycache__/
 logs/
 reports/
 products/prompt_packs/*.zip
+
+# أسرار النشر (تُنشأ محليًا)
+deploy/bubble_token.txt

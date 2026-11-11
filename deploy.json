@@ -1,0 +1,18 @@
+{
+  "entrypoint": "worker.js",
+  "compatibilityDate": "2026-11-11",
+  "modules": [
+    {
+      "name": "worker.js",
+      "type": "esm",
+      "path": "./deploy/worker.js"
+    },
+    {
+      "name": "fallback.json",
+      "type": "text",
+      "path": "./data/templates_ar.json"
+    }
+  ],
+  "assetsDirectory": "./store",
+  "spa": true
+}

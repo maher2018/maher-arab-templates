@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الامتثال الضريبي الخليجي — Arab Templates</title>
+<meta name="description" content="منصة واحدة للامتثال الضريبي في الخليج: مساعد ضريبي ذكي، أخبار السوق والعملات، ومسح فواتير واتساب.">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="ticker" id="ticker" aria-label="أسعار العملات مقابل الريال">
+    <span class="ticker-track" id="tickerTrack"><span class="ticker-item">جارٍ تحميل العملات…</span></span>
+  </div>
+  <div class="bar">
+    <div class="brand">
+      <span class="mark">ض</span>
+      <span class="brand-text">
+        <strong>الامتثال الضريبي الخليجي</strong>
+        <small>Gulf Tax Compliance Pro</small>
+      </span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <a href="#assistant" class="tab active">المساعد الضريبي</a>
+      <a href="#scanner" class="tab">مسح الفواتير</a>
+      <a href="#news" class="tab">أخبار السوق</a>
+    </nav>
+    <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">جارٍ الاتصال…</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>منصة واحدة لكل ما تحتاجه في الضريبة والامتثال</h1>
+    <p>مساعد يفهم أنظمة السعودية والإمارات والكويت، أخبار وعملات محدّثة، ومسح فواتير واتساب بدفعة واحدة — بواجهة عربية من اليمين لليسار.</p>
+    <div class="hero-stats">
+      <div><strong id="statInvoices">٠</strong><span>فاتورة ممسوحة في هذه الجلسة</span></div>
+      <div><strong id="statTax">٠٫٠٠</strong><span>إجمالي الضريبة المستخرجة (ر.س)</span></div>
+      <div><strong id="statNews">—</strong><span>تحديثات سوق متاحة</span></div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <!-- المساعد -->
+    <section class="panel chat-panel" id="assistant" aria-labelledby="chatTitle">
+      <div class="panel-head">
+        <h2 id="chatTitle">المساعد الضريبي الذكي</h2>
+        <span class="tag">قواعد معرفة خليجية · محلي</span>
+      </div>
+      <div class="chat-log" id="chatLog" aria-live="polite">
+        <div class="msg bot">
+          <div class="bubble">هلا بك! اسألني عن ضريبة القيمة المضافة، الفوترة الإلكترونية، أو مواعيد الإقرار في السعودية والإمارات والكويت.</div>
+        </div>
+      </div>
+      <div class="chips" id="suggestions">
+        <button class="chip" data-q="ما نسبة ضريبة القيمة المضافة في السعودية والإمارات؟">نسب الضريبة</button>
+        <button class="chip" data-q="متى آخر موعد لتقديم الإقرار الضريبي؟">مواعيد الإقرار</button>
+        <button class="chip" data-q="ما الحقول المطلوبة في الفاتورة الإلكترونية؟">حقول الفاتورة</button>
+        <button class="chip" data-q="كيف أمسح دفعة فواتير كبيرة دفعة واحدة؟">المسح بالجملة</button>
+      </div>
+      <form class="composer" id="chatForm">
+        <input id="chatInput" type="text" placeholder="اكتب سؤالك الضريبي…" autocomplete="off" aria-label="سؤالك">
+        <button type="submit" aria-label="إرسال">إرسال</button>
+      </form>
+    </section>
+
+    <!-- الأخبار -->
+    <section class="panel news-panel" id="news" aria-labelledby="newsTitle">
+      <div class="panel-head">
+        <h2 id="newsTitle">أخبار السوق والامتثال</h2>
+        <button class="link" id="newsRefresh">تحديث</button>
+      </div>
+      <div class="news-list" id="newsList"><div class="skeleton"></div><div class="skeleton"></div></div>
+      <p class="fine" id="newsMeta"></p>
+    </section>
+  </div>
+
+  <!-- مسح الفواتير -->
+  <section class="panel" id="scanner" aria-labelledby="scanTitle">
+    <div class="panel-head">
+      <h2 id="scanTitle">رفع ومسح الفواتير</h2>
+      <span class="tag" id="engineTag">محرك: whatsapp_invoice_parser.py</span>
+    </div>
+    <div class="scan-grid">
+      <div class="drop" id="drop">
+        <input type="file" id="file" accept=".txt,.csv" hidden>
+        <div class="drop-icon">🧾</div>
+        <p><strong>أفلت ملف فواتير هنا</strong> أو <button class="link" id="pick">اختر ملفًا</button></p>
+        <p class="fine">صيغ مدعومة: TXT وCSV (نص واتساب). للصور يلزم مزوّد OCR.</p>
+        <div class="row">
+          <button class="ghost" id="sampleBtn">تحميل نموذج واتساب</button>
+          <button class="ghost" id="clearBtn">تفريغ</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="scanText">أو الصق نص الفواتير مباشرة</label>
+        <textarea id="scanText" rows="9" placeholder="المورد: شركة النخيل للتجارة&#10;التاريخ: 2026-11-01&#10;الإجمالي: 1,150.00&#10;الضريبة: 150.00"></textarea>
+        <div class="row">
+          <button id="scanBtn">امسح الفواتير</button>
+          <button class="ghost" id="exportBtn" disabled>تصدير CSV</button>
+          <button class="ghost" id="jsonBtn" disabled>نسخ JSON</button>
+        </div>
+        <p class="msg" id="scanMsg"></p>
+      </div>
+    </div>
+
+    <div class="totals" id="totals" hidden>
+      <div><span>عدد الفواتير</span><strong id="tCount">٠</strong></div>
+      <div><span>إجمالي المبالغ</span><strong id="tTotal">٠</strong></div>
+      <div><span>إجمالي الضريبة</span><strong id="tTax">٠</strong></div>
+      <div><span>تحتاج مراجعة</span><strong id="tReview">٠</strong></div>
+    </div>
+
+    <div class="table-wrap" id="tableWrap" hidden>
+      <table>
+        <thead><tr><th>#</th><th>المورد</th><th>التاريخ</th><th>قبل الضريبة</th><th>الضريبة</th><th>الإجمالي</th><th>النسبة</th><th>الثقة</th></tr></thead>
+        <tbody id="scanBody"></tbody>
+      </table>
+    </div>
+    <p class="fine">المسح يتم على الخادم (Python) ويُعيد JSON فقط؛ لا يُخزَّن أي نص فاتورة في ملفات المشروع.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Gulf Tax Compliance Pro — منتج Arab Templates</span>
+  <span>معلومات إرشادية وليست استشارة قانونية أو ضريبية معتمدة.</span>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
