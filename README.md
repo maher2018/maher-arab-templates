@@ -231,6 +231,30 @@ python gulf_tax_template_pro/server.py --port 5080 --open
 - الحدود: لا OCR للصور، والمساعد قائم على قواعد معرفة لا نموذج لغوي، وأسعار العملات إرشادية مع لقطة احتياطية عند انقطاع الاتصال.
 - الدليل الكامل داخل المجلد: `gulf_tax_template_pro/README.md`.
 
+## التشغيل السريع على ويندوز (START_ARAB_TEMPLATES.bat)
+
+انقر نقرًا مزدوجًا على `START_ARAB_TEMPLATES.bat` في جذر المشروع، فيقوم بضغطة واحدة بـ:
+
+1. حل مسار Python الحقيقي في الجهاز (اختصار متجر Windows ينتهي فورًا ويُفسد تتبّع المعرّفات).
+2. تشغيل سرب الوكلاء في الخلفية: `agents_swarm_core.py --loop --templates` مع سجله في `logs/swarm_loop.log`.
+3. تشغيل لوحة التحكم `admin_dashboard.py --port 5050` وفتحها في المتصفح مباشرة.
+4. عدم تكرار الخدمات: يعتمد على `logs/swarm.pid` و`logs/dashboard.pid` وفحص منفذ 5050، ويطبع «يعمل بالفعل» عند إعادة النقر.
+5. إبقاء الخدمتين بعد إغلاق النافذة (عمليات منفصلة DETACHED_PROCESS).
+
+المنطق كاملًا في `scripts/start_services.py` والملف `.bat` غلاف رقيق. لتشغيلهما يدويًا:
+
+```bash
+python scripts/start_services.py --open
+python scripts/start_services.py --no-swarm --port 5051
+```
+
+الإيقاف:
+
+```bash
+taskkill /PID $(cat logs/swarm.pid) /F
+taskkill /PID $(cat logs/dashboard.pid) /F
+```
+
 ## الترخيص
 
 الاستخدام التجاري مسموح داخل مشروعك. حزم الأوامر المولّدة تُباع كمنتجات رقمية وفق شروط الحزمة نفسها (`prompt_packs/<slug>/README.md`).
