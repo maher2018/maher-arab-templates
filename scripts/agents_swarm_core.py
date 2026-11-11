@@ -42,12 +42,14 @@ try:
         TEMPLATE_TYPE,
         BubbleClient,
         BubbleError,
+        load_records,
         sync_records,
     )
 except ImportError as exc:  # pragma: no cover
     raise SystemExit(f"ضع bubble_data_sync.py بجانب هذا الملف — {exc}") from exc
 
 NEWS_API = "https://api.spaceflightnewsapi.net/v4/articles?limit=1"
+TEMPLATES_FILE = Path(__file__).resolve().parent.parent / "data" / "templates_ar.json"
 FALLBACK_HEADLINE = "مراجعة وتحديث أسعار صرف العملات الخليجية مقابل الدولار"
 
 
@@ -104,13 +106,15 @@ class AIAgentSwarm:
             print(f"     المعرّف: {uid}")
         return True
 
-    def cloud_connector_templates(self, records=None, dry_run: bool = False) -> dict[str, int]:
-        """يرفع/يحدّث القوالب العربية على جدول template (Title مفتاح التطابق)."""
-        data = records if records is not None else None
-        if data is None:
-            from bubble_data_sync import ARABIC_TEMPLATES
+    def cloud_connector_templates(self, records=None, dry_run: bool = False, json_file: str | None = None) -> dict[str, int]:
+        """يرفع/يحدّث القوالب العربية على جدول template (Title مفتاح التطابق).
 
-            data = ARABIC_TEMPLATES
+        المصدر الافتراضي هو data/templates_ar.json، لا العيّنة المدمجة، حتى لا
+        تُنشأ سجلات تجريبية عند كل دورة من دورات الحلقة.
+        """
+        data = records
+        if data is None:
+            data = load_records(json_file or str(TEMPLATES_FILE), TEMPLATE_TYPE)
         try:
             return sync_records(self.client, TEMPLATE_TYPE, data, TEMPLATE_FIELDS, key="Title", dry_run=dry_run)
         except BubbleError as exc:
@@ -127,6 +131,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--cycles", type=int, default=0, help="عدد الدورات ثم التوقف (0 = بلا حد)")
     parser.add_argument("--templates", action="store_true", help="مزامنة القوالب العربية في كل دورة")
     parser.add_argument("--app-url", default=None, help="رابط تطبيق Bubble (افتراضيًا من .env أو الثابت)")
+    parser.add_argument("--templates-file", default=None, help="ملف بيانات القوالب (افتراضيًا data/templates_ar.json)")
     parser.add_argument("--log-file", default=None, help="حفظ سجل الدورات في ملف نصي بالإضافة إلى الطرفية")
     return parser.parse_args(argv)
 
@@ -148,12 +153,12 @@ def make_logger(log_file: str | None):
     return log
 
 
-def run_cycle(swarm: AIAgentSwarm, *, with_templates: bool, log) -> bool:
+def run_cycle(swarm: AIAgentSwarm, *, with_templates: bool, log, templates_file: str | None = None) -> bool:
     """دورة واحدة: جلب تحديث حيّ، كتابته في task، ثم (اختياريًا) مزامنة القوالب."""
     live_data = swarm.data_fetcher_agent()
     ok = swarm.cloud_connector_agent(f"معالجة تحديث: {live_data[:50]}", "High", 85)
     if with_templates:
-        counts = swarm.cloud_connector_templates()
+        counts = swarm.cloud_connector_templates(json_file=templates_file)
         ok = ok and not counts.get("failed")
         log(
             "[📦 القوالب] "
@@ -170,6 +175,7 @@ def run_loop(
     cycles: int,
     with_templates: bool,
     log,
+    templates_file: str | None = None,
 ) -> int:
     """حلقة مستمرة: كل دورة تُسجّل نتيجتها، وأي خطأ لا يُسقط الحلقة."""
     interval_seconds = max(0.0, interval_minutes) * 60
@@ -182,7 +188,7 @@ def run_loop(
             started = time.time()
             log(f"[🔄 دورة {completed}] بدأت")
             try:
-                ok = run_cycle(swarm, with_templates=with_templates, log=log)
+                ok = run_cycle(swarm, with_templates=with_templates, log=log, templates_file=templates_file)
             except BubbleError as exc:
                 ok = False
                 log(f"[❌ دورة {completed}] خطأ Bubble: {str(exc).splitlines()[0]}")
@@ -213,11 +219,12 @@ def main(argv: list[str] | None = None) -> int:
                 cycles=args.cycles,
                 with_templates=args.templates,
                 log=log,
+                templates_file=args.templates_file,
             )
         finally:
             log.close()  # type: ignore[attr-defined]
 
-    ok = run_cycle(swarm, with_templates=args.templates, log=log)
+    ok = run_cycle(swarm, with_templates=args.templates, log=log, templates_file=args.templates_file)
     log.close()  # type: ignore[attr-defined]
     return 0 if ok else 1
 
