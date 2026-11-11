@@ -217,6 +217,20 @@ python scripts/store_server.py --offline       # بلا اتصال ببابل
 - الخادم للمعاينة المحلية على `127.0.0.1` فقط، وليس للنشر على الإنترنت: أي نشر حقيقي يحتاج استضافة تُشغّل Endpoint على الخادم يُبقي التوكن مخفيًا.
 
 
+## منتج الامتثال الضريبي (gulf_tax_template_pro/)
+
+المنتج الرئيسي لقالب الضرائب: صفحة عربية واحدة تجمع مساعدًا ضريبيًا بقواعد معرفة خليجية، شريط أخبار السوق وأسعار العملات، وأداة رفع ومسح فواتير مرتبطة مباشرة بـ`scripts/whatsapp_invoice_parser.py`.
+
+```bash
+python -m pip install flask
+python gulf_tax_template_pro/server.py               # http://127.0.0.1:5075
+python gulf_tax_template_pro/server.py --port 5080 --open
+```
+
+- نقاط النهاية: `/api/scan` (نص أو ملف TXT/CSV)، `/api/assistant`، `/api/news`، `/api/rates`، `/api/sample`، `/api/health`.
+- الحدود: لا OCR للصور، والمساعد قائم على قواعد معرفة لا نموذج لغوي، وأسعار العملات إرشادية مع لقطة احتياطية عند انقطاع الاتصال.
+- الدليل الكامل داخل المجلد: `gulf_tax_template_pro/README.md`.
+
 ## الترخيص
 
 الاستخدام التجاري مسموح داخل مشروعك. حزم الأوامر المولّدة تُباع كمنتجات رقمية وفق شروط الحزمة نفسها (`prompt_packs/<slug>/README.md`).
