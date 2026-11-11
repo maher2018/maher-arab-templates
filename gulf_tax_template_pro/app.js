@@ -9,6 +9,12 @@ let lastInvoice = null;
 let lastResult = null;
 let sessionCount = 0;
 let sessionTax = 0;
+const ACCOUNT = (localStorage.getItem("at_gulf_account") || (function () {
+  const id = "acc-" + Math.random().toString(36).slice(2, 9);
+  localStorage.setItem("at_gulf_account", id);
+  return id;
+})());
+const state = {plan: localStorage.getItem("at_gulf_plan") || "growth", plans: [], quota: null};
 
 /* ---------- الحالة والعملات ---------- */
 async function loadHealth() {
@@ -163,7 +169,7 @@ async function scan() {
     const res = await fetch("/api/scan", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({text})
+      body: JSON.stringify({text, account: ACCOUNT, plan: state.plan})
     });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || "فشل المسح");
@@ -182,10 +188,88 @@ function toCsv(rows) {
   return "\ufeff" + [head.join(",")].concat(lines).join("\r\n");
 }
 
+/* ---------- الباقات والسعة ---------- */
+async function loadPlans() {
+  try {
+    const res = await fetch("/api/plans", {cache: "no-store"});
+    const data = await res.json();
+    state.plans = data.plans || [];
+    renderPlans();
+    await loadQuota();
+  } catch (err) {
+    $("planCards").innerHTML = '<p class="fine">تعذّر تحميل الباقات.</p>';
+  }
+}
+
+function renderPlans() {
+  $("planCards").innerHTML = state.plans.map(function (p) {
+    const active = p.key === state.plan ? " active" : "";
+    const feats = (p.features || []).map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("");
+    return '<article class="plan' + active + '">' +
+      "<h3>" + esc(p.name) + "</h3>" +
+      '<div class="plan-price">' + num(p.price) + ' <small>ر.س / سنة</small></div>' +
+      '<div class="plan-scan">' + num(p.scans) + " فاتورة شهريًا</div>" +
+      "<ul>" + feats + "</ul>" +
+      '<p class="fine">' + esc(p["for"] || "") + "</p>" +
+      '<button class="' + (active ? "" : "ghost") + '" data-plan="' + esc(p.key) + '">' +
+        (active ? "الباقة الحالية" : "اختيار الباقة") + "</button>" +
+      "</article>";
+  }).join("");
+  const buttons = document.querySelectorAll("#planCards [data-plan]");
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", async function () {
+      state.plan = this.getAttribute("data-plan");
+      localStorage.setItem("at_gulf_plan", state.plan);
+      renderPlans();
+      await loadQuota();
+      setScanMsg("الباقة النشطة الآن: " + state.plan + " — حُدِّثت السعة.", "ok");
+    });
+  }
+}
+
+async function loadQuota() {
+  try {
+    const res = await fetch("/api/quota?account=" + encodeURIComponent(ACCOUNT) +
+      "&plan=" + encodeURIComponent(state.plan), {cache: "no-store"});
+    state.quota = await res.json();
+    renderQuota();
+  } catch (err) { /* يبقى العرض السابق */ }
+}
+
+function renderQuota() {
+  const q = state.quota;
+  if (!q) return;
+  const pct = Math.min(100, Math.round((q.used / (q.capacity + q.grace || 1)) * 100));
+  $("quotaBar").style.width = pct + "%";
+  $("quotaBar").className = "bar-fill" + (pct >= 90 ? " danger" : pct >= 70 ? " warn" : "");
+  $("quotaLabel").textContent = "استهلاك شهر " + q.period + " — باقة " + (q.plan_name || "");
+  $("quotaValue").textContent = num(q.used) + " / " + num(q.capacity) + " فاتورة";
+  $("quotaNote").textContent = q.deferred
+    ? "تجاوزت السعة: " + num(q.deferred) + " فاتورة مؤجلة، وسماحية " + num(q.grace) + " استُهلكت."
+    : "المتبقي: " + num(q.remaining) + " فاتورة + سماحية " + num(q.grace) + " — لا قيود لكل دقيقة.";
+}
+
+async function bulkTest() {
+  const total = 500;
+  const lines = [];
+  for (let i = 1; i <= total; i++) {
+    const subtotal = 100 + (i % 900);
+    const tax = Math.round(subtotal * 0.15 * 100) / 100;
+    lines.push("المورد: شركة الاختبار " + i + "\nالتاريخ: 2026-11-" +
+      String((i % 28) + 1).padStart(2, "0") +
+      "\nالإجمالي قبل الضريبة: " + subtotal.toFixed(2) +
+      "\nالضريبة (15%): " + tax.toFixed(2) +
+      "\nالإجمالي: " + (subtotal + tax).toFixed(2));
+  }
+  $("scanText").value = lines.join("\n\n");
+  await scan();
+}
+
 /* ---------- الأحداث ---------- */
 $("chatForm").addEventListener("submit", (e) => { e.preventDefault(); ask($("chatInput").value); });
 $("scanBtn").addEventListener("click", scan);
 $("newsRefresh").addEventListener("click", loadNews);
+$("bulkBtn").addEventListener("click", bulkTest);
 
 $("sampleBtn").addEventListener("click", async () => {
   try {
@@ -255,3 +339,4 @@ bindChips();
 loadHealth();
 loadRates();
 loadNews();
+loadPlans();

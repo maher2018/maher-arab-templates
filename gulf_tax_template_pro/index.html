@@ -26,6 +26,7 @@
       <a href="#assistant" class="tab active">المساعد الضريبي</a>
       <a href="#scanner" class="tab">مسح الفواتير</a>
       <a href="#news" class="tab">أخبار السوق</a>
+      <a href="#plans" class="tab">الباقات</a>
     </nav>
     <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">جارٍ الاتصال…</span></div>
   </div>
@@ -101,6 +102,7 @@
           <button id="scanBtn">امسح الفواتير</button>
           <button class="ghost" id="exportBtn" disabled>تصدير CSV</button>
           <button class="ghost" id="jsonBtn" disabled>نسخ JSON</button>
+          <button class="ghost" id="bulkBtn">اختبار ٥٠٠ فاتورة</button>
         </div>
         <p class="msg" id="scanMsg"></p>
       </div>
@@ -120,6 +122,18 @@
       </table>
     </div>
     <p class="fine">المسح يتم على الخادم (Python) ويُعيد JSON فقط؛ لا يُخزَّن أي نص فاتورة في ملفات المشروع.</p>
+  </section>
+  <section class="panel" id="plans" aria-labelledby="plansTitle">
+    <div class="panel-head">
+      <h2 id="plansTitle">الباقات وسعة مسح الفواتير</h2>
+      <span class="tag">سعة شهرية فقط · بلا قيود لكل دقيقة</span>
+    </div>
+    <div class="usage">
+      <div class="usage-head"><span id="quotaLabel">استهلاك هذا الشهر</span><strong id="quotaValue">—</strong></div>
+      <div class="bar"><div class="bar-fill" id="quotaBar"></div></div>
+      <p class="fine" id="quotaNote">تُحسب السعة شهريًا فقط، مع سماحية تجاوز ١٠٪ تُستهلك تلقائيًا.</p>
+    </div>
+    <div class="plans" id="planCards"></div>
   </section>
 </main>
 

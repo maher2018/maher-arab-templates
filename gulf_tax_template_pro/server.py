@@ -59,6 +59,85 @@ SAMPLE_TEXT = """المورد: شركة النخيل للتجارة
 الإجمالي: 840.00
 """
 
+PLANS = [
+    {"key": "starter", "name": "الأساسية", "price": 899, "scans": 300, "batch": 100,
+     "for": "مكتب محاسبة أو منشأة صغيرة بفواتير محدودة",
+     "features": ["مسح نص واتساب", "تصدير CSV", "مساعد ضريبي"]},
+    {"key": "growth", "name": "النمو", "price": 1490, "scans": 3000, "batch": 500,
+     "for": "شركة متوسطة تستلم مئات الفواتير شهريًا",
+     "features": ["مسح بالجملة ٥٠٠ فاتورة", "تصدير CSV وJSON", "أخبار وعملات", "أولوية دعم"]},
+    {"key": "scale", "name": "المؤسسات", "price": 2990, "scans": 20000, "batch": 2000,
+     "for": "مجموعة شركات وفروع متعددة",
+     "features": ["مسح بالجملة ٢٠٠٠ فاتورة", "سعة شهرية ٢٠٠٠٠", "سماحية تجاوز ١٠٪", "تقارير متعددة الدول"]},
+]
+GRACE_RATIO = 0.10
+MAX_INVOICES = 5000
+USAGE_FILE = ROOT / "reports" / "usage" / "gulf_usage.json"
+
+_usage_lock = threading.Lock()
+
+
+def _plan(key: str) -> dict:
+    for plan in PLANS:
+        if plan["key"] == (key or "").strip():
+            return plan
+    return PLANS[1]
+
+
+def _usage_all() -> dict:
+    try:
+        return json.loads(USAGE_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return {}
+
+
+def _usage_save(data: dict) -> None:
+    USAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    USAGE_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def quota_state(account: str, plan_key: str) -> dict:
+    plan = _plan(plan_key)
+    capacity = int(plan["scans"])
+    period = datetime.now().strftime("%Y-%m")
+    with _usage_lock:
+        record = _usage_all().get(account, {})
+        used = int(record.get("used", 0)) if record.get("period") == period else 0
+    grace = int(capacity * GRACE_RATIO)
+    return {
+        "account": account,
+        "plan": plan["key"],
+        "plan_name": plan["name"],
+        "period": period,
+        "capacity": capacity,
+        "used": used,
+        "remaining": max(capacity - used, 0),
+        "grace": grace,
+        "available": max(capacity + grace - used, 0),
+        "monthly_only": True,
+    }
+
+
+def consume_quota(account: str, plan_key: str, count: int) -> dict:
+    """السعة شهرية فقط: لا حدود لكل دقيقة أو لكل طلب، مع سماحية ١٠٪."""
+    plan = _plan(plan_key)
+    capacity = int(plan["scans"])
+    period = datetime.now().strftime("%Y-%m")
+    grace = int(capacity * GRACE_RATIO)
+    with _usage_lock:
+        data = _usage_all()
+        record = data.get(account, {})
+        used = int(record.get("used", 0)) if record.get("period") == period else 0
+        available = max(capacity + grace - used, 0)
+        accepted = min(count, available)
+        data[account] = {"period": period, "used": used + accepted, "plan": plan["key"]}
+        _usage_save(data)
+    state = quota_state(account, plan_key)
+    state["accepted"] = accepted
+    state["deferred"] = count - accepted
+    return state
+
+
 _rates_cache: dict[str, object] = {"at": 0.0, "data": None}
 _rates_lock = threading.Lock()
 
@@ -77,15 +156,20 @@ def invoice_dict(invoice) -> dict:
     }
 
 
-def scan_text(text: str) -> dict:
-    chunks = split_invoices(text) or [text]
+def scan_text(text: str, account: str = "demo", plan_key: str = "growth") -> dict:
+    chunks = [chunk for chunk in (split_invoices(text) or [text]) if chunk.strip()]
+    truncated = 0
+    if len(chunks) > MAX_INVOICES:
+        truncated = len(chunks) - MAX_INVOICES
+        chunks = chunks[:MAX_INVOICES]
     started = time.perf_counter()
-    rows = [invoice_dict(parse_invoice(chunk)) for chunk in chunks if chunk.strip()]
+    rows = [invoice_dict(parse_invoice(chunk)) for chunk in chunks]
     elapsed = round((time.perf_counter() - started) * 1000, 1)
-    return {
+    result = {
         "ok": True,
         "engine": "whatsapp_invoice_parser.py",
         "elapsed_ms": elapsed,
+        "quota": consume_quota(account, plan_key, len(rows)),
         "totals": {
             "count": len(rows),
             "total": round(sum(float(r["total"] or 0) for r in rows), 2),
@@ -94,6 +178,9 @@ def scan_text(text: str) -> dict:
         },
         "invoices": rows,
     }
+    if truncated:
+        result["truncated"] = truncated
+    return result
 
 
 KNOWLEDGE = [
@@ -218,6 +305,18 @@ def news():
     return jsonify(market_news())
 
 
+@app.get("/api/plans")
+def plans():
+    return jsonify({"plans": PLANS, "grace_ratio": GRACE_RATIO, "max_invoices": MAX_INVOICES})
+
+
+@app.get("/api/quota")
+def quota():
+    account = (request.args.get("account") or "demo").strip()[:64] or "demo"
+    plan_key = (request.args.get("plan") or "growth").strip()
+    return jsonify(quota_state(account, plan_key))
+
+
 @app.get("/api/rates")
 def rates():
     return jsonify(fetch_rates())
@@ -225,10 +324,12 @@ def rates():
 
 @app.post("/api/scan")
 def scan():
-    text = ""
+    account = "demo"
+    plan_key = "growth"
     if request.files:
         upload = next(iter(request.files.values()))
         raw = upload.read()
+        text = ""
         for encoding in ("utf-8", "utf-8-sig", "cp1256"):
             try:
                 text = raw.decode(encoding)
@@ -237,12 +338,16 @@ def scan():
                 continue
         if not text:
             return jsonify({"ok": False, "error": "تعذّر قراءة الملف — استخدم ترميز UTF-8"}), 400
+        account = (request.form.get("account") or "demo").strip()[:64] or "demo"
+        plan_key = (request.form.get("plan") or "growth").strip()
     else:
         payload = request.get_json(silent=True) or {}
         text = str(payload.get("text") or "")
+        account = str(payload.get("account") or "demo").strip()[:64] or "demo"
+        plan_key = str(payload.get("plan") or "growth").strip()
     if not text.strip():
         return jsonify({"ok": False, "error": "لا يوجد نص فواتير"}), 400
-    return jsonify(scan_text(text[:400_000]))
+    return jsonify(scan_text(text[:800_000], account, plan_key))
 
 
 @app.post("/api/assistant")
