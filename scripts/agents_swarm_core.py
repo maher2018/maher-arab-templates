@@ -9,15 +9,19 @@
 (``/api/1.1/obj/<type>``)، مهلة، إعادة محاولة عند تعذّر الاتصال، ورسائل
 عربية تشرح كل رمز حالة. التوكن يبقى في هذا الملف ولا يُطبع أبدًا.
 
-    python agents_swarm_core.py               # مهمة واحدة إلى task
-    python agents_swarm_core.py --templates   # + مزامنة القوالب العربية
+    python agents_swarm_core.py                      # مهمة واحدة إلى task
+    python agents_swarm_core.py --templates          # + مزامنة القوالب العربية
+    python agents_swarm_core.py --loop              # حلقة مستمرة كل 60 دقيقة
+    python agents_swarm_core.py --loop --interval 15 --templates
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -114,23 +118,107 @@ class AIAgentSwarm:
             return {"create": 0, "update": 0, "unchanged": 0, "failed": len(data)}
 
 
-def main(argv: list[str] | None = None) -> int:
-    argv = list(sys.argv[1:] if argv is None else argv)
-    with_templates = "--templates" in argv
-    app_url = BUBBLE_API_URL
-    for index, arg in enumerate(argv):
-        if arg == "--app-url" and index + 1 < len(argv):
-            app_url = argv[index + 1]
-
-    swarm = AIAgentSwarm(app_url=app_url)
-    live_data = swarm.data_fetcher_agent()
-
-    ok = swarm.cloud_connector_agent(
-        f"معالجة تحديث: {live_data[:50]}", "High", 85
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="سرب الوكلاء: جلب تحديث حيّ وكتابته في Bubble، مرة واحدة أو في حلقة مستمرة.",
     )
+    parser.add_argument("--loop", action="store_true", help="تشغيل مستمر في الخلفية بدل دورة واحدة")
+    parser.add_argument("--interval", type=float, default=60.0, help="الدقائق بين الدورات (افتراضي 60)")
+    parser.add_argument("--cycles", type=int, default=0, help="عدد الدورات ثم التوقف (0 = بلا حد)")
+    parser.add_argument("--templates", action="store_true", help="مزامنة القوالب العربية في كل دورة")
+    parser.add_argument("--app-url", default=None, help="رابط تطبيق Bubble (افتراضيًا من .env أو الثابت)")
+    parser.add_argument("--log-file", default=None, help="حفظ سجل الدورات في ملف نصي بالإضافة إلى الطرفية")
+    return parser.parse_args(argv)
+
+
+def make_logger(log_file: str | None):
+    """سجل موحّد: الطرفية دائمًا، والملف عند تمريره (مفيد عند التشغيل في الخلفية)."""
+    handle = open(log_file, "a", encoding="utf-8") if log_file else None
+
+    def log(message: str, *, quiet: bool = False) -> None:
+        stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        line = f"{stamp} {message}"
+        if not quiet:
+            print(line, flush=True)
+        if handle:
+            handle.write(line + chr(10))
+            handle.flush()
+
+    log.close = lambda: handle.close() if handle else None  # type: ignore[attr-defined]
+    return log
+
+
+def run_cycle(swarm: AIAgentSwarm, *, with_templates: bool, log) -> bool:
+    """دورة واحدة: جلب تحديث حيّ، كتابته في task، ثم (اختياريًا) مزامنة القوالب."""
+    live_data = swarm.data_fetcher_agent()
+    ok = swarm.cloud_connector_agent(f"معالجة تحديث: {live_data[:50]}", "High", 85)
     if with_templates:
         counts = swarm.cloud_connector_templates()
         ok = ok and not counts.get("failed")
+        log(
+            "[📦 القوالب] "
+            f"جديد {counts['create']} | محدَّث {counts['update']} | "
+            f"بلا تغيير {counts['unchanged']} | فشل {counts['failed']}"
+        )
+    return ok
+
+
+def run_loop(
+    swarm: AIAgentSwarm,
+    *,
+    interval_minutes: float,
+    cycles: int,
+    with_templates: bool,
+    log,
+) -> int:
+    """حلقة مستمرة: كل دورة تُسجّل نتيجتها، وأي خطأ لا يُسقط الحلقة."""
+    interval_seconds = max(0.0, interval_minutes) * 60
+    plan = "بلا حد" if cycles <= 0 else f"{cycles} دورة"
+    log(f"[🔁 Loop] بدأت الحلقة — كل {interval_minutes:g} دقيقة ({plan})")
+    completed = 0
+    try:
+        while True:
+            completed += 1
+            started = time.time()
+            log(f"[🔄 دورة {completed}] بدأت")
+            try:
+                ok = run_cycle(swarm, with_templates=with_templates, log=log)
+            except BubbleError as exc:
+                ok = False
+                log(f"[❌ دورة {completed}] خطأ Bubble: {str(exc).splitlines()[0]}")
+            except Exception as exc:  # الحلقة تستمر حتى لو فشلت دورة
+                ok = False
+                log(f"[❌ دورة {completed}] خطأ غير متوقع: {type(exc).__name__}: {exc}")
+            log(f"[🔄 دورة {completed}] {('نجحت' if ok else 'بها فشل')} في {time.time() - started:.1f} ثانية")
+            if cycles > 0 and completed >= cycles:
+                log(f"[✅ Loop] انتهت الدورات المطلوبة ({completed})")
+                return 0
+            log(f"[⏳] انتظار {interval_minutes:g} دقيقة حتى الدورة {completed + 1}…")
+            time.sleep(interval_seconds)
+    except KeyboardInterrupt:
+        log(f"[⛔] أُوقفت الحلقة يدويًا بعد {completed} دورة — خروج نظيف.")
+        return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(list(sys.argv[1:] if argv is None else argv))
+    log = make_logger(args.log_file)
+    swarm = AIAgentSwarm(app_url=args.app_url or BUBBLE_API_URL)
+
+    if args.loop:
+        try:
+            return run_loop(
+                swarm,
+                interval_minutes=args.interval,
+                cycles=args.cycles,
+                with_templates=args.templates,
+                log=log,
+            )
+        finally:
+            log.close()  # type: ignore[attr-defined]
+
+    ok = run_cycle(swarm, with_templates=args.templates, log=log)
+    log.close()  # type: ignore[attr-defined]
     return 0 if ok else 1
 
 

@@ -104,9 +104,16 @@ type invoice.txt | python scripts/whatsapp_invoice_parser.py --stdin --send
 وكيل يجلب تحديثًا حيًّا من الإنترنت، ووكيل يكتبه في `task`، ودالة جاهزة لمزامنة القوالب.
 
 ```bash
-python scripts/agents_swarm_core.py               # مهمة واحدة إلى task
-python scripts/agents_swarm_core.py --templates   # + مزامنة القوالب
+python scripts/agents_swarm_core.py                                # مهمة واحدة إلى task
+python scripts/agents_swarm_core.py --templates                    # + مزامنة القوالب
+python scripts/agents_swarm_core.py --loop                         # حلقة مستمرة كل 60 دقيقة
+python scripts/agents_swarm_core.py --loop --templates             # مع مزامنة القوالب كل دورة
+python scripts/agents_swarm_core.py --loop --interval 15 --cycles 4 --log-file logs/swarm.log
 ```
+
+- `--loop`: يبقى يعمل في الخلفية؛ كل دورة تجلب تحديثًا حيًّا وتكتبه في `task`، مع `--templates` تزامن القوالب أيضًا.
+- `--interval` بالدقائق (افتراضي 60)، و`--cycles` لتحديد عدد الدورات ثم التوقف (0 = بلا حد).
+- أي خطأ في دورة لا يُسقط الحلقة؛ يُسجَّل ويُنتظر للدورة التالية. `Ctrl+C` يوقفها بخروج نظيف.
 
 ### `scripts/prompt_pack_builder.py` — حزم أوامر AI خليجية
 يولّد 6 حزم (3 لهجات × مجالين) وكل حزمة ملفها المستقل: `README.md` (صفحة المنتج)، `prompts.md`، `prompts.txt`، `pack.json`، و`zip` جاهز للبيع، مع كتالوج بحقول المتجر.
