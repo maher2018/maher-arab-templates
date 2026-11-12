@@ -16,7 +16,7 @@ arab-templates/
 │   └── templates_ar.json         20 قالبًا عربيًا جاهزًا للمزامنة
 ├── scripts/
 │   ├── bubble_data_sync.py       عميل Bubble Data API (الأساس لكل شيء)
-│   ├── agents_swarm_core.py      سرب الوكلاء: جلب بيانات حيّة + كتابتها في Bubble
+│   ├── agents_swarm_core.py      الطيار الآلي: صيد أفكار + تعريب AR/EN + نشر + مراقبة
 │   ├── scheduled_sync.py         تشغيل دوري + سجل يومي + Task Scheduler
 │   ├── whatsapp_invoice_parser.py تحليل فواتير واردة + تقارير + إرسال
 │   └── prompt_pack_builder.py    توليد حزم أوامر AI باللهجات الخليجية
@@ -100,20 +100,33 @@ type invoice.txt | python scripts/whatsapp_invoice_parser.py --stdin --send
 - `--dedupe` يحدّث فاتورة المورد نفسه في التاريخ نفسه بدل تكرارها.
 - `--save` يحفظ التقرير في `reports/invoice_reports/`.
 
-### `scripts/agents_swarm_core.py` — سرب الوكلاء
-وكيل يجلب تحديثًا حيًّا من الإنترنت، ووكيل يكتبه في `task`، ودالة جاهزة لمزامنة القوالب.
+### `scripts/agents_swarm_core.py` — الطيار الآلي الكامل (Full Autopilot)
+ثلاثة وكلاء في نظام واحد يعمل بالعربية والإنجليزية: **وكيل الصيد والتعريب** (يجلب أفكار
+القوالب الرائجة من GitHub وHacker News وبذور محلية، ويصوغ لكل فكرة عنوانًا ووصفًا
+بالعربية والإنجليزية، ثم يرفعها إلى جدول `template` في `at-ai-lab`)، **وكيل المراقبة
+والتعافي الذاتي** (فحص دوري لاتصال Bubble، إعادة محاولة بتراجع أسّي، وطابور محلي يُفرَّغ
+تلقائيًا عند عودة الشبكة)، و**المجدول** (حلقة مستمرة أو مهمة في Windows Task Scheduler)،
+مع تقرير أداء يُحدَّث كل دورة في `autopilot_report.json`.
 
 ```bash
-python scripts/agents_swarm_core.py                                # مهمة واحدة إلى task
-python scripts/agents_swarm_core.py --templates                    # + مزامنة القوالب
-python scripts/agents_swarm_core.py --loop                         # حلقة مستمرة كل 60 دقيقة
-python scripts/agents_swarm_core.py --loop --templates             # مع مزامنة القوالب كل دورة
-python scripts/agents_swarm_core.py --loop --interval 15 --cycles 4 --log-file logs/swarm.log
+python scripts/agents_swarm_core.py --once                         # دورة كاملة: صيد + تعريب + نشر
+python scripts/agents_swarm_core.py --once --dry-run               # بلا كتابة في Bubble (الأفكار تُطابَر)
+python scripts/agents_swarm_core.py --loop --interval 60           # تشغيل مستمر كل ساعة
+python scripts/agents_swarm_core.py --check                        # فحص اتصال Bubble فقط
+python scripts/agents_swarm_core.py --install --interval 60        # تفعيل مهمة مجدولة كل ساعة
+python scripts/agents_swarm_core.py --install --daily 08:00        # أو مهمة يومية
+python scripts/agents_swarm_core.py --status                       # حالة المهمة وآخر تقرير
+python scripts/agents_swarm_core.py --uninstall                    # إزالة المهمة
+python scripts/agents_swarm_core.py --once --lang en --ideas 3 --sources github,hn,local
 ```
 
-- `--loop`: يبقى يعمل في الخلفية؛ كل دورة تجلب تحديثًا حيًّا وتكتبه في `task`، مع `--templates` تزامن القوالب أيضًا.
-- `--interval` بالدقائق (افتراضي 60)، و`--cycles` لتحديد عدد الدورات ثم التوقف (0 = بلا حد).
-- أي خطأ في دورة لا يُسقط الحلقة؛ يُسجَّل ويُنتظر للدورة التالية. `Ctrl+C` يوقفها بخروج نظيف.
+- `--ideas` عدد الأفكار لكل دورة (0 = تعطيل الصيد)، و`--sources` من `github,hn,local`.
+- `--lang ar|en|both` لغة السجلات (افتراضي `both`)، و`--log-file` يضيف ملف سجل.
+- `--dry-run` لا يكتب في Bubble ويحفظ الأفكار في `data/autopilot_queue.json`، و`--offline` يمنع أي اتصال شبكي للاختبار.
+- `--templates` يزامن القوالب العربية من `data/templates_ar.json` في الدورة نفسها.
+- الحالة تُحفظ في `autopilot_report.json` (إجماليات، صحة الاتصال، متوسط زمن الاستجابة، آخر 20 دورة)، والكتالوج ثنائي اللغة للأفكار في `data/templates_bilingual.json`.
+- المهمة المجدولة تعمل عبر `scripts/autopilot_task.bat` (يُولَّد تلقائيًا بمسارات مطلقة) وسجلها `logs/autopilot_task.log`؛ قفل `logs/.autopilot.lock` يمنع تشغيلين متداخلين.
+- جدول `template` في Bubble يحتوي الحقول الخمسة الأساسية فقط، لذا تُرفع النسخة العربية إليه وتُحفظ النسخة الإنجليزية كاملة في الكتالوج المحلي (وأي حقول `Title_EN`/`Description_EN` تُضاف لاحقًا تُرفع تلقائيًا إن وُجدت).
 
 ### `scripts/prompt_pack_builder.py` — حزم أوامر AI خليجية
 يولّد 6 حزم (3 لهجات × مجالين) وكل حزمة ملفها المستقل: `README.md` (صفحة المنتج)، `prompts.md`، `prompts.txt`، `pack.json`، و`zip` جاهز للبيع، مع كتالوج بحقول المتجر.
