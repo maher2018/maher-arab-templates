@@ -38,6 +38,25 @@ const I18N = {
     "btn.export": "تصدير CSV", "btn.bulk": "اختبار ٥٠٠ فاتورة", "btn.ocr_save": "أضف إلى سجل المشتريات",
     "btn.add_all": "أضف كل النتائج إلى سجل المشتريات", "btn.send": "إرسال", "btn.ticket": "إرسال إلى المحاسب",
 
+    "btn.email_invoice": "إرسال بالبريد",
+    "email.section": "إعدادات إرسال الفواتير بالبريد — SMTP2GO",
+    "email.intro": "اربط حساب SMTP2GO ليصل بريد الفواتير إلى عملائك من نطاقك الموثق، ويبقى المفتاح على الخادم فقط.",
+    "email.status.checking": "جارٍ التحقق من ربط SMTP2GO…",
+    "email.status.linked": "SMTP2GO مربوط — الإرسال جاهز ({sender})",
+    "email.status.missing": "SMTP2GO غير مربوط — أضف SMTP2GO_API_KEY أو ابدأ التسجيل السريع",
+    "email.from_name": "اسم المُرسل", "email.ph.name": "Arab Templates",
+    "email.from_email": "بريد المُرسل الموثق", "email.reply_to": "بريد الرد (Reply-To)",
+    "email.signup": "تسجيل سريع في SMTP2GO", "email.test": "اختبار الاتصال",
+    "email.env_note": "المفتاح يُخزَّن على الخادم فقط: أضف SMTP2GO_API_KEY في ملف .env (ورابط الإحالة في SMTP2GO_AFFILIATE_LINK). لا يُرسل المفتاح أبدًا إلى المتصفح.",
+    "msg.email_sending": "يُرسل SMTP2GO الرسالة…",
+    "msg.email_sent": "أُرسلت الفاتورة {number} إلى {to}.",
+    "msg.email_need_buyer": "أدخل بريد العميل في نموذج الفاتورة أولًا.",
+    "msg.email_need_sender": "أدخل بريد المُرسل الموثق في إعدادات البريد.",
+    "msg.email_test_sent": "أُرسلت رسالة اختبار إلى {to} — تحقق من صندوق الوارد.",
+    "msg.email_test_need": "أدخل بريد المُرسل لإرسال رسالة اختبار.",
+    "msg.email_failed": "تعذّر الإرسال: {error}",
+    "msg.email_not_linked": "حساب SMTP2GO غير مربوط: أضف SMTP2GO_API_KEY في .env أو استخدم زر التسجيل السريع.",
+
     "qr.spec_label": "رمز QR المعتمد:",
     "qr.note": "حمولة TLV مشفّرة Base64 — تُقرأ تطبيقات التحقق الضريبي اسم المورد والرقم الضريبي والطابع الزمني والإجمالي والضريبة.",
     "qr.hash_label": "تجزئة الفاتورة:", "qr.copy": "نسخ الحمولة",
@@ -193,6 +212,25 @@ const I18N = {
     "btn.export": "Export CSV", "btn.bulk": "Test 500 invoices", "btn.ocr_save": "Add to purchase ledger",
     "btn.add_all": "Add all results to the purchase ledger", "btn.send": "Send", "btn.ticket": "Send to accountant",
 
+    "btn.email_invoice": "Email invoice",
+    "email.section": "Invoice email settings — SMTP2GO",
+    "email.intro": "Connect SMTP2GO so invoice email leaves from your verified domain; the API key stays on the server only.",
+    "email.status.checking": "Checking the SMTP2GO connection…",
+    "email.status.linked": "SMTP2GO connected — ready to send ({sender})",
+    "email.status.missing": "SMTP2GO is not linked — add SMTP2GO_API_KEY or start the quick signup",
+    "email.from_name": "Sender name", "email.ph.name": "Arab Templates",
+    "email.from_email": "Verified sender email", "email.reply_to": "Reply-To email",
+    "email.signup": "Quick SMTP2GO signup", "email.test": "Test connection",
+    "email.env_note": "The key lives on the server only: add SMTP2GO_API_KEY to your .env file (affiliate link goes in SMTP2GO_AFFILIATE_LINK). The key is never sent to the browser.",
+    "msg.email_sending": "SMTP2GO is sending the message…",
+    "msg.email_sent": "Invoice {number} was sent to {to}.",
+    "msg.email_need_buyer": "Add the customer email in the invoice form first.",
+    "msg.email_need_sender": "Add your verified sender email in the email settings.",
+    "msg.email_test_sent": "A test message was sent to {to} — check the inbox.",
+    "msg.email_test_need": "Enter your sender email to send a test message.",
+    "msg.email_failed": "Could not send: {error}",
+    "msg.email_not_linked": "SMTP2GO is not linked yet: add SMTP2GO_API_KEY to .env or use the quick signup button.",
+
     "qr.spec_label": "Compliant QR:",
     "qr.note": "Base64-encoded TLV payload — tax validation apps read the seller name, tax number, timestamp, total and VAT from it.",
     "qr.hash_label": "Invoice hash:", "qr.copy": "Copy payload",
@@ -318,6 +356,7 @@ const I18N = {
 
 const PROFILE_KEY = "at_gulf_profile";
 const ACCOUNT_KEY = "at_gulf_account";
+const EMAIL_KEY = "at_gulf_email";
 
 const state = {
   lang: "ar",
@@ -340,6 +379,8 @@ const state = {
   detected: null,
   profileSaved: false,
   ret: null,
+  email: { from_name: "", from_email: "", reply_to: "" },
+  emailConfig: null,
 };
 
 const ACCOUNT = (localStorage.getItem(ACCOUNT_KEY) || (function () {
@@ -462,6 +503,7 @@ function applyStaticTexts() {
   renderOcrMode();
   renderCurrencyNotes();
   renderChatGreeting();
+  renderEmailStatus();
   if (state.invoice) { fillQrBox(state.invoice); fillPrintDoc(state.invoice); }
 }
 
@@ -473,7 +515,7 @@ async function setLanguage(lang, { persist = true, reload = true } = {}) {
   await refreshCountries();
   applyCountry(state.country, { keepCurrency: true, reload: false });
   if (state.invoice) { fillQrBox(state.invoice); fillPrintDoc(state.invoice); }
-  await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets()]);
+  await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets(), loadEmailConfig()]);
   renderRatesTicker();
 }
 
@@ -770,6 +812,7 @@ async function issueInvoice(save) {
     fillPrintDoc(inv);
     $("printBtn").disabled = false;
     $("saveInvBtn").disabled = false;
+    $("emailInvBtn").disabled = false;
     let message = t("msg.issued", { number: inv.number, total: legalMoney(inv.total, inv.currency) });
     if (save && inv.saved) message += " " + t("msg.saved");
     if ((inv.notes || []).length) message += " " + inv.notes.join(" ");
@@ -798,6 +841,7 @@ $("resetInvBtn").addEventListener("click", () => {
   $("qrBox").hidden = true;
   $("printBtn").disabled = true;
   $("saveInvBtn").disabled = true;
+  $("emailInvBtn").disabled = true;
   $("invDate").value = new Date().toISOString().slice(0, 10);
   renderItems();
   setInvMsg("");
@@ -1285,6 +1329,121 @@ function renderQuota() {
     : t("msg.quota_remaining", { remaining: fmtNum(q.remaining), grace: fmtNum(q.grace) });
 }
 
+/* ================== إرسال الفواتير بالبريد — SMTP2GO ================== */
+function readEmailProfile() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(EMAIL_KEY) || "null");
+    return raw && typeof raw === "object" ? raw : { from_name: "", from_email: "", reply_to: "" };
+  } catch (err) { return { from_name: "", from_email: "", reply_to: "" }; }
+}
+
+function saveEmailProfile() {
+  localStorage.setItem(EMAIL_KEY, JSON.stringify(state.email));
+}
+
+function fillEmailInputs() {
+  $("emailFromName").value = state.email.from_name || "";
+  $("emailFromEmail").value = state.email.from_email || "";
+  $("emailReplyTo").value = state.email.reply_to || "";
+}
+
+function setEmailMsg(text, kind) {
+  const el = $("emailMsg");
+  if (!el) return;
+  el.className = "msg " + (kind || "");
+  el.textContent = text || "";
+}
+
+function renderEmailStatus() {
+  const el = $("emailStatus");
+  const dot = $("emailDot");
+  if (!el || !dot) return;
+  const cfg = state.emailConfig;
+  if (!cfg) { el.textContent = t("email.status.checking"); dot.className = "dot"; return; }
+  if (cfg.configured) {
+    el.textContent = t("email.status.linked", { sender: state.email.from_email || cfg.sender_default || "SMTP2GO" });
+    dot.className = "dot ok";
+  } else {
+    el.textContent = t("email.status.missing");
+    dot.className = "dot bad";
+  }
+}
+
+async function loadEmailConfig() {
+  try {
+    state.emailConfig = await api("/api/email/config?lang=" + state.lang);
+  } catch (err) { state.emailConfig = null; }
+  renderEmailStatus();
+  const signup = $("smtpSignup");
+  if (signup) signup.disabled = !state.emailConfig;
+}
+
+["emailFromName", "emailFromEmail", "emailReplyTo"].forEach((id) => {
+  const el = $(id);
+  el.addEventListener("input", () => {
+    state.email.from_name = $("emailFromName").value.trim();
+    state.email.from_email = $("emailFromEmail").value.trim();
+    state.email.reply_to = $("emailReplyTo").value.trim();
+    saveEmailProfile();
+    renderEmailStatus();
+  });
+});
+
+$("smtpSignup").addEventListener("click", () => {
+  const link = state.emailConfig && state.emailConfig.affiliate_link;
+  if (link) window.open(link, "_blank", "noopener");
+  else setEmailMsg(t("msg.email_not_linked"), "bad");
+});
+
+async function emailRequest(payload) {
+  return api("/api/email/send", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, lang: state.lang }),
+  });
+}
+
+$("emailTestBtn").addEventListener("click", async () => {
+  const to = state.email.from_email || $("emailFromEmail").value.trim();
+  if (!to) { setEmailMsg(t("msg.email_test_need"), "bad"); return; }
+  setEmailMsg(t("msg.email_sending"));
+  try {
+    const data = await emailRequest({
+      test: true, to, sender: to,
+      sender_name: state.email.from_name || undefined, reply_to: state.email.reply_to || undefined,
+    });
+    setEmailMsg(data.message || t("msg.email_test_sent", { to }), "ok");
+  } catch (err) {
+    setEmailMsg(t("msg.email_failed", { error: err.message }), "bad");
+  }
+});
+
+async function emailInvoice() {
+  if (!state.invoice) { setInvMsg(t("msg.invoice_required"), "bad"); return; }
+  const to = $("buyerEmail").value.trim() || (state.invoice.buyer && state.invoice.buyer.email) || "";
+  if (!to) { setInvMsg(t("msg.email_need_buyer"), "bad"); return; }
+  const sender = state.email.from_email || (state.emailConfig && state.emailConfig.sender_default) || "";
+  if (!sender) { setInvMsg(t("msg.email_need_sender"), "bad"); return; }
+  const btn = $("emailInvBtn");
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "…";
+  setInvMsg(t("msg.email_sending"));
+  try {
+    const data = await emailRequest({
+      to, sender, invoice: state.invoice,
+      sender_name: state.email.from_name || undefined, reply_to: state.email.reply_to || undefined,
+    });
+    setInvMsg(data.message || t("msg.email_sent", { number: state.invoice.number, to }), "ok");
+  } catch (err) {
+    setInvMsg(t("msg.email_failed", { error: err.message }), "bad");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+}
+
+$("emailInvBtn").addEventListener("click", emailInvoice);
+
 /* ================== الإعدادات / التسجيل ================== */
 function openOnboarding({ firstRun = false } = {}) {
   const meta = countryBy(state.country) || {};
@@ -1373,6 +1532,9 @@ async function boot() {
   if (profile?.country) state.country = profile.country;
   if (profile?.currency) state.currency = profile.currency;
 
+  state.email = readEmailProfile();
+  fillEmailInputs();
+
   state.plan = localStorage.getItem("at_gulf_plan") || "growth";
   state.items = [blankItem()];
   $("invDate").value = new Date().toISOString().slice(0, 10);
@@ -1401,7 +1563,7 @@ async function boot() {
     $("authorityNote").textContent = err.message;
   }
 
-  await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets()]);
+  await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets(), loadEmailConfig()]);
   renderSuggestions();
   if (!profile) openOnboarding({ firstRun: true });
 }

@@ -28,10 +28,14 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
+import os
+import re
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
 import webbrowser
 from datetime import datetime
@@ -611,6 +615,254 @@ def assistant():
         return jsonify({"ok": False,
                         "error": "السؤال طويل جدًا" if lang == "ar" else "Question is too long"}), 400
     return jsonify(assistant_answer(question, payload.get("invoice"), lang))
+
+
+# ===================== SMTP2GO — إرسال الفواتير بالبريد =====================
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
+DEFAULT_AFFILIATE_LINK = "https://www.smtp2go.com/?via=arab-templates"
+SMTP2GO_ENDPOINT = "https://api.smtp2go.com/v3/email/send"
+ENV_FILES = (ROOT / ".env", ROOT / "scripts" / ".env", BASE / ".env")
+
+EMAIL_STRINGS = {
+    "missing_key": ("حساب SMTP2GO غير مربوط بعد: أضف SMTP2GO_API_KEY في ملف .env، "
+                    "أو ابدأ من زر التسجيل السريع لإنشاء الحساب ثم انسخ المفتاح.",
+                    "SMTP2GO is not linked yet: add SMTP2GO_API_KEY to your .env file, "
+                    "or use the quick signup button to create the account, then paste the key."),
+    "bad_to": ("بريد المستلم غير صالح", "Invalid recipient email address"),
+    "bad_sender": ("بريد المُرسل غير صالح — استخدم بريدًا موثقًا في SMTP2GO",
+                   "Invalid sender email — use an address verified in SMTP2GO"),
+    "no_invoice": ("أصدر الفاتورة أولًا قبل إرسالها بالبريد", "Issue the invoice before emailing it"),
+    "sent": ("أُرسلت الفاتورة {number} إلى {to}", "Invoice {number} was sent to {to}"),
+    "test_sent": ("أُرسلت رسالة اختبار إلى {to} — تحقق من صندوق الوارد",
+                  "A test message was sent to {to} — check the inbox"),
+    "provider_error": ("رفض SMTP2GO الطلب: {detail}", "SMTP2GO rejected the request: {detail}"),
+    "network": ("تعذّر الوصول إلى SMTP2GO: {detail}", "Could not reach SMTP2GO: {detail}"),
+}
+
+EMAIL_LABELS = {
+    "ar": {"title": "فاتورة ضريبية", "number": "رقم الفاتورة", "date": "التاريخ", "from": "من",
+           "to": "إلى", "item": "البند", "qty": "الكمية", "price": "السعر", "net": "الصافي",
+           "vat": "الضريبة", "total": "الإجمالي", "subtotal": "قبل الضريبة", "grand": "الإجمالي المستحق",
+           "vat_no": "الرقم الضريبي", "qr": "حمولة QR", "hash": "تجزئة الفاتورة",
+           "footer": "فاتورة إلكترونية صادرة عن نظام الامتثال الضريبي الخليجي.",
+           "test_subject": "اختبار إعداد البريد — SMTP2GO",
+           "test_body": "نجح ربط SMTP2GO بالقالب الضريبي. سيصل بريد الفواتير من هذا العنوان.",
+           "invoice_subject": "فاتورة {number} من {seller}"},
+    "en": {"title": "Tax Invoice", "number": "Invoice no.", "date": "Date", "from": "From",
+           "to": "To", "item": "Item", "qty": "Qty", "price": "Price", "net": "Net",
+           "vat": "VAT", "total": "Total", "subtotal": "Subtotal", "grand": "Total due",
+           "vat_no": "Tax number", "qr": "QR payload", "hash": "Invoice hash",
+           "footer": "E-invoice issued by the Gulf Tax Compliance system.",
+           "test_subject": "Email setup test — SMTP2GO",
+           "test_body": "SMTP2GO is now linked to the tax template. Invoice email will arrive from this address.",
+           "invoice_subject": "Invoice {number} from {seller}"},
+}
+
+
+def es(lang: str, key: str, **vars: object) -> str:
+    ar, en = EMAIL_STRINGS[key]
+    text = en if lang == "en" else ar
+    return text.format(**vars) if vars else text
+
+
+def _load_env_files() -> None:
+    """يقرأ .env المحلي (غير المتتبَّع) دون تجاوز متغيرات البيئة الحقيقية."""
+    for path in ENV_FILES:
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except (FileNotFoundError, OSError, UnicodeDecodeError):
+            continue
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+_load_env_files()
+
+
+def smtp2go_config() -> dict:
+    """إعدادات SMTP2GO العامة — المفتاح لا يُعاد أبدًا إلى المتصفح."""
+    return {
+        "provider": "smtp2go",
+        "configured": bool((os.environ.get("SMTP2GO_API_KEY") or "").strip()),
+        "api_url": SMTP2GO_ENDPOINT,
+        "affiliate_link": (os.environ.get("SMTP2GO_AFFILIATE_LINK") or DEFAULT_AFFILIATE_LINK).strip(),
+        "sender_default": (os.environ.get("SMTP2GO_SENDER") or "").strip(),
+        "sender_name_default": (os.environ.get("SMTP2GO_SENDER_NAME") or "Arab Templates").strip(),
+        "env_var": "SMTP2GO_API_KEY",
+        "docs": "https://support.smtp2go.com/hc/en-gb/articles/4409244343561-SMTP2GO-API",
+    }
+
+
+def _money(value: object) -> str:
+    try:
+        return f"{float(value):,.2f}"
+    except (TypeError, ValueError):
+        return str(value or "0.00")
+
+
+def invoice_email_html(invoice: dict, lang: str) -> tuple[str, str]:
+    """يبني جسم HTML ونصًا بديلًا لبريد الفاتورة بعملة الفاتورة القانونية."""
+    labels = EMAIL_LABELS["en" if lang == "en" else "ar"]
+    currency = invoice.get("currency") or "SAR"
+    seller = invoice.get("seller") or {}
+    buyer = invoice.get("buyer") or {}
+    rows = []
+    plain = []
+    for item in invoice.get("items") or []:
+        rows.append(
+            "<tr>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee'>{html_lib.escape(str(item.get('description') or ''))}</td>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee;text-align:center'>{_money(item.get('quantity'))}</td>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee;text-align:center'>{_money(item.get('unit_price'))}</td>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee;text-align:center'>{_money(item.get('net'))}</td>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee;text-align:center'>{_money(item.get('tax'))}</td>"
+            f"<td style='padding:6px 8px;border-bottom:1px solid #e3e8ee;text-align:center'>{_money(item.get('total'))}</td>"
+            "</tr>"
+        )
+        plain.append(f"- {item.get('description')} × {item.get('quantity')} = {_money(item.get('total'))} {currency}")
+    qr = (invoice.get("qr") or {}).get("payload") or ""
+    head = (
+        "<html><body style='margin:0;background:#f4f7fa;padding:24px;font-family:Tahoma,Segoe UI,Arial,sans-serif;color:#12263a'>"
+        "<div style='max-width:640px;margin:0 auto;background:#fff;border:1px solid #e3e8ee;border-radius:14px;padding:22px'>"
+        f"<h1 style='margin:0 0 4px;font-size:20px'>{labels['title']}</h1>"
+        f"<p style='margin:0 0 2px;color:#5b6b7c;font-size:13px'>"
+        f"{labels['number']}: <b>{html_lib.escape(str(invoice.get('number') or ''))}</b> · "
+        f"{labels['date']}: {html_lib.escape(str(invoice.get('issued_at') or ''))}</p>"
+        f"<p style='margin:0 0 12px;color:#5b6b7c;font-size:13px'>{labels['from']}: "
+        f"{html_lib.escape(str(seller.get('name') or ''))} · {labels['vat_no']}: "
+        f"{html_lib.escape(str(seller.get('vat_number') or ''))}</p>"
+        f"<p style='margin:0 0 12px;font-size:13px'>{labels['to']}: "
+        f"{html_lib.escape(str(buyer.get('name') or ''))}</p>"
+        "<table style='width:100%;border-collapse:collapse;font-size:13px'>"
+        f"<thead><tr style='background:#eef4f7;text-align:center'>"
+        f"<th style='padding:7px 8px;text-align:start'>{labels['item']}</th><th style='padding:7px 8px'>{labels['qty']}</th>"
+        f"<th style='padding:7px 8px'>{labels['price']}</th><th style='padding:7px 8px'>{labels['net']}</th>"
+        f"<th style='padding:7px 8px'>{labels['vat']}</th><th style='padding:7px 8px'>{labels['total']}</th></tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
+        "<div style='margin-top:14px;font-size:13px;text-align:end'>"
+        f"<p style='margin:2px 0'>{labels['subtotal']}: <b>{_money(invoice.get('subtotal'))} {currency}</b></p>"
+        f"<p style='margin:2px 0'>{labels['vat']}: <b>{_money(invoice.get('tax'))} {currency}</b></p>"
+        f"<p style='margin:6px 0;font-size:16px'>{labels['grand']}: <b>{_money(invoice.get('total'))} {currency}</b></p>"
+        "</div>"
+    )
+    if qr:
+        head += (f"<p style='margin:12px 0 2px;font-size:11px;color:#5b6b7c'>{labels['qr']}</p>"
+                 f"<p style='margin:0;font-family:Consolas,monospace;font-size:10px;word-break:break-all;color:#5b6b7c'>{qr}</p>")
+    if invoice.get("hash"):
+        head += (f"<p style='margin:8px 0 0;font-size:10px;color:#8a9aa8'>{labels['hash']}: "
+                 f"{html_lib.escape(str(invoice.get('hash')))}</p>")
+    head += (f"<p style='margin:16px 0 0;font-size:11px;color:#8a9aa8;border-top:1px dashed #d8e0e8;padding-top:10px'>"
+             f"{labels['footer']}</p></div></body></html>")
+    text = "\n".join([
+        labels["title"],
+        f"{labels['number']}: {invoice.get('number')}  {labels['date']}: {invoice.get('issued_at')}",
+        f"{labels['from']}: {seller.get('name')} ({seller.get('vat_number')})",
+        f"{labels['to']}: {buyer.get('name')}",
+        "",
+        *plain,
+        "",
+        f"{labels['subtotal']}: {_money(invoice.get('subtotal'))} {currency}",
+        f"{labels['vat']}: {_money(invoice.get('tax'))} {currency}",
+        f"{labels['grand']}: {_money(invoice.get('total'))} {currency}",
+        "",
+        labels["footer"],
+    ])
+    return head, text
+
+
+def _smtp2go_post(body: dict) -> tuple[int, dict]:
+    req = urllib.request.Request(
+        SMTP2GO_ENDPOINT,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Content-Type": "application/json", "Accept": "application/json",
+                 "User-Agent": "ArabTemplates-GulfTax/1.0"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            return resp.status, json.loads(resp.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as exc:
+        try:
+            return exc.code, json.loads(exc.read().decode("utf-8") or "{}")
+        except (ValueError, OSError):
+            return exc.code, {}
+
+
+@app.get("/api/email/config")
+def email_config():
+    cfg = smtp2go_config()
+    cfg["ok"] = True
+    cfg["lang"] = request_lang()
+    return jsonify(cfg)
+
+
+@app.post("/api/email/send")
+def email_send():
+    payload = request.get_json(silent=True) or {}
+    lang = request_lang(payload)
+    cfg = smtp2go_config()
+    invoice = payload.get("invoice") or {}
+    to = str(payload.get("to") or "").strip()
+    if payload.get("test"):
+        if not EMAIL_RE.match(to):
+            return jsonify({"ok": False, "error": es(lang, "bad_to")}), 400
+    elif not invoice:
+        return jsonify({"ok": False, "error": es(lang, "no_invoice")}), 400
+    elif not EMAIL_RE.match(to):
+        return jsonify({"ok": False, "error": es(lang, "bad_to")}), 400
+    if not cfg["configured"]:
+        return jsonify({"ok": False, "needs_key": True, "env_var": cfg["env_var"],
+                        "affiliate_link": cfg["affiliate_link"],
+                        "error": es(lang, "missing_key")}), 400
+    sender = str(payload.get("sender") or cfg["sender_default"] or "").strip()
+    if not EMAIL_RE.match(sender):
+        return jsonify({"ok": False, "error": es(lang, "bad_sender")}), 400
+    sender_name = str(payload.get("sender_name") or cfg["sender_name_default"]).strip()[:80]
+    labels = EMAIL_LABELS["en" if lang == "en" else "ar"]
+    if payload.get("test"):
+        subject = labels["test_subject"]
+        html_body = ("<html><body style='font-family:Tahoma,Arial,sans-serif;color:#12263a;padding:20px'>"
+                     f"<h2 style='margin:0 0 8px'>{labels['test_subject']}</h2>"
+                     f"<p style='margin:0;color:#5b6b7c'>{labels['test_body']}</p></body></html>")
+        text_body = f"{labels['test_subject']}\n\n{labels['test_body']}"
+        number = "TEST"
+    else:
+        number = str(invoice.get("number") or "")
+        seller_name = (invoice.get("seller") or {}).get("name") or sender_name
+        subject = labels["invoice_subject"].format(number=number, seller=seller_name)[:180]
+        html_body, text_body = invoice_email_html(invoice, lang)
+    body = {
+        "api_key": (os.environ.get("SMTP2GO_API_KEY") or "").strip(),
+        "to": [to],
+        "sender": f"{sender_name} <{sender}>" if sender_name else sender,
+        "subject": subject,
+        "html_body": html_body,
+        "text_body": text_body,
+    }
+    reply_to = str(payload.get("reply_to") or "").strip()
+    if EMAIL_RE.match(reply_to):
+        body["custom_headers"] = [{"header": "Reply-To", "value": reply_to}]
+    try:
+        status, data = _smtp2go_post(body)
+    except Exception as exc:  # pragma: no cover - شبكة
+        return jsonify({"ok": False, "error": es(lang, "network", detail=type(exc).__name__)}), 502
+    info = data.get("data") if isinstance(data, dict) else None
+    succeeded = int((info or {}).get("succeeded") or 0)
+    if status >= 400 or succeeded < 1:
+        detail = ""
+        if isinstance(info, dict):
+            failures = info.get("failures") or info.get("error") or info.get("error_code") or ""
+            detail = json.dumps(failures, ensure_ascii=False)[:240] if not isinstance(failures, str) else failures[:240]
+        if not detail:
+            detail = f"HTTP {status}"
+        return jsonify({"ok": False, "error": es(lang, "provider_error", detail=detail)}), 502
+    key = "test_sent" if payload.get("test") else "sent"
+    return jsonify({"ok": True, "provider": "smtp2go", "to": to, "sent": succeeded,
+                    "number": number, "lang": lang, "message": es(lang, key, number=number, to=to)})
 
 
 def main(argv: list[str] | None = None) -> int:

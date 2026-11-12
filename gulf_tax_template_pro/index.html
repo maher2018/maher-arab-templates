@@ -131,6 +131,7 @@
         <div>
           <div class="row">
             <button id="issueBtn" type="button" data-i18n="btn.issue">إصدار الفاتورة ورمز QR</button>
+            <button class="ghost" id="emailInvBtn" type="button" disabled data-i18n="btn.email_invoice">إرسال بالبريد</button>
             <button class="ghost" id="printBtn" type="button" disabled data-i18n="btn.print">طباعة / PDF</button>
             <button class="ghost" id="saveInvBtn" type="button" disabled data-i18n="btn.save">حفظ ثم إضافة للمبيعات</button>
             <button class="ghost" id="resetInvBtn" type="button" data-i18n="btn.new_invoice">فاتورة جديدة</button>
@@ -355,6 +356,24 @@
       </div>
     </div>
     <div class="modal-facts" id="obFacts"></div>
+
+    <fieldset class="card smtp-card">
+      <legend data-i18n="email.section">إعدادات إرسال الفواتير بالبريد — SMTP2GO</legend>
+      <p class="fine" data-i18n="email.intro">اربط حساب SMTP2GO ليصل بريد الفواتير إلى عملائك من نطاقك الموثق، ويُحفظ تاريخ الإرسال في الفاتورة.</p>
+      <div class="smtp-status"><span class="dot" id="emailDot"></span><span id="emailStatus">—</span></div>
+      <div class="grid-3">
+        <div class="field"><label for="emailFromName" data-i18n="email.from_name">اسم المُرسل</label><input id="emailFromName" type="text" data-i18n-ph="email.ph.name"></div>
+        <div class="field"><label for="emailFromEmail" data-i18n="email.from_email">بريد المُرسل الموثق</label><input id="emailFromEmail" type="email" placeholder="billing@example.com"></div>
+        <div class="field"><label for="emailReplyTo" data-i18n="email.reply_to">بريد الرد (Reply-To)</label><input id="emailReplyTo" type="email" placeholder="support@example.com"></div>
+      </div>
+      <div class="row tight">
+        <button id="smtpSignup" type="button" data-i18n="email.signup">تسجيل سريع في SMTP2GO</button>
+        <button class="ghost small" id="emailTestBtn" type="button" data-i18n="email.test">اختبار الاتصال</button>
+      </div>
+      <p class="msg" id="emailMsg"></p>
+      <p class="fine" data-i18n="email.env_note">المفتاح يُخزَّن على الخادم فقط: أضف SMTP2GO_API_KEY في ملف .env (ورابط الإحالة في SMTP2GO_AFFILIATE_LINK). لا يُرسل المفتاح أبدًا إلى المتصفح.</p>
+    </fieldset>
+
     <div class="row"><button id="obSave" type="button" data-i18n="modal.save">حفظ وإغلاق</button>
       <button class="ghost" id="obLater" type="button" data-i18n="modal.later">لاحقًا</button>
     </div>
