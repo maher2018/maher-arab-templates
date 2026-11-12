@@ -159,11 +159,12 @@ def _amount(value: Any) -> float:
         return 0.0
 
 
-def summary(account: str, country: str, period: str) -> dict[str, Any]:
+def summary(account: str, country: str, period: str, lang: str = "ar") -> dict[str, Any]:
     """صافي الإقرار: ضريبة المبيعات − ضريبة المشتريات، مع تفصيل الفواتير."""
     import einvoice  # استيراد متأخر لتفادي دورة الاستيراد
 
-    meta = einvoice.country_meta(country)
+    use_en = einvoice.normalize_lang(lang) == "en"
+    meta = einvoice.country_meta(country, lang)
     code = meta["code"]
     clean_period = (period or date.today().strftime("%Y-%m"))[:7]
     with _lock:
@@ -186,9 +187,13 @@ def summary(account: str, country: str, period: str) -> dict[str, Any]:
     else:
         effective = 0.0
 
-    due = einvoice.due_date(code, clean_period)
+    due = einvoice.due_date(code, clean_period, lang)
+    status = (("Payable to the authority" if net > 0 else "Credit carried forward" if net < 0 else "Balanced")
+              if use_en else
+              ("مستحق للدفع" if net > 0 else "رصيد دائن للترحيل" if net < 0 else "متعادل"))
     return {
         "ok": True,
+        "lang": "en" if use_en else "ar",
         "account": _slug(account),
         "country": meta,
         "period": clean_period,
@@ -206,5 +211,5 @@ def summary(account: str, country: str, period: str) -> dict[str, Any]:
         "purchases": purchases[:200],
         "due": due,
         "currency": meta["currency"],
-        "status": "مستحق للدفع" if net > 0 else "رصيد دائن للترحيل" if net < 0 else "متعادل",
+        "status": status,
     }

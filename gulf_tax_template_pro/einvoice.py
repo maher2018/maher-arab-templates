@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-"""محرك الفواتير الإلكترونية الخليجية.
+"""محرك الفواتير الإلكترونية الخليجية — ثنائي اللغة.
 
-يحسب الضريبة حسب دولة الإصدار (السعودية ١٥٪، الإمارات وعُمان ٥٪، البحرين ١٠٪،
-قطر والكويت بلا ضريبة قيمة مضافة حاليًا)، ويبني حمولة رمز الاستجابة السريعة
-بصيغة ZATCA Phase 1 (TLV ثم Base64) وهي الصيغة نفسها التي تعتمدها FTA في
-الإمارات لحقول: اسم المورد، الرقم الضريبي، الطابع الزمني، الإجمالي، الضريبة.
+Bilingual Gulf e-invoicing engine: VAT by country (SA 15%, AE/OM 5%, BH 10%,
+QA/KW 0%), currency metadata, ZATCA/FTA TLV+Base64 QR payload, printable hash,
+and automatic country detection from timezone / Accept-Language.
 
-الوحدة تعمل بمكتبة بايثون القياسية فقط. توليد صورة QR يحتاج حزمة ``segno``
-(اختيارية) — عند غيابها يُعاد النص المشفّر فقط وتُعرض رسالة في الواجهة.
-
-    from einvoice import build_invoice
-    inv = build_invoice({...})
+    from einvoice import build_invoice, detect_country
+    inv = build_invoice({...}, lang="en")
 """
 from __future__ import annotations
 
@@ -25,84 +21,122 @@ from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any
 
 CENT = Decimal("0.01")
+LANGS = ("ar", "en")
+DEFAULT_COUNTRY = "SA"
+MAX_ITEMS = 200
 
 COUNTRIES: dict[str, dict[str, Any]] = {
     "SA": {
-        "name": "السعودية",
+        "name": "السعودية", "name_en": "Saudi Arabia",
         "authority": "هيئة الزكاة والضريبة والجمارك (ZATCA)",
-        "vat_rate": 15.0,
-        "currency": "SAR",
-        "tax_no_label": "الرقم الضريبي (VAT)",
+        "authority_en": "Zakat, Tax and Customs Authority (ZATCA)",
+        "vat_rate": 15.0, "currency": "SAR",
+        "tax_no_label": "الرقم الضريبي (VAT)", "tax_no_label_en": "VAT number",
         "tax_no_regex": r"^\d{15}$",
-        "tax_no_hint": "١٥ رقمًا",
+        "tax_no_hint": "١٥ رقمًا", "tax_no_hint_en": "15 digits",
         "filing": "إقرار شهري أو ربع سنوي — يُقدَّم خلال الشهر التالي لنهاية الفترة",
+        "filing_en": "Monthly or quarterly return — filed in the month after the period ends",
         "qr_spec": "ZATCA TLV — المرحلة الأولى (Phase 1)",
+        "qr_spec_en": "ZATCA TLV — Phase 1",
         "period": "monthly",
     },
     "AE": {
-        "name": "الإمارات",
+        "name": "الإمارات", "name_en": "United Arab Emirates",
         "authority": "الهيئة الاتحادية للضرائب (FTA)",
-        "vat_rate": 5.0,
-        "currency": "AED",
-        "tax_no_label": "رقم التسجيل الضريبي (TRN)",
+        "authority_en": "Federal Tax Authority (FTA)",
+        "vat_rate": 5.0, "currency": "AED",
+        "tax_no_label": "رقم التسجيل الضريبي (TRN)", "tax_no_label_en": "Tax Registration Number (TRN)",
         "tax_no_regex": r"^\d{15}$",
-        "tax_no_hint": "١٥ رقمًا",
+        "tax_no_hint": "١٥ رقمًا", "tax_no_hint_en": "15 digits",
         "filing": "إقرار ربع سنوي — خلال ٢٨ يومًا من نهاية الربع",
+        "filing_en": "Quarterly return — within 28 days of the quarter end",
         "qr_spec": "FTA QR — اسم المورد، TRN، التاريخ، الإجمالي، الضريبة",
+        "qr_spec_en": "FTA QR — seller, TRN, timestamp, total, VAT",
         "period": "quarterly",
     },
     "OM": {
-        "name": "عُمان",
-        "authority": "جهاز الضرائب",
-        "vat_rate": 5.0,
-        "currency": "OMR",
-        "tax_no_label": "الرقم الضريبي",
+        "name": "عُمان", "name_en": "Oman",
+        "authority": "جهاز الضرائب", "authority_en": "Tax Authority of Oman",
+        "vat_rate": 5.0, "currency": "OMR",
+        "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number",
         "tax_no_regex": r"^[A-Za-z0-9]{5,20}$",
-        "tax_no_hint": "رقم التسجيل الضريبي",
+        "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number",
         "filing": "إقرار شهري أو ربع سنوي حسب تصنيف المنشأة",
+        "filing_en": "Monthly or quarterly return depending on the business category",
         "qr_spec": "QR ضريبي — بيانات المورد والإجمالي والضريبة",
+        "qr_spec_en": "Tax QR — seller, total and VAT",
         "period": "monthly",
     },
     "BH": {
-        "name": "البحرين",
+        "name": "البحرين", "name_en": "Bahrain",
         "authority": "الجهاز الوطني للإيرادات (NBR)",
-        "vat_rate": 10.0,
-        "currency": "BHD",
-        "tax_no_label": "الرقم الضريبي",
+        "authority_en": "National Bureau for Revenue (NBR)",
+        "vat_rate": 10.0, "currency": "BHD",
+        "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number",
         "tax_no_regex": r"^\d{10,15}$",
-        "tax_no_hint": "١٠ إلى ١٥ رقمًا",
+        "tax_no_hint": "١٠ إلى ١٥ رقمًا", "tax_no_hint_en": "10 to 15 digits",
         "filing": "إقرار شهري أو ربع سنوي حسب حجم التوريدات",
+        "filing_en": "Monthly or quarterly return depending on supply volume",
         "qr_spec": "QR ضريبي — بيانات المورد والإجمالي والضريبة",
+        "qr_spec_en": "Tax QR — seller, total and VAT",
         "period": "monthly",
     },
     "QA": {
-        "name": "قطر",
-        "authority": "الهيئة العامة للضرائب",
-        "vat_rate": 0.0,
-        "currency": "QAR",
-        "tax_no_label": "الرقم الضريبي",
+        "name": "قطر", "name_en": "Qatar",
+        "authority": "الهيئة العامة للضرائب", "authority_en": "General Tax Authority",
+        "vat_rate": 0.0, "currency": "QAR",
+        "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number",
         "tax_no_regex": r"^[A-Za-z0-9]{5,20}$",
-        "tax_no_hint": "رقم التسجيل الضريبي",
+        "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number",
         "filing": "لا ضريبة قيمة مضافة مطبقة حاليًا — القالب جاهز عند تفعيلها",
-        "qr_spec": "QR ضريبي",
+        "filing_en": "VAT is not applied yet — the template is ready when it launches",
+        "qr_spec": "QR ضريبي", "qr_spec_en": "Tax QR",
         "period": "monthly",
     },
     "KW": {
-        "name": "الكويت",
+        "name": "الكويت", "name_en": "Kuwait",
         "authority": "وزارة المالية — الإدارة الضريبية",
-        "vat_rate": 0.0,
-        "currency": "KWD",
-        "tax_no_label": "الرقم الضريبي",
+        "authority_en": "Ministry of Finance — Tax Department",
+        "vat_rate": 0.0, "currency": "KWD",
+        "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number",
         "tax_no_regex": r"^[A-Za-z0-9]{5,20}$",
-        "tax_no_hint": "رقم التسجيل الضريبي",
+        "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number",
         "filing": "لا ضريبة قيمة مضافة مطبقة حاليًا — القالب جاهز عند تفعيلها",
-        "qr_spec": "QR ضريبي",
+        "filing_en": "VAT is not applied yet — the template is ready when it launches",
+        "qr_spec": "QR ضريبي", "qr_spec_en": "Tax QR",
         "period": "monthly",
     },
 }
 
-DEFAULT_COUNTRY = "SA"
-MAX_ITEMS = 200
+CURRENCIES: dict[str, dict[str, Any]] = {
+    "SAR": {"name": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س", "decimals": 2},
+    "AED": {"name": "درهم إماراتي", "name_en": "UAE Dirham", "symbol": "د.إ", "decimals": 2},
+    "KWD": {"name": "دينار كويتي", "name_en": "Kuwaiti Dinar", "symbol": "د.ك", "decimals": 3},
+    "QAR": {"name": "ريال قطري", "name_en": "Qatari Riyal", "symbol": "ر.ق", "decimals": 2},
+    "OMR": {"name": "ريال عُماني", "name_en": "Omani Rial", "symbol": "ر.ع", "decimals": 3},
+    "BHD": {"name": "دينار بحريني", "name_en": "Bahraini Dinar", "symbol": "د.ب", "decimals": 3},
+    "USD": {"name": "دولار أمريكي", "name_en": "US Dollar", "symbol": "$", "decimals": 2},
+    "EUR": {"name": "يورو", "name_en": "Euro", "symbol": "€", "decimals": 2},
+}
+
+# خرائط الاكتشاف التلقائي: المنطقة الزمنية أولًا ثم لغة المتصفح ثم المنطقة.
+TIMEZONE_COUNTRY: dict[str, str] = {
+    "asia/riyadh": "SA", "asia/dubai": "AE", "asia/kuwait": "KW", "asia/qatar": "QA",
+    "asia/muscat": "OM", "asia/bahrain": "BH",
+}
+LANGUAGE_COUNTRY: dict[str, str] = {
+    "ar-sa": "SA", "ar-ae": "AE", "ar-kw": "KW", "ar-qa": "QA", "ar-om": "OM", "ar-bh": "BH",
+    "en-ae": "AE", "en-bh": "BH", "en-qa": "QA", "en-om": "OM", "en-kw": "KW", "en-sa": "SA",
+}
+
+
+def normalize_lang(value: Any) -> str:
+    return "en" if str(value or "").strip().lower().startswith("en") else "ar"
+
+
+def m(lang: str, ar: str, en: str) -> str:
+    """رسالة ثنائية حسب اللغة المطلوبة."""
+    return en if normalize_lang(lang) == "en" else ar
 
 
 def decimal(value: Any, default: str = "0") -> Decimal:
@@ -110,7 +144,7 @@ def decimal(value: Any, default: str = "0") -> Decimal:
     if value is None or value == "":
         return Decimal(default)
     if isinstance(value, bool):
-        raise ValueError("قيمة رقمية غير صالحة")
+        raise ValueError(m("ar", "قيمة رقمية غير صالحة", "invalid numeric value"))
     text = str(value).strip()
     text = (text.replace("٬", "").replace(",", "").replace("٫", ".")
             .replace("−", "-").replace("—", "-"))
@@ -119,7 +153,7 @@ def decimal(value: Any, default: str = "0") -> Decimal:
     try:
         return Decimal(text)
     except (InvalidOperation, ValueError) as exc:
-        raise ValueError(f"قيمة رقمية غير صالحة: {value}") from exc
+        raise ValueError(m("ar", f"قيمة رقمية غير صالحة: {value}", f"invalid numeric value: {value}")) from exc
 
 
 def money(value: Any) -> Decimal:
@@ -130,41 +164,91 @@ def fnum(value: Any) -> float:
     return float(money(value))
 
 
-def country_meta(code: str | None) -> dict[str, Any]:
+def country_meta(code: str | None, lang: str = "ar") -> dict[str, Any]:
+    """بيانات الدولة مع نصوص معروضة باللغة المطلوبة (مع إبقاء الأصلين)."""
     key = (code or DEFAULT_COUNTRY).strip().upper()
     if key not in COUNTRIES:
-        raise ValueError(f"دولة غير مدعومة: {code}")
-    return {"code": key, **COUNTRIES[key]}
+        raise ValueError(m(lang, f"دولة غير مدعومة: {code}", f"unsupported country: {code}"))
+    base = COUNTRIES[key]
+    use_en = normalize_lang(lang) == "en"
+    meta = {"code": key, **base, "lang": "en" if use_en else "ar"}
+    for field in ("name", "authority", "tax_no_label", "tax_no_hint", "filing", "qr_spec"):
+        meta[field] = base[f"{field}_en"] if use_en else base[field]
+    meta["currency"] = base["currency"]
+    meta["currency_info"] = {"code": base["currency"], **CURRENCIES.get(base["currency"], {})}
+    return meta
 
 
-def countries_public() -> list[dict[str, Any]]:
-    return [{"code": key, **meta} for key, meta in COUNTRIES.items()]
+def countries_public(lang: str = "ar") -> list[dict[str, Any]]:
+    return [country_meta(code, lang) for code in COUNTRIES]
 
 
-def compute_lines(items: list[dict[str, Any]], rate: float, prices_include_vat: bool = False) -> dict[str, Any]:
+def currencies_public(lang: str = "ar") -> list[dict[str, Any]]:
+    rows = []
+    for code, info in CURRENCIES.items():
+        rows.append({
+            "code": code,
+            "name": info["name_en"] if normalize_lang(lang) == "en" else info["name"],
+            "name_ar": info["name"], "name_en": info["name_en"],
+            "symbol": info["symbol"], "decimals": info["decimals"],
+        })
+    return rows
+
+
+def detect_country(tz: str | None = None, accept_language: str | None = None,
+                   lang: str = "ar") -> dict[str, Any]:
+    """يخمّن دولة العميل من المنطقة الزمنية ثم لغة المتصفح، ويضبط العملة والنسبة."""
+    zone = (tz or "").strip().lower()
+    if zone in TIMEZONE_COUNTRY:
+        code, source = TIMEZONE_COUNTRY[zone], "timezone"
+    else:
+        code, source = "", ""
+        for part in (accept_language or "").replace(";", ",").split(","):
+            tag = part.strip().lower()[:5]
+            if tag in LANGUAGE_COUNTRY:
+                code, source = LANGUAGE_COUNTRY[tag], "language"
+                break
+            short = tag[:2]
+            if short in ("ar", "en"):
+                code, source = DEFAULT_COUNTRY, "language"
+    if not code:
+        code, source = DEFAULT_COUNTRY, "default"
+    meta = country_meta(code, lang)
+    return {
+        "country": meta["code"],
+        "country_name": meta["name"],
+        "currency": meta["currency"],
+        "vat_rate": meta["vat_rate"],
+        "timezone": tz or "",
+        "source": source,
+        "confidence": {"timezone": 0.95, "language": 0.6, "default": 0.3}[source],
+    }
+
+
+def compute_lines(items: list[dict[str, Any]], rate: float, prices_include_vat: bool = False,
+                  lang: str = "ar") -> dict[str, Any]:
     """يحسب كل بند ثم الإجماليات. الأسعار قد تُدخل شاملة الضريبة أو قبلها."""
     if not isinstance(items, list) or not items:
-        raise ValueError("أضف بندًا واحدًا على الأقل للفاتورة")
+        raise ValueError(m(lang, "أضف بندًا واحدًا على الأقل للفاتورة", "add at least one invoice line"))
     if len(items) > MAX_ITEMS:
-        raise ValueError(f"الحد الأقصى {MAX_ITEMS} بندًا في الفاتورة")
+        raise ValueError(m(lang, f"الحد الأقصى {MAX_ITEMS} بندًا في الفاتورة", f"maximum {MAX_ITEMS} lines per invoice"))
     factor = Decimal("1") + Decimal(str(rate)) / Decimal("100")
     rows: list[dict[str, Any]] = []
-    subtotal = Decimal("0")
-    discount_total = Decimal("0")
-    tax_total = Decimal("0")
+    subtotal = discount_total = tax_total = Decimal("0")
     for index, item in enumerate(items, start=1):
         desc = str(item.get("description") or "").strip()
         if not desc:
-            raise ValueError(f"البند {index}: الوصف مطلوب")
+            raise ValueError(m(lang, f"البند {index}: الوصف مطلوب", f"line {index}: description is required"))
         qty = decimal(item.get("quantity", 1))
         if qty <= 0:
-            raise ValueError(f"البند {index}: الكمية يجب أن تكون أكبر من صفر")
+            raise ValueError(m(lang, f"البند {index}: الكمية يجب أن تكون أكبر من صفر",
+                               f"line {index}: quantity must be greater than zero"))
         price = decimal(item.get("unit_price", 0))
         if price < 0:
-            raise ValueError(f"البند {index}: السعر لا يكون سالبًا")
+            raise ValueError(m(lang, f"البند {index}: السعر لا يكون سالبًا", f"line {index}: price cannot be negative"))
         discount_pct = decimal(item.get("discount", 0))
         if discount_pct < 0 or discount_pct > 100:
-            raise ValueError(f"البند {index}: نسبة الخصم بين ٠ و١٠٠")
+            raise ValueError(m(lang, f"البند {index}: نسبة الخصم بين ٠ و١٠٠", f"line {index}: discount must be 0-100"))
         gross = qty * price
         discount_amount = (gross * discount_pct / Decimal("100")).quantize(CENT, rounding=ROUND_HALF_UP)
         net_input = gross - discount_amount
@@ -239,35 +323,37 @@ def invoice_number(country: str, issued: date, sequence: int | None = None) -> s
     return f"INV-{country}-{issued.strftime('%Y%m%d')}-{uuid.uuid4().hex[:4].upper()}"
 
 
-def validate_tax_no(code: str, value: str, label: str) -> str:
+def validate_tax_no(code: str, value: str, label: str, lang: str = "ar") -> str:
     clean = (value or "").strip()
     if not clean:
-        raise ValueError(f"{label} مطلوب")
+        raise ValueError(m(lang, f"{label} مطلوب", f"{label} is required"))
     pattern = COUNTRIES[code]["tax_no_regex"]
     if pattern and not re.match(pattern, clean):
-        raise ValueError(f"{label} غير صالح — {COUNTRIES[code]['tax_no_hint']}")
+        hint = COUNTRIES[code]["tax_no_hint_en" if normalize_lang(lang) == "en" else "tax_no_hint"]
+        raise ValueError(m(lang, f"{label} غير صالح — {hint}", f"invalid {label} — {hint}"))
     return clean
 
 
 def build_invoice(payload: dict[str, Any]) -> dict[str, Any]:
     """يبني فاتورة كاملة (تحقق + حسابات + QR + تجزئة) دون أي تخزين."""
     if not isinstance(payload, dict):
-        raise ValueError("حمولة غير صالحة")
-    meta = country_meta(payload.get("country"))
+        raise ValueError(m("ar", "حمولة غير صالحة", "invalid payload"))
+    lang = normalize_lang(payload.get("lang"))
+    meta = country_meta(payload.get("country"), lang)
     code = meta["code"]
     rate = meta["vat_rate"]
     if payload.get("vat_rate") not in (None, ""):
         rate = float(decimal(payload["vat_rate"]))
         if rate < 0 or rate > 100:
-            raise ValueError("نسبة الضريبة بين ٠ و١٠٠")
+            raise ValueError(m(lang, "نسبة الضريبة بين ٠ و١٠٠", "VAT rate must be between 0 and 100"))
 
-    def person(key: str, name_label: str) -> dict[str, Any]:
+    def person(key: str, name_ar: str, name_en: str) -> dict[str, Any]:
         block = payload.get(key) or {}
         if not isinstance(block, dict):
-            raise ValueError("بيانات الطرف غير صالحة")
+            raise ValueError(m(lang, "بيانات الطرف غير صالحة", "invalid party details"))
         name = str(block.get("name") or "").strip()
         if not name:
-            raise ValueError(f"{name_label} مطلوب")
+            raise ValueError(m(lang, f"{name_ar} مطلوب", f"{name_en} is required"))
         return {
             "name": name[:160],
             "vat_number": str(block.get("vat_number") or "").strip()[:40],
@@ -276,22 +362,22 @@ def build_invoice(payload: dict[str, Any]) -> dict[str, Any]:
             "phone": str(block.get("phone") or "").strip()[:40],
         }
 
-    seller = person("seller", "اسم المورد")
-    buyer = person("buyer", "اسم العميل")
+    seller = person("seller", "اسم المورد", "seller name")
+    buyer = person("buyer", "اسم العميل", "customer name")
     if not seller["vat_number"]:
-        raise ValueError(f"{meta['tax_no_label']} للمورد مطلوب لإصدار فاتورة معتمدة")
+        raise ValueError(m(lang, f"{meta['tax_no_label']} للمورد مطلوب لإصدار فاتورة معتمدة",
+                           f"seller VAT number is required on a tax invoice"))
     if rate > 0:
-        validate_tax_no(code, seller["vat_number"], meta["tax_no_label"])
+        validate_tax_no(code, seller["vat_number"], meta["tax_no_label"], lang)
 
-    computed = compute_lines(payload.get("items") or [], rate, bool(payload.get("prices_include_vat")))
+    computed = compute_lines(payload.get("items") or [], rate, bool(payload.get("prices_include_vat")), lang)
 
     issued_raw = str(payload.get("date") or "").strip()
     try:
         issued = date.fromisoformat(issued_raw) if issued_raw else date.today()
     except ValueError as exc:
-        raise ValueError("تاريخ الفاتورة يجب أن يكون بصيغة YYYY-MM-DD") from exc
+        raise ValueError(m(lang, "تاريخ الفاتورة يجب أن يكون بصيغة YYYY-MM-DD", "invoice date must be YYYY-MM-DD")) from exc
     number = str(payload.get("number") or "").strip()[:60] or invoice_number(code, issued)
-    sequence = payload.get("sequence")
 
     stamp = datetime.now(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
     payload_qr = zatca_tlv(seller["name"], seller["vat_number"], stamp, computed["total"], computed["tax"])
@@ -302,24 +388,29 @@ def build_invoice(payload: dict[str, Any]) -> dict[str, Any]:
 
     notes: list[str] = []
     if rate == 0:
-        notes.append(f"{meta['name']}: لا تُطبَّق ضريبة قيمة مضافة حاليًا — الفاتورة صادرة بنسبة ٠٪.")
+        notes.append(m(lang, f"{meta['name']}: لا تُطبَّق ضريبة قيمة مضافة حاليًا — الفاتورة صادرة بنسبة ٠٪.",
+                       f"{meta['name']}: VAT is not applied yet — this invoice is issued at 0%."))
     if computed["discount"] > 0:
-        notes.append("الخصم مطبَّق قبل حساب الضريبة في كل بند.")
+        notes.append(m(lang, "الخصم مطبَّق قبل حساب الضريبة في كل بند.",
+                       "Discounts are applied before VAT on every line."))
     if payload.get("prices_include_vat"):
-        notes.append("أُدخلت الأسعار شاملة الضريبة وتم استخراج الصافي والضريبة منها.")
+        notes.append(m(lang, "أُدخلت الأسعار شاملة الضريبة وتم استخراج الصافي والضريبة منها.",
+                       "Prices were entered VAT-inclusive; net and VAT were extracted."))
     if not qr_svg("test"):
-        notes.append("مكتبة segno غير مثبتة — يُعرض نص QR فقط. نفّذ: python -m pip install segno")
+        notes.append(m(lang, "مكتبة segno غير مثبتة — يُعرض نص QR فقط. نفّذ: python -m pip install segno",
+                       "segno is not installed — showing the QR payload only. Run: python -m pip install segno"))
 
     return {
         "ok": True,
+        "lang": lang,
         "uuid": str(uuid.uuid4()),
         "number": number,
         "invoice_number": number,
-        "sequence": sequence,
         "issued_at": issued.isoformat(),
         "stamp": stamp,
         "country": meta,
         "currency": meta["currency"],
+        "currency_info": meta["currency_info"],
         "vat_rate": float(rate),
         "seller": seller,
         "buyer": buyer,
@@ -351,13 +442,13 @@ def periods(country: str, back: int = 8) -> list[str]:
     return out
 
 
-def due_date(country: str, period: str) -> dict[str, str]:
+def due_date(country: str, period: str, lang: str = "ar") -> dict[str, str]:
     """آخر موعد تقديم الإقرار للفترة المحددة (تقديري حسب الدورية)."""
-    meta = country_meta(country)
+    meta = country_meta(country, lang)
     try:
         year, month = int(period[:4]), int(period[5:7])
     except (ValueError, IndexError) as exc:
-        raise ValueError("الفترة يجب أن تكون بصيغة YYYY-MM") from exc
+        raise ValueError(m(lang, "الفترة يجب أن تكون بصيغة YYYY-MM", "period must be YYYY-MM")) from exc
     if meta["period"] == "quarterly":
         end_month = min(((month - 1) // 3 + 1) * 3, 12)
         end = date(year, end_month, 1)

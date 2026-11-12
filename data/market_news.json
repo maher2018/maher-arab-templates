@@ -8,7 +8,12 @@
       "title": "فاتورة: المرحلة التالية من التكامل تشمل الأعمال الصغيرة",
       "summary": "المنشآت الملتزمة وصلت لنسب إصدار عالية، والتركيز الآن على ربط أنظمة نقاط البيع بالفواتير الإلكترونية لتفادي غرامات عدم الإصدار.",
       "action": "تأكد أن كل نقطة بيع تصدر فاتورة برمز QR ورقم ضريبي مطابق.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "Saudi Arabia",
+      "title_en": "E-invoicing: the next integration phase reaches small businesses",
+      "summary_en": "Compliant businesses already issue at high rates; the focus now is connecting point-of-sale systems to e-invoices to avoid non-issuance fines.",
+      "action_en": "Make sure every POS terminal issues an invoice with a QR code and a matching tax number.",
+      "source_en": "Internal digest"
     },
     {
       "date": "2026-11-06",
@@ -16,7 +21,12 @@
       "title": "ضريبة القيمة المضافة الإماراتية: تدقيق أعلى على الفواتير غير المطابقة",
       "summary": "تشير التحديثات القطاعية إلى تزايد طلبات توضيح الفروق بين الإقرار والمبيعات الفعلية، وأبرز أسبابها بنود بلا تصنيف ضريبي.",
       "action": "صنّف كل بند بعلامة خاضعة أو معفاة قبل تشغيل تقرير الربع.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "UAE",
+      "title_en": "UAE VAT: tighter scrutiny of non-matching invoices",
+      "summary_en": "Sector updates point to more reconciliation requests between the return and actual sales, mostly caused by lines without a VAT treatment.",
+      "action_en": "Tag every line as standard-rated or exempt before running the quarterly report.",
+      "source_en": "Internal digest"
     },
     {
       "date": "2026-11-03",
@@ -24,7 +34,12 @@
       "title": "الكويت: استعدادات لتوسيع الإفصاح المالي الرقمي",
       "summary": "المنشآت المتوسطة تبدأ تنظيم سجلاتها المالية استباقًا لأي متطلبات إفصاح جديدة، مع تركيز على أرشفة الفواتير والمستندات.",
       "action": "احفظ نسخًا رقمية موثّقة للفواتير مع تاريخ المعالجة والمصدر.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "Kuwait",
+      "title_en": "Kuwait: preparing for wider digital financial disclosure",
+      "summary_en": "Mid-size businesses are organising their records ahead of any new disclosure rules, focusing on archiving invoices and supporting documents.",
+      "action_en": "Keep documented digital copies of invoices with processing date and source.",
+      "source_en": "Internal digest"
     },
     {
       "date": "2026-10-29",
@@ -32,7 +47,12 @@
       "title": "اتجاه متزايد لربط واتساب بعمليات الفوترة",
       "summary": "الشركات الصغيرة تفضّل استلام الفواتير من الموردين عبر واتساب ثم ترحيلها آليًا، لتقليل الإدخال اليدوي وأخطاء الترحيل.",
       "action": "استخدم المسح الجماعي بدل الإدخال اليدوي، وراجع الفواتير منخفضة الثقة فقط.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "Gulf",
+      "title_en": "WhatsApp is increasingly connected to invoicing workflows",
+      "summary_en": "Small companies prefer receiving supplier invoices on WhatsApp and posting them automatically, cutting manual entry and posting errors.",
+      "action_en": "Use batch scanning instead of manual entry, and review only low-confidence invoices.",
+      "source_en": "Internal digest"
     },
     {
       "date": "2026-10-22",
@@ -40,7 +60,12 @@
       "title": "الزكاة والضريبة: أهمية مطابقة بيانات المورد قبل الخصم",
       "summary": "الخصم الضريبي يرتبط بصحة بيانات المورد والرقم الضريبي؛ الفواتير الناقصة تُرفض عند التدقيق حتى لو كان المبلغ صحيحًا.",
       "action": "افحص المورد والرقم الضريبي في كل فاتورة قبل اعتماد الخصم.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "Saudi Arabia",
+      "title_en": "ZATCA: match supplier details before claiming input VAT",
+      "summary_en": "Input VAT depends on valid supplier details and tax number; incomplete invoices are rejected at audit even when the amount is correct.",
+      "action_en": "Check the supplier name and tax number on every invoice before claiming the deduction.",
+      "source_en": "Internal digest"
     },
     {
       "date": "2026-10-15",
@@ -48,7 +73,12 @@
       "title": "الفواتير الإلكترونية: الاستعداد للمرحلة التجريبية",
       "summary": "الحديث القطاعي يتجه نحو متطلبات تبادل فواتير إلكتروني بين الشركات، ما يجعل البيانات المنظمة (مورد، تاريخ، مبلغ، ضريبة) شرطًا أساسيًا.",
       "action": "وحّد حقول الفاتورة الآن حتى لا تضطر لإعادة الترحيل لاحقًا.",
-      "source": "تجميع داخلي"
+      "source": "تجميع داخلي",
+      "tag_en": "UAE",
+      "title_en": "E-invoicing: preparing for the pilot phase",
+      "summary_en": "Industry talk is moving toward B2B e-invoice exchange requirements, making structured data (supplier, date, amount, VAT) essential.",
+      "action_en": "Standardise invoice fields now so you do not have to re-post later.",
+      "source_en": "Internal digest"
     }
   ]
 }

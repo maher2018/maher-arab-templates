@@ -218,3 +218,43 @@ tr:last-child td{border-bottom:0}
   .print-qr svg{width:110px;height:110px}
   .print-foot .fine{color:#555;font-size:8pt}
 }
+
+/* ============ التوطين: عناصر التحكم بالدولة/العملة/اللغة ============ */
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-select{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);white-space:nowrap}
+.mini-select select{font-size:.76rem;padding:6px 10px;border-radius:9px;max-width:150px;background-image:none}
+.lang-btn{background:rgba(55,194,168,.14);border:1px solid rgba(55,194,168,.42);color:var(--ink);
+  font-weight:800;font-size:.78rem;padding:7px 14px;border-radius:999px;letter-spacing:.2px}
+.lang-btn:hover{background:rgba(55,194,168,.24)}
+.icon-btn{background:transparent;border:1px solid var(--line);color:var(--muted);width:34px;height:34px;
+  padding:0;border-radius:50%;font-size:1rem;display:grid;place-items:center;line-height:1}
+.icon-btn:hover{color:var(--ink);border-color:var(--teal)}
+
+/* ============ نافذة الإعدادات / التسجيل ============ */
+.modal-backdrop{position:fixed;inset:0;z-index:60;background:rgba(3,12,18,.74);backdrop-filter:blur(7px);
+  display:grid;place-items:center;padding:18px}
+.modal{position:relative;width:min(580px,100%);background:var(--panel-solid);border:1px solid var(--line);
+  border-radius:20px;padding:22px;box-shadow:var(--shadow);max-height:92vh;overflow:auto;animation:fade .22s ease}
+.modal h2{margin:0 0 6px;font-size:1.18rem}
+.modal-close{position:absolute;inset-inline-end:12px;inset-block-start:10px;background:none;border:0;
+  color:var(--muted);font-size:1rem;padding:6px;line-height:1}
+.modal-close:hover{color:var(--ink)}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:520px){.modal-grid{grid-template-columns:1fr}}
+.lang-choice{display:flex;gap:8px;flex-wrap:wrap}
+.lang-option{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);
+  border-radius:11px;padding:9px 18px;font-weight:700}
+.lang-option.active{border-color:var(--teal);color:var(--ink);background:rgba(55,194,168,.16)}
+.detect-note{font-size:.8rem;color:var(--gold);background:rgba(226,180,85,.08);border:1px solid rgba(226,180,85,.25);
+  border-radius:11px;padding:9px 12px;margin:10px 0 0}
+.modal-facts{font-size:.76rem;color:var(--muted);margin:12px 0 0}
+
+/* ============ اتجاه LTR عند الإنجليزية ============ */
+body.ltr th,body.ltr td{text-align:left}
+body.ltr .sum-list div,body.ltr .usage-head,body.ltr .totals div{align-items:flex-start}
+body.ltr .ticker-track{animation-name:slideLtr}
+@keyframes slideLtr{from{transform:translateX(0)}to{transform:translateX(-60%)}}
+body.ltr .print-meta{text-align:right}
+body.ltr .hero h1,body.ltr .hero p{text-align:left}
+body.ltr .checklist{padding-inline-start:20px}
+body.ltr .qr-meta .mono{text-align:left}

@@ -76,21 +76,44 @@ SAMPLE_TEXT = """المورد: شركة النخيل للتجارة
 """
 
 PLANS = [
-    {"key": "starter", "name": "الأساسية", "price": 899, "scans": 300, "batch": 100,
+    {"key": "starter", "name": "الأساسية", "name_en": "Starter", "price": 899, "scans": 300, "batch": 100,
      "for": "مكتب محاسبة أو منشأة صغيرة بفواتير محدودة",
-     "features": ["مسح نص واتساب", "تصدير CSV", "مساعد ضريبي"]},
-    {"key": "growth", "name": "النمو", "price": 1490, "scans": 3000, "batch": 500,
+     "for_en": "A small accounting office or business with limited invoices",
+     "features": ["مسح نص واتساب", "تصدير CSV", "مساعد ضريبي"],
+     "features_en": ["WhatsApp text scanning", "CSV export", "Tax assistant"]},
+    {"key": "growth", "name": "النمو", "name_en": "Growth", "price": 1490, "scans": 3000, "batch": 500,
      "for": "شركة متوسطة تستلم مئات الفواتير شهريًا",
-     "features": ["مسح بالجملة ٥٠٠ فاتورة", "تصدير CSV وJSON", "أخبار وعملات", "أولوية دعم"]},
-    {"key": "scale", "name": "المؤسسات", "price": 2990, "scans": 20000, "batch": 2000,
+     "for_en": "A mid-size company receiving hundreds of invoices every month",
+     "features": ["مسح بالجملة ٥٠٠ فاتورة", "تصدير CSV وJSON", "أخبار وعملات", "أولوية دعم"],
+     "features_en": ["500-invoice batch scan", "CSV and JSON export", "Market news and rates", "Priority support"]},
+    {"key": "scale", "name": "المؤسسات", "name_en": "Enterprise", "price": 2990, "scans": 20000, "batch": 2000,
      "for": "مجموعة شركات وفروع متعددة",
-     "features": ["مسح بالجملة ٢٠٠٠ فاتورة", "سعة شهرية ٢٠٠٠٠", "سماحية تجاوز ١٠٪", "تقارير متعددة الدول"]},
+     "for_en": "A group of companies with multiple branches",
+     "features": ["مسح بالجملة ٢٠٠٠ فاتورة", "سعة شهرية ٢٠٠٠٠", "سماحية تجاوز ١٠٪", "تقارير متعددة الدول"],
+     "features_en": ["2,000-invoice batch scan", "20,000 monthly capacity", "10% overflow grace", "Multi-country reports"]},
 ]
 GRACE_RATIO = 0.10
 MAX_INVOICES = 5000
 USAGE_FILE = ROOT / "reports" / "usage" / "gulf_usage.json"
 
 _usage_lock = threading.Lock()
+
+
+def request_lang(payload: dict | None = None) -> str:
+    """لغة الطلب: ?lang=en أو حقل JSON، وإلا العربية."""
+    value = str(request.args.get("lang") or (payload or {}).get("lang") or "").strip().lower()
+    return "en" if value.startswith("en") else "ar"
+
+
+def plan_public(plan: dict, lang: str) -> dict:
+    use_en = lang == "en"
+    return {
+        "key": plan["key"],
+        "name": plan["name_en"] if use_en else plan["name"],
+        "price": plan["price"], "scans": plan["scans"], "batch": plan["batch"],
+        "for": plan["for_en"] if use_en else plan["for"],
+        "features": plan["features_en"] if use_en else plan["features"],
+    }
 
 
 def _plan(key: str) -> dict:
@@ -234,6 +257,71 @@ def assistant_answer(question: str, invoice: dict | None) -> dict:
             "كيف أمسح ٥٠٠ فاتورة من واتساب؟",
         ],
         "disclaimer": "معلومات إرشادية وليست استشارة ضريبية معتمدة.",
+        "lang": "ar",
+    }
+
+
+KNOWLEDGE_EN = [
+    (("rate", "vat", "percent", "percentage", "15", "5"),
+     "Gulf VAT rates:\n• Saudi Arabia 15%\n• UAE 5%\n• Oman 5%\n• Bahrain 10%\n• Qatar and Kuwait: no VAT yet (the template runs at 0%).\nMandatory registration thresholds: SAR 375k in Saudi Arabia and AED 375k in the UAE."),
+    (("deadline", "due", "filing", "return", "quarter"),
+     "Filing deadlines:\n• Saudi Arabia: monthly or quarterly depending on business size, filed in the month after the period ends.\n• UAE: quarterly, within 28 days of the quarter end.\n• Qatar and Kuwait: no VAT return yet.\nAlways confirm on your authority's portal, as the category can change the cadence."),
+    (("invoice", "field", "qr", "e-invoice"),
+     "Required tax invoice fields:\n• Seller name and tax number\n• Issue date and invoice number\n• Line description, quantity and price\n• Net amount, VAT rate, VAT amount, total\n• Currency and buyer details\n• QR code for simplified invoices in Saudi Arabia"),
+    (("penalty", "fine"),
+     "Penalties differ per country; the common causes are missing invoices, late returns and mismatched seller details. Verify fields before posting and archive invoices for at least five years."),
+    (("bulk", "scan", "whatsapp", "batch"),
+     "Bulk scanning:\n1. Paste a WhatsApp transcript or drop a TXT/CSV file.\n2. Scan once — every invoice is split and parsed automatically.\n3. Review only the low-confidence rows, then export CSV.\nThere is no per-request limit."),
+    (("input", "purchase", "deduct", "credit"),
+     "Input VAT can only be deducted with a valid supplier invoice. Invoices missing a tax number are rejected at audit, which is why the scanner flags low-confidence rows for review."),
+    (("currency", "exchange", "rate", "riyal", "dirham"),
+     "Rates shown are indicative against the Saudi riyal and refresh from a public source when online, with an offline snapshot. Always issue the invoice in its legal country currency."),
+    (("return", "net", "payable", "settle"),
+     "Net VAT due = output VAT collected on sales − input VAT paid on purchases. If purchases exceed sales you carry a credit forward. Change country or period in the return tab to recalculate instantly."),
+]
+
+SUGGESTIONS = {
+    "ar": ["ما موعد إقرار الربع في الإمارات؟", "ما الحقول المطلوبة في الفاتورة الإلكترونية؟",
+           "كيف أمسح ٥٠٠ فاتورة من واتساب؟", "كيف أحسب صافي الإقرار؟"],
+    "en": ["What is the quarterly filing deadline in the UAE?",
+           "Which fields are required on an e-invoice?",
+           "How do I scan 500 invoices from WhatsApp?",
+           "How is net VAT calculated?"],
+}
+
+
+def assistant_answer(question: str, invoice: dict | None, lang: str = "ar") -> dict:
+    use_en = lang == "en"
+    text = (question or "").strip().lower()
+    knowledge = KNOWLEDGE_EN if use_en else KNOWLEDGE
+    answer = None
+    for keys, reply in knowledge:
+        if any(key in text for key in keys):
+            answer = reply
+            break
+    if answer is None:
+        answer = ("I can help with VAT rates, filing deadlines, invoice fields, penalties, bulk scanning "
+                  "and net VAT. Ask for example: \"What is the VAT rate in Oman?\"") if use_en else (
+                  "أقدر أساعدك في نسب الضريبة، مواعيد الإقرار، حقول الفاتورة، الغرامات، "
+                  "والمسح بالجملة. اسأل مثلًا: «ما موعد إقرار الربع في الإمارات؟»")
+    if invoice:
+        low = float(invoice.get("confidence") or 0) < 0.8
+        supplier = invoice.get("supplier") or ("unknown supplier" if use_en else "بدون مورد")
+        if use_en:
+            answer += f"\n\nAbout the invoice from «{supplier}»: total {invoice.get('total')} and VAT {invoice.get('tax')}."
+            if low:
+                answer += " Confidence is low — review the total and VAT line before posting."
+        else:
+            answer += f"\n\nبخصوص فاتورة «{supplier}»: الإجمالي {invoice.get('total')} والضريبة {invoice.get('tax')}."
+            if low:
+                answer += " ثقة القراءة منخفضة — راجع الإجمالي وسطر الضريبة قبل الترحيل."
+    return {
+        "mode": "local-knowledge",
+        "lang": lang,
+        "answer": answer,
+        "suggestions": SUGGESTIONS["en" if use_en else "ar"],
+        "disclaimer": ("Guidance only — not certified tax advice." if use_en
+                       else "معلومات إرشادية وليست استشارة ضريبية معتمدة."),
     }
 
 
@@ -275,14 +363,22 @@ def fetch_rates() -> dict:
     return data
 
 
-def market_news() -> dict:
+def market_news(lang: str = "ar") -> dict:
     try:
         raw = json.loads((DATA / "market_news.json").read_text(encoding="utf-8"))
     except (FileNotFoundError, ValueError):
         return {"items": [], "updated_at": "—"}
     items = raw.get("items", []) if isinstance(raw, dict) else raw
     items = sorted(items, key=lambda row: str(row.get("date") or ""), reverse=True)
-    return {"items": items, "updated_at": (raw or {}).get("updated_at", "—")}
+    if lang == "en":
+        items = [{
+            "date": row.get("date"), "tag": row.get("tag_en") or row.get("tag"),
+            "title": row.get("title_en") or row.get("title"),
+            "summary": row.get("summary_en") or row.get("summary"),
+            "action": row.get("action_en") or row.get("action"),
+            "source": row.get("source_en") or row.get("source"),
+        } for row in items]
+    return {"items": items, "updated_at": (raw or {}).get("updated_at", "—"), "lang": lang}
 
 
 @app.get("/")
@@ -318,19 +414,25 @@ def sample():
 
 @app.get("/api/news")
 def news():
-    return jsonify(market_news())
+    return jsonify(market_news(request_lang()))
 
 
 @app.get("/api/plans")
 def plans():
-    return jsonify({"plans": PLANS, "grace_ratio": GRACE_RATIO, "max_invoices": MAX_INVOICES})
+    lang = request_lang()
+    return jsonify({"plans": [plan_public(plan, lang) for plan in PLANS], "lang": lang,
+                    "grace_ratio": GRACE_RATIO, "max_invoices": MAX_INVOICES})
 
 
 @app.get("/api/quota")
 def quota():
     account = (request.args.get("account") or "demo").strip()[:64] or "demo"
     plan_key = (request.args.get("plan") or "growth").strip()
-    return jsonify(quota_state(account, plan_key))
+    lang = request_lang()
+    state = quota_state(account, plan_key)
+    state["plan_name"] = plan_public(_plan(plan_key), lang)["name"]
+    state["lang"] = lang
+    return jsonify(state)
 
 
 @app.get("/api/rates")
@@ -368,13 +470,30 @@ def scan():
 
 @app.get("/api/countries")
 def countries():
-    meta = einvoice.country_meta(einvoice.DEFAULT_COUNTRY)
+    lang = request_lang()
+    meta = einvoice.country_meta(einvoice.DEFAULT_COUNTRY, lang)
     return jsonify({
-        "countries": einvoice.countries_public(),
+        "countries": einvoice.countries_public(lang),
+        "currencies": einvoice.currencies_public(lang),
         "default": meta,
         "periods": einvoice.periods(meta["code"]),
         "max_items": einvoice.MAX_ITEMS,
+        "lang": lang,
     })
+
+
+@app.get("/api/detect")
+def detect():
+    """اكتشاف تلقائي للدولة والعملة من المنطقة الزمنية ولغة المتصفح."""
+    lang = request_lang()
+    result = einvoice.detect_country(
+        request.args.get("tz") or request.args.get("timezone"),
+        request.headers.get("Accept-Language"),
+        lang,
+    )
+    result["ok"] = True
+    result["lang"] = lang
+    return jsonify(result)
 
 
 @app.post("/api/einvoice")
@@ -424,20 +543,23 @@ def taxreturn():
     country = request.args.get("country") or einvoice.DEFAULT_COUNTRY
     period = request.args.get("period") or datetime.now().strftime("%Y-%m")
     try:
-        return jsonify(ledger.summary(account, country, period))
+        return jsonify(ledger.summary(account, country, period, request_lang()))
     except ValueError as exc:
         return jsonify({"ok": False, "error": str(exc)}), 400
 
 
 @app.post("/api/ocr")
 def ocr_scan():
+    lang = request_lang()
+    if str(request.form.get("lang") or "").lower().startswith("en"):
+        lang = "en"
     upload = request.files.get("image") or (next(iter(request.files.values())) if request.files else None)
     if not upload:
-        return jsonify({"ok": False, "error": "أرفق صورة فاتورة"}), 400
+        return jsonify({"ok": False, "error": "أرفق صورة فاتورة" if lang == "ar" else "Attach an invoice image"}), 400
     raw = upload.read()
     account = (request.form.get("account") or "demo").strip()[:64] or "demo"
     try:
-        result = ocr.extract(raw, upload.filename or "image.png")
+        result = ocr.extract(raw, upload.filename or "image.png", lang)
     except ValueError as exc:
         return jsonify({"ok": False, "error": str(exc)}), 400
     except Exception as exc:  # pragma: no cover - حماية من فشل OCR غير المتوقع
@@ -447,25 +569,31 @@ def ocr_scan():
     return jsonify(result)
 
 
-ACCOUNTANT_REPLY = (
-    "وصلت رسالتك إلى المحاسب وسيُرد عليك خلال يوم عمل. "
-    "في هذه النسخة المحلية يُحفظ الطلب في سجل الحساب ويظهر رقم التذكرة أدناه، "
-    "ويمكنك متابعة الأسئلة الفورية مع المساعد الضريبي في الأعلى."
-)
+ACCOUNTANT_REPLY = {
+    "ar": ("وصلت رسالتك إلى المحاسب وسيُرد عليك خلال يوم عمل. "
+           "في هذه النسخة المحلية يُحفظ الطلب في سجل الحساب ويظهر رقم التذكرة أدناه، "
+           "ويمكنك متابعة الأسئلة الفورية مع المساعد الضريبي في الأعلى."),
+    "en": ("Your message reached the accountant and you will get a reply within one business day. "
+           "In this local build the request is stored in your account ledger and a ticket number is shown below; "
+           "use the tax assistant above for instant answers meanwhile."),
+}
 
 
 @app.post("/api/support")
 def support_post():
     payload = request.get_json(silent=True) or {}
+    lang = request_lang(payload)
     account = str(payload.get("account") or "demo").strip()[:64] or "demo"
     message = str(payload.get("message") or "").strip()
     if not message:
-        return jsonify({"ok": False, "error": "اكتب نص الرسالة"}), 400
+        return jsonify({"ok": False, "error": "اكتب نص الرسالة" if lang == "ar" else "Enter your message"}), 400
     if len(message) > 2000:
-        return jsonify({"ok": False, "error": "الرسالة أطول من ٢٠٠٠ حرف"}), 400
-    entry = ledger.add_message(account, str(payload.get("topic") or "استشارة ضريبية"), message)
+        return jsonify({"ok": False,
+                        "error": "الرسالة أطول من ٢٠٠٠ حرف" if lang == "ar" else "Message is longer than 2000 characters"}), 400
+    topic = str(payload.get("topic") or ("استشارة ضريبية" if lang == "ar" else "Tax consultation"))
+    entry = ledger.add_message(account, topic, message)
     return jsonify({"ok": True, "ticket": entry["ticket"], "entry": entry,
-                    "reply": ACCOUNTANT_REPLY})
+                    "reply": ACCOUNTANT_REPLY[lang], "lang": lang})
 
 
 @app.get("/api/support")
@@ -477,10 +605,12 @@ def support_get():
 @app.post("/api/assistant")
 def assistant():
     payload = request.get_json(silent=True) or {}
+    lang = request_lang(payload)
     question = str(payload.get("question") or "")
     if len(question) > 1000:
-        return jsonify({"ok": False, "error": "السؤال طويل جدًا"}), 400
-    return jsonify(assistant_answer(question, payload.get("invoice")))
+        return jsonify({"ok": False,
+                        "error": "السؤال طويل جدًا" if lang == "ar" else "Question is too long"}), 400
+    return jsonify(assistant_answer(question, payload.get("invoice"), lang))
 
 
 def main(argv: list[str] | None = None) -> int:
