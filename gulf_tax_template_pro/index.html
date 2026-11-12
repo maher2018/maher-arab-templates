@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الامتثال الضريبي الخليجي — Arab Templates</title>
-<meta name="description" content="منصة واحدة للامتثال الضريبي في الخليج: مساعد ضريبي ذكي، أخبار السوق والعملات، ومسح فواتير واتساب.">
+<title>نظام المحاسبة والامتثال الضريبي الخليجي — Arab Templates</title>
+<meta name="description" content="نظام محاسبة وامتثال ضريبي خليجي: فواتير إلكترونية معتمدة مع QR، حاسبة صافي الإقرار، ماسح فواتير ذكي، ومساعد ضريبي ومحاسب.">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -19,14 +19,15 @@
       <span class="mark">ض</span>
       <span class="brand-text">
         <strong>الامتثال الضريبي الخليجي</strong>
-        <small>Gulf Tax Compliance Pro</small>
+        <small>Gulf Tax &amp; Accounting Suite</small>
       </span>
     </div>
-    <nav class="tabs" role="tablist">
-      <a href="#assistant" class="tab active">المساعد الضريبي</a>
-      <a href="#scanner" class="tab">مسح الفواتير</a>
-      <a href="#news" class="tab">أخبار السوق</a>
-      <a href="#plans" class="tab">الباقات</a>
+    <nav class="tabs" role="tablist" id="tabsNav">
+      <button class="tab active" data-view="invoice" role="tab">الفواتير الإلكترونية</button>
+      <button class="tab" data-view="return" role="tab">الإقرار الضريبي</button>
+      <button class="tab" data-view="scan" role="tab">الماسح الذكي</button>
+      <button class="tab" data-view="assistant" role="tab">المساعد والمحاسب</button>
+      <button class="tab" data-view="plans" role="tab">الباقات</button>
     </nav>
     <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">جارٍ الاتصال…</span></div>
   </div>
@@ -34,113 +35,337 @@
 
 <main class="wrap">
   <section class="hero">
-    <h1>منصة واحدة لكل ما تحتاجه في الضريبة والامتثال</h1>
-    <p>مساعد يفهم أنظمة السعودية والإمارات والكويت، أخبار وعملات محدّثة، ومسح فواتير واتساب بدفعة واحدة — بواجهة عربية من اليمين لليسار.</p>
+    <h1>نظام واحد للمحاسبة والامتثال الضريبي في الخليج</h1>
+    <p>أصدر فواتير إلكترونية برمز QR معتمد (ZATCA / FTA)، احسب صافي الإقرار تلقائيًا، واسحب فواتير المشتريات من صورة أو نص واتساب — بواجهة عربية من اليمين لليسار.</p>
     <div class="hero-stats">
       <div><strong id="statInvoices">٠</strong><span>فاتورة ممسوحة في هذه الجلسة</span></div>
-      <div><strong id="statTax">٠٫٠٠</strong><span>إجمالي الضريبة المستخرجة (ر.س)</span></div>
+      <div><strong id="statTax">٠٫٠٠</strong><span>إجمالي الضريبة المستخرجة</span></div>
+      <div><strong id="statNet">—</strong><span>صافي الإقرار الحالي</span></div>
       <div><strong id="statNews">—</strong><span>تحديثات سوق متاحة</span></div>
     </div>
   </section>
 
-  <div class="layout">
-    <!-- المساعد -->
-    <section class="panel chat-panel" id="assistant" aria-labelledby="chatTitle">
+  <!-- ============ ١) الفواتير الإلكترونية ============ -->
+  <section class="view active" id="view-invoice" role="tabpanel">
+    <section class="panel">
       <div class="panel-head">
-        <h2 id="chatTitle">المساعد الضريبي الذكي</h2>
-        <span class="tag">قواعد معرفة خليجية · محلي</span>
+        <h2>مولّد الفواتير الإلكترونية المعتمدة</h2>
+        <span class="tag" id="invSpec">ZATCA / FTA — QR مشفّر</span>
       </div>
-      <div class="chat-log" id="chatLog" aria-live="polite">
-        <div class="msg bot">
-          <div class="bubble">هلا بك! اسألني عن ضريبة القيمة المضافة، الفوترة الإلكترونية، أو مواعيد الإقرار في السعودية والإمارات والكويت.</div>
+
+      <div class="grid-3">
+        <div class="field">
+          <label for="invCountry">دولة الإصدار</label>
+          <select id="invCountry"></select>
+        </div>
+        <div class="field">
+          <label for="invRate">نسبة ضريبة القيمة المضافة %</label>
+          <input id="invRate" type="number" min="0" max="100" step="0.5" value="15">
+        </div>
+        <div class="field">
+          <label for="invDate">تاريخ الفاتورة</label>
+          <input id="invDate" type="date">
         </div>
       </div>
-      <div class="chips" id="suggestions">
-        <button class="chip" data-q="ما نسبة ضريبة القيمة المضافة في السعودية والإمارات؟">نسب الضريبة</button>
-        <button class="chip" data-q="متى آخر موعد لتقديم الإقرار الضريبي؟">مواعيد الإقرار</button>
-        <button class="chip" data-q="ما الحقول المطلوبة في الفاتورة الإلكترونية؟">حقول الفاتورة</button>
-        <button class="chip" data-q="كيف أمسح دفعة فواتير كبيرة دفعة واحدة؟">المسح بالجملة</button>
-      </div>
-      <form class="composer" id="chatForm">
-        <input id="chatInput" type="text" placeholder="اكتب سؤالك الضريبي…" autocomplete="off" aria-label="سؤالك">
-        <button type="submit" aria-label="إرسال">إرسال</button>
-      </form>
-    </section>
+      <p class="fine" id="authorityNote">—</p>
 
-    <!-- الأخبار -->
-    <section class="panel news-panel" id="news" aria-labelledby="newsTitle">
-      <div class="panel-head">
-        <h2 id="newsTitle">أخبار السوق والامتثال</h2>
-        <button class="link" id="newsRefresh">تحديث</button>
-      </div>
-      <div class="news-list" id="newsList"><div class="skeleton"></div><div class="skeleton"></div></div>
-      <p class="fine" id="newsMeta"></p>
-    </section>
-  </div>
+      <div class="cols">
+        <fieldset class="card">
+          <legend>بيانات المورد (البائع)</legend>
+          <div class="field"><label for="sellerName">الاسم التجاري</label><input id="sellerName" type="text" placeholder="شركة الأفق للتقنية"></div>
+          <div class="field"><label for="sellerVat" id="sellerVatLabel">الرقم الضريبي</label><input id="sellerVat" type="text" inputmode="numeric" placeholder="310123456700003"></div>
+          <div class="field"><label for="sellerAddress">العنوان</label><input id="sellerAddress" type="text" placeholder="الرياض — طريق الملك فهد"></div>
+          <div class="grid-2">
+            <div class="field"><label for="sellerEmail">البريد</label><input id="sellerEmail" type="email" placeholder="billing@example.com"></div>
+            <div class="field"><label for="sellerPhone">الهاتف</label><input id="sellerPhone" type="tel" placeholder="+9665…"></div>
+          </div>
+        </fieldset>
 
-  <!-- مسح الفواتير -->
-  <section class="panel" id="scanner" aria-labelledby="scanTitle">
-    <div class="panel-head">
-      <h2 id="scanTitle">رفع ومسح الفواتير</h2>
-      <span class="tag" id="engineTag">محرك: whatsapp_invoice_parser.py</span>
-    </div>
-    <div class="scan-grid">
-      <div class="drop" id="drop">
-        <input type="file" id="file" accept=".txt,.csv" hidden>
-        <div class="drop-icon">🧾</div>
-        <p><strong>أفلت ملف فواتير هنا</strong> أو <button class="link" id="pick">اختر ملفًا</button></p>
-        <p class="fine">صيغ مدعومة: TXT وCSV (نص واتساب). للصور يلزم مزوّد OCR.</p>
+        <fieldset class="card">
+          <legend>بيانات العميل (المشتري)</legend>
+          <div class="field"><label for="buyerName">اسم العميل</label><input id="buyerName" type="text" placeholder="مؤسسة النخيل التجارية"></div>
+          <div class="field"><label for="buyerVat">الرقم الضريبي للعميل (اختياري)</label><input id="buyerVat" type="text" inputmode="numeric" placeholder="300987654300003"></div>
+          <div class="field"><label for="buyerAddress">العنوان</label><input id="buyerAddress" type="text" placeholder="جدة — حي الروضة"></div>
+          <div class="grid-2">
+            <div class="field"><label for="buyerEmail">البريد</label><input id="buyerEmail" type="email" placeholder="client@example.com"></div>
+            <div class="field"><label for="invNumber">رقم الفاتورة</label><input id="invNumber" type="text" placeholder="يُولّد تلقائيًا"></div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="items-head">
+        <strong>بنود الفاتورة</strong>
+        <div class="row tight">
+          <label class="switch"><input type="checkbox" id="incVat"> الأسعار تشمل الضريبة</label>
+          <button class="ghost small" id="addItem" type="button">+ إضافة بند</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="items-table">
+          <thead>
+            <tr><th>#</th><th>الوصف</th><th>الكمية</th><th>سعر الوحدة</th><th>خصم %</th><th>الصافي</th><th>الضريبة</th><th>الإجمالي</th><th></th></tr>
+          </thead>
+          <tbody id="itemsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="invoice-foot">
+        <dl class="sum-list">
+          <div><dt>الإجمالي قبل الضريبة</dt><dd id="sumSubtotal">٠٫٠٠</dd></div>
+          <div><dt>الخصم</dt><dd id="sumDiscount">٠٫٠٠</dd></div>
+          <div><dt>ضريبة القيمة المضافة</dt><dd id="sumTax">٠٫٠٠</dd></div>
+          <div class="grand"><dt>الإجمالي المستحق</dt><dd id="sumTotal">٠٫٠٠</dd></div>
+        </dl>
         <div class="row">
-          <button class="ghost" id="sampleBtn">تحميل نموذج واتساب</button>
-          <button class="ghost" id="clearBtn">تفريغ</button>
+          <button id="issueBtn" type="button">إصدار الفاتورة ورمز QR</button>
+          <button class="ghost" id="printBtn" type="button" disabled>طباعة / PDF</button>
+          <button class="ghost" id="saveInvBtn" type="button" disabled>حفظ ثم إضافة للمبيعات</button>
+          <button class="ghost" id="resetInvBtn" type="button">فاتورة جديدة</button>
         </div>
       </div>
-      <div class="field">
-        <label for="scanText">أو الصق نص الفواتير مباشرة</label>
-        <textarea id="scanText" rows="9" placeholder="المورد: شركة النخيل للتجارة&#10;التاريخ: 2026-11-01&#10;الإجمالي: 1,150.00&#10;الضريبة: 150.00"></textarea>
-        <div class="row">
-          <button id="scanBtn">امسح الفواتير</button>
-          <button class="ghost" id="exportBtn" disabled>تصدير CSV</button>
-          <button class="ghost" id="jsonBtn" disabled>نسخ JSON</button>
-          <button class="ghost" id="bulkBtn">اختبار ٥٠٠ فاتورة</button>
+      <p class="msg" id="invMsg"></p>
+
+      <div class="qr-box" id="qrBox" hidden>
+        <div class="qr-img" id="qrImg"></div>
+        <div class="qr-meta">
+          <p><strong>رمز QR المعتمد:</strong> <span id="qrSpec">—</span></p>
+          <p class="fine">حمولة TLV مشفّرة Base64 — تُقرأ تطبيقات التحقق الضريبي اسم المورد والرقم الضريبي والطابع الزمني والإجمالي والضريبة.</p>
+          <p class="mono" id="qrPayload">—</p>
+          <p class="fine">تجزئة الفاتورة: <span class="mono" id="invHash">—</span></p>
+          <button class="link" id="copyQrBtn" type="button">نسخ الحمولة</button>
         </div>
-        <p class="msg" id="scanMsg"></p>
       </div>
-    </div>
-
-    <div class="totals" id="totals" hidden>
-      <div><span>عدد الفواتير</span><strong id="tCount">٠</strong></div>
-      <div><span>إجمالي المبالغ</span><strong id="tTotal">٠</strong></div>
-      <div><span>إجمالي الضريبة</span><strong id="tTax">٠</strong></div>
-      <div><span>تحتاج مراجعة</span><strong id="tReview">٠</strong></div>
-    </div>
-
-    <div class="table-wrap" id="tableWrap" hidden>
-      <table>
-        <thead><tr><th>#</th><th>المورد</th><th>التاريخ</th><th>قبل الضريبة</th><th>الضريبة</th><th>الإجمالي</th><th>النسبة</th><th>الثقة</th></tr></thead>
-        <tbody id="scanBody"></tbody>
-      </table>
-    </div>
-    <p class="fine">المسح يتم على الخادم (Python) ويُعيد JSON فقط؛ لا يُخزَّن أي نص فاتورة في ملفات المشروع.</p>
+      <p class="fine">الفاتورة تُحسب وتُشفّر على الخادم (Python) بلا أي مكتبة خارجية في المتصفح، ولا تُحفظ إلا عند الضغط على «حفظ».</p>
+    </section>
   </section>
-  <section class="panel" id="plans" aria-labelledby="plansTitle">
-    <div class="panel-head">
-      <h2 id="plansTitle">الباقات وسعة مسح الفواتير</h2>
-      <span class="tag">سعة شهرية فقط · بلا قيود لكل دقيقة</span>
+
+  <!-- ============ ٢) الإقرار الضريبي ============ -->
+  <section class="view" id="view-return" role="tabpanel">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>حاسبة صافي الإقرار الضريبي</h2>
+        <span class="tag">ضريبة المبيعات − ضريبة المشتريات</span>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label for="retCountry">الدولة</label><select id="retCountry"></select></div>
+        <div class="field"><label for="retPeriod">الفترة الضريبية</label><select id="retPeriod"></select></div>
+        <div class="field"><label>&nbsp;</label><button id="refreshReturn" type="button">تحديث الحساب</button></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><span>ضريبة المبيعات المحصّلة</span><strong id="kpiOutput">—</strong><small id="kpiOutputSub">—</small></div>
+        <div class="kpi"><span>ضريبة المشتريات المدفوعة</span><strong id="kpiInput">—</strong><small id="kpiInputSub">—</small></div>
+        <div class="kpi accent"><span>صافي الضريبة المستحقة</span><strong id="kpiNet">—</strong><small id="kpiStatus">—</small></div>
+        <div class="kpi"><span>آخر موعد للتقديم</span><strong id="kpiDue">—</strong><small id="kpiDueNote">—</small></div>
+      </div>
+      <div class="notice" id="returnNote">—</div>
+
+      <div class="pill-tabs">
+        <button class="mini active" data-ledger="sales">سجل المبيعات (<span id="countSales">٠</span>)</button>
+        <button class="mini" data-ledger="purchases">سجل المشتريات (<span id="countPurchases">٠</span>)</button>
+      </div>
+      <div class="table-wrap">
+        <table id="ledgerTable">
+          <thead id="ledgerHead"></thead>
+          <tbody id="ledgerBody"><tr><td class="fine">—</td></tr></tbody>
+        </table>
+      </div>
+      <p class="fine">تُخصم ضريبة المشتريات من ضريبة المبيعات لنفس الفترة. إن كانت المشتريات أكبر يظهر رصيد دائن يُرحَّل للفترة التالية.</p>
+    </section>
+  </section>
+
+  <!-- ============ ٣) الماسح الذكي ============ -->
+  <section class="view" id="view-scan" role="tabpanel">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>ماسح الفواتير الذكي (صورة أو نص واتساب)</h2>
+        <span class="tag" id="ocrModeTag">وضع المحاكاة</span>
+      </div>
+
+      <div class="scan-grid">
+        <div class="drop" id="drop">
+          <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff,.pdf" hidden>
+          <div class="drop-icon">📷</div>
+          <p><strong>أفلت صورة فاتورة هنا</strong> أو <button class="link" id="pick" type="button">اختر صورة</button></p>
+          <p class="fine">PNG أو JPG أو WEBP أو PDF — حتى ٦ ميغابايت. استخراج الحقول ثم تراجعها قبل الحفظ.</p>
+          <div class="row tight">
+            <button class="ghost small" id="demoOcrBtn" type="button">تجربة صورة نموذجية</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="scanText">أو الصق نص الفواتير (واتساب / CSV)</label>
+          <textarea id="scanText" rows="8" placeholder="المورد: شركة النخيل للتجارة&#10;التاريخ: 2026-11-01&#10;الإجمالي قبل الضريبة: 1,000.00&#10;الضريبة (15%): 150.00&#10;الإجمالي: 1,150.00"></textarea>
+          <div class="row">
+            <button id="scanBtn" type="button">امسح الفواتير</button>
+            <button class="ghost" id="sampleBtn" type="button">نموذج واتساب</button>
+            <button class="ghost" id="exportBtn" type="button" disabled>تصدير CSV</button>
+            <button class="ghost" id="bulkBtn" type="button">اختبار ٥٠٠ فاتورة</button>
+          </div>
+          <p class="msg" id="scanMsg"></p>
+        </div>
+      </div>
+
+      <div class="ocr-result" id="ocrResult" hidden>
+        <div class="ocr-head">
+          <strong>نتيجة قراءة الصورة</strong>
+          <span class="tag" id="ocrMode">—</span>
+        </div>
+        <p class="fine" id="ocrNote">—</p>
+        <div class="grid-4">
+          <div class="field"><label for="ocrSupplier">المورد</label><input id="ocrSupplier" type="text"></div>
+          <div class="field"><label for="ocrDate">التاريخ</label><input id="ocrDate" type="date"></div>
+          <div class="field"><label for="ocrSubtotal">قبل الضريبة</label><input id="ocrSubtotal" type="number" step="0.01"></div>
+          <div class="field"><label for="ocrTax">الضريبة</label><input id="ocrTax" type="number" step="0.01"></div>
+        </div>
+        <div class="row">
+          <button id="ocrSaveBtn" type="button">أضف إلى سجل المشتريات</button>
+          <span class="fine" id="ocrConfidence">—</span>
+        </div>
+      </div>
+
+      <div class="totals" id="totals" hidden>
+        <div><span>عدد الفواتير</span><strong id="tCount">٠</strong></div>
+        <div><span>إجمالي المبالغ</span><strong id="tTotal">٠</strong></div>
+        <div><span>إجمالي الضريبة</span><strong id="tTax">٠</strong></div>
+        <div><span>تحتاج مراجعة</span><strong id="tReview">٠</strong></div>
+      </div>
+
+      <div class="table-wrap" id="tableWrap" hidden>
+        <table>
+          <thead><tr><th>#</th><th>المورد</th><th>التاريخ</th><th>قبل الضريبة</th><th>الضريبة</th><th>الإجمالي</th><th>النسبة</th><th>الثقة</th></tr></thead>
+          <tbody id="scanBody"></tbody>
+        </table>
+        <div class="row pad">
+          <button id="addPurchasesBtn" type="button">أضف كل النتائج إلى سجل المشتريات</button>
+        </div>
+      </div>
+      <p class="fine">المسح النصي يعمل على الخادم عبر <span class="mono">whatsapp_invoice_parser.py</span> ولا يُخزَّن أي نص فاتورة على القرص.</p>
+    </section>
+  </section>
+
+  <!-- ============ ٤) المساعد والمحاسب ============ -->
+  <section class="view" id="view-assistant" role="tabpanel">
+    <div class="layout">
+      <section class="panel chat-panel">
+        <div class="panel-head">
+          <h2>المساعد الضريبي الذكي</h2>
+          <span class="tag">قواعد معرفة خليجية · محلي</span>
+        </div>
+        <div class="chat-log" id="chatLog" aria-live="polite">
+          <div class="msg bot"><div class="bubble">هلا بك! اسألني عن ضريبة القيمة المضافة، الفوترة الإلكترونية، أو مواعيد الإقرار في السعودية والإمارات وعُمان.</div></div>
+        </div>
+        <div class="chips" id="suggestions">
+          <button class="chip" type="button" data-q="ما نسبة ضريبة القيمة المضافة في السعودية والإمارات؟">نسب الضريبة</button>
+          <button class="chip" type="button" data-q="متى آخر موعد لتقديم الإقرار الضريبي؟">مواعيد الإقرار</button>
+          <button class="chip" type="button" data-q="ما الحقول المطلوبة في الفاتورة الإلكترونية؟">حقول الفاتورة</button>
+          <button class="chip" type="button" data-q="كيف أحسب صافي الإقرار؟">صافي الإقرار</button>
+        </div>
+        <form class="composer" id="chatForm">
+          <input id="chatInput" type="text" placeholder="اكتب سؤالك الضريبي…" autocomplete="off" aria-label="سؤالك">
+          <button type="submit">إرسال</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>التواصل مع المحاسب</h2>
+          <span class="tag">تذكرة لكل رسالة</span>
+        </div>
+        <div class="field"><label for="ticketTopic">الموضوع</label><input id="ticketTopic" type="text" placeholder="إقرار الربع الثالث"></div>
+        <div class="field"><label for="ticketMessage">الرسالة</label>
+          <textarea id="ticketMessage" rows="4" placeholder="اشرح حالتك بإيجاز…"></textarea>
+        </div>
+        <div class="row"><button id="sendTicketBtn" type="button">إرسال إلى المحاسب</button></div>
+        <p class="msg" id="ticketMsg"></p>
+        <div class="msg-list" id="msgList"><p class="fine">لا رسائل بعد.</p></div>
+      </section>
     </div>
-    <div class="usage">
-      <div class="usage-head"><span id="quotaLabel">استهلاك هذا الشهر</span><strong id="quotaValue">—</strong></div>
-      <div class="bar"><div class="bar-fill" id="quotaBar"></div></div>
-      <p class="fine" id="quotaNote">تُحسب السعة شهريًا فقط، مع سماحية تجاوز ١٠٪ تُستهلك تلقائيًا.</p>
+
+    <div class="layout">
+      <section class="panel news-panel">
+        <div class="panel-head">
+          <h2>أخبار السوق والامتثال</h2>
+          <button class="link" id="newsRefresh" type="button">تحديث</button>
+        </div>
+        <div class="news-list" id="newsList"><div class="skeleton"></div><div class="skeleton"></div></div>
+        <p class="fine" id="newsMeta"></p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>ملخص سريع</h2><span class="tag">آخر حالة</span></div>
+        <ul class="checklist">
+          <li>راجع حقول الفاتورة قبل الإصدار: الاسم والرقم الضريبي والتاريخ.</li>
+          <li>احفظ فواتير المبيعات لتظهر تلقائيًا في حساب الإقرار.</li>
+          <li>أضف فواتير المشتريات من الماسح ليُخصم ضريبتها.</li>
+          <li>أرشف الفواتير ٥ سنوات على الأقل — شرط تدقيق في كل دول الخليج.</li>
+        </ul>
+        <p class="fine">المساعد يعتمد قواعد معرفة ثابتة يعرضها بوضوح، وليس استشارة ضريبية معتمدة.</p>
+      </section>
     </div>
-    <div class="plans" id="planCards"></div>
+  </section>
+
+  <!-- ============ ٥) الباقات ============ -->
+  <section class="view" id="view-plans" role="tabpanel">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>الباقات وسعة مسح الفواتير</h2>
+        <span class="tag">سعة شهرية فقط · بلا قيود لكل دقيقة</span>
+      </div>
+      <div class="usage">
+        <div class="usage-head"><span id="quotaLabel">استهلاك هذا الشهر</span><strong id="quotaValue">—</strong></div>
+        <div class="bar"><div class="bar-fill" id="quotaBar"></div></div>
+        <p class="fine" id="quotaNote">تُحسب السعة شهريًا فقط، مع سماحية تجاوز ١٠٪ تُستهلك تلقائيًا.</p>
+      </div>
+      <div class="plans" id="planCards"></div>
+    </section>
   </section>
 </main>
 
 <footer class="foot">
-  <span>Gulf Tax Compliance Pro — منتج Arab Templates</span>
+  <span>Gulf Tax &amp; Accounting Suite — منتج Arab Templates</span>
   <span>معلومات إرشادية وليست استشارة قانونية أو ضريبية معتمدة.</span>
 </footer>
+
+<!-- منطقة الطباعة: تظهر وحدها عند الطباعة -->
+<section id="printDoc" aria-hidden="true">
+  <div class="print-head">
+    <div class="print-seller">
+      <h2 id="pSeller">—</h2>
+      <p id="pSellerAddress">—</p>
+      <p>الرقم الضريبي: <span class="mono" id="pSellerVat">—</span></p>
+      <p id="pSellerContact">—</p>
+    </div>
+    <div class="print-meta">
+      <h1>فاتورة ضريبية</h1>
+      <p>TAX INVOICE · <span id="pCountry">—</span></p>
+      <p>رقم الفاتورة: <span class="mono" id="pNumber">—</span></p>
+      <p>التاريخ: <span id="pDate">—</span></p>
+      <p>العملة: <span id="pCurrency">—</span></p>
+    </div>
+  </div>
+  <div class="print-buyer">
+    <h3>فاتورة إلى</h3>
+    <p id="pBuyer">—</p>
+    <p class="mono" id="pBuyerVat">—</p>
+  </div>
+  <table class="print-table">
+    <thead><tr><th>الوصف</th><th>الكمية</th><th>السعر</th><th>الخصم</th><th>الصافي</th><th>الضريبة</th><th>الإجمالي</th></tr></thead>
+    <tbody id="pItems"></tbody>
+  </table>
+  <div class="print-totals">
+    <div><span>قبل الضريبة</span><strong id="pSubtotal">—</strong></div>
+    <div><span>الضريبة (<span id="pRate">—</span>%)</span><strong id="pTax">—</strong></div>
+    <div class="grand"><span>الإجمالي</span><strong id="pTotal">—</strong></div>
+  </div>
+  <div class="print-foot">
+    <div class="print-qr" id="pQr"></div>
+    <div>
+      <p class="mono" id="pHref">—</p>
+      <p>تجزئة الفاتورة: <span class="mono" id="pHash">—</span></p>
+      <p class="fine" id="pSpec">—</p>
+      <p class="fine">فاتورة إلكترونية صادرة عن نظام الامتثال الضريبي الخليجي.</p>
+    </div>
+  </div>
+</section>
 
 <script src="/app.js"></script>
 </body>

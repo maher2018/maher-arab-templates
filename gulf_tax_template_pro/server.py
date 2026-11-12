@@ -12,6 +12,17 @@
   POST /api/scan       مسح فواتير من نص أو ملف — عبر whatsapp_invoice_parser.py
   POST /api/assistant  مساعد ضريبي محلي بقواعد معرفة خليجية
 
+محرك الفواتير الإلكترونية والإقرار الضريبي:
+  GET  /api/countries  الدول ونسب الضريبة والدوريات
+  POST /api/einvoice   إصدار فاتورة (حساب + QR بصيغة ZATCA/FTA + تجزئة)
+  GET  /api/ledger     سجل المبيعات والمشتريات
+  POST /api/ledger     إضافة صفوف مشتريات (من المسح)
+  DELETE /api/ledger   حذف صف من السجل
+  GET  /api/taxreturn  صافي الإقرار: ضريبة المبيعات − ضريبة المشتريات
+  POST /api/ocr        استخراج بيانات فاتورة من صورة (OCR فعلي أو محاكاة)
+  POST /api/support    رسالة إلى المحاسب + رقم تذكرة
+  GET  /api/support    محادثات المحاسب السابقة
+
     python gulf_tax_template_pro/server.py --port 5075 --open
 """
 from __future__ import annotations
@@ -35,10 +46,15 @@ DATA = ROOT / "data"
 SNAPSHOT = BASE / "exchange_rates.json"
 
 sys.path.insert(0, str(SCRIPTS))
+sys.path.insert(0, str(BASE))
 from whatsapp_invoice_parser import parse_invoice, split_invoices  # noqa: E402
 
+import einvoice  # noqa: E402
+import ledger  # noqa: E402
+import ocr  # noqa: E402
+
 app = Flask(__name__, static_folder=None)
-app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
 
 SAMPLE_TEXT = """المورد: شركة النخيل للتجارة
 التاريخ: 2026-11-01
@@ -348,6 +364,114 @@ def scan():
     if not text.strip():
         return jsonify({"ok": False, "error": "لا يوجد نص فواتير"}), 400
     return jsonify(scan_text(text[:800_000], account, plan_key))
+
+
+@app.get("/api/countries")
+def countries():
+    meta = einvoice.country_meta(einvoice.DEFAULT_COUNTRY)
+    return jsonify({
+        "countries": einvoice.countries_public(),
+        "default": meta,
+        "periods": einvoice.periods(meta["code"]),
+        "max_items": einvoice.MAX_ITEMS,
+    })
+
+
+@app.post("/api/einvoice")
+def einvoice_build():
+    payload = request.get_json(silent=True) or {}
+    account = str(payload.get("account") or "demo").strip()[:64] or "demo"
+    try:
+        invoice = einvoice.build_invoice(payload)
+    except ValueError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+    if payload.get("save"):
+        invoice["saved"] = ledger.add_sale(account, invoice)
+    return jsonify(invoice)
+
+
+@app.get("/api/ledger")
+def ledger_get():
+    account = (request.args.get("account") or "demo").strip()[:64] or "demo"
+    data = ledger.load(account)
+    return jsonify({"ok": True, "account": account, "sales": data["sales"][:200],
+                    "purchases": data["purchases"][:200],
+                    "counts": {"sales": len(data["sales"]), "purchases": len(data["purchases"])}})
+
+
+@app.post("/api/ledger")
+def ledger_post():
+    payload = request.get_json(silent=True) or {}
+    account = str(payload.get("account") or "demo").strip()[:64] or "demo"
+    rows = payload.get("rows")
+    if not isinstance(rows, list) or not rows:
+        return jsonify({"ok": False, "error": "لا توجد صفوف لإضافتها"}), 400
+    added = ledger.add_purchases(account, rows[:500], str(payload.get("source") or "manual")[:24])
+    return jsonify({"ok": True, "added": added, "count": len(added)})
+
+
+@app.delete("/api/ledger/<kind>/<entry_id>")
+def ledger_delete(kind: str, entry_id: str):
+    account = (request.args.get("account") or "demo").strip()[:64] or "demo"
+    if not ledger.delete_entry(account, kind, entry_id):
+        return jsonify({"ok": False, "error": "الصف غير موجود"}), 404
+    return jsonify({"ok": True, "deleted": entry_id})
+
+
+@app.get("/api/taxreturn")
+def taxreturn():
+    account = (request.args.get("account") or "demo").strip()[:64] or "demo"
+    country = request.args.get("country") or einvoice.DEFAULT_COUNTRY
+    period = request.args.get("period") or datetime.now().strftime("%Y-%m")
+    try:
+        return jsonify(ledger.summary(account, country, period))
+    except ValueError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+
+
+@app.post("/api/ocr")
+def ocr_scan():
+    upload = request.files.get("image") or (next(iter(request.files.values())) if request.files else None)
+    if not upload:
+        return jsonify({"ok": False, "error": "أرفق صورة فاتورة"}), 400
+    raw = upload.read()
+    account = (request.form.get("account") or "demo").strip()[:64] or "demo"
+    try:
+        result = ocr.extract(raw, upload.filename or "image.png")
+    except ValueError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+    except Exception as exc:  # pragma: no cover - حماية من فشل OCR غير المتوقع
+        return jsonify({"ok": False, "error": f"تعذّر تحليل الصورة: {type(exc).__name__}"}), 500
+    if str(request.form.get("save") or "").lower() in ("1", "true", "yes"):
+        result["saved"] = ledger.add_purchases(account, [result["invoice"]], "ocr")
+    return jsonify(result)
+
+
+ACCOUNTANT_REPLY = (
+    "وصلت رسالتك إلى المحاسب وسيُرد عليك خلال يوم عمل. "
+    "في هذه النسخة المحلية يُحفظ الطلب في سجل الحساب ويظهر رقم التذكرة أدناه، "
+    "ويمكنك متابعة الأسئلة الفورية مع المساعد الضريبي في الأعلى."
+)
+
+
+@app.post("/api/support")
+def support_post():
+    payload = request.get_json(silent=True) or {}
+    account = str(payload.get("account") or "demo").strip()[:64] or "demo"
+    message = str(payload.get("message") or "").strip()
+    if not message:
+        return jsonify({"ok": False, "error": "اكتب نص الرسالة"}), 400
+    if len(message) > 2000:
+        return jsonify({"ok": False, "error": "الرسالة أطول من ٢٠٠٠ حرف"}), 400
+    entry = ledger.add_message(account, str(payload.get("topic") or "استشارة ضريبية"), message)
+    return jsonify({"ok": True, "ticket": entry["ticket"], "entry": entry,
+                    "reply": ACCOUNTANT_REPLY})
+
+
+@app.get("/api/support")
+def support_get():
+    account = (request.args.get("account") or "demo").strip()[:64] or "demo"
+    return jsonify({"ok": True, "messages": ledger.list_messages(account)[:50]})
 
 
 @app.post("/api/assistant")
