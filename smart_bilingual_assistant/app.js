@@ -480,6 +480,23 @@ function answerFor(text) {
     .join("\n");
 }
 
+function isUnanswered(question) {
+  const core = window.AssistantCore;
+  if (!core || typeof core.matchIntent !== "function") return false;
+  const result = core.matchIntent(question);
+  return !result || !result.intent;
+}
+
+function logUnanswered(question) {
+  if (!/^https?:$/.test(location.protocol)) return;
+  fetch("/api/unanswered", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question, lang: state.lang }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
 function ask(question) {
   const q = String(question || "").trim();
   if (!q) return;
@@ -489,6 +506,7 @@ function ask(question) {
   setTimeout(() => {
     typing.remove();
     appendMsg("bot", answerFor(q));
+    if (isUnanswered(q)) logUnanswered(q);
   }, 420);
 }
 
