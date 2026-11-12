@@ -2,9 +2,7 @@
 """خادم منتج Gulf Tax Compliance Pro.
 
 يقدّم واجهة gulf_tax_template_pro ويعمل كمحرك خلفي لها:
-  GET  /               الصفحة
-  GET  /styles.css     التنسيق
-  GET  /app.js         منطق الواجهة
+  GET  /               الصفحة (CSS و JavaScript مدمجان داخلها)
   GET  /api/health     الحالة
   GET  /api/sample     نص فواتير نموذجي (واتساب)
   GET  /api/news       أخبار السوق من data/market_news.json
@@ -388,16 +386,6 @@ def market_news(lang: str = "ar") -> dict:
 @app.get("/")
 def index():
     return send_from_directory(BASE, "index.html")
-
-
-@app.get("/styles.css")
-def styles():
-    return send_from_directory(BASE, "styles.css")
-
-
-@app.get("/app.js")
-def app_js():
-    return send_from_directory(BASE, "app.js")
 
 
 @app.get("/favicon.ico")
