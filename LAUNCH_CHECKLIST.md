@@ -7,6 +7,78 @@
 
 ## 1) ما يوجد في المشروع الآن
 
+### شجرة المشروع الكاملة
+
+```
+arab-templates/
+├── LAUNCH_CHECKLIST.md            هذا الملف
+├── README.md                      الدليل التفصيلي لكل مكوّن
+├── START_ARAB_TEMPLATES.bat       تشغيل بنقرة على ويندوز
+├── admin_dashboard.py             لوحة تحكم محلية
+├── deploy.json                    إعداد النشر
+├── .gitignore                     يمنع الأسرار والسجلات
+│
+├── gulf_tax_template_pro/         القالب الضريبي (6 ملفات)
+│   ├── index.html                 الواجهة (CSS/JS مدمجان)
+│   ├── server.py                  خادم Flask + /api/*
+│   ├── einvoice.py                QR والتجزئة والفواتير
+│   ├── ledger.py                  السجل والإقرار
+│   ├── ocr.py                     مسح الإيصالات (محاكاة افتراضيًا)
+│   ├── exchange_rates.json        أسعار العملات
+│   └── README.md
+│
+├── smart_bilingual_assistant/     المساعد (8 ملفات + logs/)
+│   ├── index.html · app.js · core.js · styles.css
+│   ├── tests.html · tests.js      اختبارات المطابقة (40 حالة)
+│   ├── server.py                  خادم 5083 + /api/unanswered
+│   ├── logs/                      غير متعقّب
+│   └── README.md
+│
+├── store/                         المتجر
+│   ├── index.html                 بحث وتصنيفات وبطاقات أسعار
+│   └── reseller_and_affiliates.html  الموزعون والعمولات
+│
+├── premium_bilingual_templates/   قوالب مستقلة (3 ملفات)
+│   ├── index.html                 فهرس القوالب
+│   ├── tender_cost_estimator.html حاسبة تسعير المناقصات
+│   └── factory_circular_ops.html  لوحة الأتمتة الدائرية
+│
+├── landing_pages/
+│   └── gulf_tax_landing.html      صفحة هبوط القالب الضريبي
+│
+├── marketing_assets/
+│   └── gulf_campaign_pack.md      10 نصوص + 3 سيناريوهات (عربي/إنجليزي) + 5 رسائل
+│
+├── customer_guides/               4 أدلة
+│   ├── gulf_tax_quickstart.md · reseller_program.md
+│   ├── smtp2go_email_setup.md · README.md
+│
+├── products/prompt_packs/         6 حزم جاهزة + الكتالوج
+│   ├── saudi|emirati|kuwaiti × ecommerce|realestate
+│   │   └── README.md · pack.json · prompts.md · prompts.txt
+│   ├── *.zip                      نسخ البيع (6 ملفات)
+│   └── catalog.csv · catalog.json · index.md
+│
+├── scripts/                       التشغيل والأتمتة (9 سكربتات)
+│   ├── bubble_data_sync.py · agents_swarm_core.py
+│   ├── scheduled_sync.py · whatsapp_invoice_parser.py
+│   ├── prompt_pack_builder.py · store_server.py
+│   ├── start_services.py · activity_log.py
+│   ├── autopilot_task.bat         مهمة ويندوز مجدولة
+│   └── .env · *.bak               محلي وغير متعقّب
+│
+├── data/                          5 ملفات بيانات
+│   └── templates_ar.json · templates_bilingual.json
+│       store_meta.json · market_news.json · autopilot_queue.json
+│
+├── deploy/
+│   ├── worker.js                  عامل النشر
+│   └── bubble_token.txt           محلي وغير متعقّب
+│
+├── reports/                       تقارير مولّدة (gulf, invoice_reports, usage)
+└── logs/                          سجلات محلية (غير متعقّبة)
+```
+
 ### أدوات وواجهات جاهزة
 
 | المسار | ما هو | يحتاج مفتاحًا؟ | الحالة |
@@ -17,7 +89,7 @@
 | `store/reseller_and_affiliates.html` | برنامج الموزعين (9,900 ر.س/سنة) والعمولة المتكررة 25% — عربي/إنجليزي | لا | **جاهز** |
 | `premium_bilingual_templates/` | فهرس + قالبان مستقلان: حاسبة تسعير المناقصات، ولوحة الأتمتة الدائرية | لا | **جاهز** — ملفات مستقلة |
 | `landing_pages/gulf_tax_landing.html` | صفحة هبوط تسويقية للقالب الضريبي: مشكلة/حل، جدول مقارنة، باقات، أسئلة، زر طلب | رابط الطلب في `ORDER_URL` | **جاهزة** — 5085 |
-| `marketing_assets/gulf_campaign_pack.md` | 10 نصوص إعلانية + 3 سيناريوهات فيديو 30 ثانية + 5 رسائل بريد | تستبدل `{{LINK}}` و`{{DEMO}}` و`{{WA}}` | **جاهزة للنسخ** |
+| `marketing_assets/gulf_campaign_pack.md` | 10 نصوص إعلانية + 3 سيناريوهات فيديو 30 ثانية (بجدول تصوير عربي وجدول إنجليزي لكل سيناريو) + 5 رسائل بريد، كلها بنسختين | تستبدل `{{LINK}}` و`{{DEMO}}` و`{{WA}}` | **جاهزة للنسخ** |
 
 ### سكربتات التشغيل والبيانات
 
@@ -54,7 +126,7 @@
 
 ---
 
-## 2) خطوات التشغيل بالترتيب
+## 2) خطوات التشغيل المحلي بالترتيب
 
 ### المرحلة أ — التحضير (مرة واحدة)
 
@@ -84,6 +156,7 @@
 - [ ] المساعد: سؤال معروف يُجيب، وسؤال غريب يسجّل في «غير المجابة» عبر `/api/unanswered`.
 - [ ] الصفحة التسويقية: تبديل العربية/الإنجليزية والعملات، وزر الطلب يفتح واتساب/البريد الصحيح.
 - [ ] المتجر: البحث والتصنيفات، ورابط `?q=…&cat=…&from=assistant` يبرز البطاقة الصحيحة.
+- [ ] المواد التسويقية: `marketing_assets/gulf_campaign_pack.md` يحتوي 10 نصوص و3 سيناريوهات و5 رسائل، ولكل سيناريو جدول عربي وجدول إنجليزي بنفس التوقيت (يمكن تصوير النسختين).
 - [ ] فحص الأخطاء: console نظيف في كل صفحة، و`git grep -n "BUBBLE_TOKEN=" ` لا يعيد قيمة حقيقية.
 
 ---

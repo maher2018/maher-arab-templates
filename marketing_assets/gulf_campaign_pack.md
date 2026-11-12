@@ -225,6 +225,8 @@
 
 **قواعد الإنتاج للثلاثة**: تصوير رأسي 9:16، إضاءة طبيعية، صوت واضح، ترجمة إنجليزية مدمجة (Captions) لأن 70% يشاهدون بدون صوت. كل مشهد لا يزيد على 3 ثوانٍ، وأول ثانية يجب أن تحتوي على «خطّاف» بصري أو نصي.
 
+**نسختان لكل سيناريو**: بعد الجدول العربي يوجد **جدول إنجليزي كامل** بنفس التوقيت واللقطات — تعليق صوتي إنجليزي ونص على الشاشة إنجليزي — فيمكن تصوير النسخة الإنجليزية منفصلة بدون ترجمة يدوية. أبقِ التوقيت ثابتًا في النسختين حتى يعمل نفس المونتاج والموسيقى.
+
 ---
 
 ### السيناريو 1: «الفاتورة اللي تنرفض» — 30 ثانية
@@ -241,7 +243,18 @@
 | 22–27s | طباعة الفاتورة A4 ثم مشاركتها على واتساب | «ونفس الفاتورة تنحفظ في السجل، وتدخل في الإقرار لحالها.» | تُحفظ وتدخل الإقرار |
 | 27–30s | شعار Arab Templates + زر | «جرّبها اليوم — الرابط في الوصف.» | ابدأ الآن · {{LINK}} |
 
-**تعليق إنجليزي للترجمة**: “One missing field can get your invoice rejected. Pick your country, the rate and currency follow. Enter one line and VAT calculates live. Press issue: a complete invoice with QR and hash. Saved to your ledger, counted in your return. Try it today.”
+**النسخة الإنجليزية — «The Invoice That Gets Rejected» (نفس التوقيت 30 ثانية)**
+
+| Time | Shot (same as Arabic) | English voice-over | On-screen text |
+|---|---|---|---|
+| 0–3s | Hand holds a paper invoice, red circle around the empty QR | “Your invoice is missing one field — and it gets rejected.” | One missing field = risk |
+| 3–8s | Laptop: open the template and pick the country | “Skip the workaround. Open the template, pick your country — rate and currency come pre-set.” | Pick country → rate auto-fills |
+| 8–15s | Enter one line: “Consulting, 2, 1000”, totals update live | “Enter the data once: item, quantity, price — and VAT calculates right in front of you.” | VAT calculated live |
+| 15–22s | Click “Issue invoice”, QR and hash appear | “Hit issue: a complete invoice with QR and hash, ready to print or send.” | QR + hash ready |
+| 22–27s | Print the A4 invoice, then share it on WhatsApp | “And the same invoice is saved to your ledger and counted in the return automatically.” | Saved · counted in the return |
+| 27–30s | Arab Templates logo + button | “Try it today — link in the description.” | Start now · {{LINK}} |
+
+**نص الترجمة المدمجة (Captions)**: استخدم عمود «On-screen text» كما هو؛ فهو قصير ومقروء على الجوال.
 
 **ملاحظات مونتاج**: استخدام صوت «نقرة» عند ظهور QR، وموسيقى خفيفة إيقاعية بلا كلمات. لا تُظهر بيانات عميل حقيقية.
 
@@ -261,7 +274,18 @@
 | 21–26s | شاشة الإقرار: ضريبة مدخلات ومخرجات وصافي | «وهنا الفرق يبين: صافي الضريبة وموعد التقديم بدون جمع يدوي.» | صافي الإقرار جاهز |
 | 26–30s | شعار + CTA | «جرّبه على إيصالاتك — الرابط في الوصف.» | {{LINK}} |
 
-**تعليق إنجليزي**: “Twelve receipts sitting in WhatsApp. Paste the text or upload the photo — supplier, date and VAT are extracted. Review and add to purchases; your return updates instantly with net VAT and the deadline.”
+**النسخة الإنجليزية — «WhatsApp Receipts» (نفس التوقيت 30 ثانية)**
+
+| Time | Shot (same as Arabic) | English voice-over | On-screen text |
+|---|---|---|---|
+| 0–3s | Thumb scrolls a WhatsApp chat with 12 receipt photos | “All these receipts are sitting in WhatsApp — and nobody has time to retype them.” | 12 receipts = 1 hour |
+| 3–8s | Copy a receipt’s text, paste it into the scanner tab | “Copy the text, paste it here. Or upload the photo directly.” | Paste it or upload the photo |
+| 8–15s | Fields fill in: supplier, date, total, VAT | “Supplier, date, VAT — read and filled in for you.” | Auto-extracted |
+| 15–21s | Quick review, then “Add to purchases” | “Review it in a second and add it to purchases — it lands in the return instantly.” | One purchase ledger |
+| 21–26s | Return screen: input VAT, output VAT, net | “Here is where the difference shows: net VAT and the filing deadline, no manual adding.” | Net return ready |
+| 26–30s | Logo + CTA | “Try it on your own receipts — link in the description.” | {{LINK}} |
+
+**نص الترجمة المدمجة (Captions)**: استخدم عمود «On-screen text» كما هو.
 
 **ملاحظات**: استخدم إيصالًا وهميًا (اسم مورد مُختلق) وامسح أي أرقام هواتف. أضف مؤثر صوتي عند كل حقل يتعبّى تلقائيًا.
 
@@ -281,7 +305,18 @@
 | 23–28s | لقطة عامة للواجهة بالعربية ثم الإنجليزية | «واللغة؟ عربي وإنجليزي بضغطة — عشان فريقك وعميلك.» | AR / EN فوري |
 | 28–30s | شعار + CTA | «قالب واحد لست دول خليجية.» | {{LINK}} |
 
-**تعليق إنجليزي**: “Client in Saudi, branch in the UAE, supplier in Kuwait? Switch country and the rate, currency, period and deadline follow. Issue an invoice per market in the same brand, and file each country separately. Arabic and English in one click. One template for six Gulf countries.”
+**النسخة الإنجليزية — «Three Countries, One System» (نفس التوقيت 30 ثانية)**
+
+| Time | Shot (same as Arabic) | English voice-over | On-screen text |
+|---|---|---|---|
+| 0–3s | Three papers: riyal, dirham, dinar | “Client in Saudi, branch in the UAE, supplier in Kuwait?” | 3 countries… 3 rates |
+| 3–9s | Switch country in the list: SA → AE → KW, the rate changes | “Switch the country — the rate, currency, period and deadline all follow.” | 15% · 5% · 0% |
+| 9–16s | Issue an invoice in each country (fast cuts) | “Issue an invoice in every currency, all in the same brand and layout.” | An invoice per market |
+| 16–23s | Return tab with the period changing | “And each country’s return is calculated separately, with its own filing deadline.” | A return per country |
+| 23–28s | Wide shot of the UI in Arabic, then English | “Language? Arabic and English in one click — for your team and your client.” | AR / EN instantly |
+| 28–30s | Logo + CTA | “One template for six Gulf countries.” | {{LINK}} |
+
+**نص الترجمة المدمجة (Captions)**: استخدم عمود «On-screen text» كما هو.
 
 **ملاحظات**: أضف خريطة خليجية بسيطة كخلفية في المشهد الأخير، وتأكد من ظهور اسم كل دولة بخط واضح.
 
