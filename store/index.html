@@ -47,6 +47,15 @@ body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(
 .skeleton{height:200px;border-radius:var(--radius);background:linear-gradient(90deg,#ece8df 25%,#f6f3ec 37%,#ece8df 63%);background-size:400% 100%;animation:sh 1.4s infinite}
 @keyframes sh{0%{background-position:100% 50%}100%{background-position:0 50%}}
 footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
+.deep{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 18px;padding:16px 18px;border:1px solid var(--gold);border-radius:14px;background:#fffdf6}
+.deep[hidden]{display:none}
+.deep .eyebrow{font-size:.72rem;letter-spacing:.08em;color:var(--gold);font-weight:800}
+.deep strong{font-size:1.02rem}
+.deep .sub{color:var(--muted);font-size:.86rem}
+.deep .acts{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.card.suggested{border-color:var(--gold);box-shadow:0 0 0 2px rgba(193,145,47,.16),var(--shadow)}
+.card.focus{box-shadow:0 0 0 3px var(--gold),0 18px 40px rgba(18,38,58,.16);transform:translateY(-2px)}
+.pick{align-self:flex-start;font-size:.72rem;font-weight:700;color:#7a5610;background:#fbf1d8;padding:3px 10px;border-radius:999px}
 @media(max-width:600px){.hero{padding:36px 0 18px}.nav{display:none}}
 </style>
 </head>
@@ -76,6 +85,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     <div class="chips" id="chips"></div>
   </div>
 
+  <div class="deep" id="deep" hidden></div>
   <section class="grid" id="grid" aria-live="polite"></section>
   <p class="status" id="status">جارٍ تحميل القوالب…</p>
 
@@ -104,7 +114,9 @@ const ORDER_URL = "";
 const el = (id) => document.getElementById(id);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
 const money = (n) => n == null ? "تواصل معنا" : new Intl.NumberFormat("ar-SA", {maximumFractionDigits: 0}).format(n) + " ريال";
-const state = { items: [], category: "all", q: "" };
+const params = new URLSearchParams(location.search);
+const deep = { q: (params.get("q") || "").trim(), cat: params.get("cat") || "", from: params.get("from") || "" };
+const state = { items: [], category: deep.cat || "all", q: deep.q };
 
 function normalize(row) {
   const price = Number(String(row.price == null ? "" : row.price).replace(/[^\d.]/g, ""));
@@ -145,6 +157,11 @@ function filtered() {
   });
 }
 
+function matchesDeep(item) {
+  if (!deep.q) return false;
+  return (item.title + " " + item.category + " " + item.description).toLowerCase().indexOf(deep.q.toLowerCase()) !== -1;
+}
+
 function card(item) {
   const preview = item.previewUrl
     ? '<a class="btn ghost" href="' + esc(item.previewUrl) + '" target="_blank" rel="noopener">معاينة</a>'
@@ -153,8 +170,10 @@ function card(item) {
     ? '<a class="btn" href="' + esc(ORDER_URL) + '?text=' + encodeURIComponent("أرغب بشراء " + item.title) + '" target="_blank" rel="noopener">اطلب</a>'
     : preview;
   const price = money(item.price) + (item.price == null ? "" : " <small>ر.س</small>");
-  return '<article class="card">' +
+  const suggested = deep.from === "assistant" && matchesDeep(item);
+  return '<article class="card' + (suggested ? " suggested" : "") + '">' +
     '<span class="cat">' + esc(item.category) + "</span>" +
+    (suggested ? '<span class="pick">مقترح من المساعد الذكي</span>' : "") +
     "<h3>" + esc(item.title) + "</h3>" +
     "<p>" + esc(item.description) + "</p>" +
     '<div class="foot"><span class="price">' + price + "</span>" + action + "</div>" +
@@ -169,6 +188,44 @@ function render() {
 }
 
 function setStatus(html) { el("status").innerHTML = html; }
+
+function clearDeep() {
+  deep.q = "";
+  deep.cat = "";
+  state.q = "";
+  state.category = "all";
+  el("q").value = "";
+  history.replaceState(null, "", location.pathname + location.hash);
+  el("deep").hidden = true;
+  renderChips();
+  render();
+}
+
+function focusDeep() {
+  if (!deep.q && !deep.cat) return;
+  const rows = filtered();
+  const box = el("deep");
+  box.hidden = false;
+  if (!rows.length) {
+    box.innerHTML = '<strong>لا يوجد قالب مطابق للاقتراح بعد.</strong>' +
+      '<span class="acts"><button class="btn ghost" id="deepClear" type="button">عرض كل القوالب</button></span>';
+  } else {
+    const first = rows[0];
+    box.innerHTML = '<span class="eyebrow">اقتراح المساعد الذكي</span>' +
+      '<strong>«' + esc(first.title) + '»</strong>' +
+      '<span class="sub">' + rows.length + ' قالبًا مطابقًا — البطاقة المحددة هي المقترح.</span>' +
+      '<span class="acts">' +
+      (first.previewUrl ? '<a class="btn" href="' + esc(first.previewUrl) + '" target="_blank" rel="noopener">افتح معاينة القالب</a>' : "") +
+      '<button class="btn ghost" id="deepClear" type="button">عرض كل القوالب</button></span>';
+    const target = el("grid").querySelector(".card.suggested") || el("grid").querySelector(".card");
+    if (target) {
+      target.classList.add("focus");
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+  const clear = el("deepClear");
+  if (clear) clear.addEventListener("click", clearDeep);
+}
 
 function skeletons() {
   let out = "";
@@ -186,8 +243,10 @@ function load() {
     })
     .then(function (data) {
       state.items = (data.items || []).map(normalize);
+      el("q").value = deep.q;
       renderChips();
       render();
+      focusDeep();
       const live = data.source === "bubble";
       const when = data.updated_at ? " · آخر تحديث " + esc(data.updated_at.replace("T", " ")) : "";
       setStatus('<span class="dot' + (live ? "" : " local") + '"></span>' +

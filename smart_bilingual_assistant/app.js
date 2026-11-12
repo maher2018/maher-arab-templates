@@ -54,6 +54,7 @@ const I18N = {
     "topic.penalty": "الغرامات", "topic.penalty.sub": "أشهر أسباب الغرامات وكيف تتجنبها",
     "topic.journal": "قيود الفواتير", "topic.journal.sub": "القيد الصحيح للمبيعات والمشتريات",
     "catalog.ask": "خطوات الاستخدام", "catalog.recommend": "هل يناسبني؟",
+    "catalog.store": "افتح في المتجر", "recommend.open": "افتح القالب المقترح في المتجر",
     "flow.activity": "ما نوع نشاطك؟", "flow.priority": "وما أهم ما تحتاجه الآن؟",
     "flow.choose": "اختر أحد الخيارات من الأزرار بالأسفل.",
     "act.ecommerce": "تجارة إلكترونية أو متجر", "act.services": "خدمات واستشارات", "act.accounting": "مكتب محاسبة",
@@ -171,6 +172,7 @@ const I18N = {
     "topic.penalty": "Penalties", "topic.penalty.sub": "Common causes and how to avoid them",
     "topic.journal": "Invoice entries", "topic.journal.sub": "Correct entries for sales and purchases",
     "catalog.ask": "Setup steps", "catalog.recommend": "Is it right for me?",
+    "catalog.store": "Open in store", "recommend.open": "Open the suggested template in the store",
     "flow.activity": "What kind of business do you run?", "flow.priority": "And what do you need most right now?",
     "flow.choose": "Pick one of the options below.",
     "act.ecommerce": "E-commerce or a store", "act.services": "Services and consulting", "act.accounting": "Accounting office",
@@ -286,6 +288,17 @@ function renderCurrencyOptions() {
   select.value = previous && CURRENCY_NAMES[previous] ? previous : COUNTRIES[$("auditCountry").value].currency;
 }
 
+// رابط كتالوج المتجر — بدّله إلى نطاقك المنشور عند النشر (مثال: "https://store.example.com/")
+const STORE_BASE = "http://127.0.0.1:8787/";
+
+function storeLink(template) {
+  const base = STORE_BASE || "../store/index.html";
+  const query = new URLSearchParams({ from: "assistant" });
+  if (template.store && template.store.q) query.set("q", template.store.q);
+  if (template.store && template.store.cat) query.set("cat", template.store.cat);
+  return base + "?" + query.toString();
+}
+
 const TEMPLATES = [
   {
     id: "gulf", name: { ar: "نظام المحاسبة والامتثال الضريبي الخليجي", en: "Gulf tax & accounting suite" },
@@ -296,6 +309,7 @@ const TEMPLATES = [
       ar: ["شغّل الخادم: python gulf_tax_template_pro/server.py --port 5075", "اختر الدولة والعملة واللغة من نافذة الإعدادات الأولى", "أصدر فاتورة برمز QR ثم احفظها، وتابع الإقرار في تبويب الإقرار"],
       en: ["Start the server: python gulf_tax_template_pro/server.py --port 5075", "Pick country, currency and language in the first-run setup", "Issue an invoice with its QR code, save it, then track the return in the return tab"],
     },
+    store: { q: "فواتير ضريبية", cat: "أنظمة الفواتير الضريبية" },
     link: "../gulf_tax_template_pro/index.html",
   },
   {
@@ -307,6 +321,7 @@ const TEMPLATES = [
       ar: ["شغّل خادم المتجر: python scripts/store_server.py", "اضبط ORDER_URL في أعلى store/index.html لرابط الطلب", "أضف القوالب من لوحة بابل أو من الملف المحلي وستظهر تلقائيًا"],
       en: ["Run the store server: python scripts/store_server.py", "Set ORDER_URL at the top of store/index.html", "Add templates from Bubble or the local file — they appear automatically"],
     },
+    store: { q: "متجر إلكتروني", cat: "متاجر إلكترونية" },
     link: "../store/index.html",
   },
   {
@@ -314,6 +329,7 @@ const TEMPLATES = [
     kicker: { ar: "عملاء · مهام · تقارير", en: "Customers · tasks · reports" },
     best: { ar: "فرق المبيعات والخدمات التي تتابع عملاءها يدويًا في الجداول.", en: "Sales and service teams still tracking customers in spreadsheets." },
     tags: ["crm", "services", "accounting"],
+    store: { q: "عملاء" },
     steps: {
       ar: ["استورد قائمة العملاء الحالية (CSV)", "حدّد مراحل البيع ومسؤول كل عميل", "راقب المهام المتأخرة من اللوحة أسبوعيًا"],
       en: ["Import your current customer list (CSV)", "Define pipeline stages and an owner per customer", "Review overdue tasks weekly from the dashboard"],
@@ -324,6 +340,7 @@ const TEMPLATES = [
     kicker: { ar: "مواعيد · تذكيرات", en: "Slots · reminders" },
     best: { ar: "العيادات والمكاتب التي تحجز مواعيدها عبر واتساب يدويًا.", en: "Clinics and offices booking appointments manually over WhatsApp." },
     tags: ["booking", "services"],
+    store: { q: "حجوزات", cat: "الحجوزات" },
     steps: {
       ar: ["حدّد ساعات العمل ومدة الموعد", "أضف الخدمات وأسماء الفريق", "شارك رابط الحجز مع العملاء وفعّل التذكيرات"],
       en: ["Set working hours and slot length", "Add services and team members", "Share the booking link and enable reminders"],
@@ -344,6 +361,7 @@ const TEMPLATES = [
     kicker: { ar: "أعمال · سيرة · تواصل", en: "Work · bio · contact" },
     best: { ar: "المستقلين والمصممين الذين يعرضون أعمالهم لجمهور عربي.", en: "Freelancers and designers showcasing work to an Arabic audience." },
     tags: ["personal", "showcase"],
+    store: { q: "موقع شخصي", cat: "مواقع شخصية" },
     steps: {
       ar: ["بدّل العنوان والاسم والنبذة", "أضف ٣ إلى ٦ أعمال بصور حقيقية", "اربط نموذج التواصل ببريدك أو واتساب"],
       en: ["Replace the headline, name and bio", "Add 3–6 projects with real images", "Connect the contact form to your email or WhatsApp"],
@@ -364,6 +382,7 @@ const TEMPLATES = [
     kicker: { ar: "بريد · تتبع", en: "Email · tracking" },
     best: { ar: "من يبني قائمة عملاء ويحتاج سلسلة رسائل جاهزة.", en: "Anyone building a list who needs a ready email sequence." },
     tags: ["ecommerce", "crm", "services"],
+    store: { q: "حملة بريدية", cat: "تسويق" },
     steps: {
       ar: ["اختر أحد قوالب السلسلة (ترحيب أو متابعة)", "بدّل النصوص والعروض", "أرسل عبر مزود بريد موثق وتابع الفتح والنقر"],
       en: ["Pick a sequence (welcome or follow-up)", "Replace the copy and offers", "Send through a verified email provider and track opens and clicks"],
@@ -419,12 +438,21 @@ const FLOW_PRIORITY = [
 /* قاعدة المعرفة والمطابقة في core.js */
 
 /* ============================ المحادثة ============================ */
-function appendMsg(role, text) {
+function appendMsg(role, text, link) {
   const wrap = document.createElement("div");
   wrap.className = "msg " + (role === "user" ? "user" : "bot");
   const bubble = document.createElement("div");
   bubble.className = "bubble";
   bubble.textContent = text;
+  if (link && link.href) {
+    const anchor = document.createElement("a");
+    anchor.className = "msg-link";
+    anchor.href = link.href;
+    anchor.target = "_blank";
+    anchor.rel = "noopener";
+    anchor.textContent = link.label || link.href;
+    bubble.appendChild(anchor);
+  }
   wrap.appendChild(bubble);
   $("chatLog").appendChild(wrap);
   $("chatLog").scrollTop = $("chatLog").scrollHeight;
@@ -519,7 +547,7 @@ function handleFlow(value) {
     t("recommend.steps"),
     ...steps.map((step, index) => `${index + 1}. ${step}`),
   ].join("\n");
-  appendMsg("bot", text);
+  appendMsg("bot", text, { href: storeLink(chosen), label: t("recommend.open") });
   state.flow = null;
   renderChips();
 }
@@ -554,7 +582,8 @@ function renderCatalog() {
       <ol>${steps.map((step) => `<li>${step}</li>`).join("")}</ol>
       <div class="actions">
         <button type="button" data-steps="${template.id}">${t("catalog.ask")}</button>
-        ${template.link ? `<a class="btn ghost" style="padding:7px 12px;font-size:.78rem;border-radius:9px" href="${template.link}" target="_blank" rel="noopener">${state.lang === "en" ? "Open" : "فتح"}</a>` : ""}
+        <a class="btn" style="padding:7px 12px;font-size:.78rem;border-radius:9px" href="${storeLink(template)}" target="_blank" rel="noopener">${t("catalog.store")}</a>
+        ${template.link && !template.store ? `<a class="btn ghost" style="padding:7px 12px;font-size:.78rem;border-radius:9px" href="${template.link}" target="_blank" rel="noopener">${state.lang === "en" ? "Open" : "فتح"}</a>` : ""}
       </div>
     </article>`;
   }).join("");
