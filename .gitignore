@@ -14,3 +14,9 @@ products/prompt_packs/*.zip
 
 # أسرار النشر (تُنشأ محليًا)
 deploy/bubble_token.txt
+
+# مخرجات الطيار الآلي (تُولَّد في كل دورة)
+autopilot_report.json
+data/autopilot_queue.json
+data/templates_bilingual.json.tmp
+scripts/autopilot_task.bat
