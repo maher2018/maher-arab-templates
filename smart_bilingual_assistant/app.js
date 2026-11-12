@@ -335,87 +335,7 @@ const FLOW_PRIORITY = [
   { value: "showcase", label: "prio.showcase", tags: ["showcase", "personal"] },
 ];
 
-/* ============================ المعرفة ============================ */
-const INTENTS = [
-  {
-    keys: ["نسبة", "نسب", "كم الضريبة", "rate", "vat rate", "percent", "15", "5%"],
-    answer: {
-      ar: "نسب ضريبة القيمة المضافة في الخليج:\n• السعودية 15%\n• الإمارات 5%\n• عُمان 5%\n• البحرين 10%\n• قطر والكويت: لا تُطبَّق حاليًا (0% في القالب).\n\nحدود التسجيل الإلزامي: 375,000 ر.س في السعودية و375,000 درهم في الإمارات، والاختياري 187,500 في البلدين.",
-      en: "Gulf VAT rates:\n• Saudi Arabia 15%\n• UAE 5%\n• Oman 5%\n• Bahrain 10%\n• Qatar and Kuwait: not applied yet (0% in the template).\n\nMandatory registration thresholds: SAR 375,000 in Saudi Arabia and AED 375,000 in the UAE; voluntary at 187,500 in both.",
-    },
-  },
-  {
-    keys: ["تسجيل", "حد التسجيل", "registration", "threshold", "375"],
-    answer: {
-      ar: "حدود التسجيل في ضريبة القيمة المضافة:\n• السعودية: إلزامي عند 375,000 ر.س من الإيرادات السنوية، واختياري من 187,500.\n• الإمارات: إلزامي عند 375,000 درهم، واختياري من 187,500.\n• عُمان: إلزامي عند 38,500 ريال عماني.\n• البحرين: إلزامي عند 37,500 دينار بحريني (واختياري من 18,750).\n• قطر والكويت: لا ضريبة قيمة مضافة حاليًا.\n\nراقب الإيرادات على أساس 12 شهرًا متتالية، لا السنة الميلادية فقط.",
-      en: "VAT registration thresholds:\n• Saudi Arabia: mandatory at SAR 375,000 annual revenue, voluntary from 187,500.\n• UAE: mandatory at AED 375,000, voluntary from 187,500.\n• Oman: mandatory at OMR 38,500.\n• Bahrain: mandatory at BHD 37,500 (voluntary from 18,750).\n• Qatar and Kuwait: no VAT yet.\n\nTrack revenue over any rolling 12-month period, not only the calendar year.",
-    },
-  },
-  {
-    keys: ["موعد", "مواعيد", "إقرار", "deadline", "filing", "return", "ربع"],
-    answer: {
-      ar: "مواعيد الإقرار الضريبي:\n• السعودية: شهري أو ربع سنوي حسب حجم المنشأة، ويُقدَّم خلال الشهر التالي لنهاية الفترة.\n• الإمارات: ربع سنوي خلال 28 يومًا من نهاية الربع.\n• عُمان والبحرين: شهري أو ربع سنوي حسب التصنيف.\n• قطر والكويت: لا إقرار قيمة مضافة حاليًا.\n\nاحسب الموعد من تقويم الهيئة في بلدك، فقد يتغير باختلاف التصنيف.",
-      en: "VAT filing deadlines:\n• Saudi Arabia: monthly or quarterly depending on size, filed in the month after the period ends.\n• UAE: quarterly, within 28 days of the quarter end.\n• Oman and Bahrain: monthly or quarterly depending on category.\n• Qatar and Kuwait: no VAT return yet.\n\nConfirm dates on your authority's portal, as the category can change the cadence.",
-    },
-  },
-  {
-    keys: ["حقول", "fields", "required fields", "qr", "فاتورة إلكترونية", "e-invoicing", "حقول الفاتورة"],
-    answer: {
-      ar: "الحقول الأساسية للفاتورة الضريبية:\n• اسم المورد والرقم الضريبي\n• رقم الفاتورة وتاريخ الإصدار\n• اسم العميل ورقمه الضريبي إن كان مسجلًا\n• وصف البنود والكمية والسعر والخصم\n• الصافي ونسبة الضريبة ومبلغ الضريبة والإجمالي\n• العملة ورمز QR للفاتورة المبسطة (السعودية)\n\nالفاتورة الإلكترونية في السعودية: المرحلة الأولى تشمل QR، والمرحلة الثانية ربط تكاملي مع منصة فاتورة حسب شرائح الإيرادات.",
-      en: "Required tax invoice fields:\n• Seller name and tax number\n• Invoice number and issue date\n• Customer name and tax number if registered\n• Line description, quantity, price and discount\n• Net, VAT rate, VAT amount and total\n• Currency and the QR code for simplified invoices (Saudi Arabia)\n\nSaudi e-invoicing: phase one covers the QR code; phase two is an integration with the Fatoora platform by revenue waves.",
-    },
-  },
-  {
-    keys: ["مشتريات", "خصم", "مدخلات", "input", "purchase", "deduct"],
-    answer: {
-      ar: "شروط خصم ضريبة المشتريات (المدخلات):\n• فاتورة ضريبية صحيحة تحمل رقم المورد الضريبي.\n• شراء لاستخدام العمل الخاضع للضريبة، لا للاستخدام الشخصي.\n• تسجيل الفاتورة في الفترة الصحيحة (فترة الاستلام عادةً).\n• عدم خصم ضريبة فواتير مفقودة أو غير مطابقة للبيانات.\n\nالفواتير منخفضة الثقة أو بلا رقم ضريبي لا تُعتمد عند التدقيق، ولهذا يوسم الماسح هذه الفواتير للمراجعة.",
-      en: "Conditions for deducting input VAT:\n• A valid tax invoice carrying the supplier's tax number.\n• The purchase is used for taxable business activity, not private use.\n• The invoice is recorded in the correct period (usually when received).\n• No deduction on missing or mismatched invoices.\n\nLow-confidence invoices without a tax number are rejected at audit, which is why the scanner flags them for review.",
-    },
-  },
-  {
-    keys: ["معفاة", "صفرية", "zero", "exempt", "0%"],
-    answer: {
-      ar: "الفرق بين المعفاة والصفرية:\n• **صفرية (0%)**: خاضعة للضريبة بنسبة صفر — تُمكّنك من خصم ضريبة المدخلات، مثل التصدير والرعاية الصحية المؤهلة في بعض الدول.\n• **معفاة**: خارج نطاق الضريبة — لا تُحصّل ضريبة ولا تخصم ضريبة المدخلات المرتبطة بها.\n\nعمليًا: لا تُدخل ضريبة على الفاتورة في الحالتين، لكن المعالجة المحاسبية للمدخلات تختلف.",
-      en: "Zero-rated vs exempt:\n• **Zero-rated (0%)**: taxable at zero — input VAT is usually recoverable, e.g. exports and qualifying healthcare in some countries.\n• **Exempt**: outside the scope — no output VAT and no recovery of related input VAT.\n\nIn practice both invoices show no VAT, but input VAT treatment differs.",
-    },
-  },
-  {
-    keys: ["غرامة", "عقوبة", "penalty", "fine", "تأخير"],
-    answer: {
-      ar: "أكثر أسباب الغرامات الضريبية شيوعًا:\n• عدم إصدار فاتورة إلكترونية أو إصدارها ببيانات ناقصة.\n• التأخر في تقديم الإقرار أو السداد.\n• عدم مطابقة بيانات المورد بين الفاتورة والسجل.\n• عدم الاحتفاظ بالفواتير للمدة النظامية (٥ سنوات عادةً).\n\nالوقاية أرخص من التصحيح: تحقق من الحقول قبل الإصدار، وأرشف نسخة PDF لكل فاتورة.",
-      en: "The most common tax penalties:\n• Missing or incomplete e-invoices.\n• Late filing or late payment.\n• Mismatched supplier details between invoice and records.\n• Not retaining invoices for the required period (often five years).\n\nPrevention is cheaper than correction: verify fields before issuing and archive a PDF of every invoice.",
-    },
-  },
-  {
-    keys: ["قيد", "قيود", "journal", "entry", "تدقيق", "audit", "ترحيل"],
-    boost: ["قيود", "تدقيق", "ترحيل", "journal", "audit"],
-    answer: {
-      ar: "القيد الصحيح لفاتورة مبيعات:\n• مدين: ذمم العملاء / النقدية = الإجمالي\n• دائن: الإيرادات = الصافي\n• دائن: ضريبة القيمة المضافة المستحقة = مبلغ الضريبة\n\nولفاتورة مشتريات:\n• مدين: المصروف أو الأصل = الصافي\n• مدين: ضريبة المدخلات = الضريبة\n• دائن: الموردون / النقدية = الإجمالي\n\nقبل الترحيل تحقق من: الصافي × النسبة = الضريبة، والصافي + الضريبة = الإجمالي، وصيغة الرقم الضريبي. أداة التدقيق بالأسفل تجري هذه الفحوص نيابةً عنك.",
-      en: "Correct sales invoice entry:\n• Debit receivables / cash = total\n• Credit revenue = net\n• Credit VAT payable = VAT amount\n\nPurchase invoice entry:\n• Debit expense or asset = net\n• Debit input VAT = VAT\n• Credit payables / cash = total\n\nBefore posting, verify: net × rate = VAT, net + VAT = total, and the tax-number format. The audit tool below runs these checks for you.",
-    },
-  },
-  {
-    keys: ["قالب", "قوالب", "template", "templates", "أي قالب"],
-    answer: {
-      ar: "قوالب Arab Templates المتاحة:\n• نظام المحاسبة والامتثال الضريبي الخليجي — فواتير QR وإقرار ومسح\n• متجر القوالب الرقمي — عرض وبيع القوالب\n• لوحة متابعة العملاء (CRM)\n• نظام حجز المواعيد\n• بطاقات تعليمية تفاعلية\n• موقع أعمال شخصي\n• مساعد ذكي مخصص\n• حملة بريدية عربية\n\nاضغط «اختر لي القالب المناسب» أو «هل يناسبني؟» على أي بطاقة في قسم القوالب، وسأشرح الخطوات بالتفصيل.",
-      en: "Available Arab Templates:\n• Gulf tax & accounting suite — QR invoices, VAT return, scanning\n• Digital templates store — showcase and sell templates\n• Customer follow-up dashboard (CRM)\n• Appointment booking system\n• Interactive study flashcards\n• Personal portfolio site\n• Custom AI assistant\n• Arabic email campaign\n\nPress “Recommend a template” or “Is it right for me?” on any card in the catalogue and I will explain the setup steps.",
-    },
-  },
-  {
-    keys: ["تشغيل", "استخدام", "setup", "install", "run", "start", "كيف أستخدم"],
-    answer: {
-      ar: "خطوات تشغيل منتجات Arab Templates:\n1. تثبيت بايثون ثم الحزم: python -m pip install flask segno\n2. تشغيل الخادم: python gulf_tax_template_pro/server.py --port 5075\n3. فتح http://127.0.0.1:5075 في المتصفح\n4. من الإعدادات: الدولة والعملة واللغة\n5. إصدار أول فاتورة وحفظها لتظهر في الإقرار\n\nللمتجر: python scripts/store_server.py ثم http://127.0.0.1:8787.",
-      en: "Running Arab Templates products:\n1. Install Python, then: python -m pip install flask segno\n2. Start the server: python gulf_tax_template_pro/server.py --port 5075\n3. Open http://127.0.0.1:5075\n4. In settings, pick country, currency and language\n5. Issue your first invoice and save it so it appears in the return\n\nFor the store: python scripts/store_server.py then http://127.0.0.1:8787.",
-    },
-  },
-  {
-    keys: ["دعم", "تواصل", "support", "contact", "بشري", "human"],
-    answer: {
-      ar: "للحصول على دعم بشري:\n• اطرح سؤالك هنا أولًا — معظم أسئلة القوالب والضريبة لها جواب فوري.\n• إن احتجت متابعة بشرية، أرسل التفاصيل من صفحة المتجر أو من تبويب «التواصل مع المحاسب» داخل القالب الضريبي (يُنشئ تذكرة برقم).\n• أرفق دائمًا: الدولة، الفترة، ومبلغ الفاتورة، لتسريع الرد.",
-      en: "For human support:\n• Ask here first — most template and VAT questions are answered instantly.\n• If you need a person, send details from the store page or the “Talk to an accountant” tab inside the tax template (it creates a ticket number).\n• Always include: country, period and invoice amount to speed up the reply.",
-    },
-  },
-];
+/* قاعدة المعرفة والمطابقة في core.js */
 
 /* ============================ المحادثة ============================ */
 function appendMsg(role, text) {
@@ -431,20 +351,24 @@ function appendMsg(role, text) {
 }
 
 function answerFor(text) {
-  const norm = String(text || "").toLowerCase();
-  let best = null, bestScore = 0;
-  INTENTS.forEach((intent) => {
-    let score = 0;
-    intent.keys.forEach((key) => {
-      if (norm.includes(String(key).toLowerCase())) score += Math.max(2, String(key).length);
-    });
-    (intent.boost || []).forEach((key) => {
-      if (norm.includes(String(key).toLowerCase())) score += 12;
-    });
-    if (score > bestScore) { best = intent; bestScore = score; }
-  });
-  if (best && bestScore >= 2) return best.answer[state.lang === "en" ? "en" : "ar"];
-  return t("msg.notfound") + "\n" + TOPICS.slice(0, 5).map((topic) => "• " + t(topic.key)).join("\n");
+  const core = window.AssistantCore;
+  const lang = state.lang === "en" ? "en" : "ar";
+  const result = core ? core.matchIntent(text) : { intent: null };
+  if (result.intent) {
+    if (result.country) {
+      const tailored = core.countryAnswer(result.intent.id, result.country, lang);
+      if (tailored) {
+        const hint = lang === "en"
+          ? "Ask me about registration, filing deadlines or invoice fields for more detail."
+          : "اسألني عن التسجيل أو مواعيد الإقرار أو حقول الفاتورة لمزيد من التفاصيل.";
+        return [tailored, "", hint].join("\n");
+      }
+    }
+    return result.intent.answer[lang];
+  }
+  return [t("msg.notfound")]
+    .concat(TOPICS.slice(0, 5).map((topic) => "• " + t(topic.key)))
+    .join("\n");
 }
 
 function ask(question) {

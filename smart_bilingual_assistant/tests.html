@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اختبارات المساعد — FAQ Tests</title>
+<style>
+:root{--ink:#132a3a;--muted:#5f7280;--line:#e6e0d5;--ok:#0f7f6c;--bad:#b23b2e;--brand:#0f3d5c}
+*{box-sizing:border-box}
+body{margin:0;background:#f7f5f0;color:var(--ink);font-family:"Segoe UI",Tahoma,system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:1.4rem;margin:0 0 6px}
+p.lead{color:var(--muted);margin:0 0 18px;font-size:.92rem}
+.summary{display:inline-block;font-weight:800;padding:7px 14px;border-radius:999px;background:#eaf1f6;color:var(--brand);margin-bottom:14px}
+.summary.ok{background:#e6f4f0;color:var(--ok)}
+.summary.bad{background:#fbeae8;color:var(--bad)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.85rem}
+th,td{padding:8px 10px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eaf1f6;color:var(--brand);font-size:.78rem;white-space:nowrap}
+tr.pass td:first-child{color:var(--ok);font-weight:800}
+tr.fail{background:#fdf1ef}
+tr.fail td:first-child{color:var(--bad);font-weight:800}
+tr.fail td:nth-child(4){font-weight:700}
+button{margin-top:16px;padding:10px 18px;border-radius:11px;background:var(--brand);color:#fff;border:0;font:inherit;font-weight:700;cursor:pointer}
+code{background:#f1efe8;padding:1px 6px;border-radius:6px;font-size:.8rem;direction:ltr;display:inline-block}
+.note{margin-top:14px;color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>اختبارات الأسئلة الشائعة — FAQ matching tests</h1>
+  <p class="lead">تشغّل هذه الصفحة <code>core.js</code> و<code>tests.js</code> فقط، وتتحقق من فهم صيغ عربية فصحى وخليجية وإنجليزية، ومن أن الأسئلة غير المتعلقة تُعيد «لا أعرف».</p>
+  <div id="testSummary" class="summary">…</div>
+  <table>
+    <thead>
+      <tr>
+        <th>النتيجة</th><th>السؤال</th><th>المتوقّع</th><th>الفِعلي</th>
+        <th>دولة متوقعة</th><th>دولة فعلية</th><th>الدرجة</th>
+      </tr>
+    </thead>
+    <tbody id="testRows"></tbody>
+  </table>
+  <button type="button" id="rerun">إعادة التشغيل</button>
+  <p class="note">للتشغيل من الطرفية عند توفر Node: <code>node tests.js</code> يعرض نفس الحالات عبر <code>runFaqTests()</code>. وإلا يكفي فتح هذه الصفحة في المتصفح.</p>
+</div>
+<script src="/core.js"></script>
+<script src="/tests.js"></script>
+<script>
+document.getElementById("rerun").addEventListener("click", () => renderFaqTests());
+</script>
+</body>
+</html>
