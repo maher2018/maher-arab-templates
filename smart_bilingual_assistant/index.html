@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المساعد الذكي — Arab Templates</title>
+<meta name="description" content="المساعد الذكي الرسمي لمنصة Arab Templates: دعم وتوجيه لاختيار القالب المناسب، واستشارات ضريبية ومحاسبية فورية بالعربية والإنجليزية.">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap bar">
+    <div class="brand">
+      <span class="mark">ع</span>
+      <span class="brand-text">
+        <strong data-i18n="brand.name">المساعد الذكي</strong>
+        <small data-i18n="brand.sub">Arab Templates · Smart Assistant</small>
+      </span>
+    </div>
+    <nav class="nav">
+      <a href="#assistant" data-i18n="nav.chat">المحادثة</a>
+      <a href="#catalog" data-i18n="nav.catalog">القوالب</a>
+      <a href="#audit" data-i18n="nav.audit">تدقيق القيود</a>
+      <a href="#topics" data-i18n="nav.topics">مواضيع ضريبية</a>
+    </nav>
+    <div class="controls">
+      <span class="pill"><span class="dot"></span><span data-i18n="status.local">يعمل محليًا بلا إنترنت</span></span>
+      <button class="lang-btn" id="langBtn" type="button">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="badge" data-i18n="hero.badge">مساعد رسمي · عربي / English</span>
+    <h1 data-i18n="hero.title">اسأل عن القوالب أو الضريبة — واحصل على جواب واضح فورًا</h1>
+    <p data-i18n="hero.sub">يدعم الزوار والموظفين في اختيار القالب المناسب وشرح خطوات الاستخدام، ويجيب عن استفسارات ضريبة القيمة المضافة في السعودية والإمارات ودول الخليج، ويساعد المحاسبين في تدقيق قيود الفواتير.</p>
+    <div class="hero-actions">
+      <button class="btn" type="button" data-action="recommend" data-i18n="hero.cta.recommend">اختر لي القالب المناسب</button>
+      <a class="btn ghost" href="#audit" data-i18n="hero.cta.audit">افتح أداة تدقيق الفواتير</a>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="panel chat-panel" id="assistant">
+      <div class="panel-head">
+        <h2 data-i18n="chat.title">المحادثة</h2>
+        <span class="tag" data-i18n="chat.tag">قواعد معرفة خليجية · بلا إرسال بيانات</span>
+      </div>
+      <div class="chat-log" id="chatLog" aria-live="polite">
+        <div class="msg bot"><div class="bubble" data-i18n="chat.greeting">أهلًا بك! أنا المساعد الذكي لمنصة Arab Templates. أستطيع اختيار قالب يناسب نشاطك، شرح خطوات استخدامه، والإجابة عن أسئلتك الضريبية والمحاسبية.</div></div>
+      </div>
+      <div class="chips" id="chips"></div>
+      <form class="composer" id="chatForm">
+        <input id="chatInput" type="text" autocomplete="off" data-i18n-ph="chat.placeholder" aria-label="سؤالك">
+        <button type="submit" data-i18n="chat.send">إرسال</button>
+      </form>
+      <p class="fine" data-i18n="chat.fine">المساعد يعمل بقواعد معرفة مكتوبة وواضحة داخل الصفحة، وليس استشارة ضريبية معتمدة.</p>
+    </section>
+
+    <aside class="side">
+      <section class="panel">
+        <div class="panel-head"><h2 data-i18n="side.quick">أسئلة سريعة</h2></div>
+        <div class="quick-list" id="quickList"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2 data-i18n="side.guide">دليل سريع</h2><span class="tag" data-i18n="side.guide.tag">٣ خطوات</span></div>
+        <ol class="steps">
+          <li data-i18n="side.step1">اختر نشاطك من زر «اختر لي القالب المناسب».</li>
+          <li data-i18n="side.step2">اسأل عن النسبة أو الموعد أو حقول الفاتورة في أي وقت.</li>
+          <li data-i18n="side.step3">راجع قيودك في أداة التدقيق قبل الترحيل.</li>
+        </ol>
+      </section>
+    </aside>
+  </div>
+
+  <section class="panel" id="topics">
+    <div class="panel-head">
+      <h2 data-i18n="topics.title">مواضيع ضريبية ومحاسبية</h2>
+      <span class="tag" data-i18n="topics.tag">السعودية · الإمارات · الخليج</span>
+    </div>
+    <p class="fine" data-i18n="topics.sub">اضغط أي موضوع ليُطرح على المساعد ويظهر الجواب كاملًا داخل المحادثة.</p>
+    <div class="topic-grid" id="topicGrid"></div>
+  </section>
+
+  <section class="panel" id="catalog">
+    <div class="panel-head">
+      <h2 data-i18n="catalog.title">قوالب Arab Templates</h2>
+      <span class="tag" data-i18n="catalog.tag">جاهزة للتخصيص</span>
+    </div>
+    <p class="fine" data-i18n="catalog.sub">يقترح المساعد أحد هذه القوالب حسب نشاطك، ويعرض خطوات استخدامه باللغتين.</p>
+    <div class="catalog-grid" id="catalogGrid"></div>
+  </section>
+
+  <section class="panel audit" id="audit">
+    <div class="panel-head">
+      <h2 data-i18n="audit.title">تدقيق قيود الفواتير</h2>
+      <span class="tag" data-i18n="audit.tag">تحقق فوري من الحساب والرقم الضريبي</span>
+    </div>
+    <p class="fine" data-i18n="audit.sub">أدخل بيانات الفاتورة كما سُجّلت في القيد، وستحصل على قائمة تحقق واضحة والقيد المحاسبي المقترح.</p>
+
+    <div class="audit-grid">
+      <div class="field">
+        <label for="auditCountry" data-i18n="audit.country">الدولة</label>
+        <select id="auditCountry">
+          <option value="SA" data-i18n="country.SA">السعودية — 15%</option>
+          <option value="AE" data-i18n="country.AE">الإمارات — 5%</option>
+          <option value="OM" data-i18n="country.OM">عُمان — 5%</option>
+          <option value="BH" data-i18n="country.BH">البحرين — 10%</option>
+          <option value="QA" data-i18n="country.QA">قطر — 0%</option>
+          <option value="KW" data-i18n="country.KW">الكويت — 0%</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="auditTaxNo" data-i18n="audit.taxno">الرقم الضريبي للمورد</label>
+        <input id="auditTaxNo" type="text" inputmode="numeric" placeholder="310123456700003">
+      </div>
+      <div class="field">
+        <label for="auditDate" data-i18n="audit.date">تاريخ الفاتورة</label>
+        <input id="auditDate" type="date">
+      </div>
+      <div class="field">
+        <label for="auditNet" data-i18n="audit.net">المبلغ قبل الضريبة</label>
+        <input id="auditNet" type="number" step="0.01" min="0" placeholder="1000.00">
+      </div>
+      <div class="field">
+        <label for="auditVat" data-i18n="audit.vat">مبلغ الضريبة المسجّل</label>
+        <input id="auditVat" type="number" step="0.01" min="0" placeholder="150.00">
+      </div>
+      <div class="field">
+        <label for="auditTotal" data-i18n="audit.total">إجمالي الفاتورة المسجّل</label>
+        <input id="auditTotal" type="number" step="0.01" min="0" placeholder="1150.00">
+      </div>
+    </div>
+
+    <div class="row">
+      <button id="auditBtn" type="button" data-i18n="audit.run">دقّق الفاتورة</button>
+      <button class="ghost" id="auditSample" type="button" data-i18n="audit.sample">مثال تعبئة</button>
+      <button class="ghost" id="auditClear" type="button" data-i18n="audit.clear">تفريغ</button>
+    </div>
+
+    <div class="audit-result" id="auditResult" hidden>
+      <div class="score-line">
+        <strong id="auditScore">—</strong>
+        <span id="auditVerdict" data-i18n="audit.verdict">—</span>
+      </div>
+      <ul class="checks" id="auditChecks"></ul>
+      <div class="journal">
+        <h3 data-i18n="audit.journal.title">القيد المحاسبي المقترح</h3>
+        <table>
+          <thead id="journalHead"></thead>
+          <tbody id="journalBody"></tbody>
+        </table>
+        <p class="fine" id="journalNote"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span data-i18n="footer.product">Arab Templates — المساعد الذكي الرسمي</span>
+    <span data-i18n="footer.disclaimer">معلومات إرشادية وليست استشارة ضريبية أو قانونية معتمدة.</span>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
