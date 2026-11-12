@@ -109,3 +109,16 @@ body.ltr .topic,body.ltr .quick-list button{text-align:left}
   .bubble{max-width:94%}
   .chat-log{max-height:360px}
 }
+
+/* ============ تدقيق البنود النصية ============ */
+.lines-box{margin-top:18px;border-top:1px dashed var(--line);padding-top:16px}
+.lines-box h3{font-size:.98rem;margin:0}
+.lines-box textarea{min-height:110px;margin-top:8px;font-family:Consolas,"Courier New",monospace;font-size:.86rem;line-height:1.9;direction:ltr;text-align:left}
+.msg{font-size:.82rem;color:var(--muted);min-height:1.2em;margin:8px 0 0}
+.msg.bad{color:var(--bad)}
+.msg.ok{color:var(--teal)}
+.table-wrap{margin-top:10px;overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.row-bad{background:#fdf1ef}
+.ok-cell{color:var(--teal);font-weight:700}
+.bad-cell{color:var(--bad);font-weight:700}
+.tiny{font-weight:400;font-size:.72rem;color:var(--muted);margin-top:2px}

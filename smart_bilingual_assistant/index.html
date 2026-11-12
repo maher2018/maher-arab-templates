@@ -114,12 +114,20 @@
         </select>
       </div>
       <div class="field">
+        <label for="auditCurrency" data-i18n="audit.currency">عملة الفاتورة</label>
+        <select id="auditCurrency"></select>
+      </div>
+      <div class="field">
         <label for="auditTaxNo" data-i18n="audit.taxno">الرقم الضريبي للمورد</label>
         <input id="auditTaxNo" type="text" inputmode="numeric" placeholder="310123456700003">
       </div>
       <div class="field">
         <label for="auditDate" data-i18n="audit.date">تاريخ الفاتورة</label>
         <input id="auditDate" type="date">
+      </div>
+      <div class="field">
+        <label for="auditPeriod" data-i18n="audit.period">الفترة الضريبية</label>
+        <input id="auditPeriod" type="month">
       </div>
       <div class="field">
         <label for="auditNet" data-i18n="audit.net">المبلغ قبل الضريبة</label>
@@ -154,6 +162,35 @@
           <tbody id="journalBody"></tbody>
         </table>
         <p class="fine" id="journalNote"></p>
+      </div>
+    </div>
+
+    <div class="lines-box">
+      <div class="panel-head">
+        <h3 data-i18n="lines.title">تدقيق بنود فاتورة نصية</h3>
+        <span class="tag" data-i18n="lines.tag">بند بند</span>
+      </div>
+      <p class="fine" data-i18n="lines.sub">الصق البنود، كل بند في سطر بالصيغة: الوصف | الكمية | سعر الوحدة | الخصم% | الإجمالي المسجّل (اختياري).</p>
+      <textarea id="auditLines" rows="5" data-i18n-ph="lines.ph" aria-label="بنود الفاتورة"></textarea>
+      <div class="row">
+        <button id="auditLinesBtn" type="button" data-i18n="lines.run">دقّق البنود</button>
+        <button class="ghost" id="linesSample" type="button" data-i18n="lines.sample">مثال</button>
+        <button class="ghost" id="linesClear" type="button" data-i18n="lines.clear">تفريغ</button>
+      </div>
+      <p class="msg" id="linesMsg"></p>
+
+      <div class="audit-result" id="linesResult" hidden>
+        <div class="score-line">
+          <strong id="linesScore">—</strong>
+          <span id="linesVerdict">—</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="linesHead"></thead>
+            <tbody id="linesBody"></tbody>
+          </table>
+        </div>
+        <p class="fine" id="linesTotals"></p>
       </div>
     </div>
   </section>

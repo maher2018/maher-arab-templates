@@ -83,6 +83,34 @@ const I18N = {
     "audit.taxno.invalid": "الرقم الضريبي غير مطابق لصيغة الدولة ({hint})",
     "audit.date.future": "تاريخ الفاتورة في المستقبل — راجع التاريخ",
     "audit.date.valid": "تاريخ الفاتورة سليم",
+    "audit.currency": "عملة الفاتورة", "audit.period": "الفترة الضريبية",
+    "audit.currency.valid": "العملة مطابقة لعملة الدولة ({currency})",
+    "audit.currency.mismatch": "الفاتورة بعملة {actual} بينما العملة القانونية {expected} — وثّق سعر التحويل أو أعد الإصدار بالعملة المحلية",
+    "audit.period.valid": "تاريخ الفاتورة داخل الفترة الضريبية ({period})",
+    "audit.period.mismatch": "تاريخ الفاتورة {date} خارج الفترة المحددة {period}",
+    "audit.period.missing": "لم تُحدد الفترة الضريبية — لا يمكن التحقق من ملاءمة التاريخ",
+    "audit.period.future": "الفترة الضريبية في المستقبل ({period}) — راجع الشهر",
+    "lines.title": "تدقيق بنود فاتورة نصية", "lines.tag": "بند بند",
+    "lines.sub": "الصق البنود، كل بند في سطر بالصيغة: الوصف | الكمية | سعر الوحدة | الخصم% | الإجمالي المسجّل (اختياري).",
+    "lines.ph": "استشارات ضريبية | 2 | 1000 | 0 | 2300\nاجتماعات | 1 | 500 | 10 | 517.50",
+    "lines.run": "دقّق البنود", "lines.sample": "مثال", "lines.clear": "تفريغ",
+    "lines.need": "الصق بندًا واحدًا على الأقل (الوصف | الكمية | السعر | الخصم%).",
+    "lines.ok": "البند سليم", "lines.bad": "يحتاج تصحيحًا",
+    "lines.descFallback": "بند {n}",
+    "lines.verdict.ok": "كل البنود متسقة مع نسبة الدولة",
+    "lines.verdict.bad": "{count} بندًا يحتاج تصحيحًا",
+    "lines.totals": "مجموع البنود: الصافي {net} · الضريبة {vat} · الإجمالي {total}",
+    "lines.totalsMatch": "مجموع البنود يطابق إجمالي الفاتورة أعلاه",
+    "lines.totalsMismatch": "مجموع البنود لا يطابق إجمالي الفاتورة أعلاه (فرق {diff})",
+    "lines.statedMismatch": "الإجمالي المسجّل {stated} يختلف عن المحسوب {computed}",
+    "lines.qtyBad": "الكمية يجب أن تكون أكبر من صفر",
+    "lines.priceBad": "السعر لا يكون سالبًا",
+    "lines.discBad": "الخصم يجب أن يكون بين ٠ و١٠٠",
+    "lines.sample.done": "حُمّل مثال بنود — اضغط «دقّق البنود».",
+    "lines.cleared": "تم تفريغ البنود.",
+    "lines.col.item": "البند", "lines.col.qty": "الكمية", "lines.col.price": "السعر",
+    "lines.col.disc": "الخصم", "lines.col.net": "الصافي", "lines.col.vat": "الضريبة",
+    "lines.col.total": "الإجمالي", "lines.col.state": "الحالة",
     "audit.rate.valid": "نسبة الضريبة المطبقة مطابقة لنسبة الدولة ({rate}%)",
     "audit.suggest": "التصحيح المقترح: الضريبة {vat} والإجمالي {total}.",
     "audit.journal.net": "مبيعات / إيرادات", "audit.journal.vat": "ضريبة القيمة المضافة المستحقة",
@@ -172,6 +200,34 @@ const I18N = {
     "audit.taxno.invalid": "Tax number does not match the country format ({hint})",
     "audit.date.future": "Invoice date is in the future — review it",
     "audit.date.valid": "Invoice date is valid",
+    "audit.currency": "Invoice currency", "audit.period": "Tax period",
+    "audit.currency.valid": "Currency matches the country currency ({currency})",
+    "audit.currency.mismatch": "Invoice is in {actual} but the legal currency is {expected} — document the conversion rate or reissue in local currency",
+    "audit.period.valid": "Invoice date falls inside the tax period ({period})",
+    "audit.period.mismatch": "Invoice date {date} is outside the selected period {period}",
+    "audit.period.missing": "No tax period selected — the date cannot be checked against it",
+    "audit.period.future": "The tax period is in the future ({period}) — review the month",
+    "lines.title": "Audit pasted invoice lines", "lines.tag": "Line by line",
+    "lines.sub": "Paste one line per row: description | quantity | unit price | discount% | recorded total (optional).",
+    "lines.ph": "Tax consulting | 2 | 1000 | 0 | 2300\nMeetings | 1 | 500 | 10 | 517.50",
+    "lines.run": "Audit lines", "lines.sample": "Sample", "lines.clear": "Clear",
+    "lines.need": "Paste at least one line (description | quantity | price | discount%).",
+    "lines.ok": "Line is valid", "lines.bad": "Needs correction",
+    "lines.descFallback": "Line {n}",
+    "lines.verdict.ok": "All lines agree with the country rate",
+    "lines.verdict.bad": "{count} line(s) need correction",
+    "lines.totals": "Line totals: net {net} · VAT {vat} · total {total}",
+    "lines.totalsMatch": "The line totals match the invoice total above",
+    "lines.totalsMismatch": "The line totals do not match the invoice total above (difference {diff})",
+    "lines.statedMismatch": "Recorded total {stated} differs from the computed {computed}",
+    "lines.qtyBad": "Quantity must be greater than zero",
+    "lines.priceBad": "Price cannot be negative",
+    "lines.discBad": "Discount must be between 0 and 100",
+    "lines.sample.done": "Sample lines loaded — press “Audit lines”.",
+    "lines.cleared": "Lines cleared.",
+    "lines.col.item": "Item", "lines.col.qty": "Qty", "lines.col.price": "Price",
+    "lines.col.disc": "Disc.", "lines.col.net": "Net", "lines.col.vat": "VAT",
+    "lines.col.total": "Total", "lines.col.state": "Status",
     "audit.rate.valid": "Applied VAT rate matches the country rate ({rate}%)",
     "audit.suggest": "Suggested fix: VAT {vat} and total {total}.",
     "audit.journal.net": "Sales / revenue", "audit.journal.vat": "VAT payable",
@@ -204,6 +260,31 @@ const COUNTRIES = {
   QA: { rate: 0, currency: "QAR", regex: /^[A-Za-z0-9]{5,20}$/, hintAr: "رقم تسجيل ضريبي", hintEn: "tax registration number" },
   KW: { rate: 0, currency: "KWD", regex: /^[A-Za-z0-9]{5,20}$/, hintAr: "رقم تسجيل ضريبي", hintEn: "tax registration number" },
 };
+
+const CURRENCY_NAMES = {
+  SAR: { ar: "ريال سعودي", en: "Saudi riyal" },
+  AED: { ar: "درهم إماراتي", en: "UAE dirham" },
+  KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar" },
+  QAR: { ar: "ريال قطري", en: "Qatari riyal" },
+  OMR: { ar: "ريال عماني", en: "Omani rial" },
+  BHD: { ar: "دينار بحريني", en: "Bahraini dinar" },
+  USD: { ar: "دولار أمريكي", en: "US dollar" },
+  EUR: { ar: "يورو", en: "Euro" },
+};
+
+const round2 = (value) => Math.round((Number(value) || 0) * 100) / 100;
+const currentPeriod = () => new Date().toISOString().slice(0, 7);
+const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (ch) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+
+function renderCurrencyOptions() {
+  const select = $("auditCurrency");
+  if (!select) return;
+  const previous = select.value;
+  select.innerHTML = Object.keys(CURRENCY_NAMES).map((code) =>
+    `<option value="${code}">${code} — ${CURRENCY_NAMES[code][state.lang === "en" ? "en" : "ar"]}</option>`).join("");
+  select.value = previous && CURRENCY_NAMES[previous] ? previous : COUNTRIES[$("auditCountry").value].currency;
+}
 
 const TEMPLATES = [
   {
@@ -497,6 +578,8 @@ function auditSample() {
   $("auditNet").value = "1000";
   $("auditVat").value = "150";
   $("auditTotal").value = "1150";
+  $("auditCurrency").value = "SAR";
+  $("auditPeriod").value = currentPeriod();
   $("auditResult").hidden = true;
   appendMsg("bot", t("audit.sample.done"));
 }
@@ -539,6 +622,26 @@ function runAudit() {
   if (!dateValue) warn(l("تاريخ الفاتورة", "Invoice date"), t("audit.date.future"));
   else if (dateValue > new Date().toISOString().slice(0, 10)) bad(l("تاريخ الفاتورة", "Invoice date"), t("audit.date.future"));
   else ok(l("تاريخ الفاتورة", "Invoice date"), t("audit.date.valid"));
+
+  const currency = $("auditCurrency").value;
+  if (currency === country.currency) {
+    ok(l("عملة الفاتورة", "Invoice currency"), t("audit.currency.valid", { currency }));
+  } else {
+    bad(l("عملة الفاتورة", "Invoice currency"),
+      t("audit.currency.mismatch", { actual: currency, expected: country.currency }));
+  }
+
+  const period = $("auditPeriod").value;
+  if (!period) {
+    warn(l("الفترة الضريبية", "Tax period"), t("audit.period.missing"));
+  } else if (period > currentPeriod()) {
+    warn(l("الفترة الضريبية", "Tax period"), t("audit.period.future", { period }));
+  } else if (dateValue && dateValue.slice(0, 7) !== period) {
+    bad(l("الفترة الضريبية", "Tax period"),
+      t("audit.period.mismatch", { date: dateValue, period }));
+  } else {
+    ok(l("الفترة الضريبية", "Tax period"), t("audit.period.valid", { period }));
+  }
 
   const passed = checks.filter((check) => check.status === "ok").length;
   const score = Math.round((passed / checks.length) * 100);
@@ -597,7 +700,9 @@ function applyLang(lang, persist = true) {
   renderQuick();
   renderTopics();
   renderCatalog();
+  renderCurrencyOptions();
   if (state.audit) runAudit();
+  if (state.lines) auditLines();
   if (persist) localStorage.setItem("at_assistant_lang", state.lang);
 }
 
@@ -622,6 +727,131 @@ $("auditClear").addEventListener("click", () => {
   $("auditResult").hidden = true;
   appendMsg("bot", t("audit.cleared"));
 });
+/* ---- تدقيق البنود النصية ---- */
+function parseInvoiceLines(raw) {
+  const rate = COUNTRIES[$("auditCountry").value].rate;
+  const rows = [];
+  String(raw || "").split(/\r?\n/).forEach((line) => {
+    const text = line.trim();
+    if (!text) return;
+    const parts = text.split(/\s*[|\t;]\s*/).filter((part) => part !== "");
+    let desc = "";
+    const numbers = [];
+    parts.forEach((part, index) => {
+      const cleaned = part.replace(/,/g, "").trim();
+      if (/^-?\d+(\.\d+)?$/.test(cleaned)) { numbers.push(Number(cleaned)); return; }
+      if (index === 0 || !desc) desc = part.trim();
+    });
+    if (!numbers.length) return;
+    let quantity = 1;
+    let price = numbers[0];
+    let discount = 0;
+    let stated = null;
+    if (numbers.length >= 2) {
+      quantity = numbers[0];
+      price = numbers[1];
+      discount = numbers[2] || 0;
+      if (numbers.length >= 4) stated = numbers[3];
+    }
+    const issues = [];
+    if (!(quantity > 0)) issues.push(t("lines.qtyBad"));
+    if (price < 0) issues.push(t("lines.priceBad"));
+    if (discount < 0 || discount > 100) issues.push(t("lines.discBad"));
+    const safeDiscount = Math.min(100, Math.max(0, discount));
+    const gross = Math.max(0, quantity) * Math.max(0, price);
+    const net = round2(gross - gross * safeDiscount / 100);
+    const vat = round2(net * rate / 100);
+    const total = round2(net + vat);
+    if (stated !== null && Math.abs(stated - total) > 0.05) {
+      issues.push(t("lines.statedMismatch", { stated: fmt(stated), computed: fmt(total) }));
+    }
+    rows.push({
+      desc: desc || t("lines.descFallback", { n: rows.length + 1 }),
+      quantity, price, discount, net, vat, total, issues,
+    });
+  });
+  return rows;
+}
+
+function auditLines() {
+  const rows = parseInvoiceLines($("auditLines").value);
+  const message = $("linesMsg");
+  if (!rows.length) {
+    message.className = "msg bad";
+    message.textContent = t("lines.need");
+    $("linesResult").hidden = true;
+    state.lines = null;
+    return;
+  }
+  const okRows = rows.filter((row) => !row.issues.length).length;
+  const totals = rows.reduce((acc, row) => ({
+    net: round2(acc.net + row.net), vat: round2(acc.vat + row.vat), total: round2(acc.total + row.total),
+  }), { net: 0, vat: 0, total: 0 });
+  state.lines = { rows, okRows, totals };
+  message.className = "msg";
+  message.textContent = "";
+  renderLines();
+  $("linesResult").hidden = false;
+}
+
+function renderLines() {
+  const data = state.lines;
+  if (!data) return;
+  const failed = data.rows.length - data.okRows;
+  $("linesScore").textContent = fmt(data.okRows, 0) + " / " + fmt(data.rows.length, 0);
+  $("linesVerdict").textContent = failed
+    ? t("lines.verdict.bad", { count: fmt(failed, 0) })
+    : t("lines.verdict.ok");
+  $("linesHead").innerHTML = `<tr><th>#</th><th>${t("lines.col.item")}</th><th>${t("lines.col.qty")}</th>
+    <th>${t("lines.col.price")}</th><th>${t("lines.col.disc")}</th><th>${t("lines.col.net")}</th>
+    <th>${t("lines.col.vat")}</th><th>${t("lines.col.total")}</th><th>${t("lines.col.state")}</th></tr>`;
+  $("linesBody").innerHTML = data.rows.map((row, index) => `
+    <tr class="${row.issues.length ? "row-bad" : ""}">
+      <td>${fmt(index + 1, 0)}</td>
+      <td>${esc(row.desc)}</td>
+      <td>${fmt(row.quantity, 2)}</td>
+      <td>${fmt(row.price)}</td>
+      <td>${fmt(row.discount, 0)}%</td>
+      <td>${fmt(row.net)}</td>
+      <td>${fmt(row.vat)}</td>
+      <td>${fmt(row.total)}</td>
+      <td class="${row.issues.length ? "bad-cell" : "ok-cell"}">${row.issues.length ? t("lines.bad") : t("lines.ok")}
+        ${row.issues.length ? `<div class="tiny">${esc(row.issues.join(" · "))}</div>` : ""}</td>
+    </tr>`).join("");
+  const parts = [t("lines.totals", { net: fmt(data.totals.net), vat: fmt(data.totals.vat), total: fmt(data.totals.total) })];
+  const invoiceNet = Number($("auditNet").value);
+  if (invoiceNet > 0) {
+    const diff = round2(data.totals.net - invoiceNet);
+    parts.push(Math.abs(diff) <= 0.05
+      ? t("lines.totalsMatch")
+      : t("lines.totalsMismatch", { diff: fmt(Math.abs(diff)) }));
+  }
+  $("linesTotals").textContent = parts.join(" — ");
+}
+
+$("auditLinesBtn").addEventListener("click", auditLines);
+$("linesSample").addEventListener("click", () => {
+  $("auditLines").value = l(
+    "استشارات ضريبية | 2 | 1000 | 0 | 2300\nاجتماعات | 1 | 500 | 10 | 517.50\nاشتراك سنوي | 1 | 1200 | 0",
+    "Tax consulting | 2 | 1000 | 0 | 2300\nMeetings | 1 | 500 | 10 | 517.50\nAnnual subscription | 1 | 1200"
+  );
+  $("linesMsg").className = "msg";
+  $("linesMsg").textContent = t("lines.sample.done");
+});
+$("linesClear").addEventListener("click", () => {
+  $("auditLines").value = "";
+  state.lines = null;
+  $("linesResult").hidden = true;
+  $("linesMsg").className = "msg";
+  $("linesMsg").textContent = t("lines.cleared");
+});
+$("auditCountry").addEventListener("change", () => {
+  $("auditCurrency").value = COUNTRIES[$("auditCountry").value].currency;
+  if (state.lines) auditLines();
+});
+
+$("auditPeriod").value = currentPeriod();
+renderCurrencyOptions();
 $("auditDate").value = new Date().toISOString().slice(0, 10);
 
 const saved = localStorage.getItem("at_assistant_lang");
