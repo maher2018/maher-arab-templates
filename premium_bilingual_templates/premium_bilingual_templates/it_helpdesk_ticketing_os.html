@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتب الدعم الفني واتفاقات الخدمة — IT Helpdesk Ticketing OS</title>
+<meta name="description" content="إدارة تذاكر الدعم الفني: أولويات، SLA، وقت أول استجابة، مساعد صياغة ردود فورية، و3 رسوم Chart.js.">
+<style>
+  :root{
+    --bg:#0F172A;
+    --bg2:#0B1222;
+    --panel:#141F35;
+    --panel2:#19263F;
+    --panel3:#1E2D49;
+    --line:rgba(197,160,89,.20);
+    --line-soft:rgba(147,164,191,.16);
+    --gold:#C5A059;
+    --gold-2:#E4C88A;
+    --gold-dim:rgba(197,160,89,.13);
+    --text:#EAF0FA;
+    --muted:#93A4BF;
+    --ok:#3BB98D;
+    --warn:#E0A33E;
+    --bad:#D9615F;
+    --info:#5C8FD6;
+    --r:18px;
+    --shadow:0 18px 40px rgba(3,8,20,.45);
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 520px at 85% -10%, rgba(197,160,89,.12), transparent 60%),
+      radial-gradient(900px 500px at 5% 0%, rgba(92,143,214,.10), transparent 55%),
+      linear-gradient(180deg,#0F172A 0%,#0B1222 100%);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:"Segoe UI","Tahoma","Helvetica Neue",Arial,"Noto Sans Arabic",sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:.2px;line-height:1.35}
+  p{margin:0}
+  button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--gold-2)}
+  .app{max-width:1280px;margin:0 auto;padding:18px clamp(14px,3vw,30px) 40px}
+
+  /* ---------- header ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:14px 18px;border:1px solid var(--line);border-radius:var(--r);
+    background:linear-gradient(135deg,rgba(25,38,63,.96),rgba(15,23,42,.92));
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .topbar::before{content:"";position:absolute;inset-inline:0;top:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
+  .brand{display:flex;align-items:center;gap:14px;min-width:0}
+  .mono{
+    width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;
+    font-weight:800;letter-spacing:1px;color:#0F172A;
+    background:linear-gradient(140deg,var(--gold-2),var(--gold));
+    box-shadow:0 8px 18px rgba(197,160,89,.28);
+  }
+  .brand h1{font-size:19px}
+  .brand p{color:var(--muted);font-size:12.5px;letter-spacing:.4px}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .seg{display:inline-flex;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);border-radius:12px;padding:3px}
+  .seg button{background:none;border:0;color:var(--muted);padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600}
+  .seg button.on{background:var(--gold);color:#0F172A}
+  .cur{display:flex;align-items:center;gap:8px;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);
+    border-radius:12px;padding:5px 10px;font-size:12.5px;color:var(--muted)}
+  .cur select{background:transparent;border:0;color:var(--text);font-weight:600;max-width:160px;outline:none}
+  [dir="ltr"] .cur select{max-width:200px}
+  .cur select option{background:#14203A;color:var(--text)}
+  .btn{
+    border:1px solid var(--line);background:linear-gradient(140deg,var(--gold),#B8904A);color:#101A2E;
+    padding:10px 16px;border-radius:12px;font-weight:700;font-size:13.5px;
+    display:inline-flex;align-items:center;gap:8px;transition:.18s transform,.18s box-shadow,.18s filter;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(197,160,89,.22);filter:brightness(1.04)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:rgba(197,160,89,.06);color:var(--gold-2);border-color:var(--line)}
+  .btn.ghost:hover{background:rgba(197,160,89,.12);box-shadow:none}
+  .btn.sm{padding:7px 12px;font-size:12.5px;border-radius:10px}
+  .btn.danger{background:rgba(217,97,95,.12);border-color:rgba(217,97,95,.35);color:#F0A7A5}
+  .iconbtn{
+    width:32px;height:32px;border-radius:9px;border:1px solid var(--line-soft);background:rgba(255,255,255,.02);
+    color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1;transition:.15s;
+  }
+  .iconbtn:hover{color:#F0A7A5;border-color:rgba(217,97,95,.4);background:rgba(217,97,95,.08)}
+
+  /* ---------- tabs ---------- */
+  .tabs{
+    display:flex;gap:8px;margin:18px 0;padding:6px;border:1px solid var(--line-soft);border-radius:14px;
+    background:rgba(20,31,53,.72);overflow-x:auto;scrollbar-width:thin;
+  }
+  .tab{
+    flex:1 0 auto;background:none;border:1px solid transparent;color:var(--muted);
+    padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;white-space:nowrap;transition:.16s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.5;transition:.16s}
+  .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab.on{color:#101A2E;background:linear-gradient(140deg,var(--gold-2),var(--gold));border-color:transparent;box-shadow:0 8px 18px rgba(197,160,89,.18)}
+  .tab.on .dot{background:#101A2E;opacity:1}
+
+  .tabpane{display:none;animation:fade .22s ease}
+  .tabpane.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(160deg,rgba(25,38,63,.96),rgba(20,31,53,.94));
+    border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);
+    min-width:0;
+  }
+  .card + .card{margin-top:18px}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .card-head h2{font-size:16.5px}
+  .card-head .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .kicker{
+    display:inline-grid;place-items:center;min-width:34px;height:26px;padding:0 8px;border-radius:8px;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);
+    font-size:12px;font-weight:800;letter-spacing:.6px;margin-inline-end:10px;
+  }
+  .card-head .titlewrap{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+    background:rgba(197,160,89,.10);border:1px solid var(--line);color:var(--gold-2);
+    font-size:11.5px;font-weight:700;white-space:nowrap;
+  }
+  .chip.soft{background:rgba(147,164,191,.08);border-color:var(--line-soft);color:var(--muted)}
+  .chip.ok{background:rgba(59,185,141,.10);border-color:rgba(59,185,141,.30);color:#7FD9B6}
+  .chip.bad{background:rgba(217,97,95,.10);border-color:rgba(217,97,95,.30);color:#F0A7A5}
+  .chip.warn{background:rgba(224,163,62,.10);border-color:rgba(224,163,62,.32);color:#F0C987}
+
+  /* ---------- forms ---------- */
+  .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .field-grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .field-grid .wide{grid-column:1/-1}
+  .field-grid.compact{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+  label.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  label.field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  input,select,textarea{
+    width:100%;background:rgba(11,18,34,.65);border:1px solid var(--line-soft);border-radius:11px;
+    padding:10px 12px;color:var(--text);outline:none;transition:.16s;font-size:13.5px;
+  }
+  input::placeholder,textarea::placeholder{color:#6F819D}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.14);background:rgba(11,18,34,.9)}
+  select option{background:#14203A;color:var(--text)}
+  textarea{resize:vertical;min-height:84px;line-height:1.6}
+  .form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+
+  /* ---------- kpis ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+  .kpi{
+    background:linear-gradient(160deg,rgba(25,38,63,.95),rgba(18,28,48,.92));
+    border:1px solid var(--line);border-radius:16px;padding:16px 18px;position:relative;overflow:hidden;min-width:0;
+  }
+  .kpi::after{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:90px;height:90px;border-radius:50%;
+    background:radial-gradient(circle,rgba(197,160,89,.16),transparent 70%)}
+  .kpi .lbl{font-size:11.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+  .kpi .val{font-size:27px;font-weight:800;letter-spacing:.4px;margin-top:6px;color:var(--gold-2)}
+  [dir="rtl"] .kpi .val{direction:ltr;text-align:right}
+  [dir="ltr"] .kpi .val{text-align:left}
+  .kpi .val small{margin-inline-start:5px;
+font-size:13px;color:var(--muted);font-weight:600;letter-spacing:0}
+  .kpi .note{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .kpi.plain .val{color:var(--text)}
+  .kpi.bare::after{display:none}
+
+  /* ---------- charts ---------- */
+  .grid-charts{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;margin-bottom:18px}
+  .chart-card{padding:16px 16px 10px;display:flex;flex-direction:column;min-width:0}
+  .chart-card h3{font-size:14px}
+  .chart-card .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .chart-box{position:relative;height:252px;margin-top:12px;min-width:0}
+  .chart-fallback{
+    position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:18px;
+    color:var(--muted);font-size:12.5px;background:rgba(11,18,34,.45);border:1px dashed var(--line-soft);border-radius:12px;
+  }
+  .chart-box.no-chart .chart-fallback{display:grid}
+  .legend-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--muted)}
+  .legend-row i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- dashboard lower ---------- */
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+  .grid2 > .card{margin-top:0}
+  .ms-row{display:flex;flex-direction:column;gap:6px;padding:11px 0;border-bottom:1px dashed var(--line-soft)}
+  .ms-row:last-child{border-bottom:0;padding-bottom:0}
+  .ms-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+  .ms-top b{font-weight:700}
+  .ms-meta{font-size:11.5px;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:rgba(147,164,191,.14);overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .4s}
+  .bar.plan > i{background:linear-gradient(90deg,#3E4A63,#7C8AA6)}
+  .bar.ok > i{background:linear-gradient(90deg,#2E9E77,#6FD8B2)}
+  .bar.bad > i{background:linear-gradient(90deg,#B34B4A,#E58C89)}
+  .team-mini{display:flex;flex-direction:column;gap:10px}
+  .tm-row{display:flex;align-items:center;gap:10px;font-size:13px}
+  .avatar{
+    width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(197,160,89,.12);border:1px solid var(--line);color:var(--gold-2);font-weight:800;font-size:12.5px;
+  }
+  .tm-row .grow{flex:1;min-width:0}
+  .tm-row .grow b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tm-row .grow span{font-size:11.5px;color:var(--muted)}
+
+  /* ---------- tasks ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .filters select,.filters input{width:auto;min-width:150px;flex:1 1 150px}
+  .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .col{background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:14px;padding:12px;min-width:0}
+  .col-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:0 2px}
+  .col-head b{font-size:12.5px;letter-spacing:.2px}
+  .col-head .n{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);padding:2px 8px;border-radius:99px}
+  .col-body{display:flex;flex-direction:column;gap:10px;min-height:60px}
+  .task{
+    background:linear-gradient(160deg,rgba(30,45,73,.95),rgba(22,34,56,.95));
+    border:1px solid var(--line-soft);border-radius:12px;padding:12px;position:relative;
+  }
+  .task.late{border-color:rgba(217,97,95,.45);box-shadow:inset 0 0 0 1px rgba(217,97,95,.08)}
+  .task .tt{font-size:13px;font-weight:700;line-height:1.5;word-break:break-word}
+  .task .tmeta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;font-size:11px;color:var(--muted)}
+  .task .tmeta .who{color:var(--gold-2)}
+  .task .tfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .task select{width:auto;flex:1;padding:5px 8px;font-size:11.5px;border-radius:8px}
+  .empty{color:var(--muted);font-size:12px;text-align:center;padding:18px 6px;border:1px dashed var(--line-soft);border-radius:10px}
+
+  /* ---------- team ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .member{
+    background:linear-gradient(160deg,rgba(30,45,73,.9),rgba(20,31,53,.92));
+    border:1px solid var(--line-soft);border-radius:14px;padding:16px;
+  }
+  .member-top{display:flex;align-items:center;gap:10px}
+  .member-top .who{flex:1;min-width:0}
+  .member-top b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .member-top span{font-size:11.5px;color:var(--muted)}
+  .member .stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0 8px;font-size:11.5px;color:var(--muted)}
+  .member .stats b{color:var(--text);font-size:13px}
+  .member .mail{font-size:11px;color:var(--muted);margin-top:8px;word-break:break-all}
+
+  /* ---------- references ---------- */
+  .ref-item{
+    background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:13px;padding:14px;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .ref-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .ref-body{flex:1;min-width:0}
+  .cite{font-size:13px;line-height:1.8;word-break:break-word}
+  .cite{unicode-bidi:plaintext}
+  .cite .yr{color:var(--gold-2);font-weight:700}
+  .ref-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .ref-actions{display:flex;flex-direction:column;gap:6px}
+  .ref-type{font-size:10.5px;letter-spacing:.4px;text-transform:uppercase}
+  .ref-form-grid{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px}
+  .ref-form-grid .full{grid-column:1/-1}
+
+  /* ---------- defense ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipbtn{
+    background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted);
+    padding:7px 13px;border-radius:99px;font-size:12.5px;font-weight:600;transition:.15s;
+  }
+  .chipbtn:hover{color:var(--text);border-color:var(--line)}
+  .chipbtn.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-2)}
+  .def-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+  .q{
+    border:1px solid var(--line-soft);border-radius:13px;padding:14px;background:rgba(11,18,34,.42);
+  }
+  .q + .q{margin-top:10px}
+  .q-top{display:flex;align-items:flex-start;gap:10px}
+  .q-num{
+    width:26px;height:26px;flex:0 0 26px;border-radius:8px;display:grid;place-items:center;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);font-size:11.5px;font-weight:800;
+  }
+  .q-text{flex:1;font-size:13.5px;font-weight:600;line-height:1.7}
+  .q-hint{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft);line-height:1.7}
+  .q-hint b{color:var(--gold-2);font-weight:700}
+  .q-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .ready-toggle{
+    background:rgba(59,185,141,.08);border:1px solid rgba(59,185,141,.28);color:#8ADDC0;
+    border-radius:9px;padding:5px 11px;font-size:11.5px;font-weight:700;
+  }
+  .ready-toggle.on{background:rgba(59,185,141,.2);border-color:rgba(59,185,141,.6);color:#C7F3E2}
+  .score-ring{
+    width:104px;height:104px;border-radius:50%;display:grid;place-items:center;margin:0 auto 8px;
+    background:conic-gradient(var(--gold) calc(var(--p,0)*1%), rgba(147,164,191,.14) 0);
+    position:relative;
+  }
+  .score-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#121C31}
+  .score-ring b{position:relative;font-size:22px;color:var(--gold-2)}
+  .side-card .hintline{font-size:12px;color:var(--muted);line-height:1.8}
+  .side-card ul{margin:10px 0 0;padding-inline-start:18px;color:var(--muted);font-size:12.5px;line-height:1.9}
+  .side-card li b{color:var(--text)}
+
+  /* ---------- costs ---------- */
+  .cost-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+  .money{font-variant-numeric:tabular-nums;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:13px}
+  th,td{padding:10px 12px;text-align:start;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+  th{font-size:11.5px;color:var(--muted);font-weight:700;background:rgba(11,18,34,.5);letter-spacing:.2px}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:rgba(197,160,89,.04)}
+  td.num{font-variant-numeric:tabular-nums}
+  .cost-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:rgba(147,164,191,.14);margin-top:14px}
+  .cost-bar i{display:block;height:100%}
+  .cost-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .cost-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- misc ---------- */
+  .muted{color:var(--muted)}
+  .tiny{font-size:11.5px}
+  .note-box{
+    border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--gold-dim);
+    font-size:12px;color:var(--gold-2);line-height:1.75;
+  }
+  .divider{height:1px;background:var(--line-soft);margin:16px 0}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line-soft);color:var(--muted);
+    font-size:11.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .toast{
+    position:fixed;inset-inline:0;bottom:22px;margin:0 auto;width:max-content;max-width:90vw;
+    background:#1C2A45;border:1px solid var(--gold);color:var(--gold-2);padding:10px 18px;border-radius:12px;
+    font-size:13px;font-weight:600;box-shadow:0 18px 40px rgba(0,0,0,.5);
+    opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s;z-index:60;
+  }
+  .toast.show{opacity:1;transform:none}
+  .toast.err{border-color:var(--bad);color:#F3ADAB}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(147,164,191,.25);border-radius:99px}
+  ::-webkit-scrollbar-track{background:transparent}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  @media (max-width:1100px){
+    .grid-charts{grid-template-columns:1fr 1fr}
+    .chart-card.wide{grid-column:1/-1}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (max-width:900px){
+    .def-layout{grid-template-columns:1fr}
+    .def-side{order:-1}
+  }
+  @media (max-width:820px){
+    .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .board{grid-template-columns:1fr}
+    .cost-top{grid-template-columns:1fr}
+    .grid-charts{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr 1fr}
+    .ref-form-grid .full{grid-column:1/-1}
+    .topbar{padding:12px 14px}
+    .brand h1{font-size:16px}
+    .brand p{font-size:11.5px}
+    .mono{width:44px;height:44px;flex-basis:44px;border-radius:12px;font-size:13px}
+  }
+  @media (max-width:520px){
+    .kpis{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr}
+    .app{padding-inline:12px}
+    .card{padding:16px}
+    .top-actions{width:100%}
+    .cur{flex:1}
+    .cur select{max-width:none;width:100%}
+    .field-grid{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .tabs,.top-actions,.btn,.iconbtn,.toast{display:none!important}
+    .card,.kpi{box-shadow:none;border-color:#bbb;background:#fff;color:#111}
+    .tabpane{display:block!important}
+  }
+
+  /* ---------- automation vault additions ---------- */
+  .plat{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:800;letter-spacing:.4px}
+  .plat.make{background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.4);color:var(--gold-2)}
+  .plat.n8n{background:rgba(92,143,214,.14);border:1px solid rgba(92,143,214,.4);color:#9DC0F0}
+  .scn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+  .scn{
+    background:linear-gradient(160deg,rgba(30,45,73,.92),rgba(20,31,53,.94));
+    border:1px solid var(--line-soft);border-radius:15px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;
+  }
+  .scn.off{opacity:.62}
+  .scn-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .scn-top .spacer{flex:1}
+  .scn h3{font-size:14.5px;line-height:1.55;word-break:break-word}
+  .scn .meta{font-size:11.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px}
+  .scn-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:2px}
+  .stat{background:rgba(11,18,34,.45);border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;min-width:0}
+  .stat span{display:block;font-size:10.5px;color:var(--muted)}
+  .stat b{font-size:13.5px;letter-spacing:.2px;direction:ltr;display:block;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stat.hl b{color:var(--gold-2)}
+  [dir="rtl"] .stat b{text-align:right}
+  [dir="ltr"] .stat b{text-align:left}
+  .urlrow{display:flex;align-items:center;gap:6px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);border-radius:9px;padding:5px 8px;min-width:0}
+  .urlrow code{flex:1;min-width:0;font-size:10.5px;color:#9DC0F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}
+  .urlrow .btn{padding:4px 9px;font-size:10.5px;border-radius:7px}
+  .scn-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:6px;border-top:1px dashed var(--line-soft)}
+  .scn-actions .btn{padding:5px 10px;font-size:11px;border-radius:8px}
+  details.stepsbox{margin-top:4px}
+  details.stepsbox summary{cursor:pointer;font-size:11.5px;color:var(--gold-2);font-weight:700;list-style:none}
+  details.stepsbox summary::-webkit-details-marker{display:none}
+  details.stepsbox summary::before{content:"+ ";color:var(--muted)}
+  details.stepsbox[open] summary::before{content:"− "}
+  ol.steps{margin:8px 0 0;padding-inline-start:20px;color:var(--muted);font-size:12px;line-height:1.9}
+  ol.steps b{color:var(--text);font-weight:600}
+  .health-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);font-size:12.5px}
+  .health-row:last-child{border-bottom:0}
+  .health-row .grow{flex:1;min-width:0}
+  .health-row .grow b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .health-row .grow span{font-size:11px;color:var(--muted)}
+  .dotbadge{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:0 0 8px}
+  .dotbadge.warn{background:var(--warn)}
+  .dotbadge.bad{background:var(--bad)}
+  .mini-table td,.mini-table th{padding:8px 10px;font-size:12px}
+  .hook-actions{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+  .hook-actions .btn{padding:5px 9px;font-size:11px;border-radius:8px}
+  .urlcell{max-width:320px;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left;font-size:11.5px;color:#9DC0F0}
+  .codebox{
+    background:rgba(5,10,22,.75);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;color:#A9C4E8;
+    direction:ltr;text-align:left;white-space:pre;overflow:auto;max-height:220px;line-height:1.7;
+  }
+  .doc-result{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(160deg,rgba(30,45,73,.75),rgba(20,31,53,.8))}
+  .doc-result h3{font-size:15px;margin-bottom:4px}
+  .sev{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+  .sev.high{background:rgba(217,97,95,.14);border:1px solid rgba(217,97,95,.4);color:#F0A7A5}
+  .sev.mid{background:rgba(224,163,62,.14);border:1px solid rgba(224,163,62,.4);color:#F0C987}
+  .sev.low{background:rgba(59,185,141,.12);border:1px solid rgba(59,185,141,.4);color:#8ADDC0}
+  .fixlist{margin:10px 0 0;padding-inline-start:20px;font-size:12.5px;line-height:1.95;color:var(--text)}
+  .fixlist li{margin-bottom:2px}
+  .kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 5px;direction:ltr;display:inline-block}
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:820px){.split2{grid-template-columns:1fr}}
+  .sav-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:16px 0}
+  @media (max-width:900px){.sav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:520px){.sav-grid{grid-template-columns:1fr}.scn-grid{grid-template-columns:1fr}}
+  .example-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .example-chips button{font-size:11px;padding:5px 10px;border-radius:99px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted)}
+  .example-chips button:hover{color:var(--gold-2);border-color:var(--line)}
+  .result-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+
+
+  /* ---------- helpdesk additions ---------- */
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .ticket-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}
+  @media (max-width:980px){.ticket-layout{grid-template-columns:1fr}}
+  .ticket-list{display:flex;flex-direction:column;gap:10px}
+  .ticket{
+    border:1px solid var(--line-soft);border-radius:13px;padding:13px 14px;cursor:pointer;
+    background:linear-gradient(160deg,rgba(30,45,73,.72),rgba(20,31,53,.8));transition:.16s;
+  }
+  .ticket:hover{border-color:var(--line);transform:translateY(-1px)}
+  .ticket.sel{border-color:var(--gold);box-shadow:0 0 0 1px rgba(197,160,89,.25)}
+  .ticket-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .ticket-top .ref{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px;direction:ltr}
+  .ticket h3{font-size:13.5px;line-height:1.55;margin-bottom:4px}
+  .ticket .sub{font-size:11.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+  .ticket .sla-badge{margin-inline-start:auto;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .prio{font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.3px}
+  .prio.urgent{background:rgba(217,97,95,.16);border:1px solid rgba(217,97,95,.42);color:#F0A7A5}
+  .prio.high{background:rgba(224,163,62,.14);border:1px solid rgba(224,163,62,.4);color:#F0C987}
+  .prio.normal{background:rgba(92,143,214,.14);border:1px solid rgba(92,143,214,.4);color:#9DC0F0}
+  .prio.low{background:rgba(147,164,191,.12);border:1px solid var(--line-soft);color:var(--muted)}
+  .sla-badge.met{background:rgba(59,185,141,.13);color:#8ADDC0}
+  .sla-badge.risk{background:rgba(224,163,62,.14);color:#F0C987}
+  .sla-badge.breach{background:rgba(217,97,95,.16);color:#F0A7A5}
+  .sla-badge.idle{background:rgba(147,164,191,.12);color:var(--muted)}
+  .detail-card{position:sticky;top:14px}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+  .meta-grid div{background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:9px;padding:7px 9px;min-width:0}
+  .meta-grid span{display:block;font-size:10.5px;color:var(--muted)}
+  .meta-grid b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .thread{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto;padding:4px}
+  .msg{max-width:88%;padding:8px 11px;border-radius:11px;font-size:12.5px;line-height:1.7}
+  .msg .who{display:block;font-size:10px;color:var(--muted);margin-bottom:2px}
+  .msg.customer{background:rgba(147,164,191,.10);border:1px solid var(--line-soft);align-self:flex-start}
+  .msg.agent{background:rgba(197,160,89,.12);border:1px solid var(--line);align-self:flex-end}
+  .reply-box{margin-top:12px}
+  .reply-box textarea{min-height:88px}
+  .sla-track{height:8px;border-radius:99px;background:rgba(147,164,191,.14);overflow:hidden;margin-top:6px}
+  .sla-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+  .sla-track.breach i{background:linear-gradient(90deg,#B34B4A,#E58C89)}
+  .sla-track.met i{background:linear-gradient(90deg,#2E9E77,#6FD8B2)}
+  .tone-seg{display:flex;flex-wrap:wrap;gap:7px}
+  .tone-seg button{padding:6px 12px;border-radius:99px;font-size:11.5px;font-weight:700;background:rgba(11,18,34,.5);border:1px solid var(--line-soft);color:var(--muted)}
+  .tone-seg button.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-2)}
+  .reply-out{white-space:pre-wrap;font-size:13px;line-height:1.95;color:var(--text);background:rgba(11,18,34,.45);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:120px}
+  .ticket-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 12px;border:1px dashed var(--line-soft);border-radius:12px}
+  .policy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  @media (max-width:620px){.policy-grid{grid-template-columns:1fr}}
+  .policy{background:rgba(11,18,34,.4);border:1px solid var(--line-soft);border-radius:12px;padding:12px}
+  .policy b{font-size:12.5px;display:block;margin-bottom:8px}
+  .policy .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .policy label{font-size:10.5px;color:var(--muted);display:block;margin-bottom:3px}
+  .statline{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:7px 0;border-bottom:1px dashed var(--line-soft)}
+  .statline:last-child{border-bottom:0}
+  .statline b{color:var(--gold-2)}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mono">HD</div>
+      <div>
+        <h1 data-i18n="brand.title">مكتب الدعم الفني</h1>
+        <p data-i18n="brand.sub">IT Helpdesk · SLA &amp; Response OS</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button type="button" data-lang="ar" class="on">العربية</button>
+        <button type="button" data-lang="en">English</button>
+      </div>
+      <label class="cur">
+        <span data-i18n="currency">العملة</span>
+        <select id="currency" aria-label="Currency"></select>
+      </label>
+      <button type="button" class="btn ghost sm" id="resetBtn" data-i18n="reset">استعادة النموذج</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Sections">
+    <button type="button" class="tab on" data-tab="dash"><span class="dot"></span><span data-i18n="tab.dash">لوحة الدعم</span></button>
+    <button type="button" class="tab" data-tab="tickets"><span class="dot"></span><span data-i18n="tab.tickets">التذاكر</span></button>
+    <button type="button" class="tab" data-tab="sla"><span class="dot"></span><span data-i18n="tab.sla">اتفاقات الخدمة SLA</span></button>
+    <button type="button" class="tab" data-tab="assistant"><span class="dot"></span><span data-i18n="tab.assistant">مساعد الردود</span></button>
+  </nav>
+
+  <main>
+    <!-- ============ DASHBOARD ============ -->
+    <section class="tabpane on" id="pane-dash">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">01</span><h2 data-i18n="dash.title">حالة الدعم اليوم</h2></div>
+            <div class="sub" data-i18n="dash.sub">كل الأرقام من تذاكرك الفعلية؛ التزام SLA يُحسب من أول استجابة مقابل هدف الأولوية.</div>
+          </div>
+          <span class="chip" id="dashChip">—</span>
+        </div>
+        <div class="kpis" style="margin:0">
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.open">تذاكر مفتوحة</div>
+            <div class="val"><span id="kpiOpen">0</span></div>
+            <div class="note" id="kpiOpenNote">—</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.sla">الالتزام بـ SLA</div>
+            <div class="val"><span id="kpiSla">0</span><small>%</small></div>
+            <div class="note" id="kpiSlaNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.resp">متوسط أول استجابة</div>
+            <div class="val"><span id="kpiResp">0</span><small data-i18n="unit.min">دقيقة</small></div>
+            <div class="note" id="kpiRespNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.cost">تكلفة التأخير</div>
+            <div class="val money" id="kpiCost">0</div>
+            <div class="note" id="kpiCostNote">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-charts">
+        <div class="card chart-card">
+          <h3 data-i18n="chart.priority">التذاكر حسب الأولوية</h3>
+          <div class="sub" data-i18n="chart.prioritySub">كل التذاكر المسجلة</div>
+          <div class="chart-box" id="boxPriority"><canvas id="cPriority" aria-label="Tickets by priority"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card">
+          <h3 data-i18n="chart.sla">التزام SLA حسب التصنيف</h3>
+          <div class="sub" data-i18n="chart.slaSub">ضمن الوقت مقابل متأخرة مقابل بانتظار الرد</div>
+          <div class="chart-box" id="boxSla"><canvas id="cSla" aria-label="SLA compliance by category"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card wide">
+          <h3 data-i18n="chart.trend">تذاكر آخر سبعة أيام</h3>
+          <div class="sub" data-i18n="chart.trendSub">حجم الوارد اليومي — حدّد الاختناقات مبكراً</div>
+          <div class="chart-box" id="boxTrend"><canvas id="cTrend" aria-label="Ticket volume trend"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">02</span><h2 data-i18n="dash.needs">تذاكر تنتظر أول رد</h2></div>
+              <div class="sub" data-i18n="dash.needsSub">الأقرب لانتهاك الاتفاق أولاً</div></div>
+            <button type="button" class="btn ghost sm" data-goto="tickets" data-i18n="dash.open">فتح التذاكر</button>
+          </div>
+          <div id="needsList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">03</span><h2 data-i18n="dash.summary">ملخص الاتفاق</h2></div>
+              <div class="sub" data-i18n="dash.summarySub">محسوب من تذاكرك وأهدافك</div></div>
+            <button type="button" class="btn ghost sm" data-goto="sla" data-i18n="dash.edit">تعديل الأهداف</button>
+          </div>
+          <div id="dashSummary"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TICKETS ============ -->
+    <section class="tabpane" id="pane-tickets">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">04</span><h2 data-i18n="tk.new">تذكرة جديدة</h2></div>
+            <div class="sub" data-i18n="tk.newSub">سجّل تذكرة يدوياً؛ الهدف الزمني يُطبَّق تلقائياً من أولويتها.</div></div>
+        </div>
+        <div class="field-grid">
+          <label class="field wide"><span data-i18n="f.subject">موضوع التذكرة</span>
+            <input id="nSubject" data-i18n-ph="tk.subjectPh" autocomplete="off"></label>
+          <label class="field"><span data-i18n="f.customer">اسم العميل</span><input id="nCustomer" autocomplete="off"></label>
+          <label class="field"><span data-i18n="f.email">البريد / التواصل</span><input id="nEmail" dir="ltr" autocomplete="off" placeholder="name@company.com"></label>
+          <label class="field"><span data-i18n="f.channel">القناة</span>
+            <select id="nChannel">
+              <option value="email" data-i18n="channel.email">بريد إلكتروني</option>
+              <option value="chat" data-i18n="channel.chat">دردشة مباشرة</option>
+              <option value="whatsapp" data-i18n="channel.whatsapp">واتساب</option>
+              <option value="portal" data-i18n="channel.portal">بوابة الخدمة</option>
+              <option value="phone" data-i18n="channel.phone">هاتف</option>
+            </select></label>
+          <label class="field"><span data-i18n="f.category">التصنيف</span>
+            <select id="nCategory">
+              <option value="billing" data-i18n="cat.billing">فواتير ومدفوعات</option>
+              <option value="technical" data-i18n="cat.technical">مشكلة تقنية</option>
+              <option value="account" data-i18n="cat.account">حساب ودخول</option>
+              <option value="shipping" data-i18n="cat.shipping">شحن وتسليم</option>
+              <option value="refund" data-i18n="cat.refund">استرجاع</option>
+            </select></label>
+          <label class="field"><span data-i18n="f.priority">الأولوية</span>
+            <select id="nPriority">
+              <option value="urgent" data-i18n="prio.urgent">حرجة</option>
+              <option value="high" data-i18n="prio.high">عالية</option>
+              <option value="normal" selected data-i18n="prio.normal">عادية</option>
+              <option value="low" data-i18n="prio.low">منخفضة</option>
+            </select></label>
+          <label class="field"><span data-i18n="f.assignee">المسؤول</span><input id="nAssignee" data-i18n-ph="tk.assigneePh" autocomplete="off"></label>
+          <label class="field wide"><span data-i18n="f.message">رسالة العميل</span>
+            <textarea id="nMessage" data-i18n-ph="tk.messagePh" rows="2"></textarea></label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn" id="addTicket" data-i18n="tk.add">إضافة التذكرة</button>
+          <span class="tiny muted" data-i18n="tk.hint">نصيحة: صِف المشكلة في جملة واحدة، وضع التفاصيل في الرد الأول.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">05</span><h2 data-i18n="tk.list">قائمة التذاكر</h2></div>
+            <div class="sub" id="tkSub">—</div></div>
+          <button type="button" class="btn ghost sm" id="expTickets" data-i18n="tk.export">تصدير CSV</button>
+        </div>
+        <div class="filters">
+          <select id="fStatus">
+            <option value="" data-i18n="tk.allStatus">كل الحالات</option>
+            <option value="open" data-i18n="status.open">مفتوحة</option>
+            <option value="pending" data-i18n="status.pending">بانتظار العميل</option>
+            <option value="resolved" data-i18n="status.resolved">محلولة</option>
+          </select>
+          <select id="fPriority">
+            <option value="" data-i18n="tk.allPriority">كل الأولويات</option>
+            <option value="urgent" data-i18n="prio.urgent">حرجة</option>
+            <option value="high" data-i18n="prio.high">عالية</option>
+            <option value="normal" data-i18n="prio.normal">عادية</option>
+            <option value="low" data-i18n="prio.low">منخفضة</option>
+          </select>
+          <input id="fSearch" data-i18n-ph="tk.search" autocomplete="off">
+        </div>
+        <div class="ticket-layout">
+          <div class="ticket-list" id="ticketList"></div>
+          <div class="card detail-card" style="margin:0" id="detailCard">
+            <div id="detailBody"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SLA ============ -->
+    <section class="tabpane" id="pane-sla">
+      <div class="split2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">06</span><h2 data-i18n="sla.policy">أهداف الاتفاق حسب الأولوية</h2></div>
+              <div class="sub" data-i18n="sla.policySub">أول استجابة بالدقائق، والحل بالساعات. تُحفظ تلقائياً.</div></div>
+          </div>
+          <div class="policy-grid" id="policyGrid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">07</span><h2 data-i18n="sla.cost">تكلفة الدعم والتأخير</h2></div>
+              <div class="sub" data-i18n="sla.costSub">بالعملة المختارة — تُستخدم لحساب تكلفة انتهاكات الشهر.</div></div>
+          </div>
+          <label class="field"><span data-i18n="sla.hourly">تكلفة ساعة عمل الدعم</span>
+            <input type="number" id="hourlyInput" min="0" step="0.01"></label>
+          <label class="field" style="margin-top:12px"><span data-i18n="sla.penalty">تقدير خسارة التذكرة المتأخرة</span>
+            <input type="number" id="penaltyInput" min="0" step="0.01"></label>
+          <div class="divider"></div>
+          <div class="statline"><span data-i18n="sla.monthCost">تكلفة ساعات الدعم (تقديري)</span><b id="monthCost">—</b></div>
+          <div class="statline"><span data-i18n="sla.penaltyTotal">غرامات التأخير</span><b id="penaltyTotal">—</b></div>
+          <div class="statline"><span data-i18n="sla.totalCost">الإجمالي</span><b id="totalCost">—</b></div>
+          <div class="tiny muted" style="margin-top:10px" data-i18n="sla.costNote">تقدير إداري مبسّط: ساعات الدعم = عدد التذاكر × متوسط زمن المعالجة.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">08</span><h2 data-i18n="sla.table">الالتزام حسب الأولوية</h2></div>
+            <div class="sub" id="slaSub">—</div></div>
+          <span class="chip" id="slaChip">—</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th data-i18n="f.priority">الأولوية</th>
+              <th data-i18n="sla.target">هدف أول استجابة</th>
+              <th data-i18n="th.tickets">تذاكر</th>
+              <th data-i18n="th.met">ضمن الوقت</th>
+              <th data-i18n="th.breached">متأخرة</th>
+              <th data-i18n="th.waiting">بانتظار الرد</th>
+              <th data-i18n="th.compliance">الالتزام</th>
+            </tr></thead>
+            <tbody id="slaRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="split2">
+        <div class="card">
+          <div class="card-head" style="margin-bottom:10px"><div><h2 data-i18n="sla.risk">خطر وشيك</h2><div class="sub" data-i18n="sla.riskSub">أقل من ثلث المهلة متبقٍ</div></div></div>
+          <div id="riskList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head" style="margin-bottom:10px"><div><h2 data-i18n="sla.breach">انتهاكات مسجلة</h2><div class="sub" data-i18n="sla.breachSub">تجاوزت هدف أول استجابة</div></div></div>
+          <div id="breachList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ASSISTANT ============ -->
+    <section class="tabpane" id="pane-assistant">
+      <div class="def-layout">
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div><div class="titlewrap"><span class="kicker">09</span><h2 data-i18n="as.title">مساعد صياغة الردود</h2></div>
+                <div class="sub" data-i18n="as.sub">اختر التذكرة والنبرة، وسيُصاغ رد جاهز باسمك مع موعد الحل المتوقع.</div></div>
+              <span class="chip soft" id="asTicketChip">—</span>
+            </div>
+            <div class="split2">
+              <label class="field"><span data-i18n="as.ticket">التذكرة</span>
+                <select id="asTicket"></select></label>
+              <div class="field"><span data-i18n="as.tone">النبرة</span>
+                <div class="tone-seg" id="toneSeg">
+                  <button type="button" data-tone="formal" class="on" data-i18n="tone.formal">رسمية</button>
+                  <button type="button" data-tone="friendly" data-i18n="tone.friendly">ودّية</button>
+                  <button type="button" data-tone="apologetic" data-i18n="tone.apologetic">اعتذارية</button>
+                  <button type="button" data-tone="technical" data-i18n="tone.technical">تقنية</button>
+                </div>
+              </div>
+            </div>
+            <label class="field" style="margin-top:12px"><span data-i18n="as.instructions">التفاصيل التي تريد إضافتها (اختياري)</span>
+              <textarea id="asInstructions" data-i18n-ph="as.instructionsPh" rows="2"></textarea></label>
+            <div class="form-actions">
+              <button type="button" class="btn" id="genReply" data-i18n="as.generate">صياغة الرد</button>
+              <button type="button" class="btn ghost sm" id="copyReply" data-i18n="as.copy">نسخ</button>
+              <button type="button" class="btn ghost sm" id="sendReply" data-i18n="as.send">إرسال كرد</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head" style="margin-bottom:10px">
+              <div><h2 data-i18n="as.output">الرد المقترح</h2><div class="sub" id="asSub" data-i18n="as.outputSub">اختر تذكرة ثم اضغط «صياغة الرد».</div></div>
+            </div>
+            <div class="reply-out" id="replyOut">—</div>
+          </div>
+        </div>
+
+        <aside class="def-side">
+          <div class="card side-card">
+            <h2 data-i18n="as.rulesTitle">قواعد رد سريع</h2>
+            <ul>
+              <li data-i18n="as.rule1">اذكر ما فهمته من المشكلة في أول سطرين — لا تبدأ بالاعتذار فقط.</li>
+              <li data-i18n="as.rule2">أعطِ خطوة واحدة قابلة للتنفيذ الآن، ثم البديل إن لم تنجح.</li>
+              <li data-i18n="as.rule3">حدّد موعد التحديث القادم صراحةً بدل «قريباً».</li>
+              <li data-i18n="as.rule4">لا تطلب كلمة المرور أو رمز التحقق أبداً.</li>
+              <li data-i18n="as.rule5">أنهِ الرسالة بما يحتاجه العميل ليفعل الآن.</li>
+            </ul>
+            <div class="divider"></div>
+            <div class="hintline" data-i18n="as.tip">كلما كانت التذكرة مصنّفة وأولويتها صحيحة، كان هدف SLA واقعياً وردّك أسرع.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="foot.left">ARAB TEMPLATES · ملف واحد يعمل بلا خادم</span>
+    <span data-i18n="foot.right">© 2026 Arab Templates — IT Helpdesk Ticketing OS</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const STORE = "at_helpdesk_os_v1";
+
+  const CURRENCIES = [
+    { code: "SAR", ar: "ريال سعودي", en: "Saudi Riyal", rate: 3.75 },
+    { code: "AED", ar: "درهم إماراتي", en: "UAE Dirham", rate: 3.6725 },
+    { code: "EGP", ar: "جنيه مصري", en: "Egyptian Pound", rate: 48.5 },
+    { code: "KWD", ar: "دينار كويتي", en: "Kuwaiti Dinar", rate: 0.307 },
+    { code: "QAR", ar: "ريال قطري", en: "Qatari Riyal", rate: 3.64 },
+    { code: "BHD", ar: "دينار بحريني", en: "Bahraini Dinar", rate: 0.376 },
+    { code: "OMR", ar: "ريال عماني", en: "Omani Rial", rate: 0.3845 },
+    { code: "JOD", ar: "دينار أردني", en: "Jordanian Dinar", rate: 0.709 },
+    { code: "IQD", ar: "دينار عراقي", en: "Iraqi Dinar", rate: 1310 },
+    { code: "LBP", ar: "ليرة لبنانية", en: "Lebanese Pound", rate: 89500 },
+    { code: "SYP", ar: "ليرة سورية", en: "Syrian Pound", rate: 13000 },
+    { code: "YER", ar: "ريال يمني", en: "Yemeni Rial", rate: 250 },
+    { code: "LYD", ar: "دينار ليبي", en: "Libyan Dinar", rate: 4.85 },
+    { code: "TND", ar: "دينار تونسي", en: "Tunisian Dinar", rate: 3.13 },
+    { code: "DZD", ar: "دينار جزائري", en: "Algerian Dinar", rate: 134 },
+    { code: "MAD", ar: "درهم مغربي", en: "Moroccan Dirham", rate: 9.85 },
+    { code: "MRU", ar: "أوقية موريتانية", en: "Mauritanian Ouguiya", rate: 39.8 },
+    { code: "SDG", ar: "جنيه سوداني", en: "Sudanese Pound", rate: 601 },
+    { code: "SOS", ar: "شلن صومالي", en: "Somali Shilling", rate: 571 },
+    { code: "DJF", ar: "فرنك جيبوتي", en: "Djiboutian Franc", rate: 177.7 },
+    { code: "KMF", ar: "فرنك قمري", en: "Comorian Franc", rate: 452 },
+    { code: "ILS", ar: "شيقل (فلسطين)", en: "Shekel (Palestine)", rate: 3.72 }
+  ];
+
+  const PRIOS = ["urgent", "high", "normal", "low"];
+  const CATS = ["billing", "technical", "account", "shipping", "refund"];
+  const CHANNELS = ["email", "chat", "whatsapp", "portal", "phone"];
+
+  const DICT = {
+    ar: {
+      "brand.title": "مكتب الدعم الفني", "brand.sub": "IT Helpdesk · SLA & Response OS",
+      "currency": "العملة", "reset": "استعادة النموذج",
+      "tab.dash": "لوحة الدعم", "tab.tickets": "التذاكر", "tab.sla": "اتفاقات الخدمة SLA", "tab.assistant": "مساعد الردود",
+      "dash.title": "حالة الدعم اليوم", "dash.sub": "كل الأرقام من تذاكرك الفعلية؛ التزام SLA يُحسب من أول استجابة مقابل هدف الأولوية.",
+      "kpi.open": "تذاكر مفتوحة", "kpi.sla": "الالتزام بـ SLA", "kpi.resp": "متوسط أول استجابة", "unit.min": "دقيقة",
+      "kpi.cost": "تكلفة التأخير",
+      "chart.priority": "التذاكر حسب الأولوية", "chart.prioritySub": "كل التذاكر المسجلة",
+      "chart.sla": "التزام SLA حسب التصنيف", "chart.slaSub": "ضمن الوقت مقابل متأخرة مقابل بانتظار الرد",
+      "chart.trend": "تذاكر آخر سبعة أيام", "chart.trendSub": "حجم الوارد اليومي — حدّد الاختناقات مبكراً",
+      "chart.offline": "الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.",
+      "dash.needs": "تذاكر تنتظر أول رد", "dash.needsSub": "الأقرب لانتهاك الاتفاق أولاً",
+      "dash.open": "فتح التذاكر", "dash.summary": "ملخص الاتفاق", "dash.summarySub": "محسوب من تذاكرك وأهدافك", "dash.edit": "تعديل الأهداف",
+      "tk.new": "تذكرة جديدة", "tk.newSub": "سجّل تذكرة يدوياً؛ الهدف الزمني يُطبَّق تلقائياً من أولويتها.",
+      "f.subject": "موضوع التذكرة", "tk.subjectPh": "مثال: تعذّر تسجيل الدخول بعد تحديث النظام",
+      "f.customer": "اسم العميل", "f.email": "البريد / التواصل", "f.channel": "القناة", "f.category": "التصنيف",
+      "f.priority": "الأولوية", "f.assignee": "المسؤول", "tk.assigneePh": "اسم موظف الدعم",
+      "f.message": "رسالة العميل", "tk.messagePh": "اكتب ما قاله العميل…",
+      "tk.add": "إضافة التذكرة", "tk.hint": "نصيحة: صِف المشكلة في جملة واحدة، وضع التفاصيل في الرد الأول.",
+      "tk.list": "قائمة التذاكر", "tk.export": "تصدير CSV", "tk.allStatus": "كل الحالات", "tk.allPriority": "كل الأولويات",
+      "tk.search": "ابحث برقم التذكرة أو الموضوع أو العميل…",
+      "status.open": "مفتوحة", "status.pending": "بانتظار العميل", "status.resolved": "محلولة",
+      "prio.urgent": "حرجة", "prio.high": "عالية", "prio.normal": "عادية", "prio.low": "منخفضة",
+      "channel.email": "بريد إلكتروني", "channel.chat": "دردشة مباشرة", "channel.whatsapp": "واتساب",
+      "channel.portal": "بوابة الخدمة", "channel.phone": "هاتف",
+      "cat.billing": "فواتير ومدفوعات", "cat.technical": "مشكلة تقنية", "cat.account": "حساب ودخول",
+      "cat.shipping": "شحن وتسليم", "cat.refund": "استرجاع",
+      "sla.policy": "أهداف الاتفاق حسب الأولوية", "sla.policySub": "أول استجابة بالدقائق، والحل بالساعات. تُحفظ تلقائياً.",
+      "sla.cost": "تكلفة الدعم والتأخير", "sla.costSub": "بالعملة المختارة — تُستخدم لحساب تكلفة انتهاكات الشهر.",
+      "sla.hourly": "تكلفة ساعة عمل الدعم", "sla.penalty": "تقدير خسارة التذكرة المتأخرة",
+      "sla.monthCost": "تكلفة ساعات الدعم (تقديري)", "sla.penaltyTotal": "غرامات التأخير", "sla.totalCost": "الإجمالي",
+      "sla.costNote": "تقدير إداري مبسّط: ساعات الدعم = عدد التذاكر × متوسط زمن المعالجة.",
+      "sla.table": "الالتزام حسب الأولوية", "sla.target": "هدف أول استجابة",
+      "th.tickets": "تذاكر", "th.met": "ضمن الوقت", "th.breached": "متأخرة", "th.waiting": "بانتظار الرد", "th.compliance": "الالتزام",
+      "sla.risk": "خطر وشيك", "sla.riskSub": "أقل من ثلث المهلة متبقٍ",
+      "sla.breach": "انتهاكات مسجلة", "sla.breachSub": "تجاوزت هدف أول استجابة",
+      "as.title": "مساعد صياغة الردود", "as.sub": "اختر التذكرة والنبرة، وسيُصاغ رد جاهز باسمك مع موعد الحل المتوقع.",
+      "as.ticket": "التذكرة", "as.tone": "النبرة",
+      "tone.formal": "رسمية", "tone.friendly": "ودّية", "tone.apologetic": "اعتذارية", "tone.technical": "تقنية",
+      "as.instructions": "التفاصيل التي تريد إضافتها (اختياري)", "as.instructionsPh": "مثال: أعدنا تعيين كلمة المرور وأرسلنا رابطاً جديداً",
+      "as.generate": "صياغة الرد", "as.copy": "نسخ", "as.send": "إرسال كرد",
+      "as.output": "الرد المقترح", "as.outputSub": "اختر تذكرة ثم اضغط «صياغة الرد».",
+      "as.rulesTitle": "قواعد رد سريع",
+      "as.rule1": "اذكر ما فهمته من المشكلة في أول سطرين — لا تبدأ بالاعتذار فقط.",
+      "as.rule2": "أعطِ خطوة واحدة قابلة للتنفيذ الآن، ثم البديل إن لم تنجح.",
+      "as.rule3": "حدّد موعد التحديث القادم صراحةً بدل «قريباً».",
+      "as.rule4": "لا تطلب كلمة المرور أو رمز التحقق أبداً.",
+      "as.rule5": "أنهِ الرسالة بما يحتاجه العميل ليفعل الآن.",
+      "as.tip": "كلما كانت التذكرة مصنّفة وأولويتها صحيحة، كان هدف SLA واقعياً وردّك أسرع.",
+      "foot.left": "ARAB TEMPLATES · ملف واحد يعمل بلا خادم",
+      "foot.right": "© 2026 Arab Templates — IT Helpdesk Ticketing OS"
+    },
+    en: {
+      "brand.title": "IT Helpdesk", "brand.sub": "Ticketing · SLA & Response OS",
+      "currency": "Currency", "reset": "Restore sample",
+      "tab.dash": "Support dashboard", "tab.tickets": "Tickets", "tab.sla": "SLA policies", "tab.assistant": "Reply assistant",
+      "dash.title": "Support at a glance", "dash.sub": "All figures come from your tickets; SLA compliance compares first response to the priority target.",
+      "kpi.open": "Open tickets", "kpi.sla": "SLA compliance", "kpi.resp": "Avg first response", "unit.min": "min",
+      "kpi.cost": "Delay cost",
+      "chart.priority": "Tickets by priority", "chart.prioritySub": "All logged tickets",
+      "chart.sla": "SLA compliance by category", "chart.slaSub": "On time versus breached versus awaiting reply",
+      "chart.trend": "Tickets over the last seven days", "chart.trendSub": "Daily inbound volume — catch bottlenecks early",
+      "chart.offline": "Charts need an internet connection to load Chart.js.",
+      "dash.needs": "Awaiting first reply", "dash.needsSub": "Closest to breaching first",
+      "dash.open": "Open tickets", "dash.summary": "SLA summary", "dash.summarySub": "Computed from your tickets and targets", "dash.edit": "Edit targets",
+      "tk.new": "New ticket", "tk.newSub": "Log a ticket manually; its time target comes from the priority.",
+      "f.subject": "Ticket subject", "tk.subjectPh": "e.g. Cannot sign in after the latest update",
+      "f.customer": "Customer name", "f.email": "Email / contact", "f.channel": "Channel", "f.category": "Category",
+      "f.priority": "Priority", "f.assignee": "Assignee", "tk.assigneePh": "Support agent name",
+      "f.message": "Customer message", "tk.messagePh": "What did the customer say…",
+      "tk.add": "Add ticket", "tk.hint": "Tip: one sentence for the problem, details in your first reply.",
+      "tk.list": "Ticket queue", "tk.export": "Export CSV", "tk.allStatus": "All statuses", "tk.allPriority": "All priorities",
+      "tk.search": "Search ticket number, subject or customer…",
+      "status.open": "Open", "status.pending": "Awaiting customer", "status.resolved": "Resolved",
+      "prio.urgent": "Urgent", "prio.high": "High", "prio.normal": "Normal", "prio.low": "Low",
+      "channel.email": "Email", "channel.chat": "Live chat", "channel.whatsapp": "WhatsApp",
+      "channel.portal": "Service portal", "channel.phone": "Phone",
+      "cat.billing": "Billing & payments", "cat.technical": "Technical issue", "cat.account": "Account & access",
+      "cat.shipping": "Shipping & delivery", "cat.refund": "Refund",
+      "sla.policy": "Targets by priority", "sla.policySub": "First response in minutes, resolution in hours. Saved automatically.",
+      "sla.cost": "Support and delay cost", "sla.costSub": "In the selected currency — used for monthly breach cost.",
+      "sla.hourly": "Support hourly cost", "sla.penalty": "Estimated cost per breached ticket",
+      "sla.monthCost": "Estimated support hours cost", "sla.penaltyTotal": "Breach penalties", "sla.totalCost": "Total",
+      "sla.costNote": "Simplified admin estimate: support hours = tickets × average handling time.",
+      "sla.table": "Compliance by priority", "sla.target": "First-response target",
+      "th.tickets": "Tickets", "th.met": "On time", "th.breached": "Breached", "th.waiting": "Awaiting reply", "th.compliance": "Compliance",
+      "sla.risk": "At risk", "sla.riskSub": "Less than a third of the window left",
+      "sla.breach": "Recorded breaches", "sla.breachSub": "Past the first-response target",
+      "as.title": "Reply drafting assistant", "as.sub": "Pick a ticket and a tone; get a ready reply in your name with the expected resolution time.",
+      "as.ticket": "Ticket", "as.tone": "Tone",
+      "tone.formal": "Formal", "tone.friendly": "Friendly", "tone.apologetic": "Apologetic", "tone.technical": "Technical",
+      "as.instructions": "Details to include (optional)", "as.instructionsPh": "e.g. We reset the password and sent a fresh link",
+      "as.generate": "Draft reply", "as.copy": "Copy", "as.send": "Send as reply",
+      "as.output": "Suggested reply", "as.outputSub": "Pick a ticket, then press “Draft reply”.",
+      "as.rulesTitle": "Fast reply rules",
+      "as.rule1": "Show you understood the problem in the first two lines — do not open with an apology alone.",
+      "as.rule2": "Give one action the customer can take now, then the fallback.",
+      "as.rule3": "State the next update time explicitly instead of “soon”.",
+      "as.rule4": "Never ask for passwords or verification codes.",
+      "as.rule5": "Close with what the customer should do next.",
+      "as.tip": "The better a ticket is categorised and prioritised, the more realistic its SLA and the faster your reply.",
+      "foot.left": "ARAB TEMPLATES · one file, no server required",
+      "foot.right": "© 2026 Arab Templates — IT Helpdesk Ticketing OS"
+    }
+  };
+
+  let state = null;
+  let ui = { lang: "ar", currency: "SAR" };
+  let selectedId = null;
+  let tone = "formal";
+  let lastReply = "";
+  const charts = { priority: null, sla: null, trend: null };
+
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const uid = (p) => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 4);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const t = (key) => (DICT[ui.lang] && DICT[ui.lang][key]) || DICT.ar[key] || key;
+  const isAr = () => ui.lang === "ar";
+  const num = (v, d) => { const n = parseFloat(v); return isFinite(n) ? n : d; };
+
+  function fmtNum(n, digits) {
+    const d = digits == null ? 0 : digits;
+    return new Intl.NumberFormat("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).format(isFinite(n) ? n : 0);
+  }
+  function cur() { return CURRENCIES.find((c) => c.code === ui.currency) || CURRENCIES[0]; }
+  function fmtMoney(usd) {
+    const c = cur();
+    const v = (isFinite(usd) ? usd : 0) * c.rate;
+    return "\u200E" + fmtNum(v, v >= 1000 ? 0 : 2) + " " + c.code;
+  }
+  function fmtDur(ms) {
+    const mins = Math.max(0, Math.round(ms / 60000));
+    if (mins < 60) return fmtNum(mins) + (isAr() ? " د" : "m");
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    if (h < 24) return fmtNum(h) + (isAr() ? " س" : "h") + (m ? " " + fmtNum(m) + (isAr() ? " د" : "m") : "");
+    const d = Math.floor(h / 24);
+    return fmtNum(d) + (isAr() ? " يوم" : "d") + (h % 24 ? " " + fmtNum(h % 24) + (isAr() ? " س" : "h") : "");
+  }
+  function fmtDate(iso) {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    if (isNaN(d)) return "—";
+    try { return d.toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { day: "numeric", month: "short", year: "numeric" }); }
+    catch (e) { return d.toISOString().slice(0, 10); }
+  }
+  function toast(msg, bad) {
+    const el = $("#toast");
+    el.textContent = msg;
+    el.className = "toast show" + (bad ? " err" : "");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { el.className = "toast"; }, 2600);
+  }
+  const prioLabel = (p) => t("prio." + p);
+  const catLabel = (c) => t("cat." + c);
+  const channelLabel = (c) => t("channel." + c);
+  const statusLabel = (s) => t("status." + s);
+
+  /* ---------------- seed & storage ---------------- */
+  function seed() {
+    const ago = (mins) => new Date(Date.now() - mins * 60000).toISOString();
+    const mk = (ref, subject, customer, email, channel, cat, prio, assignee, status, createdMin, firstMin, resolvedMin, msgs) => ({
+      id: uid("tk"), ref: ref, subject: subject, customer: customer, email: email, channel: channel,
+      category: cat, priority: prio, assignee: assignee, status: status,
+      createdAt: ago(createdMin),
+      firstResponseAt: firstMin == null ? null : ago(firstMin),
+      resolvedAt: resolvedMin == null ? null : ago(resolvedMin),
+      messages: msgs.map((m) => ({ from: m[0], text: m[1], at: ago(m[2]) }))
+    });
+    return {
+      agent: "سارة العتيبي",
+      hourlyUSD: 18,
+      penaltyUSD: 15,
+      policies: {
+        urgent: { first: 30, resolve: 4 },
+        high: { first: 120, resolve: 8 },
+        normal: { first: 480, resolve: 24 },
+        low: { first: 1440, resolve: 48 }
+      },
+      tickets: [
+        mk("T-1048", "تعذّر تسجيل الدخول بعد تحديث النظام", "نورة القحطاني", "noura@example.com", "email", "technical", "urgent", "سارة العتيبي", "open", 55, null, null,
+          [["customer", "بعد التحديث الأخير تظهر رسالة «بيانات الدخول غير صحيحة» رغم أن كلمة المرور صحيحة. جرّبت متصفحين.", 55]]),
+        mk("T-1047", "خصم المبلغ مرتين على البطاقة", "عبدالله الشمري", "abdullah@example.com", "whatsapp", "billing", "high", "محمد الحربي", "open", 185, 140, null,
+          [["customer", "تم خصم 249 ريالاً مرتين لنفس الطلب. أرجو حل المشكلة اليوم.", 185], ["agent", "أهلاً عبدالله، تحققت من العملية: الخصم المزدوج مؤكّد وسيُعاد خلال 3 أيام عمل. أرسل لي آخر 4 أرقام من البطاقة لأربطها بالاسترجاع.", 140]]),
+        mk("T-1046", "طلب تغيير البريد المرتبط بالحساب", "ريم العتيبي", "reem@example.com", "portal", "account", "normal", "سارة العتيبي", "open", 350, null, null,
+          [["customer", "أريد نقل حسابي إلى بريد العمل الجديد، هل أحتاج إثبات ملكية؟", 350]]),
+        mk("T-1045", "الشحنة متأخرة عن موعد التسليم", "سلطان الدوسري", "sultan@example.com", "chat", "shipping", "urgent", "خالد العمري", "open", 150, 128, null,
+          [["customer", "الطلب متأخر يومين ورقم التتبع لا يتحدّث.", 150], ["agent", "أعتذر عن التأخير يا سلطان، الشحنة في مركز التوزيع وتُسلّم غداً قبل الظهر. أرسلت لك تحديث التتبع على الواتساب.", 128]]),
+        mk("T-1044", "طلب استرجاع منتج غير مطابق", "مها الزهراني", "maha@example.com", "email", "refund", "low", "محمد الحربي", "open", 2880, 1560, null,
+          [["customer", "المنتج وصل بلون مختلف، أريد استرجاع المبلغ.", 2880], ["agent", "أهلاً مها، نعتذر عن ذلك. أرسل صورة المنتج وسننشئ طلب استرجاع فوري.", 1560]]),
+        mk("T-1043", "فاتورة الاشتراك تظهر بمبلغ مختلف", "شركة أفق", "billing@ufuq.example", "email", "billing", "normal", "سارة العتيبي", "resolved", 1560, 1400, 330,
+          [["customer", "الفاتورة هذا الشهر أعلى من الاتفاق السنوي.", 1560], ["agent", "راجعنا الفاتورة: فُعّل مستخدم إضافي. عدّلنا الفاتورة وأرسلنا نسخة محدّثة.", 1400]]),
+        mk("T-1042", "بطء شديد في لوحة التحكم", "فيصل العنزي", "faisal@example.com", "chat", "technical", "high", "خالد العمري", "pending", 4300, 4200, null,
+          [["customer", "لوحة التحكم تتعطل كل صباح تقريباً.", 4300], ["agent", "شكراً فيصل، رصدنا الحمل الزائد بين 9 و10 صباحاً وعالجنا الاستعلامات البطيئة. أخبرنا إن تكرر غداً.", 4200]]),
+        mk("T-1041", "تأكيد عنوان التوصيل", "هند المطيري", "hind@example.com", "phone", "shipping", "normal", "خالد العمري", "resolved", 6000, 5880, 5400,
+          [["customer", "أريد التأكد أن العنوان الجديد مسجّل قبل الشحن.", 6000], ["agent", "تم تحديث العنوان وتأكيده مع شركة الشحن.", 5880]]),
+        mk("T-1040", "إعادة تعيين كلمة المرور", "ماجد السبيعي", "majed@example.com", "portal", "account", "low", "سارة العتيبي", "resolved", 8600, 7950, 7000,
+          [["customer", "نسيت كلمة المرور ولا يصلني رابط الاستعادة.", 8600], ["agent", "تحققنا من البريد وأعدنا إرسال الرابط، وتم الدخول بنجاح.", 7950]]),
+        mk("T-1039", "استفسار عن صلاحية الضمان", "لمى الحربي", "lama@example.com", "email", "refund", "low", "محمد الحربي", "open", 10020, 9720, null,
+          [["customer", "هل الضمان يغطي تلف الشاشة بعد 7 أشهر؟", 10020], ["agent", "أهلاً لمى، الضمان يغطي عيوب التصنيع لمدة سنة، وتلف الشاشة يُقيَّم في مركز الصيانة. أرسل لك رقم الطلب.", 9720]])
+      ]
+    };
+  }
+
+  function load() {
+    const base = seed();
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { saved = null; }
+    if (saved && typeof saved === "object" && Array.isArray(saved.tickets)) {
+      const savedAgent = String(saved.agent || base.agent);
+      state = {
+        agent: String(saved.agent || base.agent),
+        hourlyUSD: num(saved.hourlyUSD, base.hourlyUSD),
+        penaltyUSD: num(saved.penaltyUSD, base.penaltyUSD),
+        policies: Object.assign({}, base.policies, saved.policies || {}),
+        tickets: saved.tickets.map((x) => ({
+          id: x.id || uid("tk"), ref: x.ref || "T-0000", subject: String(x.subject || ""), customer: String(x.customer || ""),
+          email: String(x.email || ""), channel: CHANNELS.indexOf(x.channel) !== -1 ? x.channel : "email",
+          category: CATS.indexOf(x.category) !== -1 ? x.category : "technical",
+          priority: PRIOS.indexOf(x.priority) !== -1 ? x.priority : "normal",
+          assignee: String(x.assignee || savedAgent),
+          status: ["open", "pending", "resolved"].indexOf(x.status) !== -1 ? x.status : "open",
+          createdAt: x.createdAt || new Date().toISOString(),
+          firstResponseAt: x.firstResponseAt || null,
+          resolvedAt: x.resolvedAt || null,
+          messages: Array.isArray(x.messages) ? x.messages : []
+        }))
+      };
+      if (saved.ui) {
+        if (saved.ui.lang === "en" || saved.ui.lang === "ar") ui.lang = saved.ui.lang;
+        if (CURRENCIES.some((c) => c.code === saved.ui.currency)) ui.currency = saved.ui.currency;
+      }
+    } else {
+      state = base;
+      ui = { lang: "ar", currency: "SAR" };
+    }
+    selectedId = state.tickets.length ? state.tickets[0].id : null;
+  }
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify({ agent: state.agent, hourlyUSD: state.hourlyUSD, penaltyUSD: state.penaltyUSD, policies: state.policies, tickets: state.tickets, ui: { lang: ui.lang, currency: ui.currency } })); }
+    catch (e) { /* storage blocked */ }
+  }
+
+  /* ---------------- SLA math ---------------- */
+  function targetMs(tk) { return (num(state.policies[tk.priority].first, 30)) * 60000; }
+  function slaInfo(tk) {
+    const created = new Date(tk.createdAt).getTime();
+    const target = targetMs(tk);
+    const first = tk.firstResponseAt ? new Date(tk.firstResponseAt).getTime() : null;
+    if (first) {
+      const elapsed = first - created;
+      return { state: elapsed <= target ? "met" : "breach", elapsed: elapsed, target: target, remaining: target - elapsed };
+    }
+    const elapsed = Date.now() - created;
+    if (elapsed > target) return { state: "breach", elapsed: elapsed, target: target, remaining: target - elapsed };
+    if (target - elapsed <= target * 0.33) return { state: "risk", elapsed: elapsed, target: target, remaining: target - elapsed };
+    return { state: "waiting", elapsed: elapsed, target: target, remaining: target - elapsed };
+  }
+  function counts() {
+    const c = { met: 0, breach: 0, risk: 0, waiting: 0, answered: 0, open: 0, resolved: 0 };
+    state.tickets.forEach((tk) => {
+      const info = slaInfo(tk);
+      c[info.state === "breach" ? "breach" : info.state === "met" ? "met" : info.state === "risk" ? "risk" : "waiting"]++;
+      if (tk.firstResponseAt) c.answered++;
+      if (tk.status === "resolved") c.resolved++; else c.open++;
+    });
+    c.total = state.tickets.length;
+    return c;
+  }
+  function compliance() {
+    const c = counts();
+    const denom = c.met + c.breach;
+    return denom ? (c.met / denom) * 100 : 0;
+  }
+  function avgFirst() {
+    const answered = state.tickets.filter((tk) => tk.firstResponseAt);
+    if (!answered.length) return 0;
+    const sum = answered.reduce((a, tk) => a + (new Date(tk.firstResponseAt).getTime() - new Date(tk.createdAt).getTime()), 0);
+    return sum / answered.length / 60000;
+  }
+  function breachCount() {
+    return state.tickets.filter((tk) => slaInfo(tk).state === "breach").length;
+  }
+  function select(id) {
+    selectedId = id;
+    renderTickets();
+    renderAssistant();
+  }
+
+  /* ---------------- i18n ---------------- */
+  function applyI18n() {
+    document.documentElement.lang = ui.lang;
+    document.documentElement.dir = isAr() ? "rtl" : "ltr";
+    $$("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    $$("[data-i18n-ph]").forEach((el) => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $$("#langSeg button").forEach((b) => b.classList.toggle("on", b.getAttribute("data-lang") === ui.lang));
+    document.title = isAr() ? "مكتب الدعم الفني واتفاقات الخدمة — IT Helpdesk Ticketing OS" : "IT Helpdesk & SLA OS — Support Ticketing";
+    const sel = $("#currency");
+    sel.innerHTML = CURRENCIES.map((c) => '<option value="' + c.code + '">' + c.code + " — " + esc(isAr() ? c.ar : c.en) + "</option>").join("");
+    sel.value = ui.currency;
+  }
+
+  /* ---------------- dashboard ---------------- */
+  function renderKpis() {
+    const c = counts();
+    $("#kpiOpen").textContent = fmtNum(c.open);
+    $("#kpiOpenNote").textContent = isAr()
+      ? c.risk + " على وشك التأخر · " + (c.total - c.open) + " محلولة"
+      : c.risk + " at risk · " + (c.total - c.open) + " resolved";
+    $("#kpiOpenNote").style.color = c.risk ? "var(--warn)" : "";
+
+    const comp = compliance();
+    $("#kpiSla").textContent = fmtNum(comp, 0);
+    $("#kpiSlaNote").textContent = isAr()
+      ? (c.met + c.breach) + " تذكرة محسومة · " + c.breach + " متأخرة"
+      : (c.met + c.breach) + " decided · " + c.breach + " breached";
+    $("#kpiSlaNote").style.color = comp >= 90 ? "var(--ok)" : comp >= 75 ? "var(--warn)" : "var(--bad)";
+
+    const avg = avgFirst();
+    $("#kpiResp").textContent = fmtNum(avg, 0);
+    $("#kpiRespNote").textContent = isAr() ? "من " + c.answered + " تذكرة تم الرد عليها" : "across " + c.answered + " answered tickets";
+
+    const cost = breachCount() * state.penaltyUSD;
+    $("#kpiCost").textContent = fmtMoney(cost);
+    $("#kpiCostNote").textContent = isAr()
+      ? breachCount() + " انتهاك × " + fmtMoney(state.penaltyUSD)
+      : breachCount() + " breaches × " + fmtMoney(state.penaltyUSD);
+
+    $("#dashChip").textContent = isAr()
+      ? c.total + " تذكرة · " + c.resolved + " محلولة · وكيل: " + state.agent
+      : c.total + " tickets · " + c.resolved + " resolved · agent: " + state.agent;
+  }
+
+  function renderNeeds() {
+    const list = state.tickets
+      .filter((tk) => !tk.firstResponseAt && tk.status !== "resolved")
+      .map((tk) => ({ tk: tk, info: slaInfo(tk) }))
+      .sort((a, b) => a.info.remaining - b.info.remaining)
+      .slice(0, 4);
+    if (!list.length) {
+      $("#needsList").innerHTML = '<div class="empty">' + (isAr() ? "كل التذاكر تم الرد عليها." : "Every ticket has a first reply.") + "</div>";
+      return;
+    }
+    $("#needsList").innerHTML = list.map((x) => {
+      const late = x.info.remaining < 0;
+      return '<div class="health-row"><span class="dotbadge ' + (late ? "bad" : x.info.state === "risk" ? "warn" : "") + '"></span>' +
+        '<div class="grow"><b>' + esc(x.tk.subject) + "</b><span>" + esc(x.tk.customer) + " · " + esc(prioLabel(x.tk.priority)) + " · " +
+        (late ? (isAr() ? "متأخر " : "late ") + fmtDur(-x.info.remaining) : (isAr() ? "متبقٍ " : "left ") + fmtDur(x.info.remaining)) + "</span></div>" +
+        '<button type="button" class="btn ghost sm" data-open-ticket="' + x.tk.id + '">' + (isAr() ? "رد" : "Reply") + "</button></div>";
+    }).join("");
+  }
+
+  function renderSummary() {
+    const c = counts();
+    const rows = [
+      [isAr() ? "إجمالي التذاكر" : "Total tickets", fmtNum(c.total)],
+      [isAr() ? "مفتوحة الآن" : "Open now", fmtNum(c.open)],
+      [isAr() ? "ضمن الوقت" : "On time", fmtNum(c.met)],
+      [isAr() ? "متأخرة" : "Breached", fmtNum(c.breach)],
+      [isAr() ? "بانتظار الرد" : "Awaiting reply", fmtNum(c.waiting + c.risk)],
+      [isAr() ? "متوسط أول استجابة" : "Avg first response", fmtNum(avgFirst(), 0) + (isAr() ? " دقيقة" : " min")]
+    ];
+    $("#dashSummary").innerHTML = rows.map((r) =>
+      '<div class="statline"><span>' + esc(r[0]) + "</span><b>" + esc(r[1]) + "</b></div>"
+    ).join("");
+  }
+
+  /* ---------------- tickets ---------------- */
+  function renderTickets() {
+    const fs = $("#fStatus").value;
+    const fp = $("#fPriority").value;
+    const q = ($("#fSearch").value || "").trim().toLowerCase();
+    let list = state.tickets.slice();
+    if (fs) list = list.filter((x) => x.status === fs);
+    if (fp) list = list.filter((x) => x.priority === fp);
+    if (q) list = list.filter((x) => (x.ref + " " + x.subject + " " + x.customer + " " + x.assignee).toLowerCase().indexOf(q) !== -1);
+    list.sort((a, b) => {
+      const sa = slaInfo(a), sb = slaInfo(b);
+      const rank = { breach: 0, risk: 1, waiting: 2, met: 3 };
+      if (rank[sa.state] !== rank[sb.state]) return rank[sa.state] - rank[sb.state];
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    const c = counts();
+    $("#tkSub").textContent = list.length + (isAr() ? " من " : " of ") + c.total + (isAr() ? " تذكرة · " : " tickets · ") +
+      c.open + (isAr() ? " مفتوحة · " : " open · ") + fmtNum(compliance(), 0) + "% SLA";
+
+    if (!list.length) {
+      $("#ticketList").innerHTML = '<div class="empty">' + (isAr() ? "لا تذاكر مطابقة." : "No matching tickets.") + "</div>";
+    } else {
+      $("#ticketList").innerHTML = list.map((tk) => {
+        const info = slaInfo(tk);
+        const badge = info.state === "met" ? (isAr() ? "ضمن الوقت" : "On time")
+          : info.state === "breach" ? (isAr() ? "متأخرة " : "Late ") + fmtDur(-info.remaining)
+            : (isAr() ? "متبقٍ " : "Left ") + fmtDur(info.remaining);
+        return '<article class="ticket' + (tk.id === selectedId ? " sel" : "") + '" data-select-ticket="' + tk.id + '">' +
+          '<div class="ticket-top"><span class="ref">' + esc(tk.ref) + "</span>" +
+          '<span class="prio ' + tk.priority + '">' + esc(prioLabel(tk.priority)) + "</span>" +
+          '<span class="chip soft">' + esc(statusLabel(tk.status)) + "</span>" +
+          '<span class="sla-badge ' + info.state + '">' + esc(badge) + "</span></div>" +
+          "<h3>" + esc(tk.subject) + "</h3>" +
+          '<div class="sub"><span>' + esc(tk.customer) + "</span><span>·</span><span>" + esc(channelLabel(tk.channel)) + "</span>" +
+          "<span>·</span><span>" + esc(catLabel(tk.category)) + "</span></div>" +
+          "</article>";
+      }).join("");
+    }
+    renderDetail();
+  }
+
+  function renderDetail() {
+    const tk = state.tickets.find((x) => x.id === selectedId);
+    if (!tk) {
+      $("#detailBody").innerHTML = '<div class="ticket-empty">' + (isAr() ? "اختر تذكرة من القائمة لعرض تفاصيلها والرد عليها." : "Select a ticket to see details and reply.") + "</div>";
+      return;
+    }
+    const info = slaInfo(tk);
+    const used = clamp((Math.min(info.elapsed, info.target) / info.target) * 100, 0, 100);
+    const trackCls = info.state === "breach" ? "breach" : info.state === "met" ? "met" : "";
+    const first = tk.firstResponseAt
+      ? (isAr() ? "أول رد بعد " : "First reply in ") + fmtDur(new Date(tk.firstResponseAt) - new Date(tk.createdAt))
+      : (isAr() ? "لم يُرد بعد" : "No reply yet");
+    const thread = (tk.messages || []).map((m) =>
+      '<div class="msg ' + (m.from === "agent" ? "agent" : "customer") + '"><span class="who">' +
+      (m.from === "agent" ? esc(tk.assignee || state.agent) : esc(tk.customer)) + " · " + esc(fmtDate(m.at)) + "</span>" + esc(m.text) + "</div>"
+    ).join("");
+
+    $("#detailBody").innerHTML =
+      '<div class="card-head" style="margin-bottom:8px">' +
+      '<div><span class="ref" style="font-size:11px;color:var(--muted);direction:ltr;display:block">' + esc(tk.ref) + "</span>" +
+      '<h2 style="font-size:15px;margin-top:2px">' + esc(tk.subject) + "</h2></div>" +
+      '<span class="prio ' + tk.priority + '">' + esc(prioLabel(tk.priority)) + "</span></div>" +
+      '<div class="tiny muted">' + esc(tk.customer) + (tk.email ? " · " + esc(tk.email) : "") + "</div>" +
+      '<div class="meta-grid"><div><span>' + (isAr() ? "القناة" : "Channel") + "</span><b>" + esc(channelLabel(tk.channel)) + "</b></div>" +
+      "<div><span>" + (isAr() ? "التصنيف" : "Category") + "</span><b>" + esc(catLabel(tk.category)) + "</b></div>" +
+      "<div><span>" + (isAr() ? "المسؤول" : "Assignee") + "</span><b>" + esc(tk.assignee || "—") + "</b></div>" +
+      "<div><span>" + (isAr() ? "أُنشئت" : "Created") + "</span><b>" + esc(fmtDate(tk.createdAt)) + "</b></div></div>" +
+      '<div class="tiny muted">' + esc(first) + " · " + (isAr() ? "هدف " : "target ") + fmtNum(info.target / 60000) + (isAr() ? " دقيقة" : " min") + "</div>" +
+      '<div class="sla-track ' + trackCls + '"><i style="width:' + used + '%"></i></div>' +
+      '<div class="tiny" style="margin-top:5px;color:' + (info.state === "breach" ? "var(--bad)" : info.state === "risk" ? "var(--warn)" : "var(--muted)") + '">' +
+      (info.state === "breach" ? (isAr() ? "تجاوز الهدف بـ " : "Over target by ") + fmtDur(-info.remaining)
+        : (isAr() ? "متبقٍ " : "Left ") + fmtDur(info.remaining)) + "</div>" +
+      '<div class="thread" style="margin-top:12px">' + (thread || '<div class="ticket-empty">' + (isAr() ? "لا رسائل" : "No messages") + "</div>") + "</div>" +
+      '<div class="reply-box"><label class="field"><span>' + (isAr() ? "ردّك على العميل" : "Your reply") + "</span>" +
+      '<textarea id="replyText" rows="3" placeholder="' + esc(isAr() ? "اكتب الرد…" : "Write your reply…") + '"></textarea></label>' +
+      '<div class="form-actions"><button type="button" class="btn sm" data-send-reply="' + tk.id + '">' + (isAr() ? "إرسال الرد" : "Send reply") + "</button>" +
+      '<button type="button" class="btn ghost sm" data-assist-ticket="' + tk.id + '">' + (isAr() ? "صياغة بالمساعد" : "Draft with assistant") + "</button>" +
+      '<button type="button" class="btn danger sm" data-del-ticket="' + tk.id + '">' + (isAr() ? "حذف" : "Delete") + "</button></div>" +
+      '<label class="field" style="margin-top:10px"><span>' + (isAr() ? "حالة التذكرة" : "Ticket status") + "</span>" +
+      '<select data-status-ticket="' + tk.id + '">' + ["open", "pending", "resolved"].map((s) =>
+        '<option value="' + s + '"' + (tk.status === s ? " selected" : "") + ">" + esc(statusLabel(s)) + "</option>").join("") + "</select></label>" +
+      "</div>";
+  }
+
+  function addTicket() {
+    const subject = $("#nSubject").value.trim();
+    if (!subject) { toast(isAr() ? "أدخل موضوع التذكرة" : "Enter a ticket subject", true); $("#nSubject").focus(); return; }
+    const customer = $("#nCustomer").value.trim() || (isAr() ? "عميل" : "Customer");
+    const msg = $("#nMessage").value.trim();
+    const maxRef = state.tickets.reduce((m, x) => {
+      const n = parseInt(String(x.ref || "").replace(/\D/g, ""), 10);
+      return isFinite(n) ? Math.max(m, n) : m;
+    }, 1048);
+    const ref = "T-" + (maxRef + 1);
+    const tk = {
+      id: uid("tk"), ref: ref, subject: subject, customer: customer,
+      email: $("#nEmail").value.trim(), channel: $("#nChannel").value,
+      category: $("#nCategory").value, priority: $("#nPriority").value,
+      assignee: $("#nAssignee").value.trim() || state.agent, status: "open",
+      createdAt: new Date().toISOString(), firstResponseAt: null, resolvedAt: null,
+      messages: msg ? [{ from: "customer", text: msg, at: new Date().toISOString() }] : []
+    };
+    state.tickets.unshift(tk);
+    selectedId = tk.id;
+    $("#nSubject").value = ""; $("#nCustomer").value = ""; $("#nEmail").value = ""; $("#nMessage").value = "";
+    save();
+    renderAll();
+    toast(isAr() ? "أُضيفت التذكرة" : "Ticket added");
+  }
+
+  function sendReply(id, text) {
+    const tk = state.tickets.find((x) => x.id === id);
+    if (!tk) return;
+    const clean = (text || "").trim();
+    if (!clean) { toast(isAr() ? "اكتب رداً أولاً" : "Write a reply first", true); return; }
+    tk.messages.push({ from: "agent", text: clean, at: new Date().toISOString() });
+    if (!tk.firstResponseAt) tk.firstResponseAt = new Date().toISOString();
+    if (tk.status === "open") tk.status = "pending";
+    save();
+    renderAll();
+    toast(isAr() ? "أُرسل الرد وسُجّل وقت الاستجابة" : "Reply sent and response time logged");
+  }
+
+  /* ---------------- SLA tab ---------------- */
+  function renderPolicies() {
+    $("#policyGrid").innerHTML = PRIOS.map((p) => {
+      const pol = state.policies[p];
+      return '<div class="policy"><b>' + esc(prioLabel(p)) + "</b>" +
+        '<div class="row"><div><label>' + (isAr() ? "أول استجابة (دقيقة)" : "First response (min)") + "</label>" +
+        '<input type="number" min="1" step="1" value="' + num(pol.first, 30) + '" data-pf="' + p + '"></div>' +
+        "<div><label>" + (isAr() ? "الحل (ساعة)" : "Resolve (hours)") + "</label>" +
+        '<input type="number" min="1" step="1" value="' + num(pol.resolve, 4) + '" data-pr="' + p + '"></div></div></div>';
+    }).join("");
+  }
+
+  function renderSla() {
+    const rate = cur().rate;
+    if (document.activeElement !== $("#hourlyInput")) $("#hourlyInput").value = Math.round(state.hourlyUSD * rate * 100) / 100;
+    if (document.activeElement !== $("#penaltyInput")) $("#penaltyInput").value = Math.round(state.penaltyUSD * rate * 100) / 100;
+
+    const c = counts();
+    $("#slaSub").textContent = isAr()
+      ? c.total + " تذكرة · التزام " + fmtNum(compliance(), 0) + "% · " + breachCount() + " انتهاك"
+      : c.total + " tickets · " + fmtNum(compliance(), 0) + "% compliance · " + breachCount() + " breached";
+    $("#slaChip").textContent = fmtNum(compliance(), 0) + "%";
+    $("#slaChip").className = "chip " + (compliance() >= 90 ? "ok" : compliance() >= 75 ? "warn" : "bad");
+
+    $("#slaRows").innerHTML = PRIOS.map((p) => {
+      const list = state.tickets.filter((x) => x.priority === p);
+      const met = list.filter((x) => slaInfo(x).state === "met").length;
+      const breach = list.filter((x) => slaInfo(x).state === "breach").length;
+      const waiting = list.filter((x) => ["waiting", "risk"].indexOf(slaInfo(x).state) !== -1).length;
+      const comp = met + breach ? (met / (met + breach)) * 100 : null;
+      return "<tr><td><span class=\"prio " + p + '">' + esc(prioLabel(p)) + "</span></td>" +
+        '<td class="num">' + fmtNum(state.policies[p].first) + (isAr() ? " د" : " min") + " / " + fmtNum(state.policies[p].resolve) + (isAr() ? " س" : " h") + "</td>" +
+        '<td class="num">' + list.length + "</td>" +
+        '<td class="num" style="color:var(--ok)">' + met + "</td>" +
+        '<td class="num" style="color:var(--bad)">' + breach + "</td>" +
+        '<td class="num">' + waiting + "</td>" +
+        "<td>" + (comp == null ? "—" : fmtNum(comp, 0) + "%") + "</td></tr>";
+    }).join("");
+
+    const risk = state.tickets.filter((x) => slaInfo(x).state === "risk");
+    const breach = state.tickets.filter((x) => slaInfo(x).state === "breach");
+    const rowHtml = (x, isBreach) => {
+      const info = slaInfo(x);
+      return '<div class="health-row"><span class="dotbadge ' + (isBreach ? "bad" : "warn") + '"></span>' +
+        '<div class="grow"><b>' + esc(x.subject) + "</b><span>" + esc(x.customer) + " · " + esc(prioLabel(x.priority)) + " · " +
+        (isBreach ? (isAr() ? "تأخر " : "over ") + fmtDur(-info.remaining) : (isAr() ? "يتبقى " : "left ") + fmtDur(info.remaining)) + "</span></div>" +
+        '<button type="button" class="btn ghost sm" data-open-ticket="' + x.id + '">' + (isAr() ? "فتح" : "Open") + "</button></div>";
+    };
+    $("#riskList").innerHTML = risk.length ? risk.map((x) => rowHtml(x, false)).join("") : '<div class="empty">' + (isAr() ? "لا تذاكر على وشك التأخر." : "Nothing at risk.") + "</div>";
+    $("#breachList").innerHTML = breach.length ? breach.map((x) => rowHtml(x, true)).join("") : '<div class="empty">' + (isAr() ? "لا انتهاكات مسجلة — عمل ممتاز." : "No breaches recorded.") + "</div>";
+
+    const hours = (state.tickets.length * 20) / 60;
+    $("#monthCost").textContent = fmtMoney(hours * state.hourlyUSD);
+    $("#penaltyTotal").textContent = fmtMoney(breachCount() * state.penaltyUSD);
+    $("#totalCost").textContent = fmtMoney(hours * state.hourlyUSD + breachCount() * state.penaltyUSD);
+  }
+
+  /* ---------------- assistant ---------------- */
+  function ticketOptions() {
+    const sel = $("#asTicket");
+    const keep = sel.value;
+    sel.innerHTML = state.tickets.map((tk) =>
+      '<option value="' + tk.id + '">' + esc(tk.ref + " — " + tk.subject) + "</option>"
+    ).join("");
+    if (keep && state.tickets.some((x) => x.id === keep)) sel.value = keep;
+    else if (selectedId) sel.value = selectedId;
+  }
+
+  function renderAssistant() {
+    ticketOptions();
+    const tk = state.tickets.find((x) => x.id === ($("#asTicket").value || selectedId));
+    $("#asTicketChip").textContent = tk ? tk.ref : "—";
+    if (tk && $("#asTicket").value !== tk.id) $("#asTicket").value = tk.id;
+    $$("#toneSeg button").forEach((b) => b.classList.toggle("on", b.getAttribute("data-tone") === tone));
+    if (!lastReply) $("#asSub").textContent = t("as.outputSub");
+  }
+
+  function firstName(full) { return String(full || "").trim().split(/\s+/)[0] || full || ""; }
+
+  function etaText(tk) {
+    const hours = num(state.policies[tk.priority].resolve, 24);
+    const d = new Date(Date.now() + hours * 3600000);
+    try {
+      return d.toLocaleString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "long", hour: "2-digit", minute: "2-digit", day: "numeric", month: "short" });
+    } catch (e) { return d.toISOString().slice(0, 16).replace("T", " "); }
+  }
+
+  function generateReply() {
+    const tk = state.tickets.find((x) => x.id === $("#asTicket").value);
+    if (!tk) { toast(isAr() ? "أضف تذكرة أولاً" : "Add a ticket first", true); return; }
+    const name = firstName(tk.customer);
+    const extra = $("#asInstructions").value.trim();
+    const eta = etaText(tk);
+    const agent = tk.assignee || state.agent;
+    const short = tk.channel === "chat" || tk.channel === "whatsapp";
+    const prio = isAr() ? prioLabel(tk.priority) : prioLabel(tk.priority).toLowerCase();
+    let text = "";
+
+    if (isAr()) {
+      const greet = tone === "friendly" ? "أهلاً " + name + "،" : tone === "apologetic" ? "عزيزي/عزيزتي " + name + "،" : "السيد/ة " + name + " المحترم/ة،";
+      const intro = {
+        formal: "شكراً لتواصلك بخصوص «" + tk.subject + "». اطّلعت على تفاصيل تذكرتك رقم " + tk.ref + " وأفهم تماماً أثر هذه المشكلة عليك.",
+        friendly: "وصلتنا رسالتك عن «" + tk.subject + "» — خلّنا نحلها سريعاً. راجعت التفاصيل ووضعت لك الخطوة الأنسب.",
+        apologetic: "نعتذر بصدق عن الإزعاج الذي سببه لك «" + tk.subject + "». تحمّلنا مسؤولية متابعة تذكرتك " + tk.ref + " من الآن وحتى الحل.",
+        technical: "استلمت تذكرتك " + tk.ref + " بخصوص «" + tk.subject + "» وحددت الأولوية «" + prio + "». سأتعامل معها بخطوات تشخيصية واضحة."
+      }[tone];
+      const action = extra
+        ? extra
+        : {
+          formal: "نتابع حالتك الآن مع الفريق المختص، وسنرسل لك تحديثاً تفصيلياً في أقرب وقت.",
+          friendly: "أنا أتابعها بنفسي الآن، وأول ما يظهر أي تحديث سأرسله لك مباشرة.",
+          apologetic: "أعدت فتح الحالة مع الفريق التقني، وسأبقى معك خطوة بخطوة حتى تتأكد من حل المشكلة.",
+          technical: "أرجو تنفيذ الخطوات التالية: 1) حدّث الصفحة بعد مسح الذاكرة المؤقتة. 2) أعد المحاولة من متصفح آخر. 3) أرسل لي وقت ظهور الرسالة ونصها كما هو."
+        }[tone];
+      const close = short
+        ? "أخبرني هل نجحت الخطوة، وسأكمل معك فوراً."
+        : "إن احتجت أي توضيح إضافي، رُد على هذه الرسالة وسأتابع معك شخصياً.";
+      text = greet + "\n\n" + intro + "\n\n" + action + "\n\n" + "سأوافيك بتحديث قبل " + eta + ". " + close + "\n\nمع التقدير،\n" + agent + "\n" + "فريق الدعم الفني";
+    } else {
+      const greet = tone === "friendly" ? "Hi " + name + "," : tone === "apologetic" ? "Dear " + name + "," : "Dear " + name + ",";
+      const intro = {
+        formal: "Thank you for contacting us about “" + tk.subject + "”. I have reviewed ticket " + tk.ref + " and fully understand the impact this is having on you.",
+        friendly: "Thanks for reaching out about “" + tk.subject + "” — let's get this sorted. I've reviewed the details and picked the best next step for you.",
+        apologetic: "I'm genuinely sorry for the disruption caused by “" + tk.subject + "”. We own ticket " + tk.ref + " from now until it is fully resolved.",
+        technical: "Ticket " + tk.ref + " for “" + tk.subject + "” is assigned " + prio + " priority. I'll work through clear diagnostic steps with you."
+      }[tone];
+      const action = extra
+        ? extra
+        : {
+          formal: "Your case is with the right team now and I will send you a detailed update as soon as possible.",
+          friendly: "I'm on it personally, and I'll message you the moment anything changes.",
+          apologetic: "I have reopened the case with our technical team and will stay with you step by step until you confirm it is fixed.",
+          technical: "Please try the following: 1) Clear your cache and refresh. 2) Retry in another browser. 3) Send me the exact time and text of the error."
+        }[tone];
+      const close = short
+        ? "Let me know if that worked and I'll take it from there."
+        : "If anything is unclear, just reply to this message and I'll pick it up personally.";
+      text = greet + "\n\n" + intro + "\n\n" + action + "\n\n" + "I'll send you an update before " + eta + ". " + close + "\n\nBest regards,\n" + agent + "\nSupport Team";
+    }
+
+    lastReply = text;
+    $("#replyOut").textContent = text;
+    $("#asSub").textContent = isAr()
+      ? "جاهز للإرسال · " + tk.ref + " · نبرة " + t("tone." + tone)
+      : "Ready to send · " + tk.ref + " · " + t("tone." + tone) + " tone";
+    toast(isAr() ? "صيغ الرد" : "Reply drafted");
+  }
+
+  /* ---------------- charts ---------------- */
+  function renderCharts() {
+    if (typeof window.Chart === "undefined") {
+      ["boxPriority", "boxSla", "boxTrend"].forEach((id) => $("#" + id).classList.add("no-chart"));
+      return;
+    }
+    ["boxPriority", "boxSla", "boxTrend"].forEach((id) => $("#" + id).classList.remove("no-chart"));
+    window.Chart.defaults.color = "#93A4BF";
+    window.Chart.defaults.font.family = '"Segoe UI", Tahoma, Arial, sans-serif';
+    const tooltip = {
+      backgroundColor: "#0B1222", titleColor: "#EAF0FA", bodyColor: "#C9D5E8",
+      borderColor: "rgba(197,160,89,.35)", borderWidth: 1, padding: 10, cornerRadius: 10, displayColors: false
+    };
+    const legend = { labels: { color: "#C9D5E8", boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "rectRounded", font: { size: 11 } } };
+
+    if (charts.priority) { charts.priority.destroy(); charts.priority = null; }
+    const pCounts = PRIOS.map((p) => state.tickets.filter((x) => x.priority === p).length);
+    charts.priority = new window.Chart($("#cPriority"), {
+      type: "doughnut",
+      data: {
+        labels: PRIOS.map(prioLabel),
+        datasets: [{ data: pCounts, backgroundColor: ["#D9615F", "#E0A33E", "#5C8FD6", "#7C8AA6"], borderColor: "#141F35", borderWidth: 3, hoverOffset: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: "62%",
+        plugins: {
+          legend: Object.assign({ position: "bottom" }, legend),
+          tooltip: Object.assign({ callbacks: { label: (c) => c.label + ": " + c.parsed + (isAr() ? " تذكرة" : " tickets") } }, tooltip)
+        }
+      }
+    });
+
+    if (charts.sla) { charts.sla.destroy(); charts.sla = null; }
+    charts.sla = new window.Chart($("#cSla"), {
+      type: "bar",
+      data: {
+        labels: CATS.map(catLabel),
+        datasets: [
+          { label: isAr() ? "ضمن الوقت" : "On time", data: CATS.map((c) => state.tickets.filter((x) => x.category === c && slaInfo(x).state === "met").length), backgroundColor: "rgba(59,185,141,.72)", borderRadius: 5, maxBarThickness: 26 },
+          { label: isAr() ? "متأخرة" : "Breached", data: CATS.map((c) => state.tickets.filter((x) => x.category === c && slaInfo(x).state === "breach").length), backgroundColor: "rgba(217,97,95,.75)", borderRadius: 5, maxBarThickness: 26 },
+          { label: isAr() ? "بانتظار الرد" : "Waiting", data: CATS.map((c) => state.tickets.filter((x) => x.category === c && ["waiting", "risk"].indexOf(slaInfo(x).state) !== -1).length), backgroundColor: "rgba(147,164,191,.35)", borderRadius: 5, maxBarThickness: 26 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: Object.assign({ position: "bottom" }, legend), tooltip: Object.assign({}, tooltip) },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: "#C9D5E8", font: { size: 9.5 } } },
+          y: { stacked: true, beginAtZero: true, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", precision: 0, font: { size: 10 } } }
+        }
+      }
+    });
+
+    if (charts.trend) { charts.trend.destroy(); charts.trend = null; }
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - i);
+      days.push(d);
+    }
+    const dayCounts = days.map((d) => {
+      const next = new Date(d.getTime() + 86400000);
+      return state.tickets.filter((x) => {
+        const c = new Date(x.createdAt).getTime();
+        return c >= d.getTime() && c < next.getTime();
+      }).length;
+    });
+    const labels = days.map((d) => {
+      try { return d.toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "short", day: "numeric" }); }
+      catch (e) { return d.toISOString().slice(5, 10); }
+    });
+    charts.trend = new window.Chart($("#cTrend"), {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: isAr() ? "تذاكر" : "Tickets", data: dayCounts,
+          borderColor: "#C5A059", backgroundColor: "rgba(197,160,89,.16)",
+          fill: true, tension: 0.35, borderWidth: 2, pointRadius: 3, pointBackgroundColor: "#E4C88A"
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: Object.assign({ callbacks: { label: (c) => c.parsed.y + (isAr() ? " تذكرة" : " tickets") } }, tooltip)
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: "#93A4BF", font: { size: 10 } } },
+          y: { beginAtZero: true, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", precision: 0, font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  /* ---------------- export ---------------- */
+  function exportCSV() {
+    if (!state.tickets.length) { toast(isAr() ? "لا تذاكر للتصدير" : "No tickets to export", true); return; }
+    const head = ["Ref", "Subject", "Customer", "Email", "Channel", "Category", "Priority", "Status", "Assignee", "Created", "FirstResponse", "SLA", "Resolved"];
+    const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+    const rows = state.tickets.map((x) => [x.ref, x.subject, x.customer, x.email, x.channel, x.category, x.priority, x.status, x.assignee, x.createdAt, x.firstResponseAt || "", slaInfo(x).state, x.resolvedAt || ""].map(q).join(","));
+    const blob = new Blob(["\uFEFF" + [head.map(q).join(",")].concat(rows).join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "helpdesk-tickets.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast(isAr() ? "نُزّل helpdesk-tickets.csv" : "helpdesk-tickets.csv downloaded");
+  }
+
+  /* ---------------- render all ---------------- */
+  function renderAll() {
+    renderKpis();
+    renderNeeds();
+    renderSummary();
+    renderTickets();
+    renderSla();
+    renderAssistant();
+    renderCharts();
+  }
+
+  /* ---------------- events ---------------- */
+  function bind() {
+    $$("#tabs .tab").forEach((btn) => btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-tab");
+      $$("#tabs .tab").forEach((b) => { b.classList.toggle("on", b === btn); b.setAttribute("aria-selected", b === btn ? "true" : "false"); });
+      $$(".tabpane").forEach((p) => p.classList.toggle("on", p.id === "pane-" + key));
+      if (key === "dash") renderCharts();
+      if (key === "assistant") renderAssistant();
+    }));
+    $$("[data-goto]").forEach((btn) => btn.addEventListener("click", () => {
+      const tab = $('.tab[data-tab="' + btn.getAttribute("data-goto") + '"]');
+      if (tab) tab.click();
+    }));
+
+    $$("#langSeg button").forEach((b) => b.addEventListener("click", () => {
+      ui.lang = b.getAttribute("data-lang");
+      save();
+      applyI18n();
+      renderAll();
+    }));
+    $("#currency").addEventListener("change", (e) => {
+      ui.currency = e.target.value;
+      save();
+      renderKpis();
+      renderSla();
+    });
+
+    $("#fStatus").addEventListener("change", renderTickets);
+    $("#fPriority").addEventListener("change", renderTickets);
+    $("#fSearch").addEventListener("input", renderTickets);
+    $("#addTicket").addEventListener("click", addTicket);
+    $("#expTickets").addEventListener("click", exportCSV);
+
+    $("#asTicket").addEventListener("change", () => {
+      selectedId = $("#asTicket").value;
+      renderTickets();
+      renderAssistant();
+    });
+    $("#genReply").addEventListener("click", generateReply);
+    $("#copyReply").addEventListener("click", () => {
+      if (!lastReply) { toast(isAr() ? "صِغ رداً أولاً" : "Draft a reply first", true); return; }
+      copyText(lastReply, isAr() ? "نُسخ الرد" : "Reply copied");
+    });
+    $("#sendReply").addEventListener("click", () => {
+      if (!lastReply) { toast(isAr() ? "صِغ رداً أولاً" : "Draft a reply first", true); return; }
+      const tk = state.tickets.find((x) => x.id === $("#asTicket").value);
+      if (!tk) { toast(isAr() ? "اختر تذكرة" : "Select a ticket", true); return; }
+      sendReply(tk.id, lastReply);
+      select(tk.id);
+    });
+
+    $("#policyGrid").addEventListener("change", (e) => {
+      const pf = e.target.getAttribute("data-pf");
+      const pr = e.target.getAttribute("data-pr");
+      if (pf) state.policies[pf].first = Math.max(1, num(e.target.value, 30));
+      if (pr) state.policies[pr].resolve = Math.max(1, num(e.target.value, 4));
+      save();
+      renderAll();
+      toast(isAr() ? "حُدّث هدف الاتفاق" : "SLA target updated");
+    });
+    $("#hourlyInput").addEventListener("change", (e) => {
+      const v = parseFloat(e.target.value);
+      if (!isFinite(v) || v < 0) { renderSla(); return; }
+      state.hourlyUSD = v / cur().rate;
+      save();
+      renderSla();
+      renderKpis();
+      toast(isAr() ? "حُدّثت تكلفة الساعة" : "Hourly cost updated");
+    });
+    $("#penaltyInput").addEventListener("change", (e) => {
+      const v = parseFloat(e.target.value);
+      if (!isFinite(v) || v < 0) { renderSla(); return; }
+      state.penaltyUSD = v / cur().rate;
+      save();
+      renderSla();
+      renderKpis();
+    });
+
+    $("#resetBtn").addEventListener("click", () => {
+      if (!window.confirm(isAr() ? "استعادة النموذج ستحذف تعديلاتك المحلية. متابعة؟" : "Restoring the sample erases local edits. Continue?")) return;
+      try { localStorage.removeItem(STORE); } catch (e) {}
+      lastReply = "";
+      load();
+      $("#replyOut").textContent = "—";
+      $("#asSub").textContent = t("as.outputSub");
+      renderAll();
+      toast(isAr() ? "استُعيد النموذج" : "Sample restored");
+    });
+
+    document.addEventListener("click", (e) => {
+      const selCard = e.target.closest("[data-select-ticket]");
+      if (selCard) { select(selCard.getAttribute("data-select-ticket")); return; }
+
+      const openTk = e.target.closest("[data-open-ticket]");
+      if (openTk) {
+        const id = openTk.getAttribute("data-open-ticket");
+        selectedId = id;
+        const tab = $('.tab[data-tab="tickets"]');
+        if (tab) tab.click();
+        renderTickets();
+        const card = $('[data-select-ticket="' + id + '"]');
+        if (card) card.scrollIntoView({ block: "center", behavior: "smooth" });
+        return;
+      }
+
+      const send = e.target.closest("[data-send-reply]");
+      if (send) {
+        const ta = $("#replyText");
+        sendReply(send.getAttribute("data-send-reply"), ta ? ta.value : "");
+        return;
+      }
+
+      const assist = e.target.closest("[data-assist-ticket]");
+      if (assist) {
+        const id = assist.getAttribute("data-assist-ticket");
+        selectedId = id;
+        const tab = $('.tab[data-tab="assistant"]');
+        if (tab) tab.click();
+        renderAssistant();
+        $("#asTicket").value = id;
+        $("#asInstructions").focus();
+        return;
+      }
+
+      const del = e.target.closest("[data-del-ticket]");
+      if (del) {
+        const id = del.getAttribute("data-del-ticket");
+        const tk = state.tickets.find((x) => x.id === id);
+        if (!tk) return;
+        if (!window.confirm((isAr() ? "حذف التذكرة: " : "Delete ticket: ") + tk.ref + "؟")) return;
+        state.tickets = state.tickets.filter((x) => x.id !== id);
+        if (selectedId === id) selectedId = state.tickets.length ? state.tickets[0].id : null;
+        save();
+        renderAll();
+        return;
+      }
+
+      const toneBtn = e.target.closest("[data-tone]");
+      if (toneBtn) {
+        tone = toneBtn.getAttribute("data-tone");
+        renderAssistant();
+        return;
+      }
+    });
+
+    document.addEventListener("change", (e) => {
+      const st = e.target.closest("[data-status-ticket]");
+      if (!st) return;
+      const tk = state.tickets.find((x) => x.id === st.getAttribute("data-status-ticket"));
+      if (!tk) return;
+      tk.status = st.value;
+      tk.resolvedAt = st.value === "resolved" ? new Date().toISOString() : null;
+      save();
+      renderAll();
+      toast(isAr() ? "حُدّثت الحالة" : "Status updated");
+    });
+  }
+
+  function copyText(text, msg) {
+    const done = () => toast(msg || (isAr() ? "نُسخ" : "Copied"));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else fallbackCopy(text, done);
+  }
+  function fallbackCopy(text, done) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) { toast(isAr() ? "تعذّر النسخ" : "Copy failed", true); }
+    document.body.removeChild(ta);
+  }
+
+  /* ---------------- init ---------------- */
+  load();
+  applyI18n();
+  renderPolicies();
+  bind();
+  renderAll();
+
+  (function () {
+    const hash = (location.hash || "").replace("#", "");
+    if (!hash) return;
+    const tab = document.querySelector('#tabs .tab[data-tab="' + hash + '"]');
+    if (tab) tab.click();
+  })();
+
+  window.addEventListener("load", () => { if (typeof window.Chart !== "undefined") renderCharts(); });
+})();
+</script>
+</body>
+</html>

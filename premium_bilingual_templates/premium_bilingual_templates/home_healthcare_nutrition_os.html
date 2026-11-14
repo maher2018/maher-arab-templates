@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الرعاية المنزلية والتغذية العلاجية — Home Health &amp; Clinical Nutrition OS</title>
+<meta name="description" content="إدارة زيارات التمريض المنزلي وبرامج التغذية العلاجية والقياسات الحيوية: منسّق جداول طبية، 22 عملة، و3 رسوم Chart.js.">
+<style>
+  :root{
+    --bg:#0F172A;
+    --bg2:#0B1222;
+    --panel:#141F35;
+    --panel2:#19263F;
+    --panel3:#1E2D49;
+    --line:rgba(197,160,89,.20);
+    --line-soft:rgba(147,164,191,.16);
+    --gold:#C5A059;
+    --gold-2:#E4C88A;
+    --gold-dim:rgba(197,160,89,.13);
+    --text:#EAF0FA;
+    --muted:#93A4BF;
+    --ok:#3BB98D;
+    --warn:#E0A33E;
+    --bad:#D9615F;
+    --info:#5C8FD6;
+    --r:18px;
+    --shadow:0 18px 40px rgba(3,8,20,.45);
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 520px at 85% -10%, rgba(197,160,89,.12), transparent 60%),
+      radial-gradient(900px 500px at 5% 0%, rgba(92,143,214,.10), transparent 55%),
+      linear-gradient(180deg,#0F172A 0%,#0B1222 100%);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:"Segoe UI","Tahoma","Helvetica Neue",Arial,"Noto Sans Arabic",sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:.2px;line-height:1.35}
+  p{margin:0}
+  button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--gold-2)}
+  .app{max-width:1280px;margin:0 auto;padding:18px clamp(14px,3vw,30px) 40px}
+
+  /* ---------- header ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:14px 18px;border:1px solid var(--line);border-radius:var(--r);
+    background:linear-gradient(135deg,rgba(25,38,63,.96),rgba(15,23,42,.92));
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .topbar::before{content:"";position:absolute;inset-inline:0;top:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
+  .brand{display:flex;align-items:center;gap:14px;min-width:0}
+  .mono{
+    width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;
+    font-weight:800;letter-spacing:1px;color:#0F172A;
+    background:linear-gradient(140deg,var(--gold-2),var(--gold));
+    box-shadow:0 8px 18px rgba(197,160,89,.28);
+  }
+  .brand h1{font-size:19px}
+  .brand p{color:var(--muted);font-size:12.5px;letter-spacing:.4px}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .seg{display:inline-flex;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);border-radius:12px;padding:3px}
+  .seg button{background:none;border:0;color:var(--muted);padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600}
+  .seg button.on{background:var(--gold);color:#0F172A}
+  .cur{display:flex;align-items:center;gap:8px;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);
+    border-radius:12px;padding:5px 10px;font-size:12.5px;color:var(--muted)}
+  .cur select{background:transparent;border:0;color:var(--text);font-weight:600;max-width:160px;outline:none}
+  [dir="ltr"] .cur select{max-width:200px}
+  .cur select option{background:#14203A;color:var(--text)}
+  .btn{
+    border:1px solid var(--line);background:linear-gradient(140deg,var(--gold),#B8904A);color:#101A2E;
+    padding:10px 16px;border-radius:12px;font-weight:700;font-size:13.5px;
+    display:inline-flex;align-items:center;gap:8px;transition:.18s transform,.18s box-shadow,.18s filter;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(197,160,89,.22);filter:brightness(1.04)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:rgba(197,160,89,.06);color:var(--gold-2);border-color:var(--line)}
+  .btn.ghost:hover{background:rgba(197,160,89,.12);box-shadow:none}
+  .btn.sm{padding:7px 12px;font-size:12.5px;border-radius:10px}
+  .btn.danger{background:rgba(217,97,95,.12);border-color:rgba(217,97,95,.35);color:#F0A7A5}
+  .iconbtn{
+    width:32px;height:32px;border-radius:9px;border:1px solid var(--line-soft);background:rgba(255,255,255,.02);
+    color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1;transition:.15s;
+  }
+  .iconbtn:hover{color:#F0A7A5;border-color:rgba(217,97,95,.4);background:rgba(217,97,95,.08)}
+
+  /* ---------- tabs ---------- */
+  .tabs{
+    display:flex;gap:8px;margin:18px 0;padding:6px;border:1px solid var(--line-soft);border-radius:14px;
+    background:rgba(20,31,53,.72);overflow-x:auto;scrollbar-width:thin;
+  }
+  .tab{
+    flex:1 0 auto;background:none;border:1px solid transparent;color:var(--muted);
+    padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;white-space:nowrap;transition:.16s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.5;transition:.16s}
+  .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab.on{color:#101A2E;background:linear-gradient(140deg,var(--gold-2),var(--gold));border-color:transparent;box-shadow:0 8px 18px rgba(197,160,89,.18)}
+  .tab.on .dot{background:#101A2E;opacity:1}
+
+  .tabpane{display:none;animation:fade .22s ease}
+  .tabpane.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(160deg,rgba(25,38,63,.96),rgba(20,31,53,.94));
+    border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);
+    min-width:0;
+  }
+  .card + .card{margin-top:18px}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .card-head h2{font-size:16.5px}
+  .card-head .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .kicker{
+    display:inline-grid;place-items:center;min-width:34px;height:26px;padding:0 8px;border-radius:8px;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);
+    font-size:12px;font-weight:800;letter-spacing:.6px;margin-inline-end:10px;
+  }
+  .card-head .titlewrap{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+    background:rgba(197,160,89,.10);border:1px solid var(--line);color:var(--gold-2);
+    font-size:11.5px;font-weight:700;white-space:nowrap;
+  }
+  .chip.soft{background:rgba(147,164,191,.08);border-color:var(--line-soft);color:var(--muted)}
+  .chip.ok{background:rgba(59,185,141,.10);border-color:rgba(59,185,141,.30);color:#7FD9B6}
+  .chip.bad{background:rgba(217,97,95,.10);border-color:rgba(217,97,95,.30);color:#F0A7A5}
+  .chip.warn{background:rgba(224,163,62,.10);border-color:rgba(224,163,62,.32);color:#F0C987}
+
+  /* ---------- forms ---------- */
+  .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .field-grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .field-grid .wide{grid-column:1/-1}
+  .field-grid.compact{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+  label.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  label.field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  input,select,textarea{
+    width:100%;background:rgba(11,18,34,.65);border:1px solid var(--line-soft);border-radius:11px;
+    padding:10px 12px;color:var(--text);outline:none;transition:.16s;font-size:13.5px;
+  }
+  input::placeholder,textarea::placeholder{color:#6F819D}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.14);background:rgba(11,18,34,.9)}
+  select option{background:#14203A;color:var(--text)}
+  textarea{resize:vertical;min-height:84px;line-height:1.6}
+  .form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+
+  /* ---------- kpis ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+  .kpi{
+    background:linear-gradient(160deg,rgba(25,38,63,.95),rgba(18,28,48,.92));
+    border:1px solid var(--line);border-radius:16px;padding:16px 18px;position:relative;overflow:hidden;min-width:0;
+  }
+  .kpi::after{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:90px;height:90px;border-radius:50%;
+    background:radial-gradient(circle,rgba(197,160,89,.16),transparent 70%)}
+  .kpi .lbl{font-size:11.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+  .kpi .val{font-size:27px;font-weight:800;letter-spacing:.4px;margin-top:6px;color:var(--gold-2)}
+  [dir="rtl"] .kpi .val{direction:ltr;text-align:right}
+  [dir="ltr"] .kpi .val{text-align:left}
+  .kpi .val small{margin-inline-start:5px;
+font-size:13px;color:var(--muted);font-weight:600;letter-spacing:0}
+  .kpi .note{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .kpi.plain .val{color:var(--text)}
+  .kpi.bare::after{display:none}
+
+  /* ---------- charts ---------- */
+  .grid-charts{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;margin-bottom:18px}
+  .chart-card{padding:16px 16px 10px;display:flex;flex-direction:column;min-width:0}
+  .chart-card h3{font-size:14px}
+  .chart-card .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .chart-box{position:relative;height:252px;margin-top:12px;min-width:0}
+  .chart-fallback{
+    position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:18px;
+    color:var(--muted);font-size:12.5px;background:rgba(11,18,34,.45);border:1px dashed var(--line-soft);border-radius:12px;
+  }
+  .chart-box.no-chart .chart-fallback{display:grid}
+  .legend-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--muted)}
+  .legend-row i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- dashboard lower ---------- */
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+  .grid2 > .card{margin-top:0}
+  .ms-row{display:flex;flex-direction:column;gap:6px;padding:11px 0;border-bottom:1px dashed var(--line-soft)}
+  .ms-row:last-child{border-bottom:0;padding-bottom:0}
+  .ms-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+  .ms-top b{font-weight:700}
+  .ms-meta{font-size:11.5px;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:rgba(147,164,191,.14);overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .4s}
+  .bar.plan > i{background:linear-gradient(90deg,#3E4A63,#7C8AA6)}
+  .bar.ok > i{background:linear-gradient(90deg,#2E9E77,#6FD8B2)}
+  .bar.bad > i{background:linear-gradient(90deg,#B34B4A,#E58C89)}
+  .team-mini{display:flex;flex-direction:column;gap:10px}
+  .tm-row{display:flex;align-items:center;gap:10px;font-size:13px}
+  .avatar{
+    width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(197,160,89,.12);border:1px solid var(--line);color:var(--gold-2);font-weight:800;font-size:12.5px;
+  }
+  .tm-row .grow{flex:1;min-width:0}
+  .tm-row .grow b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tm-row .grow span{font-size:11.5px;color:var(--muted)}
+
+  /* ---------- tasks ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .filters select,.filters input{width:auto;min-width:150px;flex:1 1 150px}
+  .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .col{background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:14px;padding:12px;min-width:0}
+  .col-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:0 2px}
+  .col-head b{font-size:12.5px;letter-spacing:.2px}
+  .col-head .n{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);padding:2px 8px;border-radius:99px}
+  .col-body{display:flex;flex-direction:column;gap:10px;min-height:60px}
+  .task{
+    background:linear-gradient(160deg,rgba(30,45,73,.95),rgba(22,34,56,.95));
+    border:1px solid var(--line-soft);border-radius:12px;padding:12px;position:relative;
+  }
+  .task.late{border-color:rgba(217,97,95,.45);box-shadow:inset 0 0 0 1px rgba(217,97,95,.08)}
+  .task .tt{font-size:13px;font-weight:700;line-height:1.5;word-break:break-word}
+  .task .tmeta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;font-size:11px;color:var(--muted)}
+  .task .tmeta .who{color:var(--gold-2)}
+  .task .tfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .task select{width:auto;flex:1;padding:5px 8px;font-size:11.5px;border-radius:8px}
+  .empty{color:var(--muted);font-size:12px;text-align:center;padding:18px 6px;border:1px dashed var(--line-soft);border-radius:10px}
+
+  /* ---------- team ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .member{
+    background:linear-gradient(160deg,rgba(30,45,73,.9),rgba(20,31,53,.92));
+    border:1px solid var(--line-soft);border-radius:14px;padding:16px;
+  }
+  .member-top{display:flex;align-items:center;gap:10px}
+  .member-top .who{flex:1;min-width:0}
+  .member-top b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .member-top span{font-size:11.5px;color:var(--muted)}
+  .member .stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0 8px;font-size:11.5px;color:var(--muted)}
+  .member .stats b{color:var(--text);font-size:13px}
+  .member .mail{font-size:11px;color:var(--muted);margin-top:8px;word-break:break-all}
+
+  /* ---------- references ---------- */
+  .ref-item{
+    background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:13px;padding:14px;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .ref-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .ref-body{flex:1;min-width:0}
+  .cite{font-size:13px;line-height:1.8;word-break:break-word}
+  .cite{unicode-bidi:plaintext}
+  .cite .yr{color:var(--gold-2);font-weight:700}
+  .ref-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .ref-actions{display:flex;flex-direction:column;gap:6px}
+  .ref-type{font-size:10.5px;letter-spacing:.4px;text-transform:uppercase}
+  .ref-form-grid{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px}
+  .ref-form-grid .full{grid-column:1/-1}
+
+  /* ---------- defense ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipbtn{
+    background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted);
+    padding:7px 13px;border-radius:99px;font-size:12.5px;font-weight:600;transition:.15s;
+  }
+  .chipbtn:hover{color:var(--text);border-color:var(--line)}
+  .chipbtn.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-2)}
+  .def-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+  .q{
+    border:1px solid var(--line-soft);border-radius:13px;padding:14px;background:rgba(11,18,34,.42);
+  }
+  .q + .q{margin-top:10px}
+  .q-top{display:flex;align-items:flex-start;gap:10px}
+  .q-num{
+    width:26px;height:26px;flex:0 0 26px;border-radius:8px;display:grid;place-items:center;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);font-size:11.5px;font-weight:800;
+  }
+  .q-text{flex:1;font-size:13.5px;font-weight:600;line-height:1.7}
+  .q-hint{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft);line-height:1.7}
+  .q-hint b{color:var(--gold-2);font-weight:700}
+  .q-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .ready-toggle{
+    background:rgba(59,185,141,.08);border:1px solid rgba(59,185,141,.28);color:#8ADDC0;
+    border-radius:9px;padding:5px 11px;font-size:11.5px;font-weight:700;
+  }
+  .ready-toggle.on{background:rgba(59,185,141,.2);border-color:rgba(59,185,141,.6);color:#C7F3E2}
+  .score-ring{
+    width:104px;height:104px;border-radius:50%;display:grid;place-items:center;margin:0 auto 8px;
+    background:conic-gradient(var(--gold) calc(var(--p,0)*1%), rgba(147,164,191,.14) 0);
+    position:relative;
+  }
+  .score-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#121C31}
+  .score-ring b{position:relative;font-size:22px;color:var(--gold-2)}
+  .side-card .hintline{font-size:12px;color:var(--muted);line-height:1.8}
+  .side-card ul{margin:10px 0 0;padding-inline-start:18px;color:var(--muted);font-size:12.5px;line-height:1.9}
+  .side-card li b{color:var(--text)}
+
+  /* ---------- costs ---------- */
+  .cost-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+  .money{font-variant-numeric:tabular-nums;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:13px}
+  th,td{padding:10px 12px;text-align:start;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+  th{font-size:11.5px;color:var(--muted);font-weight:700;background:rgba(11,18,34,.5);letter-spacing:.2px}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:rgba(197,160,89,.04)}
+  td.num{font-variant-numeric:tabular-nums}
+  .cost-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:rgba(147,164,191,.14);margin-top:14px}
+  .cost-bar i{display:block;height:100%}
+  .cost-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .cost-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- misc ---------- */
+  .muted{color:var(--muted)}
+  .tiny{font-size:11.5px}
+  .note-box{
+    border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--gold-dim);
+    font-size:12px;color:var(--gold-2);line-height:1.75;
+  }
+  .divider{height:1px;background:var(--line-soft);margin:16px 0}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line-soft);color:var(--muted);
+    font-size:11.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .toast{
+    position:fixed;inset-inline:0;bottom:22px;margin:0 auto;width:max-content;max-width:90vw;
+    background:#1C2A45;border:1px solid var(--gold);color:var(--gold-2);padding:10px 18px;border-radius:12px;
+    font-size:13px;font-weight:600;box-shadow:0 18px 40px rgba(0,0,0,.5);
+    opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s;z-index:60;
+  }
+  .toast.show{opacity:1;transform:none}
+  .toast.err{border-color:var(--bad);color:#F3ADAB}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(147,164,191,.25);border-radius:99px}
+  ::-webkit-scrollbar-track{background:transparent}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  @media (max-width:1100px){
+    .grid-charts{grid-template-columns:1fr 1fr}
+    .chart-card.wide{grid-column:1/-1}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (max-width:900px){
+    .def-layout{grid-template-columns:1fr}
+    .def-side{order:-1}
+  }
+  @media (max-width:820px){
+    .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .board{grid-template-columns:1fr}
+    .cost-top{grid-template-columns:1fr}
+    .grid-charts{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr 1fr}
+    .ref-form-grid .full{grid-column:1/-1}
+    .topbar{padding:12px 14px}
+    .brand h1{font-size:16px}
+    .brand p{font-size:11.5px}
+    .mono{width:44px;height:44px;flex-basis:44px;border-radius:12px;font-size:13px}
+  }
+  @media (max-width:520px){
+    .kpis{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr}
+    .app{padding-inline:12px}
+    .card{padding:16px}
+    .top-actions{width:100%}
+    .cur{flex:1}
+    .cur select{max-width:none;width:100%}
+    .field-grid{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .tabs,.top-actions,.btn,.iconbtn,.toast{display:none!important}
+    .card,.kpi{box-shadow:none;border-color:#bbb;background:#fff;color:#111}
+    .tabpane{display:block!important}
+  }
+
+  /* ---------- automation vault additions ---------- */
+  .plat{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:800;letter-spacing:.4px}
+  .plat.make{background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.4);color:var(--gold-2)}
+  .plat.n8n{background:rgba(92,143,214,.14);border:1px solid rgba(92,143,214,.4);color:#9DC0F0}
+  .scn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+  .scn{
+    background:linear-gradient(160deg,rgba(30,45,73,.92),rgba(20,31,53,.94));
+    border:1px solid var(--line-soft);border-radius:15px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;
+  }
+  .scn.off{opacity:.62}
+  .scn-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .scn-top .spacer{flex:1}
+  .scn h3{font-size:14.5px;line-height:1.55;word-break:break-word}
+  .scn .meta{font-size:11.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px}
+  .scn-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:2px}
+  .stat{background:rgba(11,18,34,.45);border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;min-width:0}
+  .stat span{display:block;font-size:10.5px;color:var(--muted)}
+  .stat b{font-size:13.5px;letter-spacing:.2px;direction:ltr;display:block;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stat.hl b{color:var(--gold-2)}
+  [dir="rtl"] .stat b{text-align:right}
+  [dir="ltr"] .stat b{text-align:left}
+  .urlrow{display:flex;align-items:center;gap:6px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);border-radius:9px;padding:5px 8px;min-width:0}
+  .urlrow code{flex:1;min-width:0;font-size:10.5px;color:#9DC0F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}
+  .urlrow .btn{padding:4px 9px;font-size:10.5px;border-radius:7px}
+  .scn-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:6px;border-top:1px dashed var(--line-soft)}
+  .scn-actions .btn{padding:5px 10px;font-size:11px;border-radius:8px}
+  details.stepsbox{margin-top:4px}
+  details.stepsbox summary{cursor:pointer;font-size:11.5px;color:var(--gold-2);font-weight:700;list-style:none}
+  details.stepsbox summary::-webkit-details-marker{display:none}
+  details.stepsbox summary::before{content:"+ ";color:var(--muted)}
+  details.stepsbox[open] summary::before{content:"− "}
+  ol.steps{margin:8px 0 0;padding-inline-start:20px;color:var(--muted);font-size:12px;line-height:1.9}
+  ol.steps b{color:var(--text);font-weight:600}
+  .health-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);font-size:12.5px}
+  .health-row:last-child{border-bottom:0}
+  .health-row .grow{flex:1;min-width:0}
+  .health-row .grow b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .health-row .grow span{font-size:11px;color:var(--muted)}
+  .dotbadge{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:0 0 8px}
+  .dotbadge.warn{background:var(--warn)}
+  .dotbadge.bad{background:var(--bad)}
+  .mini-table td,.mini-table th{padding:8px 10px;font-size:12px}
+  .hook-actions{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+  .hook-actions .btn{padding:5px 9px;font-size:11px;border-radius:8px}
+  .urlcell{max-width:320px;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left;font-size:11.5px;color:#9DC0F0}
+  .codebox{
+    background:rgba(5,10,22,.75);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;color:#A9C4E8;
+    direction:ltr;text-align:left;white-space:pre;overflow:auto;max-height:220px;line-height:1.7;
+  }
+  .doc-result{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(160deg,rgba(30,45,73,.75),rgba(20,31,53,.8))}
+  .doc-result h3{font-size:15px;margin-bottom:4px}
+  .sev{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+  .sev.high{background:rgba(217,97,95,.14);border:1px solid rgba(217,97,95,.4);color:#F0A7A5}
+  .sev.mid{background:rgba(224,163,62,.14);border:1px solid rgba(224,163,62,.4);color:#F0C987}
+  .sev.low{background:rgba(59,185,141,.12);border:1px solid rgba(59,185,141,.4);color:#8ADDC0}
+  .fixlist{margin:10px 0 0;padding-inline-start:20px;font-size:12.5px;line-height:1.95;color:var(--text)}
+  .fixlist li{margin-bottom:2px}
+  .kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 5px;direction:ltr;display:inline-block}
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:820px){.split2{grid-template-columns:1fr}}
+  .sav-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:16px 0}
+  @media (max-width:900px){.sav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:520px){.sav-grid{grid-template-columns:1fr}.scn-grid{grid-template-columns:1fr}}
+  .example-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .example-chips button{font-size:11px;padding:5px 10px;border-radius:99px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted)}
+  .example-chips button:hover{color:var(--gold-2);border-color:var(--line)}
+  .result-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+
+
+  /* ---------- helpdesk additions ---------- */
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .ticket-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}
+  @media (max-width:980px){.ticket-layout{grid-template-columns:1fr}}
+  .ticket-list{display:flex;flex-direction:column;gap:10px}
+  .ticket{
+    border:1px solid var(--line-soft);border-radius:13px;padding:13px 14px;cursor:pointer;
+    background:linear-gradient(160deg,rgba(30,45,73,.72),rgba(20,31,53,.8));transition:.16s;
+  }
+  .ticket:hover{border-color:var(--line);transform:translateY(-1px)}
+  .ticket.sel{border-color:var(--gold);box-shadow:0 0 0 1px rgba(197,160,89,.25)}
+  .ticket-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .ticket-top .ref{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px;direction:ltr}
+  .ticket h3{font-size:13.5px;line-height:1.55;margin-bottom:4px}
+  .ticket .sub{font-size:11.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+  .ticket .sla-badge{margin-inline-start:auto;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .prio{font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.3px}
+  .prio.urgent{background:rgba(217,97,95,.16);border:1px solid rgba(217,97,95,.42);color:#F0A7A5}
+  .prio.high{background:rgba(224,163,62,.14);border:1px solid rgba(224,163,62,.4);color:#F0C987}
+  .prio.normal{background:rgba(92,143,214,.14);border:1px solid rgba(92,143,214,.4);color:#9DC0F0}
+  .prio.low{background:rgba(147,164,191,.12);border:1px solid var(--line-soft);color:var(--muted)}
+  .sla-badge.met{background:rgba(59,185,141,.13);color:#8ADDC0}
+  .sla-badge.risk{background:rgba(224,163,62,.14);color:#F0C987}
+  .sla-badge.breach{background:rgba(217,97,95,.16);color:#F0A7A5}
+  .sla-badge.idle{background:rgba(147,164,191,.12);color:var(--muted)}
+  .detail-card{position:sticky;top:14px}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+  .meta-grid div{background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:9px;padding:7px 9px;min-width:0}
+  .meta-grid span{display:block;font-size:10.5px;color:var(--muted)}
+  .meta-grid b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .thread{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto;padding:4px}
+  .msg{max-width:88%;padding:8px 11px;border-radius:11px;font-size:12.5px;line-height:1.7}
+  .msg .who{display:block;font-size:10px;color:var(--muted);margin-bottom:2px}
+  .msg.customer{background:rgba(147,164,191,.10);border:1px solid var(--line-soft);align-self:flex-start}
+  .msg.agent{background:rgba(197,160,89,.12);border:1px solid var(--line);align-self:flex-end}
+  .reply-box{margin-top:12px}
+  .reply-box textarea{min-height:88px}
+  .sla-track{height:8px;border-radius:99px;background:rgba(147,164,191,.14);overflow:hidden;margin-top:6px}
+  .sla-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+  .sla-track.breach i{background:linear-gradient(90deg,#B34B4A,#E58C89)}
+  .sla-track.met i{background:linear-gradient(90deg,#2E9E77,#6FD8B2)}
+  .tone-seg{display:flex;flex-wrap:wrap;gap:7px}
+  .tone-seg button{padding:6px 12px;border-radius:99px;font-size:11.5px;font-weight:700;background:rgba(11,18,34,.5);border:1px solid var(--line-soft);color:var(--muted)}
+  .tone-seg button.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-2)}
+  .reply-out{white-space:pre-wrap;font-size:13px;line-height:1.95;color:var(--text);background:rgba(11,18,34,.45);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:120px}
+  .ticket-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 12px;border:1px dashed var(--line-soft);border-radius:12px}
+  .policy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  @media (max-width:620px){.policy-grid{grid-template-columns:1fr}}
+  .policy{background:rgba(11,18,34,.4);border:1px solid var(--line-soft);border-radius:12px;padding:12px}
+  .policy b{font-size:12.5px;display:block;margin-bottom:8px}
+  .policy .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .policy label{font-size:10.5px;color:var(--muted);display:block;margin-bottom:3px}
+  .statline{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:7px 0;border-bottom:1px dashed var(--line-soft)}
+  .statline:last-child{border-bottom:0}
+  .statline b{color:var(--gold-2)}
+
+  /* ---------- home healthcare additions ---------- */
+  .notice{border:1px solid var(--line-soft);background:rgba(11,18,34,.45);border-radius:12px;padding:12px 14px;color:var(--muted);font-size:12.5px;line-height:1.85}
+  .notice b{color:var(--gold-2)}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .visit{
+    border:1px solid var(--line-soft);border-radius:13px;padding:12px 14px;
+    background:linear-gradient(160deg,rgba(30,45,73,.72),rgba(20,31,53,.82));
+  }
+  .visit + .visit{margin-top:10px}
+  .visit-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+  .visit-top .when{font-size:11px;color:var(--muted);font-weight:700;direction:ltr;letter-spacing:.3px}
+  .visit h3{font-size:13.5px;line-height:1.55;margin:0}
+  .visit .sub{font-size:11.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:3px}
+  .visit .foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .visit select{width:auto;padding:5px 8px;font-size:11.5px;border-radius:8px}
+  .nut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .nut-card{
+    border:1px solid var(--line-soft);border-radius:14px;padding:14px;min-width:0;
+    background:linear-gradient(160deg,rgba(30,45,73,.82),rgba(20,31,53,.92));
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .nut-top{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+  .nut-top h3{font-size:13.5px;flex:1;min-width:0;line-height:1.5}
+  .nut-top .sub{font-size:10.5px;color:var(--muted);width:100%}
+  .nut-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .nut-fields label{font-size:10px;color:var(--muted);display:block;margin-bottom:3px}
+  .nut-fields input,.nut-fields select{padding:6px 8px;font-size:12px;border-radius:8px}
+  .bmi-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--muted)}
+  .bmi-row b{color:var(--gold-2);font-size:13px}
+  .vital-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:14px}
+  .vital-strip .stat b{font-size:14px}
+  .vital-table td,.vital-table th{padding:8px 10px;font-size:12px}
+  .flag{display:inline-flex!important;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .flag.ok{background:rgba(59,185,141,.13);color:#8ADDC0}
+  .flag.warn{background:rgba(224,163,62,.14);color:#F0C987}
+  .flag.bad{background:rgba(217,97,95,.16);color:#F0A7A5}
+  .flag.idle{background:rgba(147,164,191,.12);color:var(--muted)}
+  .stat span.flag,.bmi-row b .flag{display:inline-flex!important;font-size:9.5px;padding:2px 7px}
+  .side-card h2{font-size:16.5px}
+  .visit .sub span{white-space:nowrap}
+  .sched-out{
+    white-space:pre-wrap;font-size:12.5px;line-height:1.95;color:var(--text);
+    background:rgba(11,18,34,.45);border:1px solid var(--line);border-radius:12px;
+    padding:16px;min-height:240px;max-height:520px;overflow:auto;
+  }
+  .sched-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .daybox{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--muted)}
+  @media (max-width:900px){
+    .nut-grid{grid-template-columns:1fr}
+    .vital-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:520px){
+    .vital-strip{grid-template-columns:1fr}
+    .nut-fields{grid-template-columns:1fr}
+  }
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mono">HH</div>
+      <div>
+        <h1 data-i18n="brand.title">الرعاية المنزلية</h1>
+        <p data-i18n="brand.sub">Home Health &amp; Clinical Nutrition OS</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button type="button" data-lang="ar" class="on">العربية</button>
+        <button type="button" data-lang="en">English</button>
+      </div>
+      <label class="cur">
+        <span data-i18n="currency">العملة</span>
+        <select id="currency" aria-label="Currency"></select>
+      </label>
+      <button type="button" class="btn ghost sm" id="resetBtn" data-i18n="reset">استعادة النموذج</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Sections">
+    <button type="button" class="tab on" data-tab="dash"><span class="dot"></span><span data-i18n="tab.dash">لوحة الرعاية</span></button>
+    <button type="button" class="tab" data-tab="visits"><span class="dot"></span><span data-i18n="tab.visits">الزيارات</span></button>
+    <button type="button" class="tab" data-tab="nutrition"><span class="dot"></span><span data-i18n="tab.nutrition">التغذية العلاجية</span></button>
+    <button type="button" class="tab" data-tab="vitals"><span class="dot"></span><span data-i18n="tab.vitals">القياسات الحيوية</span></button>
+    <button type="button" class="tab" data-tab="schedule"><span class="dot"></span><span data-i18n="tab.schedule">منسّق الجدول</span></button>
+  </nav>
+
+  <main>
+    <!-- ============ DASHBOARD ============ -->
+    <section class="tabpane on" id="pane-dash">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">01</span><h2 data-i18n="dash.title">حالة الرعاية اليوم</h2></div>
+            <div class="sub" data-i18n="dash.sub">زيارات اليوم وعبء الأسبوع والتزام الخطط الغذائية من بياناتك الفعلية.</div>
+          </div>
+          <span class="chip" id="dashChip">—</span>
+        </div>
+        <div class="kpis" style="margin:0">
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.visits">زيارات اليوم</div>
+            <div class="val"><span id="kpiVisits">0</span></div>
+            <div class="note" id="kpiVisitsNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.patients">مرضى نشطون</div>
+            <div class="val"><span id="kpiPatients">0</span></div>
+            <div class="note" id="kpiPatientsNote">—</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.adherence">الالتزام بالخطط الغذائية</div>
+            <div class="val"><span id="kpiAdherence">0</span><small>%</small></div>
+            <div class="note" id="kpiAdherenceNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.cost">تكلفة الزيارات المكتملة</div>
+            <div class="val money" id="kpiCost">0</div>
+            <div class="note" id="kpiCostNote">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-charts" style="margin-top:18px">
+        <div class="card chart-card">
+          <h3 data-i18n="chart.type">الزيارات حسب النوع</h3>
+          <div class="sub" data-i18n="chart.typeSub">كل الزيارات غير الملغاة</div>
+          <div class="chart-box" id="boxType"><canvas id="cType" aria-label="Visits by type"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card">
+          <h3 data-i18n="chart.load">عبء الأسبوع القادم</h3>
+          <div class="sub" data-i18n="chart.loadSub">عدد الزيارات المجدولة لكل يوم</div>
+          <div class="chart-box" id="boxLoad"><canvas id="cLoad" aria-label="Weekly visit load"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card wide">
+          <h3 data-i18n="chart.vitals">متوسط الضغط الانقباضي والانبساطي</h3>
+          <div class="sub" data-i18n="chart.vitalsSub">آخر سبعة أيام من كل القياسات المسجلة</div>
+          <div class="chart-box" id="boxVitals"><canvas id="cVitals" aria-label="Blood pressure trend"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="titlewrap"><span class="kicker">02</span><h2 data-i18n="dash.today">زيارات اليوم</h2></div>
+              <div class="sub" data-i18n="dash.todaySub">بالترتيب الزمني مع المسؤول والحالة</div>
+            </div>
+            <button type="button" class="btn ghost sm" data-goto="visits" data-i18n="dash.openVisits">فتح الزيارات</button>
+          </div>
+          <div id="todayList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="titlewrap"><span class="kicker">03</span><h2 data-i18n="dash.alerts">تنبيهات سريرية</h2></div>
+              <div class="sub" data-i18n="dash.alertsSub">ضغط أو سكر مرتفع، أو التزام غذائي منخفض</div>
+            </div>
+            <button type="button" class="btn ghost sm" data-goto="vitals" data-i18n="dash.openVitals">فتح القياسات</button>
+          </div>
+          <div id="alertList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VISITS ============ -->
+    <section class="tabpane" id="pane-visits">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">04</span><h2 data-i18n="visits.title">جدولة زيارة جديدة</h2></div>
+            <div class="sub" data-i18n="visits.sub">حدّد النوع والمدة؛ التكلفة تُحسب تلقائياً من سعر الساعة.</div>
+          </div>
+          <span class="chip" id="visitChip">—</span>
+        </div>
+        <div class="field-grid compact">
+          <label class="field"><span data-i18n="visits.patient">المريض</span><select id="vPatient"></select></label>
+          <label class="field"><span data-i18n="visits.type">نوع الزيارة</span><select id="vType"></select></label>
+          <label class="field"><span data-i18n="visits.staff">المسؤول</span><select id="vStaff"></select></label>
+          <label class="field"><span data-i18n="visits.datetime">التاريخ والوقت</span><input id="vWhen" type="datetime-local"></label>
+          <label class="field"><span data-i18n="visits.duration">المدة (دقيقة)</span><input id="vDuration" type="number" min="15" step="15" value="60"></label>
+          <label class="field wide"><span data-i18n="visits.notes">ملاحظات</span><input id="vNotes" data-i18n-ph="visits.notesPh"></label>
+        </div>
+        <div class="form-actions"><button type="button" class="btn" id="addVisit" data-i18n="visits.addBtn">إضافة الزيارة</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">05</span><h2 data-i18n="visits.list">سجل الزيارات</h2></div>
+            <div class="sub" data-i18n="visits.listSub">غيّر الحالة مباشرة؛ الملغاة لا تدخل في حساب العبء.</div>
+          </div>
+        </div>
+        <div class="filters">
+          <select id="fStatus" aria-label="Status"><option value="all" data-i18n="visits.all">كل الحالات</option></select>
+          <select id="fType" aria-label="Type"><option value="all" data-i18n="visits.allTypes">كل الأنواع</option></select>
+          <input id="fSearch" data-i18n-ph="visits.search" placeholder="ابحث عن مريض أو منطقة">
+        </div>
+        <div id="visitList"></div>
+      </div>
+    </section>
+
+    <!-- ============ NUTRITION ============ -->
+    <section class="tabpane" id="pane-nutrition">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">06</span><h2 data-i18n="nutrition.title">برامج التغذية العلاجية</h2></div>
+            <div class="sub" data-i18n="nutrition.sub">عدّل السعرات والبروتين والهدف والالتزام؛ كل تغيير يُحفظ فوراً ويحدّث اللوحة.</div>
+          </div>
+          <span class="chip" id="nutChip">—</span>
+        </div>
+        <div class="nut-grid" id="nutGrid"></div>
+      </div>
+      <div class="card">
+        <div class="notice" data-i18n="nutrition.note">الالتزام يُسجَّل من متابعة المريض، ومؤشر كتلة الجسم يُحسب من آخر وزن مسجّل في القياسات الحيوية وطول المريض.</div>
+      </div>
+    </section>
+
+    <!-- ============ VITALS ============ -->
+    <section class="tabpane" id="pane-vitals">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">07</span><h2 data-i18n="vitals.title">القياسات الحيوية</h2></div>
+            <div class="sub" data-i18n="vitals.sub">سجّل الوزن والضغط والسكر لكل مريض؛ تُعلَّم القراءات الخارجة عن النطاق تلقائياً.</div>
+          </div>
+          <label class="field" style="min-width:220px"><span data-i18n="vitals.patient">المريض</span><select id="vitalsPatient"></select></label>
+        </div>
+        <div class="vital-strip" id="vitalStrip"></div>
+        <div class="row-between" style="margin-bottom:14px">
+          <span class="chip soft" id="vitalChip">—</span>
+          <span class="tiny muted" data-i18n="vitals.ranges">النطاقات المرجعية: ضغط أقل من 140/90 · سكر 70–180 ملغم/دل</span>
+        </div>
+        <div id="vitalTableWrap"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">08</span><h2 data-i18n="vitals.add">إضافة قياس</h2></div>
+            <div class="sub" data-i18n="vitals.addSub">اترك الحقل صفراً إذا لم يُقس؛ لا يُسجَّل صفر في السجل.</div>
+          </div>
+        </div>
+        <div class="field-grid compact">
+          <label class="field"><span data-i18n="vitals.weight">الوزن (كغ)</span><input id="mWeight" type="number" step="0.1" value="0"></label>
+          <label class="field"><span data-i18n="vitals.sys">الانقباضي</span><input id="mSys" type="number" step="1" value="0"></label>
+          <label class="field"><span data-i18n="vitals.dia">الانبساطي</span><input id="mDia" type="number" step="1" value="0"></label>
+          <label class="field"><span data-i18n="vitals.glucose">السكر (ملغم/دل)</span><input id="mGlucose" type="number" step="1" value="0"></label>
+          <label class="field"><span data-i18n="vitals.when">وقت القياس</span><input id="mWhen" type="datetime-local"></label>
+        </div>
+        <div class="form-actions"><button type="button" class="btn" id="addVital" data-i18n="vitals.addBtn">حفظ القياس</button></div>
+      </div>
+    </section>
+
+    <!-- ============ SCHEDULE COORDINATOR ============ -->
+    <section class="tabpane" id="pane-schedule">
+      <div class="def-layout">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="titlewrap"><span class="kicker">09</span><h2 data-i18n="sched.title">منسّق الجداول الطبية</h2></div>
+              <div class="sub" data-i18n="sched.sub">يبني مسار اليوم لكل مريض بفواصل انتقال، ويكشف التعارضات والزيارات بلا مسؤول.</div>
+            </div>
+            <span class="chip" id="schedChip">—</span>
+          </div>
+          <div class="field-grid two">
+            <label class="field"><span data-i18n="sched.date">تاريخ الزيارات</span><input id="schedDate" type="date"></label>
+            <label class="field"><span data-i18n="sched.start">بداية الجولة</span><input id="schedStart" type="time" value="08:00"></label>
+            <label class="field"><span data-i18n="sched.buffer">فاصل الانتقال (دقيقة)</span><input id="schedBuffer" type="number" min="0" step="5" value="20"></label>
+            <label class="field"><span data-i18n="sched.staff">الفريق</span><select id="schedStaff"></select></label>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn" id="genSched" data-i18n="sched.gen">تنسيق الجدول</button>
+            <button type="button" class="btn ghost" id="copySched" data-i18n="sched.copy">نسخ</button>
+            <button type="button" class="btn ghost" id="dlSched" data-i18n="sched.download">تنزيل TXT</button>
+          </div>
+          <div class="sched-meta" id="schedMeta"></div>
+          <div class="sched-out" id="schedOut" data-i18n="sched.out">اختر التاريخ واضغط «تنسيق الجدول» ليبني المسار من بيانات الزيارات.</div>
+        </div>
+
+        <aside class="card side-card">
+          <div class="titlewrap"><span class="kicker">10</span><h2 data-i18n="sched.how">كيف ينسّق؟</h2></div>
+          <ul>
+            <li data-i18n="sched.h1">يرتّب زيارات كل مسؤول زمنياً من وقت البداية الذي تحدّده.</li>
+            <li data-i18n="sched.h2">يضيف فاصل الانتقال بعد كل زيارة قبل الزيارة التالية.</li>
+            <li data-i18n="sched.h3">يظهر الفرق بين الوقت المقترح والموعد الأصلي عند تجاوز 15 دقيقة.</li>
+            <li data-i18n="sched.h4">يعلَم الزيارات بلا مسؤول، ويحذّر عند تجاوز خمس زيارات في اليوم.</li>
+            <li data-i18n="sched.h5">يضيف الهدف الغذائي وحالة المريض لتسليم مختصر للفريق.</li>
+          </ul>
+          <div class="note-box" style="margin-top:14px" data-i18n="sched.hint">النص جاهز للنسخ إلى واتساب الفريق؛ لا يُرسل تلقائياً من القالب.</div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="foot.left">Arab Templates · قالب رعاية منزلية مستقل بملف واحد</span>
+    <span data-i18n="foot.right">زيارات · تغذية علاجية · قياسات · 3 رسوم Chart.js · 22 عملة</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  "use strict";
+  const STORE = "at_home_health_os_v1";
+
+  const CURRENCIES = [
+    { code: "SAR", ar: "ريال سعودي", en: "Saudi Riyal", rate: 3.75 },
+    { code: "AED", ar: "درهم إماراتي", en: "UAE Dirham", rate: 3.6725 },
+    { code: "EGP", ar: "جنيه مصري", en: "Egyptian Pound", rate: 48.5 },
+    { code: "KWD", ar: "دينار كويتي", en: "Kuwaiti Dinar", rate: 0.307 },
+    { code: "QAR", ar: "ريال قطري", en: "Qatari Riyal", rate: 3.64 },
+    { code: "BHD", ar: "دينار بحريني", en: "Bahraini Dinar", rate: 0.376 },
+    { code: "OMR", ar: "ريال عماني", en: "Omani Rial", rate: 0.3845 },
+    { code: "JOD", ar: "دينار أردني", en: "Jordanian Dinar", rate: 0.709 },
+    { code: "IQD", ar: "دينار عراقي", en: "Iraqi Dinar", rate: 1310 },
+    { code: "LBP", ar: "ليرة لبنانية", en: "Lebanese Pound", rate: 89500 },
+    { code: "SYP", ar: "ليرة سورية", en: "Syrian Pound", rate: 13000 },
+    { code: "YER", ar: "ريال يمني", en: "Yemeni Rial", rate: 250 },
+    { code: "LYD", ar: "دينار ليبي", en: "Libyan Dinar", rate: 4.85 },
+    { code: "TND", ar: "دينار تونسي", en: "Tunisian Dinar", rate: 3.13 },
+    { code: "DZD", ar: "دينار جزائري", en: "Algerian Dinar", rate: 134 },
+    { code: "MAD", ar: "درهم مغربي", en: "Moroccan Dirham", rate: 9.85 },
+    { code: "MRU", ar: "أوقية موريتانية", en: "Mauritanian Ouguiya", rate: 39.8 },
+    { code: "SDG", ar: "جنيه سوداني", en: "Sudanese Pound", rate: 601 },
+    { code: "SOS", ar: "شلن صومالي", en: "Somali Shilling", rate: 571 },
+    { code: "DJF", ar: "فرنك جيبوتي", en: "Djiboutian Franc", rate: 177.7 },
+    { code: "KMF", ar: "فرنك قمري", en: "Comorian Franc", rate: 452 },
+    { code: "ILS", ar: "شيقل (فلسطين)", en: "Shekel (Palestine)", rate: 3.72 }
+  ];
+
+  const TYPES = [
+    { id: "nursing", ar: "تمريض منزلي", en: "Home nursing", rate: 45 },
+    { id: "nutrition", ar: "استشارة تغذية", en: "Nutrition consult", rate: 55 },
+    { id: "labs", ar: "سحب عينات", en: "Lab draw", rate: 30 },
+    { id: "followup", ar: "متابعة", en: "Follow-up", rate: 25 }
+  ];
+  const STAFF = [
+    { id: "sara", ar: "سارة العتيبي", en: "Sarah Alotaibi", role: "nurse" },
+    { id: "reem", ar: "ريم القحطاني", en: "Reem Alqahtani", role: "nurse" },
+    { id: "faisal", ar: "فيصل الحربي", en: "Faisal Alharbi", role: "dietitian" },
+    { id: "khalid", ar: "خالد الشمري", en: "Khalid Alshammari", role: "lab" }
+  ];
+  const GOALS = ["diabetes", "cardiac", "renal", "postop", "senior", "gestational"];
+  const STATUSES = ["scheduled", "inprogress", "done", "cancelled"];
+
+  const DICT = {
+    ar: {
+      "brand.title": "الرعاية المنزلية",
+      "brand.sub": "Home Health & Clinical Nutrition OS",
+      "currency": "العملة", "reset": "استعادة النموذج",
+      "tab.dash": "لوحة الرعاية", "tab.visits": "الزيارات", "tab.nutrition": "التغذية العلاجية",
+      "tab.vitals": "القياسات الحيوية", "tab.schedule": "منسّق الجدول",
+      "dash.title": "حالة الرعاية اليوم",
+      "dash.sub": "زيارات اليوم وعبء الأسبوع والتزام الخطط الغذائية من بياناتك الفعلية.",
+      "kpi.visits": "زيارات اليوم", "kpi.patients": "مرضى نشطون",
+      "kpi.adherence": "الالتزام بالخطط الغذائية", "kpi.cost": "تكلفة الزيارات المكتملة",
+      "chart.type": "الزيارات حسب النوع", "chart.typeSub": "كل الزيارات غير الملغاة",
+      "chart.load": "عبء الأسبوع القادم", "chart.loadSub": "عدد الزيارات المجدولة لكل يوم",
+      "chart.vitals": "متوسط الضغط الانقباضي والانبساطي",
+      "chart.vitalsSub": "آخر سبعة أيام من كل القياسات المسجلة",
+      "chart.offline": "الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.",
+      "dash.today": "زيارات اليوم", "dash.todaySub": "بالترتيب الزمني مع المسؤول والحالة",
+      "dash.openVisits": "فتح الزيارات",
+      "dash.alerts": "تنبيهات سريرية", "dash.alertsSub": "ضغط أو سكر مرتفع، أو التزام غذائي منخفض",
+      "dash.openVitals": "فتح القياسات",
+      "visits.title": "جدولة زيارة جديدة", "visits.sub": "حدّد النوع والمدة؛ التكلفة تُحسب تلقائياً من سعر الساعة.",
+      "visits.patient": "المريض", "visits.type": "نوع الزيارة", "visits.staff": "المسؤول",
+      "visits.datetime": "التاريخ والوقت", "visits.duration": "المدة (دقيقة)", "visits.notes": "ملاحظات",
+      "visits.notesPh": "مثال: قياس السكر قبل الفطور", "visits.addBtn": "إضافة الزيارة",
+      "visits.list": "سجل الزيارات", "visits.listSub": "غيّر الحالة مباشرة؛ الملغاة لا تدخل في حساب العبء.",
+      "visits.all": "كل الحالات", "visits.allTypes": "كل الأنواع", "visits.search": "ابحث عن مريض أو منطقة",
+      "nutrition.title": "برامج التغذية العلاجية",
+      "nutrition.sub": "عدّل السعرات والبروتين والهدف والالتزام؛ كل تغيير يُحفظ فوراً ويحدّث اللوحة.",
+      "nutrition.note": "الالتزام يُسجَّل من متابعة المريض، ومؤشر كتلة الجسم يُحسب من آخر وزن مسجّل في القياسات الحيوية وطول المريض.",
+      "vitals.title": "القياسات الحيوية",
+      "vitals.sub": "سجّل الوزن والضغط والسكر لكل مريض؛ تُعلَّم القراءات الخارجة عن النطاق تلقائياً.",
+      "vitals.patient": "المريض",
+      "vitals.ranges": "النطاقات المرجعية: ضغط أقل من 140/90 · سكر 70–180 ملغم/دل",
+      "vitals.add": "إضافة قياس", "vitals.addSub": "اترك الحقل صفراً إذا لم يُقس؛ لا يُسجَّل صفر في السجل.",
+      "vitals.weight": "الوزن (كغ)", "vitals.sys": "الانقباضي", "vitals.dia": "الانبساطي",
+      "vitals.glucose": "السكر (ملغم/دل)", "vitals.when": "وقت القياس", "vitals.addBtn": "حفظ القياس",
+      "sched.title": "منسّق الجداول الطبية",
+      "sched.sub": "يبني مسار اليوم لكل مريض بفواصل انتقال، ويكشف التعارضات والزيارات بلا مسؤول.",
+      "sched.date": "تاريخ الزيارات", "sched.start": "بداية الجولة", "sched.buffer": "فاصل الانتقال (دقيقة)",
+      "sched.staff": "الفريق", "sched.gen": "تنسيق الجدول", "sched.copy": "نسخ", "sched.download": "تنزيل TXT",
+      "sched.out": "اختر التاريخ واضغط «تنسيق الجدول» ليبني المسار من بيانات الزيارات.",
+      "sched.how": "كيف ينسّق؟",
+      "sched.h1": "يرتّب زيارات كل مسؤول زمنياً من وقت البداية الذي تحدّده.",
+      "sched.h2": "يضيف فاصل الانتقال بعد كل زيارة قبل الزيارة التالية.",
+      "sched.h3": "يظهر الفرق بين الوقت المقترح والموعد الأصلي عند تجاوز 15 دقيقة.",
+      "sched.h4": "يعلَم الزيارات بلا مسؤول، ويحذّر عند تجاوز خمس زيارات في اليوم.",
+      "sched.h5": "يضيف الهدف الغذائي وحالة المريض لتسليم مختصر للفريق.",
+      "sched.hint": "النص جاهز للنسخ إلى واتساب الفريق؛ لا يُرسل تلقائياً من القالب.",
+      "foot.left": "Arab Templates · قالب رعاية منزلية مستقل بملف واحد",
+      "foot.right": "زيارات · تغذية علاجية · قياسات · 3 رسوم Chart.js · 22 عملة"
+    },
+    en: {
+      "brand.title": "Home Health",
+      "brand.sub": "Home Health & Clinical Nutrition OS",
+      "currency": "Currency", "reset": "Restore sample",
+      "tab.dash": "Care board", "tab.visits": "Visits", "tab.nutrition": "Clinical nutrition",
+      "tab.vitals": "Vitals", "tab.schedule": "Schedule coordinator",
+      "dash.title": "Today's care status",
+      "dash.sub": "Today's visits, weekly load and nutrition adherence from your own data.",
+      "kpi.visits": "Visits today", "kpi.patients": "Active patients",
+      "kpi.adherence": "Nutrition plan adherence", "kpi.cost": "Completed visit cost",
+      "chart.type": "Visits by type", "chart.typeSub": "All visits except cancelled",
+      "chart.load": "Next week's load", "chart.loadSub": "Scheduled visits per day",
+      "chart.vitals": "Average systolic and diastolic pressure",
+      "chart.vitalsSub": "Last seven days across all recorded measurements",
+      "chart.offline": "Charts need an internet connection to load Chart.js.",
+      "dash.today": "Today's visits", "dash.todaySub": "Chronological, with owner and status",
+      "dash.openVisits": "Open visits",
+      "dash.alerts": "Clinical alerts", "dash.alertsSub": "High pressure or glucose, or low nutrition adherence",
+      "dash.openVitals": "Open vitals",
+      "visits.title": "Schedule a new visit", "visits.sub": "Pick a type and duration; cost follows the hourly rate.",
+      "visits.patient": "Patient", "visits.type": "Visit type", "visits.staff": "Owner",
+      "visits.datetime": "Date and time", "visits.duration": "Duration (min)", "visits.notes": "Notes",
+      "visits.notesPh": "e.g. glucose reading before breakfast", "visits.addBtn": "Add visit",
+      "visits.list": "Visit log", "visits.listSub": "Change status inline; cancelled visits are excluded from load.",
+      "visits.all": "All statuses", "visits.allTypes": "All types", "visits.search": "Search patient or area",
+      "nutrition.title": "Clinical nutrition plans",
+      "nutrition.sub": "Edit calories, protein, goal and adherence; every change is saved and refreshes the board.",
+      "nutrition.note": "Adherence comes from patient follow-up, and BMI uses the latest weight in vitals plus the patient's height.",
+      "vitals.title": "Vitals",
+      "vitals.sub": "Record weight, pressure and glucose per patient; out-of-range readings are flagged automatically.",
+      "vitals.patient": "Patient",
+      "vitals.ranges": "Reference ranges: pressure below 140/90 · glucose 70–180 mg/dL",
+      "vitals.add": "Add a reading", "vitals.addSub": "Leave a field at zero when it was not measured; zeros are not stored.",
+      "vitals.weight": "Weight (kg)", "vitals.sys": "Systolic", "vitals.dia": "Diastolic",
+      "vitals.glucose": "Glucose (mg/dL)", "vitals.when": "Measured at", "vitals.addBtn": "Save reading",
+      "sched.title": "Medical schedule coordinator",
+      "sched.sub": "Builds each patient's day with travel buffers, and surfaces conflicts and unassigned visits.",
+      "sched.date": "Visit date", "sched.start": "Round start", "sched.buffer": "Travel buffer (min)",
+      "sched.staff": "Team", "sched.gen": "Coordinate schedule", "sched.copy": "Copy", "sched.download": "Download TXT",
+      "sched.out": "Pick a date and press “Coordinate schedule” to build the route from your visits.",
+      "sched.how": "How it coordinates",
+      "sched.h1": "Orders each owner's visits from the start time you choose.",
+      "sched.h2": "Adds the travel buffer after every visit before the next one.",
+      "sched.h3": "Shows how far the suggested slot moved from the planned time when it exceeds 15 minutes.",
+      "sched.h4": "Flags visits with no owner, and warns when a day exceeds five visits.",
+      "sched.h5": "Adds the nutrition goal and patient condition so the handoff is self-contained.",
+      "sched.hint": "The text is ready to paste into the team's WhatsApp; the template never sends it automatically.",
+      "foot.left": "Arab Templates · single-file home care template",
+      "foot.right": "Visits · Nutrition · Vitals · 3 Chart.js charts · 22 currencies"
+    }
+  };
+
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const uid = (p) => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 4);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const num = (v, d) => { const n = parseFloat(v); return isFinite(n) ? n : d; };
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+
+  function fmtNum(n, digits) {
+    const d = digits == null ? 0 : digits;
+    return new Intl.NumberFormat("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).format(isFinite(n) ? n : 0);
+  }
+  function cur() { return CURRENCIES.find((c) => c.code === ui.currency) || CURRENCIES[0]; }
+  function fmtMoney(usd) {
+    const c = cur();
+    const v = (isFinite(usd) ? usd : 0) * c.rate;
+    return "\u200E" + fmtNum(v, Math.abs(v) >= 1000 ? 0 : 2) + " " + c.code;
+  }
+  function atTime(daysAhead, hh, mm) {
+    const d = new Date();
+    d.setDate(d.getDate() + daysAhead);
+    d.setHours(hh, mm || 0, 0, 0);
+    return d.toISOString();
+  }
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return "—";
+    try { return d.toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "short", day: "numeric", month: "short" }); }
+    catch (e) { return d.toISOString().slice(0, 10); }
+  }
+  function fmtTime(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return "—";
+    return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+  function fmtDT(iso) { return fmtDate(iso) + " · " + fmtTime(iso); }
+  function sameDay(iso, ymd) {
+    const d = new Date(iso);
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) === ymd;
+  }
+  function todayYMD() {
+    const d = new Date();
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  function localInput(iso) {
+    const d = new Date(iso);
+    const p = (n) => ("0" + n).slice(-2);
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + "T" + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+
+  function typeById(id) { return TYPES.find((t) => t.id === id) || TYPES[0]; }
+  function staffById(id) { return STAFF.find((s) => s.id === id) || null; }
+  function typeName(id) { const t = typeById(id); return isAr() ? t.ar : t.en; }
+  function staffName(id) { const s = staffById(id); return s ? (isAr() ? s.ar : s.en) : (isAr() ? "بلا مسؤول" : "Unassigned"); }
+  function goalName(g) {
+    const map = {
+      diabetes: ["سكري", "Diabetes"], cardiac: ["قلب", "Cardiac"], renal: ["كلى", "Renal"],
+      postop: ["ما بعد الجراحة", "Post-op"], senior: ["رعاية كبار السن", "Senior care"], gestational: ["سكري حملي", "Gestational"]
+    };
+    const v = map[g] || map.diabetes;
+    return isAr() ? v[0] : v[1];
+  }
+  function statusInfo(s) {
+    const map = {
+      scheduled: ["مجدولة", "Scheduled", "idle"], inprogress: ["جارية", "In progress", "warn"],
+      done: ["مكتملة", "Completed", "ok"], cancelled: ["ملغاة", "Cancelled", "bad"]
+    };
+    const v = map[s] || map.scheduled;
+    return { ar: v[0], en: v[1], cls: v[2], label: isAr() ? v[0] : v[1] };
+  }
+
+  function seed() {
+    const mk = (id, nameAr, nameEn, areaAr, areaEn, age, height, condAr, condEn, goal, kcal, protein, restrAr, restrEn, adherence, v) => {
+      const vitals = [];
+      for (let i = 6; i >= 0; i--) {
+        const t = (6 - i) / 6;
+        vitals.push({
+          id: uid("m"),
+          at: atTime(-i, 9, 0),
+          weight: Math.round((v.weight - v.drop * t) * 10) / 10,
+          sys: Math.round(v.sys - v.sysDrop * t),
+          dia: Math.round(v.dia - v.diaDrop * t),
+          glucose: Math.round(v.glucose - v.gluDrop * t)
+        });
+      }
+      return {
+        id: id, nameAr: nameAr, nameEn: nameEn, areaAr: areaAr, areaEn: areaEn, age: age, height: height,
+        conditionAr: condAr, conditionEn: condEn,
+        plan: { goal: goal, kcal: kcal, protein: protein, restrAr: restrAr, restrEn: restrEn, adherence: adherence },
+        vitals: vitals
+      };
+    };
+    const patients = [
+      mk("p1", "نورة القحطاني", "Noura Alqahtani", "النرجس", "Alnarjis", 68, 160, "سكري نوع 2 وضغط", "Type 2 diabetes & hypertension", "diabetes", 1600, 85, "قليل الصوديوم، بلا سكريات مضافة", "Low sodium, no added sugar", 78, { weight: 82, drop: 0.6, sys: 145, sysDrop: 7, dia: 92, diaDrop: 4, glucose: 180, gluDrop: 25 }),
+      mk("p2", "عبدالله الشمري", "Abdullah Alshammari", "العليا", "Alolaya", 74, 172, "قصور قلب", "Heart failure", "cardiac", 1900, 95, "قليل البوتاسيوم والسوائل", "Low potassium, fluid restricted", 64, { weight: 88, drop: 0.5, sys: 150, sysDrop: 6, dia: 95, diaDrop: 5, glucose: 110, gluDrop: 5 }),
+      mk("p3", "سارة العتيبي", "Sarah Alotaibi", "الملقا", "Almalqa", 45, 165, "ما بعد جراحة سمنة", "Post bariatric surgery", "postop", 1200, 80, "بروتين عالٍ، سوائل مقيدة", "High protein, restricted fluids", 88, { weight: 96, drop: 2.2, sys: 118, sysDrop: 2, dia: 78, diaDrop: 2, glucose: 95, gluDrop: 3 }),
+      mk("p4", "ماجد المطيري", "Majed Almutairi", "الياسمين", "Alyasmin", 59, 178, "كلى مزمنة", "Chronic kidney disease", "renal", 1800, 70, "فوسفور منخفض، بروتين مقيد", "Low phosphorus, protein restricted", 72, { weight: 74, drop: 0.8, sys: 155, sysDrop: 3, dia: 92, diaDrop: 2, glucose: 130, gluDrop: 6 }),
+      mk("p5", "هدى الزهراني", "Huda Alzahrani", "حطين", "Hittin", 81, 155, "ضعف عام وخطر سقوط", "Frailty & fall risk", "senior", 1500, 75, "ألياف عالية، وجبات صغيرة متكررة", "High fibre, small frequent meals", 59, { weight: 61, drop: 0.4, sys: 128, sysDrop: 2, dia: 78, diaDrop: 1, glucose: 100, gluDrop: 4 }),
+      mk("p6", "ريم الدوسري", "Reem Aldosari", "قرطبة", "Qurtubah", 36, 168, "سكري حملي", "Gestational diabetes", "gestational", 2000, 100, "سعرات موزعة، فطور إلزامي", "Distributed calories, breakfast required", 91, { weight: 78, drop: -0.8, sys: 120, sysDrop: 1, dia: 78, diaDrop: 1, glucose: 145, gluDrop: 17 })
+    ];
+    const visits = [
+      { id: "v1", patientId: "p1", type: "nursing", staff: "sara", at: atTime(0, 9, 0), duration: 60, status: "done", notesAr: "قياس الضغط والسكر قبل الفطور", notesEn: "Pressure and glucose before breakfast" },
+      { id: "v2", patientId: "p4", type: "nutrition", staff: "faisal", at: atTime(0, 11, 30), duration: 45, status: "done", notesAr: "مراجعة خطة الكلى وتقليل الفوسفور", notesEn: "Renal plan review, reduce phosphorus" },
+      { id: "v3", patientId: "p2", type: "nursing", staff: "sara", at: atTime(0, 15, 0), duration: 45, status: "scheduled", notesAr: "تقييم التورم ووزن السوائل", notesEn: "Check oedema and fluid weight" },
+      { id: "v4", patientId: "p3", type: "nutrition", staff: "faisal", at: atTime(1, 10, 0), duration: 45, status: "scheduled", notesAr: "رفع البروتين إلى 80غ يومياً", notesEn: "Raise protein to 80g daily" },
+      { id: "v5", patientId: "p5", type: "nursing", staff: "reem", at: atTime(1, 12, 0), duration: 60, status: "scheduled", notesAr: "تقييم خطر السقوط وتدريب المشي", notesEn: "Fall risk review and walking practice" },
+      { id: "v6", patientId: "p6", type: "labs", staff: "khalid", at: atTime(1, 14, 30), duration: 30, status: "scheduled", notesAr: "سحب HbA1c وصورة دم", notesEn: "HbA1c and CBC draw" },
+      { id: "v7", patientId: "p1", type: "nutrition", staff: "faisal", at: atTime(2, 9, 30), duration: 45, status: "scheduled", notesAr: "ضبط وجبة الإفطار", notesEn: "Tune the breakfast plan" },
+      { id: "v8", patientId: "p4", type: "labs", staff: "khalid", at: atTime(2, 11, 0), duration: 30, status: "scheduled", notesAr: "وظائف كلى وإلكتروليتات", notesEn: "Renal panel and electrolytes" },
+      { id: "v9", patientId: "p6", type: "nursing", staff: "sara", at: atTime(3, 10, 0), duration: 60, status: "scheduled", notesAr: "متابعة سكر الحمل وضغط", notesEn: "Gestational glucose and pressure check" },
+      { id: "v10", patientId: "p3", type: "followup", staff: "reem", at: atTime(5, 16, 0), duration: 30, status: "scheduled", notesAr: "متابعة الوزن بعد أسبوعين", notesEn: "Two-week weight follow-up" },
+      { id: "v11", patientId: "p5", type: "nutrition", staff: "faisal", at: atTime(4, 13, 0), duration: 45, status: "cancelled", notesAr: "أُلغي بطلب الأسرة", notesEn: "Cancelled at family request" }
+    ];
+    return { patients: patients, visits: visits, ui: { lang: "ar", currency: "SAR" }, sched: { date: todayYMD(), start: "08:00", buffer: 20, staff: "all" } };
+  }
+
+  let state = seed();
+  let ui = { lang: "ar", currency: "SAR" };
+  let selectedPatient = "p1";
+  let lastSched = "";
+  let statusFilter = "all", typeFilter = "all", searchTerm = "";
+  const charts = { type: null, load: null, vitals: null };
+
+  const t = (key) => (DICT[ui.lang] && DICT[ui.lang][key]) || DICT.ar[key] || key;
+  const isAr = () => ui.lang === "ar";
+  const pName = (p) => (isAr() ? p.nameAr : p.nameEn);
+  const pArea = (p) => (isAr() ? p.areaAr : p.areaEn);
+  const pCond = (p) => (isAr() ? p.conditionAr : p.conditionEn);
+  const pRestr = (p) => (isAr() ? p.plan.restrAr : p.plan.restrEn);
+  function patient(id) { return state.patients.find((p) => p.id === id) || state.patients[0] || null; }
+  function latestVital(p) {
+    if (!p || !p.vitals.length) return null;
+    return p.vitals.slice().sort((a, b) => new Date(b.at) - new Date(a.at))[0];
+  }
+  function bmiOf(p) {
+    const v = latestVital(p);
+    if (!p || !v || !p.height) return null;
+    return v.weight / Math.pow(p.height / 100, 2);
+  }
+  function bmiInfo(b) {
+    if (b == null) return { label: "—", cls: "idle" };
+    if (b < 18.5) return { label: isAr() ? "نقص" : "Underweight", cls: "warn" };
+    if (b < 25) return { label: isAr() ? "طبيعي" : "Normal", cls: "ok" };
+    if (b < 30) return { label: isAr() ? "زيادة" : "Overweight", cls: "warn" };
+    return { label: isAr() ? "سمنة" : "Obese", cls: "bad" };
+  }
+  function vitalFlags(v) {
+    const f = [];
+    if (v.sys >= 140 || v.dia >= 90) f.push({ txt: isAr() ? "ضغط مرتفع" : "High BP", cls: "bad" });
+    else if (v.sys > 0 && v.sys < 100) f.push({ txt: isAr() ? "ضغط منخفض" : "Low BP", cls: "warn" });
+    if (v.glucose > 180) f.push({ txt: isAr() ? "سكر مرتفع" : "High glucose", cls: "bad" });
+    else if (v.glucose > 0 && v.glucose < 70) f.push({ txt: isAr() ? "سكر منخفض" : "Low glucose", cls: "warn" });
+    return f;
+  }
+  function visitCost(v) { return typeById(v.type).rate * (num(v.duration, 60) / 60); }
+  function visitsOn(ymd) {
+    return state.visits.filter((v) => v.status !== "cancelled" && sameDay(v.at, ymd));
+  }
+
+  function toast(msg, bad) {
+    const el = $("#toast");
+    el.textContent = msg;
+    el.classList.toggle("err", !!bad);
+    el.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove("show"), 2400);
+  }
+
+  function load() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { saved = null; }
+    if (!saved || !Array.isArray(saved.patients) || !Array.isArray(saved.visits)) return;
+    state = {
+      patients: saved.patients.map((p) => ({
+        id: String(p.id || uid("p")),
+        nameAr: String(p.nameAr || p.name || ""), nameEn: String(p.nameEn || p.name || ""),
+        areaAr: String(p.areaAr || ""), areaEn: String(p.areaEn || ""),
+        age: num(p.age, 0), height: num(p.height, 0),
+        conditionAr: String(p.conditionAr || ""), conditionEn: String(p.conditionEn || ""),
+        plan: {
+          goal: GOALS.indexOf(p.plan && p.plan.goal) !== -1 ? p.plan.goal : "diabetes",
+          kcal: Math.max(0, num(p.plan && p.plan.kcal, 1800)),
+          protein: Math.max(0, num(p.plan && p.plan.protein, 80)),
+          restrAr: String((p.plan && p.plan.restrAr) || ""),
+          restrEn: String((p.plan && p.plan.restrEn) || ""),
+          adherence: clamp(num(p.plan && p.plan.adherence, 70), 0, 100)
+        },
+        vitals: (Array.isArray(p.vitals) ? p.vitals : []).map((v) => ({
+          id: String(v.id || uid("m")), at: String(v.at || new Date().toISOString()),
+          weight: num(v.weight, 0), sys: num(v.sys, 0), dia: num(v.dia, 0), glucose: num(v.glucose, 0)
+        }))
+      })),
+      visits: saved.visits.map((v) => ({
+        id: String(v.id || uid("v")),
+        patientId: String(v.patientId || ""),
+        type: TYPES.some((x) => x.id === v.type) ? v.type : "nursing",
+        staff: STAFF.some((s) => s.id === v.staff) ? v.staff : "",
+        at: String(v.at || new Date().toISOString()),
+        duration: Math.max(15, num(v.duration, 60)),
+        status: STATUSES.indexOf(v.status) !== -1 ? v.status : "scheduled",
+        notesAr: String(v.notesAr || ""), notesEn: String(v.notesEn || "")
+      })),
+      ui: { lang: (saved.ui && saved.ui.lang) || "ar", currency: (saved.ui && saved.ui.currency) || "SAR" },
+      sched: {
+        date: String((saved.sched && saved.sched.date) || todayYMD()),
+        start: String((saved.sched && saved.sched.start) || "08:00"),
+        buffer: Math.max(0, num(saved.sched && saved.sched.buffer, 20)),
+        staff: String((saved.sched && saved.sched.staff) || "all")
+      }
+    };
+    if (CURRENCIES.some((c) => c.code === state.ui.currency)) ui.currency = state.ui.currency;
+    ui.lang = state.ui.lang === "en" ? "en" : "ar";
+  }
+  function save() {
+    state.ui = { lang: ui.lang, currency: ui.currency };
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* blocked */ }
+  }
+
+  function applyI18n() {
+    document.documentElement.lang = ui.lang;
+    document.documentElement.dir = isAr() ? "rtl" : "ltr";
+    $$("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    $$("[data-i18n-ph]").forEach((el) => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $$("#langSeg button").forEach((b) => b.classList.toggle("on", b.getAttribute("data-lang") === ui.lang));
+    document.title = isAr()
+      ? "الرعاية المنزلية والتغذية العلاجية — Home Health & Nutrition OS"
+      : "Home Health & Clinical Nutrition OS — Visits, Plans & Vitals";
+    const sel = $("#currency");
+    sel.innerHTML = CURRENCIES.map((c) => '<option value="' + c.code + '">' + c.code + " — " + esc(isAr() ? c.ar : c.en) + "</option>").join("");
+    sel.value = ui.currency;
+    fillVisitSelects();
+    fillSchedStaff();
+  }
+
+  function fillVisitSelects() {
+    $("#vPatient").innerHTML = state.patients.map((p) => '<option value="' + esc(p.id) + '">' + esc(pName(p)) + " — " + esc(pArea(p)) + "</option>").join("");
+    $("#vType").innerHTML = TYPES.map((x) => '<option value="' + x.id + '">' + esc(isAr() ? x.ar : x.en) + "</option>").join("");
+    $("#vStaff").innerHTML = STAFF.map((s) => '<option value="' + s.id + '">' + esc(isAr() ? s.ar : s.en) + "</option>").join("") +
+      '<option value="">' + (isAr() ? "بلا مسؤول (يُعلَم لاحقاً)" : "Unassigned (flag for later)") + "</option>";
+    $("#fStatus").innerHTML = '<option value="all">' + t("visits.all") + "</option>" + STATUSES.map((s) => '<option value="' + s + '">' + esc(statusInfo(s).label) + "</option>").join("");
+    $("#fStatus").value = statusFilter;
+    $("#fType").innerHTML = '<option value="all">' + t("visits.allTypes") + "</option>" + TYPES.map((x) => '<option value="' + x.id + '">' + esc(isAr() ? x.ar : x.en) + "</option>").join("");
+    $("#fType").value = typeFilter;
+    $("#vitalsPatient").innerHTML = state.patients.map((p) => '<option value="' + esc(p.id) + '">' + esc(pName(p)) + "</option>").join("");
+    if (!state.patients.some((p) => p.id === selectedPatient)) selectedPatient = state.patients.length ? state.patients[0].id : "";
+    $("#vitalsPatient").value = selectedPatient;
+  }
+  function fillSchedStaff() {
+    $("#schedStaff").innerHTML = '<option value="all">' + (isAr() ? "كل الفريق" : "Whole team") + "</option>" +
+      STAFF.map((s) => '<option value="' + s.id + '">' + esc(isAr() ? s.ar : s.en) + "</option>").join("");
+    $("#schedStaff").value = state.sched.staff;
+  }
+
+  /* ---------------- dashboard ---------------- */
+  function renderKpis() {
+    const today = visitsOn(todayYMD());
+    const done = today.filter((v) => v.status === "done").length;
+    const avgAdh = state.patients.length
+      ? state.patients.reduce((s, p) => s + p.plan.adherence, 0) / state.patients.length : 0;
+    const lowAdh = state.patients.filter((p) => p.plan.adherence < 70).length;
+    const completed = state.visits.filter((v) => v.status === "done");
+    const cost = completed.reduce((s, v) => s + visitCost(v), 0);
+
+    $("#kpiVisits").textContent = fmtNum(today.length);
+    $("#kpiVisitsNote").textContent = isAr()
+      ? done + " مكتملة · " + (today.length - done) + " متبقية"
+      : done + " done · " + (today.length - done) + " remaining";
+    $("#kpiPatients").textContent = fmtNum(state.patients.length);
+    const risky = state.patients.filter((p) => { const v = latestVital(p); return v && vitalFlags(v).length; }).length;
+    $("#kpiPatientsNote").textContent = isAr()
+      ? risky + " بحاجة متابعة قياسات · " + lowAdh + " التزام منخفض"
+      : risky + " need vitals follow-up · " + lowAdh + " low adherence";
+    $("#kpiPatientsNote").style.color = risky ? "var(--warn)" : "";
+
+    $("#kpiAdherence").textContent = fmtNum(avgAdh, 0);
+    $("#kpiAdherenceNote").textContent = isAr()
+      ? lowAdh + " مريض دون 70% · " + state.patients.length + " خطة نشطة"
+      : lowAdh + " below 70% · " + state.patients.length + " active plans";
+    $("#kpiAdherenceNote").style.color = avgAdh >= 80 ? "var(--ok)" : avgAdh >= 70 ? "var(--warn)" : "var(--bad)";
+
+    $("#kpiCost").textContent = fmtMoney(cost);
+    $("#kpiCostNote").textContent = isAr()
+      ? completed.length + " زيارة مكتملة · متوسط " + fmtMoney(completed.length ? cost / completed.length : 0)
+      : completed.length + " completed · avg " + fmtMoney(completed.length ? cost / completed.length : 0);
+
+    $("#dashChip").textContent = isAr()
+      ? today.length + " زيارة اليوم · " + state.patients.length + " مرضى · " + ui.currency
+      : today.length + " visits today · " + state.patients.length + " patients · " + ui.currency;
+  }
+
+  function renderToday() {
+    const list = visitsOn(todayYMD()).sort((a, b) => new Date(a.at) - new Date(b.at));
+    if (!list.length) {
+      $("#todayList").innerHTML = '<div class="empty">' + (isAr() ? "لا زيارات مجدولة اليوم." : "No visits scheduled today.") + "</div>";
+      return;
+    }
+    $("#todayList").innerHTML = list.map((v) => {
+      const p = patient(v.patientId);
+      const st = statusInfo(v.status);
+      return '<div class="health-row"><span class="dotbadge ' + (st.cls === "ok" ? "" : st.cls) + '"></span>' +
+        '<div class="grow"><b>' + fmtTime(v.at) + " · " + esc(p ? pName(p) : "—") + "</b><span>" +
+        esc(typeName(v.type)) + " · " + esc(staffName(v.staff)) + " · " + esc(p ? pArea(p) : "") + "</span></div>" +
+        '<span class="flag ' + st.cls + '">' + esc(st.label) + "</span></div>";
+    }).join("");
+  }
+
+  function renderAlerts() {
+    const rows = [];
+    state.patients.forEach((p) => {
+      const v = latestVital(p);
+      if (!v) return;
+      vitalFlags(v).forEach((f) => rows.push({ p: p, txt: f.txt + " · " + (v.sys ? v.sys + "/" + v.dia : "") + (v.glucose ? " · " + v.glucose + " " + (isAr() ? "ملغم/دل" : "mg/dL") : ""), cls: f.cls }));
+      if (p.plan.adherence < 70) rows.push({ p: p, txt: (isAr() ? "التزام غذائي " : "Adherence ") + fmtNum(p.plan.adherence) + "%", cls: "warn" });
+    });
+    const shown = rows.slice(0, 5);
+    if (!shown.length) {
+      $("#alertList").innerHTML = '<div class="empty">' + (isAr() ? "لا تنبيهات — كل القراءات داخل النطاق." : "No alerts — all readings in range.") + "</div>";
+      return;
+    }
+    $("#alertList").innerHTML = shown.map((r) =>
+      '<div class="health-row"><span class="dotbadge ' + (r.cls === "bad" ? "bad" : "warn") + '"></span>' +
+      '<div class="grow"><b>' + esc(pName(r.p)) + "</b><span>" + esc(r.txt) + " · " + esc(pArea(r.p)) + "</span></div>" +
+      '<button type="button" class="btn ghost sm" data-open-vitals="' + esc(r.p.id) + '">' + (isAr() ? "القياسات" : "Vitals") + "</button></div>"
+    ).join("");
+  }
+
+  /* ---------------- charts ---------------- */
+  function renderCharts() {
+    const boxes = ["boxType", "boxLoad", "boxVitals"];
+    if (typeof window.Chart === "undefined") {
+      boxes.forEach((id) => $("[id=" + id + "]").classList.add("no-chart"));
+      return;
+    }
+    boxes.forEach((id) => $("[id=" + id + "]").classList.remove("no-chart"));
+    window.Chart.defaults.color = "#93A4BF";
+    window.Chart.defaults.font.family = '"Segoe UI", Tahoma, Arial, sans-serif';
+    const tooltip = {
+      backgroundColor: "#0B1222", titleColor: "#EAF0FA", bodyColor: "#C9D5E8",
+      borderColor: "rgba(197,160,89,.35)", borderWidth: 1, padding: 10, cornerRadius: 10, displayColors: false
+    };
+    const legend = { labels: { color: "#C9D5E8", boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "rectRounded", font: { size: 11 } } };
+    const active = state.visits.filter((v) => v.status !== "cancelled");
+
+    if (charts.type) { charts.type.destroy(); charts.type = null; }
+    charts.type = new window.Chart($("#cType"), {
+      type: "doughnut",
+      data: {
+        labels: TYPES.map((x) => (isAr() ? x.ar : x.en)),
+        datasets: [{
+          data: TYPES.map((x) => active.filter((v) => v.type === x.id).length),
+          backgroundColor: ["#C5A059", "#5C8FD6", "#3BB98D", "#E0A33E"],
+          borderColor: "#141F35", borderWidth: 3, hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: "62%",
+        plugins: {
+          legend: Object.assign({ position: "bottom" }, legend),
+          tooltip: Object.assign({ callbacks: { label: (c) => c.label + ": " + c.parsed + (isAr() ? " زيارة" : " visits") } }, tooltip)
+        }
+      }
+    });
+
+    if (charts.load) { charts.load.destroy(); charts.load = null; }
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      days.push(d);
+    }
+    const loadData = days.map((d) => {
+      const ymd = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+      return visitsOn(ymd).length;
+    });
+    charts.load = new window.Chart($("#cLoad"), {
+      type: "bar",
+      data: {
+        labels: days.map((d) => {
+          try { return d.toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "short", day: "numeric" }); }
+          catch (e) { return d.toISOString().slice(5, 10); }
+        }),
+        datasets: [{
+          label: isAr() ? "زيارات" : "Visits",
+          data: loadData,
+          backgroundColor: loadData.map((n) => n >= 3 ? "rgba(224,163,62,.78)" : "rgba(197,160,89,.72)"),
+          borderRadius: 6, maxBarThickness: 34
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: Object.assign({ callbacks: { label: (c) => c.parsed.y + (isAr() ? " زيارة" : " visits") } }, tooltip) },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: "#93A4BF", font: { size: 10 } } },
+          y: { beginAtZero: true, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", precision: 0, font: { size: 10 } } }
+        }
+      }
+    });
+
+    if (charts.vitals) { charts.vitals.destroy(); charts.vitals = null; }
+    const vDays = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      d.setHours(0, 0, 0, 0);
+      vDays.push(d);
+    }
+    const avgFor = (d, key) => {
+      const next = new Date(d.getTime() + 86400000);
+      const vals = [];
+      state.patients.forEach((p) => p.vitals.forEach((v) => {
+        const ts = new Date(v.at).getTime();
+        if (ts >= d.getTime() && ts < next.getTime() && v[key] > 0) vals.push(v[key]);
+      }));
+      if (!vals.length) return null;
+      return Math.round(vals.reduce((s, n) => s + n, 0) / vals.length);
+    };
+    charts.vitals = new window.Chart($("#cVitals"), {
+      type: "line",
+      data: {
+        labels: vDays.map((d) => {
+          try { return d.toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "short", day: "numeric" }); }
+          catch (e) { return d.toISOString().slice(5, 10); }
+        }),
+        datasets: [
+          { label: isAr() ? "انقباضي" : "Systolic", data: vDays.map((d) => avgFor(d, "sys")), borderColor: "#C5A059", backgroundColor: "rgba(197,160,89,.14)", fill: true, tension: 0.35, borderWidth: 2, pointRadius: 3, pointBackgroundColor: "#E4C88A", spanGaps: true },
+          { label: isAr() ? "انبساطي" : "Diastolic", data: vDays.map((d) => avgFor(d, "dia")), borderColor: "#5C8FD6", backgroundColor: "rgba(92,143,214,.10)", fill: true, tension: 0.35, borderWidth: 2, pointRadius: 3, pointBackgroundColor: "#9DC0F0", spanGaps: true }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: Object.assign({ position: "bottom" }, legend),
+          tooltip: Object.assign({ callbacks: { label: (c) => c.dataset.label + ": " + (c.parsed.y == null ? "—" : c.parsed.y + " mmHg") } }, tooltip)
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: "#93A4BF", font: { size: 10 } } },
+          y: { suggestedMin: 60, suggestedMax: 160, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  /* ---------------- visits ---------------- */
+  function renderVisits() {
+    const list = state.visits
+      .filter((v) => statusFilter === "all" || v.status === statusFilter)
+      .filter((v) => typeFilter === "all" || v.type === typeFilter)
+      .filter((v) => {
+        if (!searchTerm) return true;
+        const p = patient(v.patientId);
+        const hay = ((p ? pName(p) + " " + pArea(p) + " " + (p.nameEn + " " + p.areaEn) : "") + " " + typeName(v.type) + " " + staffName(v.staff)).toLowerCase();
+        return hay.indexOf(searchTerm.toLowerCase()) !== -1;
+      })
+      .sort((a, b) => new Date(a.at) - new Date(b.at));
+
+    $("#visitChip").textContent = isAr()
+      ? state.visits.filter((v) => v.status !== "cancelled").length + " زيارة نشطة · " + ui.currency
+      : state.visits.filter((v) => v.status !== "cancelled").length + " active visits · " + ui.currency;
+
+    if (!list.length) {
+      $("#visitList").innerHTML = '<div class="empty">' + (isAr() ? "لا زيارات تطابق الفلتر." : "No visits match the filter.") + "</div>";
+      return;
+    }
+    $("#visitList").innerHTML = list.map((v) => {
+      const p = patient(v.patientId);
+      const st = statusInfo(v.status);
+      return '<div class="visit" data-visit="' + esc(v.id) + '">' +
+        '<div class="visit-top"><span class="when">' + esc(fmtDT(v.at)) + "</span>" +
+        '<span class="chip soft">' + esc(typeName(v.type)) + "</span>" +
+        '<span class="flag ' + st.cls + '">' + esc(st.label) + "</span>" +
+        '<span class="chip">' + esc(fmtMoney(visitCost(v))) + "</span></div>" +
+        "<h3>" + esc(p ? pName(p) : "—") + "</h3>" +
+        '<div class="sub"><span>' + esc(p ? pArea(p) : "") + "</span><span>·</span><span>" + esc(staffName(v.staff)) + "</span><span>·</span><span>" + fmtNum(v.duration) + (isAr() ? " دقيقة" : " min") + "</span></div>" +
+        ((isAr() ? v.notesAr : v.notesEn) ? '<div class="tiny muted" style="margin-top:6px">' + esc(isAr() ? v.notesAr : v.notesEn) + "</div>" : "") +
+        '<div class="foot">' +
+        '<select data-visit-status="' + esc(v.id) + '" aria-label="Status">' +
+        STATUSES.map((s) => '<option value="' + s + '"' + (s === v.status ? " selected" : "") + ">" + esc(statusInfo(s).label) + "</option>").join("") +
+        "</select>" +
+        '<button type="button" class="iconbtn" data-del-visit="' + esc(v.id) + '" aria-label="' + (isAr() ? "حذف" : "Delete") + '">✕</button>' +
+        "</div></div>";
+    }).join("");
+  }
+
+  /* ---------------- nutrition ---------------- */
+  function renderNutrition() {
+    const avg = state.patients.length ? state.patients.reduce((s, p) => s + p.plan.adherence, 0) / state.patients.length : 0;
+    $("#nutChip").textContent = (isAr() ? "متوسط الالتزام " : "Average adherence ") + fmtNum(avg, 0) + "%";
+    $("#nutGrid").innerHTML = state.patients.map((p) => {
+      const b = bmiOf(p), bi = bmiInfo(b);
+      const low = p.plan.adherence < 70;
+      return '<div class="nut-card" data-nut="' + esc(p.id) + '">' +
+        '<div class="nut-top"><h3>' + esc(pName(p)) + '</h3><span class="flag ' + (low ? "warn" : "ok") + '">' + fmtNum(p.plan.adherence) + "%</span>" +
+        '<div class="sub">' + esc(pArea(p)) + " · " + fmtNum(p.age) + (isAr() ? " سنة · " : " yrs · ") + esc(pCond(p)) + "</div></div>" +
+        '<div class="nut-fields">' +
+        '<label>' + t2("goal") + '<select data-npf="goal">' + GOALS.map((g) => '<option value="' + g + '"' + (g === p.plan.goal ? " selected" : "") + ">" + esc(goalName(g)) + "</option>").join("") + "</select></label>" +
+        '<label>' + t2("kcal") + '<input type="number" step="50" min="0" data-npf="kcal" value="' + num(p.plan.kcal) + '"></label>' +
+        '<label>' + t2("protein") + '<input type="number" step="5" min="0" data-npf="protein" value="' + num(p.plan.protein) + '"></label>' +
+        '<label>' + t2("adherence") + '<input type="number" step="1" min="0" max="100" data-npf="adherence" value="' + num(p.plan.adherence) + '"></label>' +
+        "</div>" +
+        '<div class="bmi-row"><span>' + t2("bmi") + "</span><b>" + (b == null ? "—" : fmtNum(b, 1)) + ' <span class="flag ' + bi.cls + '" style="font-size:10px">' + esc(bi.label) + "</span></b></div>" +
+        '<div class="tiny muted">' + esc(pRestr(p)) + "</div>" +
+        "</div>";
+    }).join("");
+    function t2(k) {
+      const map = {
+        goal: [isAr() ? "الهدف" : "Goal", ""], kcal: [isAr() ? "سعرات/يوم" : "kcal/day", ""],
+        protein: [isAr() ? "بروتين (غ)" : "Protein (g)", ""], adherence: [isAr() ? "الالتزام %" : "Adherence %", ""],
+        bmi: [isAr() ? "مؤشر كتلة الجسم" : "BMI", ""]
+      };
+      return map[k][0];
+    }
+  }
+
+  /* ---------------- vitals ---------------- */
+  function renderVitals() {
+    const p = patient(selectedPatient);
+    if (!p) {
+      $("#vitalTableWrap").innerHTML = '<div class="empty">' + (isAr() ? "لا مرضى." : "No patients.") + "</div>";
+      $("#vitalStrip").innerHTML = "";
+      return;
+    }
+    const sorted = p.vitals.slice().sort((a, b) => new Date(b.at) - new Date(a.at));
+    const last = sorted[0] || null;
+    const first = sorted[sorted.length - 1] || null;
+    const b = bmiOf(p), bi = bmiInfo(b);
+    const change = last && first ? last.weight - first.weight : 0;
+    $("#vitalChip").textContent = isAr()
+      ? pName(p) + " · " + pCond(p) + " · " + fmtNum(p.age) + " سنة"
+      : pName(p) + " · " + pCond(p) + " · " + fmtNum(p.age) + " yrs";
+    $("#vitalStrip").innerHTML =
+      '<div class="stat hl"><span>' + (isAr() ? "آخر وزن" : "Latest weight") + "</span><b>" + (last ? fmtNum(last.weight, 1) + " kg" : "—") + "</b></div>" +
+      '<div class="stat"><span>' + (isAr() ? "مؤشر كتلة الجسم" : "BMI") + '</span><b>' + (b == null ? "—" : fmtNum(b, 1)) + ' <span class="flag ' + bi.cls + '" style="font-size:9.5px">' + esc(bi.label) + "</span></b></div>" +
+      '<div class="stat"><span>' + (isAr() ? "آخر ضغط" : "Latest BP") + "</span><b>" + (last && last.sys ? last.sys + "/" + last.dia : "—") + "</b></div>" +
+      '<div class="stat"><span>' + (isAr() ? "آخر سكر" : "Latest glucose") + "</span><b>" + (last && last.glucose ? fmtNum(last.glucose) : "—") + "</b></div>" +
+      '<div class="stat"><span>' + (isAr() ? "تغيّر الوزن (7 أيام)" : "Weight change (7d)") + '</span><b style="color:' + (Math.abs(change) > 1 ? "var(--gold-2)" : "var(--text)") + '">' + (change > 0 ? "+" : "") + fmtNum(change, 1) + " kg</b></div>";
+
+    if (!sorted.length) {
+      $("#vitalTableWrap").innerHTML = '<div class="empty">' + (isAr() ? "لا قياسات بعد لهذا المريض." : "No readings for this patient yet.") + "</div>";
+      return;
+    }
+    const rows = sorted.slice(0, 8).map((v) => {
+      const flags = vitalFlags(v);
+      return "<tr><td>" + esc(fmtDate(v.at)) + " · " + esc(fmtTime(v.at)) + "</td>" +
+        '<td class="num">' + (v.weight ? fmtNum(v.weight, 1) : "—") + "</td>" +
+        '<td class="num">' + (v.sys ? v.sys + "/" + v.dia : "—") + "</td>" +
+        '<td class="num">' + (v.glucose ? fmtNum(v.glucose) : "—") + "</td>" +
+        "<td>" + (flags.length ? flags.map((f) => '<span class="flag ' + f.cls + '" style="margin-inline-end:4px">' + esc(f.txt) + "</span>").join("") : '<span class="flag ok">' + (isAr() ? "داخل النطاق" : "In range") + "</span>") + "</td></tr>";
+    }).join("");
+    $("#vitalTableWrap").innerHTML = '<div class="table-wrap"><table class="vital-table"><thead><tr>' +
+      "<th>" + (isAr() ? "الوقت" : "When") + "</th><th>" + t("vitals.weight") + "</th><th>" + (isAr() ? "الضغط" : "BP") + "</th><th>" + t("vitals.glucose") + "</th><th>" + (isAr() ? "الحالة" : "Flag") + "</th>" +
+      "</tr></thead><tbody>" + rows + "</tbody></table></div>";
+  }
+
+  /* ---------------- scheduler ---------------- */
+  function toMin(hhmm) {
+    const parts = String(hhmm || "08:00").split(":");
+    return clamp(num(parts[0], 8) * 60 + num(parts[1], 0), 0, 1439);
+  }
+  function fromMin(m) {
+    const v = ((Math.round(m) % 1440) + 1440) % 1440;
+    return ("0" + Math.floor(v / 60)).slice(-2) + ":" + ("0" + (v % 60)).slice(-2);
+  }
+  function buildSchedule() {
+    const date = $("#schedDate").value || todayYMD();
+    const start = toMin($("#schedStart").value);
+    const buffer = Math.max(0, num($("#schedBuffer").value, 20));
+    const staffSel = $("#schedStaff").value;
+    const dayVisits = visitsOn(date).slice()
+      .filter((v) => staffSel === "all" || v.staff === staffSel)
+      .sort((a, b) => new Date(a.at) - new Date(b.at));
+
+    const L = [];
+    const conflicts = [];
+    const unassigned = dayVisits.filter((v) => !v.staff);
+    const byStaff = {};
+    dayVisits.forEach((v) => { const k = v.staff || "none"; (byStaff[k] = byStaff[k] || []).push(v); });
+
+    const dateLabel = (() => {
+      try { return new Date(date + "T12:00:00").toLocaleDateString(isAr() ? "ar-SA-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }); }
+      catch (e) { return date; }
+    })();
+    const teamLabel = staffSel === "all" ? (isAr() ? "كل الفريق" : "Whole team") : staffName(staffSel);
+
+    L.push((isAr() ? "جدول الزيارات — " : "Visit schedule — ") + dateLabel);
+    L.push((isAr() ? "الفريق: " : "Team: ") + teamLabel + " · " + (isAr() ? "البداية " : "Start ") + fromMin(start) + " · " + (isAr() ? "فاصل " : "Buffer ") + buffer + (isAr() ? " دقيقة" : " min"));
+    L.push("");
+
+    if (!dayVisits.length) {
+      L.push(isAr() ? "لا زيارات مجدولة في هذا التاريخ." : "No visits scheduled on this date.");
+    }
+
+    const keys = Object.keys(byStaff).sort((a, b) => (a === "none" ? 1 : b === "none" ? -1 : 0));
+    let total = 0;
+    keys.forEach((key) => {
+      const list = byStaff[key];
+      const staffObj = staffById(key);
+      const staffLabel = staffObj ? (isAr() ? staffObj.ar : staffObj.en) : (isAr() ? "بلا مسؤول" : "Unassigned");
+      let cursor = start;
+      let minutes = 0;
+      const head = staffLabel + " (" + list.length + (isAr() ? " زيارات" : " visits") + ")";
+      L.push(head);
+      // planned overlap detection
+      for (let i = 1; i < list.length; i++) {
+        const prevEnd = new Date(list[i - 1].at).getTime() + num(list[i - 1].duration, 60) * 60000;
+        if (new Date(list[i].at).getTime() < prevEnd) conflicts.push((isAr() ? "تعارض في مواعيد " : "Overlapping bookings for ") + staffLabel + ": " + fmtTime(list[i - 1].at) + " / " + fmtTime(list[i].at));
+      }
+      if (list.length > 5) conflicts.push((isAr() ? "يوم مزدحم لـ " : "Heavy day for ") + staffLabel + " (" + list.length + (isAr() ? " زيارات)" : " visits)"));
+      const seenPatients = {};
+      list.forEach((v) => {
+        const p0 = patient(v.patientId);
+        if (seenPatients[v.patientId]) conflicts.push((isAr() ? "زيارتان لنفس المريض لدى " : "Two visits for the same patient with ") + staffLabel + ": " + (p0 ? pName(p0) : v.patientId));
+        seenPatients[v.patientId] = true;
+      });
+      list.forEach((v) => {
+        const p = patient(v.patientId);
+        const planned = new Date(v.at).getHours() * 60 + new Date(v.at).getMinutes();
+        const dur = num(v.duration, 60);
+        const slotStart = cursor;
+        const slotEnd = cursor + dur;
+        const shift = slotStart - planned;
+        total += 1;
+        L.push(fromMin(slotStart) + "–" + fromMin(slotEnd) + "  " + (p ? pName(p) : "—") + " — " + (p ? pArea(p) : ""));
+        L.push("            " + typeName(v.type) + " · " + dur + (isAr() ? " د" : " min") + " · " +
+          (p ? (isAr() ? "خطة " + goalName(p.plan.goal) + " " + fmtNum(p.plan.kcal) + " سعرة · " + pCond(p) : goalName(p.plan.goal) + " plan " + fmtNum(p.plan.kcal) + " kcal · " + pCond(p)) : ""));
+        if (Math.abs(shift) > 15) {
+          L.push("            " + (isAr() ? "تحرّك " + (shift > 0 ? "بعد " : "قبل ") + Math.abs(shift) + " دقيقة عن الموعد الأصلي " : "Moved " + Math.abs(shift) + " min " + (shift > 0 ? "later" : "earlier") + " than planned ") + fmtTime(v.at));
+        }
+        minutes += dur;
+        cursor = slotEnd + buffer;
+      });
+      L.push((isAr() ? "إجمالي الزيارات: " : "Total visit time: ") + minutes + (isAr() ? " دقيقة + انتقالات · ينتهي " : " min + travel · ends ") + fromMin(cursor - buffer));
+      L.push("");
+    });
+
+    L.push(isAr() ? "ملاحظات التنسيق" : "Coordination notes");
+    if (unassigned.length) {
+      L.push("- " + (isAr() ? unassigned.length + " زيارة بلا مسؤول: " : unassigned.length + " visit(s) with no owner: ") +
+        unassigned.map((v) => (patient(v.patientId) ? pName(patient(v.patientId)) : "") + " " + fmtTime(v.at)).join("، "));
+    }
+    if (conflicts.length) conflicts.forEach((c) => L.push("- " + c));
+    if (!unassigned.length && !conflicts.length) L.push(isAr() ? "- لا تعارضات ولا زيارات بلا مسؤول." : "- No conflicts and no unassigned visits.");
+    L.push("- " + (isAr() ? "إجمالي زيارات اليوم: " : "Visits today: ") + total + (isAr() ? " زيارة · تذكير بتسجيل القياسات بعد كل زيارة." : " visits · remember to log vitals after each visit."));
+
+    lastSched = L.join("\n");
+    $("#schedOut").textContent = lastSched;
+    $("#schedChip").textContent = total + (isAr() ? " زيارة · " : " visits · ") + dateLabel;
+    $("#schedMeta").innerHTML =
+      '<span class="chip soft">' + (isAr() ? "الفريق " : "Team ") + esc(teamLabel) + "</span>" +
+      '<span class="chip ' + (conflicts.length ? "warn" : "ok") + '">' + (isAr() ? "تعارضات " : "Conflicts ") + conflicts.length + "</span>" +
+      '<span class="chip ' + (unassigned.length ? "warn" : "ok") + '">' + (isAr() ? "بلا مسؤول " : "Unassigned ") + unassigned.length + "</span>";
+    return lastSched;
+  }
+
+  /* ---------------- render ---------------- */
+  function renderAll() {
+    renderKpis();
+    renderToday();
+    renderAlerts();
+    renderVisits();
+    renderNutrition();
+    renderVitals();
+    renderCharts();
+  }
+
+  function goTab(key) {
+    $$("#tabs .tab").forEach((b) => {
+      const on = b.getAttribute("data-tab") === key;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    $$(".tabpane").forEach((p) => p.classList.toggle("on", p.id === "pane-" + key));
+    if (key === "dash") renderCharts();
+    if (key === "schedule" && lastSched) $("#schedOut").textContent = lastSched;
+  }
+
+  function bind() {
+    $$("#tabs .tab").forEach((btn) => btn.addEventListener("click", () => {
+      goTab(btn.getAttribute("data-tab"));
+      const k = btn.getAttribute("data-tab");
+      history.replaceState(null, "", k === "dash" ? location.pathname + location.search : "#" + k);
+    }));
+    $$("[data-goto]").forEach((btn) => btn.addEventListener("click", () => {
+      const tab = $('.tab[data-tab="' + btn.getAttribute("data-goto") + '"]');
+      if (tab) tab.click();
+    }));
+
+    $$("#langSeg button").forEach((btn) => btn.addEventListener("click", () => {
+      ui.lang = btn.getAttribute("data-lang");
+      save();
+      applyI18n();
+      renderAll();
+      $("#schedOut").textContent = t("sched.out");
+      $("#schedMeta").innerHTML = "";
+      $("#schedChip").textContent = "—";
+      lastSched = "";
+    }));
+
+    $("#currency").addEventListener("change", (e) => {
+      ui.currency = e.target.value;
+      save();
+      renderAll();
+    });
+
+    $("#resetBtn").addEventListener("click", () => {
+      state = seed();
+      ui = { lang: ui.lang, currency: ui.currency };
+      selectedPatient = "p1";
+      lastSched = "";
+      statusFilter = "all"; typeFilter = "all"; searchTerm = "";
+      $("#fSearch").value = "";
+      $("#schedDate").value = state.sched.date;
+      $("#schedStart").value = state.sched.start;
+      $("#schedBuffer").value = state.sched.buffer;
+      $("#schedOut").textContent = t("sched.out");
+      $("#schedMeta").innerHTML = "";
+      $("#schedChip").textContent = "—";
+      save();
+      applyI18n();
+      renderAll();
+      toast(isAr() ? "استُعيد النموذج" : "Sample restored");
+    });
+
+    $("#addVisit").addEventListener("click", () => {
+      const when = $("#vWhen").value;
+      if (!when) { toast(isAr() ? "حدّد تاريخ الزيارة ووقتها" : "Pick the visit date and time", true); $("#vWhen").focus(); return; }
+      state.visits.push({
+        id: uid("v"), patientId: $("#vPatient").value, type: $("#vType").value,
+        staff: $("#vStaff").value, at: new Date(when).toISOString(),
+        duration: Math.max(15, num($("#vDuration").value, 60)),
+        status: "scheduled", notesAr: $("#vNotes").value.trim(), notesEn: $("#vNotes").value.trim()
+      });
+      $("#vNotes").value = "";
+      save();
+      renderAll();
+      toast(isAr() ? "أُضيفت الزيارة" : "Visit added");
+    });
+
+    $("#fStatus").addEventListener("change", (e) => { statusFilter = e.target.value; renderVisits(); });
+    $("#fType").addEventListener("change", (e) => { typeFilter = e.target.value; renderVisits(); });
+    $("#fSearch").addEventListener("input", (e) => { searchTerm = e.target.value.trim(); renderVisits(); });
+
+    $("#visitList").addEventListener("change", (e) => {
+      const sel = e.target.closest("[data-visit-status]");
+      if (!sel) return;
+      const v = state.visits.find((x) => x.id === sel.getAttribute("data-visit-status"));
+      if (!v) return;
+      v.status = sel.value;
+      save();
+      renderKpis();
+      renderToday();
+      renderVisits();
+      renderCharts();
+      toast(isAr() ? "حُدّثت الحالة" : "Status updated");
+    });
+    $("#visitList").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-del-visit]");
+      if (!btn) return;
+      state.visits = state.visits.filter((v) => v.id !== btn.getAttribute("data-del-visit"));
+      save();
+      renderAll();
+      toast(isAr() ? "حُذفت الزيارة" : "Visit deleted");
+    });
+
+    $("#nutGrid").addEventListener("change", (e) => {
+      const card = e.target.closest("[data-nut]");
+      const f = e.target.getAttribute("data-npf");
+      if (!card || !f) return;
+      const p = patient(card.getAttribute("data-nut"));
+      if (!p) return;
+      if (f === "goal") p.plan.goal = GOALS.indexOf(e.target.value) !== -1 ? e.target.value : p.plan.goal;
+      else if (f === "adherence") p.plan.adherence = clamp(num(e.target.value, 0), 0, 100);
+      else p.plan[f] = Math.max(0, num(e.target.value, 0));
+      save();
+      renderKpis();
+      renderNutrition();
+      renderAlerts();
+    });
+
+    $("#vitalsPatient").addEventListener("change", (e) => {
+      selectedPatient = e.target.value;
+      renderVitals();
+    });
+    $("#addVital").addEventListener("click", () => {
+      const p = patient(selectedPatient);
+      if (!p) return;
+      const latest = latestVital(p);
+      let when = $("#mWhen").value ? new Date($("#mWhen").value) : new Date();
+      if (!$("#mWhen").value && latest && when.getTime() <= new Date(latest.at).getTime()) {
+        when = new Date(Math.max(Date.now(), new Date(latest.at).getTime() + 60000));
+      }
+      when = when.toISOString();
+      const reading = {
+        id: uid("m"), at: when,
+        weight: Math.max(0, num($("#mWeight").value, 0)),
+        sys: Math.max(0, num($("#mSys").value, 0)),
+        dia: Math.max(0, num($("#mDia").value, 0)),
+        glucose: Math.max(0, num($("#mGlucose").value, 0))
+      };
+      if (!reading.weight && !reading.sys && !reading.glucose) {
+        toast(isAr() ? "أدخل قياساً واحداً على الأقل" : "Enter at least one reading", true); return;
+      }
+      p.vitals.push(reading);
+      ["#mWeight", "#mSys", "#mDia", "#mGlucose"].forEach((s) => { $(s).value = "0"; });
+      save();
+      renderVitals();
+      renderKpis();
+      renderAlerts();
+      renderCharts();
+      toast(isAr() ? "حُفظ القياس" : "Reading saved");
+    });
+
+    $("#genSched").addEventListener("click", () => {
+      state.sched = {
+        date: $("#schedDate").value, start: $("#schedStart").value,
+        buffer: Math.max(0, num($("#schedBuffer").value, 20)), staff: $("#schedStaff").value
+      };
+      save();
+      buildSchedule();
+      toast(isAr() ? "نُسّق الجدول" : "Schedule coordinated");
+    });
+    $("#copySched").addEventListener("click", () => {
+      if (!lastSched) { toast(isAr() ? "نسّق الجدول أولاً" : "Coordinate the schedule first", true); return; }
+      const done = () => toast(isAr() ? "نُسخ الجدول" : "Schedule copied");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lastSched).then(done).catch(() => fallback());
+      } else fallback();
+      function fallback() {
+        const ta = document.createElement("textarea");
+        ta.value = lastSched;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); done(); } catch (e) { toast(isAr() ? "تعذّر النسخ" : "Copy failed", true); }
+        document.body.removeChild(ta);
+      }
+    });
+    $("#dlSched").addEventListener("click", () => {
+      if (!lastSched) { toast(isAr() ? "نسّق الجدول أولاً" : "Coordinate the schedule first", true); return; }
+      const blob = new Blob([lastSched], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "visit-schedule.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      toast(isAr() ? "نُزّل الجدول" : "Schedule downloaded");
+    });
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-open-vitals]");
+      if (!btn) return;
+      selectedPatient = btn.getAttribute("data-open-vitals");
+      $("#vitalsPatient").value = selectedPatient;
+      const tab = $('.tab[data-tab="vitals"]');
+      if (tab) tab.click();
+      renderVitals();
+    });
+  }
+
+  /* ---------------- boot ---------------- */
+  load();
+  applyI18n();
+  $("#vWhen").value = localInput(atTime(1, 9, 0));
+  $("#mWhen").value = localInput(new Date().toISOString());
+  $("#schedDate").value = state.sched.date;
+  $("#schedStart").value = state.sched.start;
+  $("#schedBuffer").value = state.sched.buffer;
+  $("#schedStaff").value = state.sched.staff;
+  renderAll();
+  bind();
+  const hash = (location.hash || "").replace("#", "");
+  if (["visits", "nutrition", "vitals", "schedule"].indexOf(hash) !== -1) goTab(hash);
+  window.addEventListener("load", () => { if (typeof window.Chart !== "undefined") renderCharts(); });
+</script>
+</body>
+</html>

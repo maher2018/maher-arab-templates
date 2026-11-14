@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خزانة مخططات الأتمتة — Automation Blueprint Vault</title>
+<meta name="description" content="خزانة توثيق سيناريوهات Make وn8n: مخططات وروابط Webhooks، حساب الوقت والمال الموفّر شهرياً، ومساعد ذكي لتشخيص الأخطاء.">
+<style>
+  :root{
+    --bg:#0F172A;
+    --bg2:#0B1222;
+    --panel:#141F35;
+    --panel2:#19263F;
+    --panel3:#1E2D49;
+    --line:rgba(197,160,89,.20);
+    --line-soft:rgba(147,164,191,.16);
+    --gold:#C5A059;
+    --gold-2:#E4C88A;
+    --gold-dim:rgba(197,160,89,.13);
+    --text:#EAF0FA;
+    --muted:#93A4BF;
+    --ok:#3BB98D;
+    --warn:#E0A33E;
+    --bad:#D9615F;
+    --info:#5C8FD6;
+    --r:18px;
+    --shadow:0 18px 40px rgba(3,8,20,.45);
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 520px at 85% -10%, rgba(197,160,89,.12), transparent 60%),
+      radial-gradient(900px 500px at 5% 0%, rgba(92,143,214,.10), transparent 55%),
+      linear-gradient(180deg,#0F172A 0%,#0B1222 100%);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:"Segoe UI","Tahoma","Helvetica Neue",Arial,"Noto Sans Arabic",sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:.2px;line-height:1.35}
+  p{margin:0}
+  button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--gold-2)}
+  .app{max-width:1280px;margin:0 auto;padding:18px clamp(14px,3vw,30px) 40px}
+
+  /* ---------- header ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:14px 18px;border:1px solid var(--line);border-radius:var(--r);
+    background:linear-gradient(135deg,rgba(25,38,63,.96),rgba(15,23,42,.92));
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .topbar::before{content:"";position:absolute;inset-inline:0;top:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
+  .brand{display:flex;align-items:center;gap:14px;min-width:0}
+  .mono{
+    width:52px;height:52px;flex:0 0 52px;border-radius:14px;display:grid;place-items:center;
+    font-weight:800;letter-spacing:1px;color:#0F172A;
+    background:linear-gradient(140deg,var(--gold-2),var(--gold));
+    box-shadow:0 8px 18px rgba(197,160,89,.28);
+  }
+  .brand h1{font-size:19px}
+  .brand p{color:var(--muted);font-size:12.5px;letter-spacing:.4px}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .seg{display:inline-flex;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);border-radius:12px;padding:3px}
+  .seg button{background:none;border:0;color:var(--muted);padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600}
+  .seg button.on{background:var(--gold);color:#0F172A}
+  .cur{display:flex;align-items:center;gap:8px;background:rgba(11,18,34,.7);border:1px solid var(--line-soft);
+    border-radius:12px;padding:5px 10px;font-size:12.5px;color:var(--muted)}
+  .cur select{background:transparent;border:0;color:var(--text);font-weight:600;max-width:160px;outline:none}
+  [dir="ltr"] .cur select{max-width:200px}
+  .cur select option{background:#14203A;color:var(--text)}
+  .btn{
+    border:1px solid var(--line);background:linear-gradient(140deg,var(--gold),#B8904A);color:#101A2E;
+    padding:10px 16px;border-radius:12px;font-weight:700;font-size:13.5px;
+    display:inline-flex;align-items:center;gap:8px;transition:.18s transform,.18s box-shadow,.18s filter;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(197,160,89,.22);filter:brightness(1.04)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:rgba(197,160,89,.06);color:var(--gold-2);border-color:var(--line)}
+  .btn.ghost:hover{background:rgba(197,160,89,.12);box-shadow:none}
+  .btn.sm{padding:7px 12px;font-size:12.5px;border-radius:10px}
+  .btn.danger{background:rgba(217,97,95,.12);border-color:rgba(217,97,95,.35);color:#F0A7A5}
+  .iconbtn{
+    width:32px;height:32px;border-radius:9px;border:1px solid var(--line-soft);background:rgba(255,255,255,.02);
+    color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1;transition:.15s;
+  }
+  .iconbtn:hover{color:#F0A7A5;border-color:rgba(217,97,95,.4);background:rgba(217,97,95,.08)}
+
+  /* ---------- tabs ---------- */
+  .tabs{
+    display:flex;gap:8px;margin:18px 0;padding:6px;border:1px solid var(--line-soft);border-radius:14px;
+    background:rgba(20,31,53,.72);overflow-x:auto;scrollbar-width:thin;
+  }
+  .tab{
+    flex:1 0 auto;background:none;border:1px solid transparent;color:var(--muted);
+    padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;white-space:nowrap;transition:.16s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.5;transition:.16s}
+  .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab.on{color:#101A2E;background:linear-gradient(140deg,var(--gold-2),var(--gold));border-color:transparent;box-shadow:0 8px 18px rgba(197,160,89,.18)}
+  .tab.on .dot{background:#101A2E;opacity:1}
+
+  .tabpane{display:none;animation:fade .22s ease}
+  .tabpane.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(160deg,rgba(25,38,63,.96),rgba(20,31,53,.94));
+    border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);
+    min-width:0;
+  }
+  .card + .card{margin-top:18px}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .card-head h2{font-size:16.5px}
+  .card-head .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .kicker{
+    display:inline-grid;place-items:center;min-width:34px;height:26px;padding:0 8px;border-radius:8px;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);
+    font-size:12px;font-weight:800;letter-spacing:.6px;margin-inline-end:10px;
+  }
+  .card-head .titlewrap{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+    background:rgba(197,160,89,.10);border:1px solid var(--line);color:var(--gold-2);
+    font-size:11.5px;font-weight:700;white-space:nowrap;
+  }
+  .chip.soft{background:rgba(147,164,191,.08);border-color:var(--line-soft);color:var(--muted)}
+  .chip.ok{background:rgba(59,185,141,.10);border-color:rgba(59,185,141,.30);color:#7FD9B6}
+  .chip.bad{background:rgba(217,97,95,.10);border-color:rgba(217,97,95,.30);color:#F0A7A5}
+  .chip.warn{background:rgba(224,163,62,.10);border-color:rgba(224,163,62,.32);color:#F0C987}
+
+  /* ---------- forms ---------- */
+  .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .field-grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .field-grid .wide{grid-column:1/-1}
+  .field-grid.compact{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+  label.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  label.field > span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  input,select,textarea{
+    width:100%;background:rgba(11,18,34,.65);border:1px solid var(--line-soft);border-radius:11px;
+    padding:10px 12px;color:var(--text);outline:none;transition:.16s;font-size:13.5px;
+  }
+  input::placeholder,textarea::placeholder{color:#6F819D}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.14);background:rgba(11,18,34,.9)}
+  select option{background:#14203A;color:var(--text)}
+  textarea{resize:vertical;min-height:84px;line-height:1.6}
+  .form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+
+  /* ---------- kpis ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+  .kpi{
+    background:linear-gradient(160deg,rgba(25,38,63,.95),rgba(18,28,48,.92));
+    border:1px solid var(--line);border-radius:16px;padding:16px 18px;position:relative;overflow:hidden;min-width:0;
+  }
+  .kpi::after{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:90px;height:90px;border-radius:50%;
+    background:radial-gradient(circle,rgba(197,160,89,.16),transparent 70%)}
+  .kpi .lbl{font-size:11.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+  .kpi .val{font-size:27px;font-weight:800;letter-spacing:.4px;margin-top:6px;color:var(--gold-2)}
+  [dir="rtl"] .kpi .val{direction:ltr;text-align:right}
+  [dir="ltr"] .kpi .val{text-align:left}
+  .kpi .val small{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:0}
+  .kpi .note{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .kpi.plain .val{color:var(--text)}
+  .kpi.bare::after{display:none}
+
+  /* ---------- charts ---------- */
+  .grid-charts{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;margin-bottom:18px}
+  .chart-card{padding:16px 16px 10px;display:flex;flex-direction:column;min-width:0}
+  .chart-card h3{font-size:14px}
+  .chart-card .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .chart-box{position:relative;height:252px;margin-top:12px;min-width:0}
+  .chart-fallback{
+    position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:18px;
+    color:var(--muted);font-size:12.5px;background:rgba(11,18,34,.45);border:1px dashed var(--line-soft);border-radius:12px;
+  }
+  .chart-box.no-chart .chart-fallback{display:grid}
+  .legend-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--muted)}
+  .legend-row i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- dashboard lower ---------- */
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+  .grid2 > .card{margin-top:0}
+  .ms-row{display:flex;flex-direction:column;gap:6px;padding:11px 0;border-bottom:1px dashed var(--line-soft)}
+  .ms-row:last-child{border-bottom:0;padding-bottom:0}
+  .ms-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+  .ms-top b{font-weight:700}
+  .ms-meta{font-size:11.5px;color:var(--muted)}
+  .bar{height:7px;border-radius:99px;background:rgba(147,164,191,.14);overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .4s}
+  .bar.plan > i{background:linear-gradient(90deg,#3E4A63,#7C8AA6)}
+  .bar.ok > i{background:linear-gradient(90deg,#2E9E77,#6FD8B2)}
+  .bar.bad > i{background:linear-gradient(90deg,#B34B4A,#E58C89)}
+  .team-mini{display:flex;flex-direction:column;gap:10px}
+  .tm-row{display:flex;align-items:center;gap:10px;font-size:13px}
+  .avatar{
+    width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(197,160,89,.12);border:1px solid var(--line);color:var(--gold-2);font-weight:800;font-size:12.5px;
+  }
+  .tm-row .grow{flex:1;min-width:0}
+  .tm-row .grow b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tm-row .grow span{font-size:11.5px;color:var(--muted)}
+
+  /* ---------- tasks ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .filters select,.filters input{width:auto;min-width:150px;flex:1 1 150px}
+  .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .col{background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:14px;padding:12px;min-width:0}
+  .col-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:0 2px}
+  .col-head b{font-size:12.5px;letter-spacing:.2px}
+  .col-head .n{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);padding:2px 8px;border-radius:99px}
+  .col-body{display:flex;flex-direction:column;gap:10px;min-height:60px}
+  .task{
+    background:linear-gradient(160deg,rgba(30,45,73,.95),rgba(22,34,56,.95));
+    border:1px solid var(--line-soft);border-radius:12px;padding:12px;position:relative;
+  }
+  .task.late{border-color:rgba(217,97,95,.45);box-shadow:inset 0 0 0 1px rgba(217,97,95,.08)}
+  .task .tt{font-size:13px;font-weight:700;line-height:1.5;word-break:break-word}
+  .task .tmeta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;font-size:11px;color:var(--muted)}
+  .task .tmeta .who{color:var(--gold-2)}
+  .task .tfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .task select{width:auto;flex:1;padding:5px 8px;font-size:11.5px;border-radius:8px}
+  .empty{color:var(--muted);font-size:12px;text-align:center;padding:18px 6px;border:1px dashed var(--line-soft);border-radius:10px}
+
+  /* ---------- team ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .member{
+    background:linear-gradient(160deg,rgba(30,45,73,.9),rgba(20,31,53,.92));
+    border:1px solid var(--line-soft);border-radius:14px;padding:16px;
+  }
+  .member-top{display:flex;align-items:center;gap:10px}
+  .member-top .who{flex:1;min-width:0}
+  .member-top b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .member-top span{font-size:11.5px;color:var(--muted)}
+  .member .stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0 8px;font-size:11.5px;color:var(--muted)}
+  .member .stats b{color:var(--text);font-size:13px}
+  .member .mail{font-size:11px;color:var(--muted);margin-top:8px;word-break:break-all}
+
+  /* ---------- references ---------- */
+  .ref-item{
+    background:rgba(11,18,34,.42);border:1px solid var(--line-soft);border-radius:13px;padding:14px;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .ref-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .ref-body{flex:1;min-width:0}
+  .cite{font-size:13px;line-height:1.8;word-break:break-word}
+  .cite{unicode-bidi:plaintext}
+  .cite .yr{color:var(--gold-2);font-weight:700}
+  .ref-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .ref-actions{display:flex;flex-direction:column;gap:6px}
+  .ref-type{font-size:10.5px;letter-spacing:.4px;text-transform:uppercase}
+  .ref-form-grid{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px}
+  .ref-form-grid .full{grid-column:1/-1}
+
+  /* ---------- defense ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chipbtn{
+    background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted);
+    padding:7px 13px;border-radius:99px;font-size:12.5px;font-weight:600;transition:.15s;
+  }
+  .chipbtn:hover{color:var(--text);border-color:var(--line)}
+  .chipbtn.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-2)}
+  .def-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+  .q{
+    border:1px solid var(--line-soft);border-radius:13px;padding:14px;background:rgba(11,18,34,.42);
+  }
+  .q + .q{margin-top:10px}
+  .q-top{display:flex;align-items:flex-start;gap:10px}
+  .q-num{
+    width:26px;height:26px;flex:0 0 26px;border-radius:8px;display:grid;place-items:center;
+    background:var(--gold-dim);border:1px solid var(--line);color:var(--gold-2);font-size:11.5px;font-weight:800;
+  }
+  .q-text{flex:1;font-size:13.5px;font-weight:600;line-height:1.7}
+  .q-hint{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-soft);line-height:1.7}
+  .q-hint b{color:var(--gold-2);font-weight:700}
+  .q-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .ready-toggle{
+    background:rgba(59,185,141,.08);border:1px solid rgba(59,185,141,.28);color:#8ADDC0;
+    border-radius:9px;padding:5px 11px;font-size:11.5px;font-weight:700;
+  }
+  .ready-toggle.on{background:rgba(59,185,141,.2);border-color:rgba(59,185,141,.6);color:#C7F3E2}
+  .score-ring{
+    width:104px;height:104px;border-radius:50%;display:grid;place-items:center;margin:0 auto 8px;
+    background:conic-gradient(var(--gold) calc(var(--p,0)*1%), rgba(147,164,191,.14) 0);
+    position:relative;
+  }
+  .score-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#121C31}
+  .score-ring b{position:relative;font-size:22px;color:var(--gold-2)}
+  .side-card .hintline{font-size:12px;color:var(--muted);line-height:1.8}
+  .side-card ul{margin:10px 0 0;padding-inline-start:18px;color:var(--muted);font-size:12.5px;line-height:1.9}
+  .side-card li b{color:var(--text)}
+
+  /* ---------- costs ---------- */
+  .cost-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+  .money{font-variant-numeric:tabular-nums;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:13px}
+  th,td{padding:10px 12px;text-align:start;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+  th{font-size:11.5px;color:var(--muted);font-weight:700;background:rgba(11,18,34,.5);letter-spacing:.2px}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:rgba(197,160,89,.04)}
+  td.num{font-variant-numeric:tabular-nums}
+  .cost-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:rgba(147,164,191,.14);margin-top:14px}
+  .cost-bar i{display:block;height:100%}
+  .cost-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .cost-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:6px}
+
+  /* ---------- misc ---------- */
+  .muted{color:var(--muted)}
+  .tiny{font-size:11.5px}
+  .note-box{
+    border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--gold-dim);
+    font-size:12px;color:var(--gold-2);line-height:1.75;
+  }
+  .divider{height:1px;background:var(--line-soft);margin:16px 0}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line-soft);color:var(--muted);
+    font-size:11.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .toast{
+    position:fixed;inset-inline:0;bottom:22px;margin:0 auto;width:max-content;max-width:90vw;
+    background:#1C2A45;border:1px solid var(--gold);color:var(--gold-2);padding:10px 18px;border-radius:12px;
+    font-size:13px;font-weight:600;box-shadow:0 18px 40px rgba(0,0,0,.5);
+    opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s;z-index:60;
+  }
+  .toast.show{opacity:1;transform:none}
+  .toast.err{border-color:var(--bad);color:#F3ADAB}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(147,164,191,.25);border-radius:99px}
+  ::-webkit-scrollbar-track{background:transparent}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  @media (max-width:1100px){
+    .grid-charts{grid-template-columns:1fr 1fr}
+    .chart-card.wide{grid-column:1/-1}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (max-width:900px){
+    .def-layout{grid-template-columns:1fr}
+    .def-side{order:-1}
+  }
+  @media (max-width:820px){
+    .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .board{grid-template-columns:1fr}
+    .cost-top{grid-template-columns:1fr}
+    .grid-charts{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr 1fr}
+    .ref-form-grid .full{grid-column:1/-1}
+    .topbar{padding:12px 14px}
+    .brand h1{font-size:16px}
+    .brand p{font-size:11.5px}
+    .mono{width:44px;height:44px;flex-basis:44px;border-radius:12px;font-size:13px}
+  }
+  @media (max-width:520px){
+    .kpis{grid-template-columns:1fr}
+    .ref-form-grid{grid-template-columns:1fr}
+    .app{padding-inline:12px}
+    .card{padding:16px}
+    .top-actions{width:100%}
+    .cur{flex:1}
+    .cur select{max-width:none;width:100%}
+    .field-grid{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .tabs,.top-actions,.btn,.iconbtn,.toast{display:none!important}
+    .card,.kpi{box-shadow:none;border-color:#bbb;background:#fff;color:#111}
+    .tabpane{display:block!important}
+  }
+
+  /* ---------- automation vault additions ---------- */
+  .plat{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:800;letter-spacing:.4px}
+  .plat.make{background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.4);color:var(--gold-2)}
+  .plat.n8n{background:rgba(92,143,214,.14);border:1px solid rgba(92,143,214,.4);color:#9DC0F0}
+  .scn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+  .scn{
+    background:linear-gradient(160deg,rgba(30,45,73,.92),rgba(20,31,53,.94));
+    border:1px solid var(--line-soft);border-radius:15px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;
+  }
+  .scn.off{opacity:.62}
+  .scn-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .scn-top .spacer{flex:1}
+  .scn h3{font-size:14.5px;line-height:1.55;word-break:break-word}
+  .scn .meta{font-size:11.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px}
+  .scn-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:2px}
+  .stat{background:rgba(11,18,34,.45);border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;min-width:0}
+  .stat span{display:block;font-size:10.5px;color:var(--muted)}
+  .stat b{font-size:13.5px;letter-spacing:.2px;direction:ltr;display:block;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stat.hl b{color:var(--gold-2)}
+  [dir="rtl"] .stat b{text-align:right}
+  [dir="ltr"] .stat b{text-align:left}
+  .urlrow{display:flex;align-items:center;gap:6px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);border-radius:9px;padding:5px 8px;min-width:0}
+  .urlrow code{flex:1;min-width:0;font-size:10.5px;color:#9DC0F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}
+  .urlrow .btn{padding:4px 9px;font-size:10.5px;border-radius:7px}
+  .scn-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:6px;border-top:1px dashed var(--line-soft)}
+  .scn-actions .btn{padding:5px 10px;font-size:11px;border-radius:8px}
+  details.stepsbox{margin-top:4px}
+  details.stepsbox summary{cursor:pointer;font-size:11.5px;color:var(--gold-2);font-weight:700;list-style:none}
+  details.stepsbox summary::-webkit-details-marker{display:none}
+  details.stepsbox summary::before{content:"+ ";color:var(--muted)}
+  details.stepsbox[open] summary::before{content:"− "}
+  ol.steps{margin:8px 0 0;padding-inline-start:20px;color:var(--muted);font-size:12px;line-height:1.9}
+  ol.steps b{color:var(--text);font-weight:600}
+  .health-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);font-size:12.5px}
+  .health-row:last-child{border-bottom:0}
+  .health-row .grow{flex:1;min-width:0}
+  .health-row .grow b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .health-row .grow span{font-size:11px;color:var(--muted)}
+  .dotbadge{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:0 0 8px}
+  .dotbadge.warn{background:var(--warn)}
+  .dotbadge.bad{background:var(--bad)}
+  .mini-table td,.mini-table th{padding:8px 10px;font-size:12px}
+  .hook-actions{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+  .hook-actions .btn{padding:5px 9px;font-size:11px;border-radius:8px}
+  .urlcell{max-width:320px;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left;font-size:11.5px;color:#9DC0F0}
+  .codebox{
+    background:rgba(5,10,22,.75);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;color:#A9C4E8;
+    direction:ltr;text-align:left;white-space:pre;overflow:auto;max-height:220px;line-height:1.7;
+  }
+  .doc-result{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(160deg,rgba(30,45,73,.75),rgba(20,31,53,.8))}
+  .doc-result h3{font-size:15px;margin-bottom:4px}
+  .sev{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+  .sev.high{background:rgba(217,97,95,.14);border:1px solid rgba(217,97,95,.4);color:#F0A7A5}
+  .sev.mid{background:rgba(224,163,62,.14);border:1px solid rgba(224,163,62,.4);color:#F0C987}
+  .sev.low{background:rgba(59,185,141,.12);border:1px solid rgba(59,185,141,.4);color:#8ADDC0}
+  .fixlist{margin:10px 0 0;padding-inline-start:20px;font-size:12.5px;line-height:1.95;color:var(--text)}
+  .fixlist li{margin-bottom:2px}
+  .kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 5px;direction:ltr;display:inline-block}
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:820px){.split2{grid-template-columns:1fr}}
+  .sav-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:16px 0}
+  @media (max-width:900px){.sav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:520px){.sav-grid{grid-template-columns:1fr}.scn-grid{grid-template-columns:1fr}}
+  .example-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .example-chips button{font-size:11px;padding:5px 10px;border-radius:99px;background:rgba(11,18,34,.55);border:1px solid var(--line-soft);color:var(--muted)}
+  .example-chips button:hover{color:var(--gold-2);border-color:var(--line)}
+  .result-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mono">AV</div>
+      <div>
+        <h1 data-i18n="brand.title">خزانة مخططات الأتمتة</h1>
+        <p data-i18n="brand.sub">Automation Blueprints · Make &amp; n8n</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button type="button" data-lang="ar" class="on">العربية</button>
+        <button type="button" data-lang="en">English</button>
+      </div>
+      <label class="cur">
+        <span data-i18n="currency">العملة</span>
+        <select id="currency" aria-label="Currency"></select>
+      </label>
+      <button type="button" class="btn ghost sm" id="resetBtn" data-i18n="reset">استعادة النموذج</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Sections">
+    <button type="button" class="tab on" data-tab="dash"><span class="dot"></span><span data-i18n="tab.dash">لوحة الأتمتة</span></button>
+    <button type="button" class="tab" data-tab="scenarios"><span class="dot"></span><span data-i18n="tab.scenarios">خزانة السيناريوهات</span></button>
+    <button type="button" class="tab" data-tab="webhooks"><span class="dot"></span><span data-i18n="tab.webhooks">الويب هوكس</span></button>
+    <button type="button" class="tab" data-tab="savings"><span class="dot"></span><span data-i18n="tab.savings">حاسبة التوفير</span></button>
+    <button type="button" class="tab" data-tab="doctor"><span class="dot"></span><span data-i18n="tab.doctor">طبيب الأخطاء</span></button>
+  </nav>
+
+  <main>
+    <!-- ============ DASHBOARD ============ -->
+    <section class="tabpane on" id="pane-dash">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="titlewrap"><span class="kicker">01</span><h2 data-i18n="dash.title">نبض الأتمتة الشهري</h2></div>
+            <div class="sub" data-i18n="dash.sub">كل الأرقام محسوبة من سيناريوهاتك: التنفيذات × الدقائق الموفَّرة × سعر ساعة العمل.</div>
+          </div>
+          <span class="chip" id="dashChip">—</span>
+        </div>
+        <div class="kpis" style="margin:0">
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.hours">ساعات موفَّرة شهرياً</div>
+            <div class="val"><span id="kpiHours">0</span></div>
+            <div class="note" id="kpiHoursNote">—</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl" data-i18n="kpi.net">صافي التوفير شهرياً</div>
+            <div class="val money" id="kpiNet">0</div>
+            <div class="note" id="kpiNetNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.active">سيناريوهات نشطة</div>
+            <div class="val"><span id="kpiActive">0</span><small> / <span id="kpiAll">0</span></small></div>
+            <div class="note" id="kpiActiveNote">—</div>
+          </div>
+          <div class="kpi plain">
+            <div class="lbl" data-i18n="kpi.err">معدل الخطأ المرجّح</div>
+            <div class="val"><span id="kpiErr">0</span><small>%</small></div>
+            <div class="note" id="kpiErrNote">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-charts">
+        <div class="card chart-card wide">
+          <h3 data-i18n="chart.hours">الساعات الموفَّرة لكل سيناريو</h3>
+          <div class="sub" data-i18n="chart.hoursSub">شهرياً — التنفيذات × الدقائق ÷ 60</div>
+          <div class="chart-box" id="boxHours"><canvas id="cHours" aria-label="Hours saved per scenario"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card">
+          <h3 data-i18n="chart.runs">التنفيذات مقابل الأخطاء</h3>
+          <div class="sub" data-i18n="chart.runsSub">لكل سيناريو خلال شهر</div>
+          <div class="chart-box" id="boxRuns"><canvas id="cRuns" aria-label="Runs versus errors"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+        <div class="card chart-card">
+          <h3 data-i18n="chart.share">توزيع التوفير حسب المنصة</h3>
+          <div class="sub" data-i18n="chart.shareSub">صافي القيمة بعد تكلفة الأدوات</div>
+          <div class="chart-box" id="boxShare"><canvas id="cShare" aria-label="Savings by platform"></canvas><div class="chart-fallback" data-i18n="chart.offline">الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.</div></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">02</span><h2 data-i18n="dash.top">أعلى السيناريوهات توفيراً</h2></div>
+              <div class="sub" data-i18n="dash.topSub">مرتّبة حسب القيمة الصافية الشهرية</div></div>
+            <button type="button" class="btn ghost sm" data-goto="scenarios" data-i18n="dash.manage">إدارة</button>
+          </div>
+          <div class="table-wrap">
+            <table class="mini-table">
+              <thead><tr>
+                <th data-i18n="f.scenario">السيناريو</th>
+                <th data-i18n="th.platform">المنصة</th>
+                <th data-i18n="th.hours">ساعات/شهر</th>
+                <th data-i18n="th.net">صافي/شهر</th>
+              </tr></thead>
+              <tbody id="topRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="titlewrap"><span class="kicker">03</span><h2 data-i18n="dash.health">صحة التشغيل</h2></div>
+              <div class="sub" data-i18n="dash.healthSub">تنبيهات تحتاج تدخلاً قبل أن تتضخم</div></div>
+            <span class="chip soft" id="healthChip">—</span>
+          </div>
+          <div id="healthList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCENARIOS ============ -->
+    <section class="tabpane" id="pane-scenarios">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">04</span><h2 id="formTitle" data-i18n="scn.add">إضافة سيناريو</h2></div>
+            <div class="sub" data-i18n="scn.addSub">وثّق المخطط كاملاً: المشغّل، الخطوات، رابط الويب هوك، وحجم التشغيل الشهري.</div></div>
+          <span class="chip soft" id="editChip" hidden>—</span>
+        </div>
+        <div class="field-grid">
+          <label class="field wide"><span data-i18n="f.name">اسم السيناريو</span>
+            <input id="sName" data-i18n-ph="scn.namePh" autocomplete="off"></label>
+          <label class="field"><span data-i18n="f.platform">المنصة</span>
+            <select id="sPlatform">
+              <option value="make">Make</option>
+              <option value="n8n">n8n</option>
+            </select></label>
+          <label class="field"><span data-i18n="f.trigger">المشغّل</span>
+            <select id="sTrigger">
+              <option value="webhook" data-i18n="trigger.webhook">Webhook / طلب خارجي</option>
+              <option value="schedule" data-i18n="trigger.schedule">مجدول (Schedule)</option>
+              <option value="form" data-i18n="trigger.form">نموذج / استبيان</option>
+              <option value="email" data-i18n="trigger.email">بريد إلكتروني</option>
+              <option value="crm" data-i18n="trigger.crm">حدث في تطبيق (CRM/متجر)</option>
+            </select></label>
+          <label class="field"><span data-i18n="f.runs">تنفيذات شهرياً</span><input type="number" id="sRuns" min="0" step="1" value="600"></label>
+          <label class="field"><span data-i18n="f.minutes">دقائق يدوية/تنفيذ</span><input type="number" id="sMinutes" min="0" step="0.5" value="4"></label>
+          <label class="field"><span data-i18n="f.err">نسبة الأخطاء %</span><input type="number" id="sErr" min="0" max="100" step="0.1" value="1.5"></label>
+          <label class="field"><span data-i18n="f.cost">تكلفة الأدوات/شهر (بالعملة)</span><input type="number" id="sCost" min="0" step="0.01" value="9"></label>
+          <label class="field"><span data-i18n="f.webhook">رابط الويب هوك</span>
+            <input id="sWebhook" dir="ltr" placeholder="https://hook.eu2.make.com/xxxxxxxx" autocomplete="off"></label>
+          <label class="field wide"><span data-i18n="f.steps">خطوات المخطط (سطر لكل خطوة)</span>
+            <textarea id="sSteps" data-i18n-ph="scn.stepsPh" rows="3"></textarea></label>
+          <label class="field wide"><span data-i18n="f.notes">ملاحظات التشغيل</span>
+            <input id="sNotes" data-i18n-ph="scn.notesPh" autocomplete="off"></label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn" id="saveScn" data-i18n="scn.save">حفظ السيناريو</button>
+          <button type="button" class="btn ghost sm" id="cancelEdit" data-i18n="scn.cancel" hidden>إلغاء التعديل</button>
+          <span class="tiny muted" data-i18n="scn.hint">نصيحة: كل خطوة يجب أن تُرجع نتيجة واضحة، وإلا فأضف عقدة تحقق.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">05</span><h2 data-i18n="scn.list">الخزانة</h2></div>
+            <div class="sub" id="scnSub">—</div></div>
+          <div class="row-between">
+            <button type="button" class="btn ghost sm" id="expJson" data-i18n="scn.exportJson">تصدير JSON</button>
+            <button type="button" class="btn ghost sm" id="expCsv" data-i18n="scn.exportCsv">تصدير CSV</button>
+          </div>
+        </div>
+        <div class="filters">
+          <select id="fPlatform">
+            <option value="" data-i18n="scn.allPlatforms">كل المنصات</option>
+            <option value="make">Make</option>
+            <option value="n8n">n8n</option>
+          </select>
+          <input id="fSearch" data-i18n-ph="scn.search" autocomplete="off">
+        </div>
+        <div class="scn-grid" id="scnGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ WEBHOOKS ============ -->
+    <section class="tabpane" id="pane-webhooks">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">06</span><h2 data-i18n="web.title">سجل روابط الويب هوك</h2></div>
+            <div class="sub" data-i18n="web.sub">روابط الالتقاط التي تناديها أنظمتك — انسخ الرابط أو أمر cURL الجاهز للاختبار.</div></div>
+          <span class="chip" id="hookCount">0</span>
+        </div>
+        <div class="note-box" data-i18n="web.hint">لا تُرسل بيانات حقيقية إلى رابط تجريبي. استخدم بيانات وهمية عند اختبار الـ Webhook، وتأكد من رمز التحقق (Secret) قبل الربط بالإنتاج.</div>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead><tr>
+              <th data-i18n="f.scenario">السيناريو</th>
+              <th data-i18n="th.platform">المنصة</th>
+              <th data-i18n="th.method">الطريقة</th>
+              <th data-i18n="web.url">الرابط</th>
+              <th data-i18n="web.actions">إجراءات</th>
+            </tr></thead>
+            <tbody id="hookRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">07</span><h2 data-i18n="web.sample">حمولة اختبار جاهزة</h2></div>
+            <div class="sub" data-i18n="web.sampleSub">أرسل هذه الحمولة إلى أي رابط أعلاه للتحقق من وصول البيانات.</div></div>
+          <button type="button" class="btn sm" id="copySample" data-i18n="web.copySample">نسخ الحمولة</button>
+        </div>
+        <pre class="codebox" id="sampleCode"></pre>
+      </div>
+    </section>
+
+    <!-- ============ SAVINGS ============ -->
+    <section class="tabpane" id="pane-savings">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="titlewrap"><span class="kicker">08</span><h2 data-i18n="sav.title">حاسبة الوقت والمال الموفّر</h2></div>
+            <div class="sub" data-i18n="sav.sub">عدّل سعر ساعة العمل وراجع الأثر الشهري والسنوي — كل المبالغ بالعملة المختارة.</div></div>
+        </div>
+        <div class="field-grid two">
+          <label class="field"><span data-i18n="sav.rate">سعر ساعة العمل</span>
+            <input type="number" id="rateInput" min="0" step="0.01"></label>
+          <label class="field"><span data-i18n="sav.tools">تكلفة الأدوات الشهرية</span>
+            <input id="toolsDisplay" readonly></label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn sm" id="applyRate" data-i18n="sav.apply">إعادة الحساب</button>
+          <span class="tiny muted" data-i18n="sav.rateHint">الافتراضي 24 دولاراً/ساعة. عدّله ليتغيّر التوفير كله فوراً.</span>
+        </div>
+
+        <div class="sav-grid">
+          <div class="kpi" style="margin:0">
+            <div class="lbl" data-i18n="sav.hours">ساعات موفَّرة/شهر</div>
+            <div class="val"><span id="savHours">0</span></div>
+            <div class="note" data-i18n="sav.hoursNote">وقت بشري مُستعاد</div>
+          </div>
+          <div class="kpi" style="margin:0">
+            <div class="lbl" data-i18n="sav.gross">قيمة الوقت/شهر</div>
+            <div class="val money" id="savGross">0</div>
+            <div class="note" data-i18n="sav.grossNote">قبل خصم الأدوات</div>
+          </div>
+          <div class="kpi" style="margin:0">
+            <div class="lbl" data-i18n="sav.net">صافي التوفير/شهر</div>
+            <div class="val money" id="savNet">0</div>
+            <div class="note" id="savNetNote">—</div>
+          </div>
+          <div class="kpi plain" style="margin:0">
+            <div class="lbl" data-i18n="sav.roi">عائد الاستثمار</div>
+            <div class="val"><span id="savROI">0</span><small>%</small></div>
+            <div class="note" data-i18n="sav.roiNote">صافي التوفير ÷ تكلفة الأدوات</div>
+          </div>
+        </div>
+
+        <div class="split2">
+          <div class="card" style="margin:0;background:rgba(11,18,34,.35)">
+            <div class="card-head" style="margin-bottom:10px"><div><h2 data-i18n="sav.split">التوزيع حسب المنصة</h2><div class="sub" data-i18n="sav.splitSub">الساعات والقيمة لكل منصة</div></div></div>
+            <div id="platformSplit"></div>
+          </div>
+          <div class="card" style="margin:0;background:rgba(11,18,34,.35)">
+            <div class="card-head" style="margin-bottom:10px"><div><h2 data-i18n="sav.annualTitle">الأثر السنوي</h2><div class="sub" data-i18n="sav.annualSub">إسقاط مباشر × 12</div></div></div>
+            <div class="kpi plain bare" style="margin:0;border:0;padding:6px 0;background:none">
+              <div class="lbl" data-i18n="sav.annual">صافي التوفير السنوي</div>
+              <div class="val money" id="savAnnual">0</div>
+              <div class="note"><span id="annualHours">0</span> <span data-i18n="sav.annualHours">ساعة عمل سنوياً</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="tiny muted" data-i18n="sav.note">تقدير يعتمد على أرقامك المعلنة؛ راجع التنفيذات الفعلية شهرياً قبل الاعتماد عليه في أي قرار.</div>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-top:16px">
+          <table class="mini-table">
+            <thead><tr>
+              <th data-i18n="f.scenario">السيناريو</th>
+              <th data-i18n="th.platform">المنصة</th>
+              <th data-i18n="th.runs">تنفيذات</th>
+              <th data-i18n="th.hours">ساعات/شهر</th>
+              <th data-i18n="sav.gross">قيمة الوقت/شهر</th>
+              <th data-i18n="th.tool">تكلفة الأدوات</th>
+              <th data-i18n="th.net">صافي/شهر</th>
+            </tr></thead>
+            <tbody id="savRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOCTOR ============ -->
+    <section class="tabpane" id="pane-doctor">
+      <div class="def-layout">
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div><div class="titlewrap"><span class="kicker">09</span><h2 data-i18n="doc.title">طبيب أخطاء الأتمتة</h2></div>
+                <div class="sub" data-i18n="doc.sub">الصق نص الخطأ أو رمز الحالة؛ سأطابقه مع أسباب شائعة في Make وn8n وأعطيك خطوات إصلاح مرتّبة.</div></div>
+            </div>
+            <div class="field-grid">
+              <label class="field"><span data-i18n="f.platform">المنصة</span>
+                <select id="dPlatform">
+                  <option value="" data-i18n="doc.anyPlatform">كلتا المنصتين</option>
+                  <option value="make">Make</option>
+                  <option value="n8n">n8n</option>
+                </select></label>
+              <label class="field wide"><span data-i18n="doc.error">نص الخطأ / رمز الحالة</span>
+                <textarea id="dError" data-i18n-ph="doc.errorPh" rows="3"></textarea></label>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn" id="doctorBtn" data-i18n="doc.run">شخّص الخطأ</button>
+              <button type="button" class="btn ghost sm" id="clearDoctor" data-i18n="doc.clear">تفريغ</button>
+            </div>
+            <div class="example-chips" id="docChips"></div>
+          </div>
+          <div class="card" id="docResultCard">
+            <div class="card-head" style="margin-bottom:10px">
+              <div><h2 data-i18n="doc.resultTitle">نتيجة التشخيص</h2><div class="sub" id="docSub" data-i18n="doc.resultSub">لم يُشخَّص خطأ بعد</div></div>
+            </div>
+            <div id="docResult"></div>
+          </div>
+        </div>
+        <aside class="def-side">
+          <div class="card side-card">
+            <h2 data-i18n="doc.checklistTitle">فحص سريع قبل التصعيد</h2>
+            <ul>
+              <li data-i18n="doc.check1">افتح آخر تنفيذ في Make/n8n واقرأ اسم العقدة الفاشلة أولاً.</li>
+              <li data-i18n="doc.check2">أعد إرسال الحمولة نفسها يدوياً من لوحة الويب هوك.</li>
+              <li data-i18n="doc.check3">أعد ربط الحساب إذا كانت الكلمة المفتاحية «401» أو «Unauthorized».</li>
+              <li data-i18n="doc.check4">راقب عدد العمليات: تجاوز الحد يظهر كخطأ 429 لا كعطل في المخطط.</li>
+              <li data-i18n="doc.check5">أوقف التفعيل التلقائي للسيناريو أثناء الاختبار لمنع التكرار.</li>
+            </ul>
+            <div class="divider"></div>
+            <div class="hintline" data-i18n="doc.tip">قاعدة ذهبية: 80% من أخطاء الأتمتة سببها صلاحية منتهية، أو شكل بيانات مختلف عن المتوقع، أو تجاوز حد الاستخدام — وليست المنصة نفسها.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="foot.left">ARAB TEMPLATES · ملف واحد يعمل بلا خادم</span>
+    <span data-i18n="foot.right">© 2026 Arab Templates — Automation Blueprint Vault</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const STORE = "at_automation_vault_v1";
+
+  const CURRENCIES = [
+    { code: "SAR", ar: "ريال سعودي", en: "Saudi Riyal", rate: 3.75 },
+    { code: "AED", ar: "درهم إماراتي", en: "UAE Dirham", rate: 3.6725 },
+    { code: "EGP", ar: "جنيه مصري", en: "Egyptian Pound", rate: 48.5 },
+    { code: "KWD", ar: "دينار كويتي", en: "Kuwaiti Dinar", rate: 0.307 },
+    { code: "QAR", ar: "ريال قطري", en: "Qatari Riyal", rate: 3.64 },
+    { code: "BHD", ar: "دينار بحريني", en: "Bahraini Dinar", rate: 0.376 },
+    { code: "OMR", ar: "ريال عماني", en: "Omani Rial", rate: 0.3845 },
+    { code: "JOD", ar: "دينار أردني", en: "Jordanian Dinar", rate: 0.709 },
+    { code: "IQD", ar: "دينار عراقي", en: "Iraqi Dinar", rate: 1310 },
+    { code: "LBP", ar: "ليرة لبنانية", en: "Lebanese Pound", rate: 89500 },
+    { code: "SYP", ar: "ليرة سورية", en: "Syrian Pound", rate: 13000 },
+    { code: "YER", ar: "ريال يمني", en: "Yemeni Rial", rate: 250 },
+    { code: "LYD", ar: "دينار ليبي", en: "Libyan Dinar", rate: 4.85 },
+    { code: "TND", ar: "دينار تونسي", en: "Tunisian Dinar", rate: 3.13 },
+    { code: "DZD", ar: "دينار جزائري", en: "Algerian Dinar", rate: 134 },
+    { code: "MAD", ar: "درهم مغربي", en: "Moroccan Dirham", rate: 9.85 },
+    { code: "MRU", ar: "أوقية موريتانية", en: "Mauritanian Ouguiya", rate: 39.8 },
+    { code: "SDG", ar: "جنيه سوداني", en: "Sudanese Pound", rate: 601 },
+    { code: "SOS", ar: "شلن صومالي", en: "Somali Shilling", rate: 571 },
+    { code: "DJF", ar: "فرنك جيبوتي", en: "Djiboutian Franc", rate: 177.7 },
+    { code: "KMF", ar: "فرنك قمري", en: "Comorian Franc", rate: 452 },
+    { code: "ILS", ar: "شيقل (فلسطين)", en: "Shekel (Palestine)", rate: 3.72 }
+  ];
+
+  const TRIGGERS = ["webhook", "schedule", "form", "email", "crm"];
+
+  const ERROR_LIB = [
+    {
+      id: "e401", sev: "high", keys: ["401", "unauthorized", "invalid credentials", "token", "expired", "صلاحية", "توكن"],
+      ar: "فشل التحقق من الصلاحية (401)", en: "Authentication failed (401)",
+      causeAr: "التوكن أو الاتصال بالحساب منتهٍ أو أُلغي من الطرف الآخر، لذلك ترفض الخدمة الطلب قبل تنفيذ أي خطوة.",
+      causeEn: "The token or account connection expired or was revoked upstream, so the service rejects the request before any step runs.",
+      fixesAr: ["افتح إعدادات الاتصال وأعد ربط الحساب (Reauthorize).", "أنشئ توكن جديداً من لوحة الخدمة وحدّثه في العقدة.", "اختبر العقدة وحدها (Run this step) قبل إعادة تفعيل المخطط.", "إن كان التوكن في Header مخصص، تأكد أنه يسبقه كلمة Bearer."],
+      fixesEn: ["Open the connection settings and reauthorize the account.", "Generate a fresh token in the provider dashboard and update the node.", "Test that node alone before re-enabling the scenario.", "If you set a custom header, make sure it is prefixed with Bearer."],
+      prevAr: "أضف عقدة تحقق أسبوعية من الصلاحية، وفعّل تنبيه البريد عند أي خطأ 401.",
+      prevEn: "Add a weekly credential check and email alerts on any 401."
+    },
+    {
+      id: "e403", sev: "high", keys: ["403", "forbidden", "permission", "scope", "صلاحية الوصول"],
+      ar: "الوصول ممنوع (403)", en: "Access forbidden (403)",
+      causeAr: "الصلاحية موجودة لكنها لا تغطي العملية أو المورد المطلوب (نطاق ناقص، أو ملف/قاعدة لا يملكها الحساب).",
+      causeEn: "The credential works but does not cover the requested resource (missing scope, or the account does not own the file/database).",
+      fixesAr: ["راجع النطاقات (Scopes) الممنوحة للاتصال وأضف الناقص.", "تأكد أن الحساب يملك المورد (جدول، ملف، لوحة).", "جرّب نفس العملية من واجهة الخدمة للتأكد أنها ليست محظورة على الحساب.", "في Google Sheets تأكد أن البريد المضاف في Make له صلاحية التحرير."],
+      fixesEn: ["Review the granted scopes and add what is missing.", "Confirm the account owns the resource (sheet, file, board).", "Repeat the same call in the provider UI to rule out an account-level block.", "For Google Sheets, ensure the connected address has edit access."],
+      prevAr: "وثّق النطاقات المطلوبة لكل سيناريو داخل هذه الخزانة.",
+      prevEn: "Document required scopes per scenario inside this vault."
+    },
+    {
+      id: "e404", sev: "mid", keys: ["404", "not found", "webhook not", "no route", "غير موجود"],
+      ar: "المسار غير موجود (404)", en: "Endpoint not found (404)",
+      causeAr: "الرابط تغيّر أو السيناريو غير مفعّل، أو استُخدم رابط لوحة التحكم بدل رابط الالتقاط.",
+      causeEn: "The URL changed or the scenario is inactive, or the editor URL was used instead of the live hook URL.",
+      fixesAr: ["انسخ رابط الويب هوك من داخل العقدة مباشرة وأعد لصقه.", "تأكد أن السيناريو مُفعّل (Active) وليس في وضع التحرير.", "في n8n ميّز بين /webhook-test/ و/webhook/ — الأول للاختبار فقط.", "أعد إرسال الحمولة بأمر cURL للتحقق."],
+      fixesEn: ["Copy the hook URL directly from the node and paste it again.", "Confirm the scenario is Active, not in edit mode.", "In n8n distinguish /webhook-test/ from /webhook/ — the first is test-only.", "Re-send the payload with cURL to verify."],
+      prevAr: "خزّن رابط الإنتاج فقط هنا، وضع روابط الاختبار في ملاحظات منفصلة.",
+      prevEn: "Store only the production URL here; keep test URLs in separate notes."
+    },
+    {
+      id: "e429", sev: "mid", keys: ["429", "rate limit", "too many", "quota", "limit exceeded", "تجاوز الحد"],
+      ar: "تجاوز حد الاستخدام (429)", en: "Rate limit exceeded (429)",
+      causeAr: "عدد الطلبات أو العمليات تجاوز خطة الحساب أو نافذة السماح لدى الخدمة المستقبلة.",
+      causeEn: "Request or operation volume passed the plan limit or the provider's allowance window.",
+      fixesAr: ["أضف عقدة تأخير (Sleep) بين الدفعات — 1 إلى 3 ثوانٍ غالباً كافية.", "قسّم الدفعة إلى مجموعات أصغر (Batches) بدل إرسالها دفعة واحدة.", "راجع استهلاك الخطة وارفعها مؤقتاً إن كان الحمل موسمياً.", "استخدم معالجة أخطاء مع إعادة المحاولة (Retry) بتباعد أسّي."],
+      fixesEn: ["Add a Sleep node between batches — 1–3 seconds is often enough.", "Split the payload into smaller batches instead of one burst.", "Check plan usage and raise it temporarily during seasonal spikes.", "Use error handling with exponential-backoff retries."],
+      prevAr: "اضبط حد التنفيذ المتوازي في إعدادات السيناريو، وراقب لوحة الاستهلاك أسبوعياً.",
+      prevEn: "Cap concurrent executions in scenario settings and review usage weekly."
+    },
+    {
+      id: "etimeout", sev: "mid", keys: ["timeout", "timed out", "etimedout", "socket hang up", "مهلة", "انتهت المهلة"],
+      ar: "انتهت مهلة الاتصال", en: "Request timed out",
+      causeAr: "الخدمة المستقبلة بطيئة أو لا تُرجع رداً، أو أن العملية تنتظر ملفاً كبيراً/تقريراً طويلاً.",
+      causeEn: "The target service is slow or never responds, or the step waits on a large file or long-running report.",
+      fixesAr: ["ارفع مهلة العقدة تدريجياً (30 → 60 ثانية) واختبر.", "افصل العملية الطويلة إلى طلب بدء + طلب استعلام عن الحالة.", "تحقق من حالة الخدمة (Status Page) قبل تعديل المخطط.", "قلّل حجم الحمولة واحذف الحقول غير اللازمة."],
+      fixesEn: ["Raise the node timeout gradually (30 → 60s) and retest.", "Split long work into a start call plus a status-poll call.", "Check the provider status page before changing the workflow.", "Shrink the payload and drop unused fields."],
+      prevAr: "أضف مساراً بديلاً (Error route) يسجّل الطلبات المتأخرة لإعادة معالجتها.",
+      prevEn: "Add an error route that logs timed-out requests for reprocessing."
+    },
+    {
+      id: "econn", sev: "mid", keys: ["econnreset", "connection reset", "econnrefused", "network", "قطع الاتصال"],
+      ar: "انقطاع الاتصال بالخدمة", en: "Connection reset or refused",
+      causeAr: "الجدار الناري أو الشبكة تمنع الوصول، أو الخدمة أغلقت الاتصال فجأة.",
+      causeEn: "A firewall or network blocks access, or the service closed the connection unexpectedly.",
+      fixesAr: ["تأكد أن رابط الخدمة صحيح وبروتوكول HTTPS.", "أعد المحاولة بعد دقيقة — الانقطاع المؤقت شائع.", "إن كنت تستضيف n8n محلياً، تحقق من الـ Proxy وسجلات الحاوية.", "استخدم IP ثابتاً أو نطاقاً مسموحاً إن كانت الخدمة تقيّد المصادر."],
+      fixesEn: ["Confirm the endpoint and HTTPS scheme are correct.", "Retry after a minute — transient resets are common.", "If self-hosting n8n, check the proxy and container logs.", "Use a static IP or allowlisted domain if the service restricts origins."],
+      prevAr: "فعّل إعادة المحاولة تلقائياً (3 محاولات) مع تسجيل كل فشل.",
+      prevEn: "Enable automatic retries (3 attempts) and log every failure."
+    },
+    {
+      id: "ejson", sev: "mid", keys: ["json", "unexpected token", "parse", "syntaxerror", "invalid json", "تحليل"],
+      ar: "تعذّر تحليل JSON", en: "JSON parsing failed",
+      causeAr: "الحمولة ليست JSON صالحاً، أو أن حقل رقم/تاريخ أُرسل كنص غير متوقع، أو يوجد نص قبل الأقواس.",
+      causeEn: "The payload is not valid JSON, a number/date field arrived as unexpected text, or there is leading text before the braces.",
+      fixesAr: ["اطبع الحمولة الخام (Raw) قبل عقدة التحليل لرؤية الشكل الحقيقي.", "أزل أي وسوم HTML أو تحذيرات PHP قبل الجسم.", "استخدم عقدة Parse JSON في n8n بدل الاعتماد على التحليل التلقائي.", "تأكد من ترميز UTF-8 وعدم وجود BOM في الملف."],
+      fixesEn: ["Log the raw payload before parsing to inspect its real shape.", "Strip HTML warnings or BOM before the body.", "Use a Parse JSON node in n8n rather than implicit parsing.", "Ensure UTF-8 encoding and no BOM in files."],
+      prevAr: "أضف خطوة تحقق من المخطط (Schema) قبل تمرير البيانات للخطوات التالية.",
+      prevEn: "Add a schema check before passing data downstream."
+    },
+    {
+      id: "e422", sev: "mid", keys: ["422", "validation", "required", "missing field", "invalid value", "حقل مطلوب"],
+      ar: "بيانات غير مكتملة (422)", en: "Validation failed (422)",
+      causeAr: "حقل مطلوب وصل فارغاً أو بصيغة مختلفة (هاتف بلا رمز دولة، تاريخ بصيغة أخرى، قائمة بدل نص).",
+      causeEn: "A required field arrived empty or in a different shape (phone without country code, another date format, array instead of text).",
+      fixesAr: ["قارن الحمولة المرسلة مع مثال ناجح من توثيق الخدمة.", "أضف عقدة Set لتوحيد الصيغ (تاريخ ISO، هاتف E.164).", "اجعل الحقول الاختيارية صريحة كـ null بدل حذفها.", "سجّل رد الخطأ الكامل — غالباً يذكر اسم الحقل بالضبط."],
+      fixesEn: ["Compare the outgoing payload with a working example from the docs.", "Add a Set node to normalize formats (ISO dates, E.164 phones).", "Send optional fields explicitly as null instead of omitting them.", "Log the full error response — it usually names the exact field."],
+      prevAr: "اعتمد قالب حمولة واحداً معتمداً لكل نوع حدث.",
+      prevEn: "Keep one approved payload template per event type."
+    },
+    {
+      id: "edupe", sev: "low", keys: ["duplicate", "twice", "repeated", "same record", "تكرار", "مكرر"],
+      ar: "تنفيذ مكرر أو سجلات مزدوجة", en: "Duplicate runs or records",
+      causeAr: "إعادة المحاولة بعد مهلة أنشأت سجلاً ثانياً، أو أن الويب هوك يستقبل الحدث أكثر من مرة.",
+      causeEn: "A retry after a timeout created a second record, or the webhook receives the same event more than once.",
+      fixesAr: ["استخدم مفتاح فريد (event_id / order_id) وافحص وجوده قبل الإنشاء.", "اجعل الإنشاء Idempotent عبر Upsert بدل Insert.", "أوقف إعادة المحاولة التلقائية للعمليات غير الآمنة.", "احذف السجلات المكررة الحالية بقاعدة بيانات أو تصفية."],
+      fixesEn: ["Use a unique key (event_id / order_id) and check it before creating.", "Make creation idempotent with Upsert instead of Insert.", "Disable automatic retries for non-idempotent steps.", "Clean existing duplicates with a database step or filter."],
+      prevAr: "سجّل مفاتيح الـ Idempotency في توثيق كل سيناريو.",
+      prevEn: "Record idempotency keys in each scenario's documentation."
+    },
+    {
+      id: "efilter", sev: "low", keys: ["filter", "no output", "did not match", "empty", "skipped", "لم يطابق", "لا نتائج"],
+      ar: "الفلتر يمنع مرور البيانات", en: "A filter blocks all items",
+      causeAr: "شرط الفلتر يقارن نصاً برقم أو يتوقع حقلاً غير موجود، فتخرج الصفقة فارغة ويبدو المخطط كأنه لم يعمل.",
+      causeEn: "A filter compares text to a number or expects a missing field, so the bundle leaves empty and the run looks idle.",
+      fixesAr: ["اطبع مخرجات العقدة السابقة وتحقق من نوع كل حقل.", "استخدم مقارنة مرنة (contains / exists) بدل المساواة الصارمة.", "أضف مساراً بديلاً يسجّل الصفقات المرفوضة.", "اختبر الفلتر بعنصر واحد معروف قبل الدفعة كاملة."],
+      fixesEn: ["Log the previous node's output and check each field's type.", "Use a looser comparison (contains / exists) instead of strict equality.", "Add a fallback route that logs rejected bundles.", "Test the filter on one known item before the full batch."],
+      prevAr: "سمِّ كل فلتر بوصف واضح يذكر الشرط المتوقع.",
+      prevEn: "Name every filter with the exact condition it expects."
+    },
+    {
+      id: "esize", sev: "mid", keys: ["too large", "size limit", "payload", "413", "file size", "حجم"],
+      ar: "الحمولة أو الملف أكبر من الحد", en: "Payload or file exceeds the limit",
+      causeAr: "إرسال ملف/قاعدة كبيرة في طلب واحد يتجاوز حد الخدمة (غالباً 5–10 ميغابايت).",
+      causeEn: "Sending a large file or base64 attachment in one request exceeds the provider limit (often 5–10 MB).",
+      fixesAr: ["ارفع الملف إلى تخزين (Drive/S3) وأرسل الرابط بدل المحتوى.", "قسّم الملف إلى أجزاء وأرسلها بالتتابع.", "اضغط الصور قبل الترميز base64.", "استخدم رفع متعدد الأجزاء إن كانت الخدمة تدعمه."],
+      fixesEn: ["Upload to storage (Drive/S3) and send the link instead of the bytes.", "Split the file into chunks and send them sequentially.", "Compress images before base64 encoding.", "Use multipart upload if the provider supports it."],
+      prevAr: "أضف فحص حجم قبل الإرسال مع حد أقصى معلن.",
+      prevEn: "Add a size check before sending with a documented maximum."
+    },
+    {
+      id: "econn2", sev: "mid", keys: ["connection expired", "reconnect", "disconnected", "account", "انتهت الصلاحية"],
+      ar: "انتهى اتصال الحساب في Make", en: "Make connection expired",
+      causeAr: "Make يفصل الاتصالات التي لم تُستخدم مدة طويلة أو بعد تغيير كلمة المرور/الصلاحيات.",
+      causeEn: "Make drops connections unused for a long period or after a password/permission change.",
+      fixesAr: ["افتح Connections وأعد التفويض للحساب المتأثر.", "أعد تشغيل آخر تنفيذ فاشل بعد إعادة الربط.", "تحقق من أن الحساب لم يتغيّر (بريد مختلف) قبل الربط.", "ثبّت التنبيهات على بريد المسؤول."],
+      fixesEn: ["Open Connections and reauthorize the affected account.", "Rerun the last failed execution after reconnecting.", "Check the account did not change (different mailbox) before linking.", "Subscribe admin alerts to connection failures."],
+      prevAr: "راجع الاتصالات شهرياً ضمن قائمة صيانة دورية.",
+      prevEn: "Review connections monthly as part of maintenance."
+    },
+    {
+      id: "einactive", sev: "low", keys: ["could not be started", "inactive", "not active", "disabled", "غير مفعّل"],
+      ar: "السيناريو غير مفعّل أو لم يبدأ", en: "Scenario inactive or failed to start",
+      causeAr: "المخطط في وضع التحرير، أو استُنفدت العمليات، أو أن جدولة n8n متوقفة.",
+      causeEn: "The workflow is in edit mode, operations are exhausted, or n8n scheduling is paused.",
+      fixesAr: ["فعّل السيناريو من الزر العلوي وتأكد من ظهور Active.", "راجع رصيد العمليات/الخطة.", "في n8n تحقق من تفعيل الـ Workflow ووجود Trigger صحيح.", "أعد نشر الـ Workflow بعد آخر تعديل."],
+      fixesEn: ["Toggle the scenario on and confirm Active is shown.", "Check operations balance/plan.", "In n8n confirm the workflow is active and has a valid trigger.", "Republish the workflow after the latest edit."],
+      prevAr: "أضف تنبيه غياب تنفيذ (No-run alert) لأي سيناريو حرج.",
+      prevEn: "Add a no-run alert for every critical scenario."
+    },
+    {
+      id: "eundef", sev: "mid", keys: ["cannot read properties", "undefined", "null", "typeerror", "خطأ في الخاصية"],
+      ar: "قراءة خاصية من قيمة غير موجودة", en: "Reading a property of undefined",
+      causeAr: "تعيين حقل (Mapping) يشير إلى مسار غير موجود في بعض العناصر، فيفشل السيناريو عند أول عنصر ناقص.",
+      causeEn: "A field mapping points to a path missing on some items, so the run fails at the first incomplete item.",
+      fixesAr: ["استخدم تعبيراً آمناً: get(map; path; default) أو ?. في n8n.", "أضف عقدة If للتحقق من وجود الحقل قبل استخدامه.", "سجّل العنصر الذي فشل وافحص بنيته.", "اجعل الحقول الاختيارية بقيمة افتراضية صريحة."],
+      fixesEn: ["Use a safe expression: get(map; path; default) or ?. in n8n.", "Add an If node to check the field exists before use.", "Log the failing item and inspect its structure.", "Give optional fields an explicit default."],
+      prevAr: "مرّر عناصر اختبار متنوعة (كاملة وناقصة) قبل الإنتاج.",
+      prevEn: "Test with varied items (complete and incomplete) before production."
+    },
+    {
+      id: "e500", sev: "high", keys: ["500", "internal server error", "502", "503", "server error", "خطأ في الخادم"],
+      ar: "خطأ داخلي في الخدمة (5xx)", en: "Provider server error (5xx)",
+      causeAr: "الخلل في طرف الخدمة المستقبلة وليس في مخططك؛ الطلب وصل لكن المعالجة فشلت.",
+      causeEn: "The fault is on the receiving service, not your workflow; the request arrived but processing failed.",
+      fixesAr: ["أعد المحاولة بعد دقائق مع تسجيل معرّف الطلب (Request ID).", "راجع صفحة حالة الخدمة قبل تعديل المخطط.", "أرسل نفس الحمولة إلى بيئة اختبار الخدمة (Sandbox).", "إن تكرر الخطأ، أبلغ الدعم برقم الطلب والوقت."],
+      fixesEn: ["Retry after a few minutes and log the request ID.", "Check the provider status page before editing the workflow.", "Send the same payload to the provider sandbox.", "If it repeats, report the request ID and timestamp to support."],
+      prevAr: "احتفظ بمسار احتياطي يخزّن الطلبات الفاشلة لإعادة إرسالها.",
+      prevEn: "Keep a fallback path that stores failed requests for replay."
+    }
+  ];
+
+  const SAMPLE_PAYLOAD = {
+    event: "order.created",
+    order_id: "ORD-10482",
+    customer: { name: "Demo Customer", phone: "+966500000000" },
+    total: 249,
+    currency: "SAR",
+    items: [{ sku: "SKU-01", qty: 2 }],
+    source: "automation-vault-test"
+  };
+
+  const DICT = {
+    ar: {
+      "brand.title": "خزانة مخططات الأتمتة", "brand.sub": "Automation Blueprints · Make & n8n",
+      "currency": "العملة", "reset": "استعادة النموذج",
+      "tab.dash": "لوحة الأتمتة", "tab.scenarios": "خزانة السيناريوهات", "tab.webhooks": "الويب هوكس",
+      "tab.savings": "حاسبة التوفير", "tab.doctor": "طبيب الأخطاء",
+      "dash.title": "نبض الأتمتة الشهري", "dash.sub": "كل الأرقام محسوبة من سيناريوهاتك: التنفيذات × الدقائق الموفَّرة × سعر ساعة العمل.",
+      "kpi.hours": "ساعات موفَّرة شهرياً", "kpi.net": "صافي التوفير شهرياً", "kpi.active": "سيناريوهات نشطة", "kpi.err": "معدل الخطأ المرجّح",
+      "chart.hours": "الساعات الموفَّرة لكل سيناريو", "chart.hoursSub": "شهرياً — التنفيذات × الدقائق ÷ 60",
+      "chart.runs": "التنفيذات مقابل الأخطاء", "chart.runsSub": "لكل سيناريو خلال شهر",
+      "chart.share": "توزيع التوفير حسب المنصة", "chart.shareSub": "صافي القيمة بعد تكلفة الأدوات",
+      "chart.offline": "الرسوم تحتاج اتصالاً بالإنترنت لتحميل Chart.js.",
+      "dash.top": "أعلى السيناريوهات توفيراً", "dash.topSub": "مرتّبة حسب القيمة الصافية الشهرية", "dash.manage": "إدارة",
+      "f.scenario": "السيناريو", "th.platform": "المنصة", "th.hours": "ساعات/شهر", "th.net": "صافي/شهر",
+      "dash.health": "صحة التشغيل", "dash.healthSub": "تنبيهات تحتاج تدخلاً قبل أن تتضخم",
+      "scn.add": "إضافة سيناريو", "scn.addSub": "وثّق المخطط كاملاً: المشغّل، الخطوات، رابط الويب هوك، وحجم التشغيل الشهري.",
+      "scn.update": "تعديل سيناريو", "scn.namePh": "مثال: فاتورة واتساب → Google Sheets + Slack",
+      "f.name": "اسم السيناريو", "f.platform": "المنصة", "f.trigger": "المشغّل",
+      "trigger.webhook": "Webhook / طلب خارجي", "trigger.schedule": "مجدول (Schedule)", "trigger.form": "نموذج / استبيان",
+      "trigger.email": "بريد إلكتروني", "trigger.crm": "حدث في تطبيق (CRM/متجر)",
+      "f.runs": "تنفيذات شهرياً", "f.minutes": "دقائق يدوية/تنفيذ", "f.err": "نسبة الأخطاء %",
+      "f.cost": "تكلفة الأدوات/شهر (بالعملة)", "f.webhook": "رابط الويب هوك",
+      "f.steps": "خطوات المخطط (سطر لكل خطوة)", "scn.stepsPh": "استقبال الويب هوك\nتحقق من الحقول\nإنشاء السجل\nإشعار Slack",
+      "f.notes": "ملاحظات التشغيل", "scn.notesPh": "مثال: يتوقف عند تجاوز 2000 تنفيذ شهرياً",
+      "scn.save": "حفظ السيناريو", "scn.cancel": "إلغاء التعديل",
+      "scn.hint": "نصيحة: كل خطوة يجب أن تُرجع نتيجة واضحة، وإلا فأضف عقدة تحقق.",
+      "scn.list": "الخزانة", "scn.exportJson": "تصدير JSON", "scn.exportCsv": "تصدير CSV",
+      "scn.allPlatforms": "كل المنصات", "scn.search": "ابحث بالاسم أو الملاحظات…",
+      "web.title": "سجل روابط الويب هوك", "web.sub": "روابط الالتقاط التي تناديها أنظمتك — انسخ الرابط أو أمر cURL الجاهز للاختبار.",
+      "web.hint": "لا تُرسل بيانات حقيقية إلى رابط تجريبي. استخدم بيانات وهمية عند اختبار الـ Webhook، وتأكد من رمز التحقق (Secret) قبل الربط بالإنتاج.",
+      "th.method": "الطريقة", "web.url": "الرابط", "web.actions": "إجراءات",
+      "web.sample": "حمولة اختبار جاهزة", "web.sampleSub": "أرسل هذه الحمولة إلى أي رابط أعلاه للتحقق من وصول البيانات.",
+      "web.copySample": "نسخ الحمولة",
+      "sav.title": "حاسبة الوقت والمال الموفّر", "sav.sub": "عدّل سعر ساعة العمل وراجع الأثر الشهري والسنوي — كل المبالغ بالعملة المختارة.",
+      "sav.rate": "سعر ساعة العمل", "sav.tools": "تكلفة الأدوات الشهرية", "sav.apply": "إعادة الحساب",
+      "sav.rateHint": "الافتراضي 24 دولاراً/ساعة. عدّله ليتغيّر التوفير كله فوراً.",
+      "sav.hours": "ساعات موفَّرة/شهر", "sav.hoursNote": "وقت بشري مُستعاد",
+      "sav.gross": "قيمة الوقت/شهر", "sav.grossNote": "قبل خصم الأدوات",
+      "sav.net": "صافي التوفير/شهر", "sav.roi": "عائد الاستثمار", "sav.roiNote": "صافي التوفير ÷ تكلفة الأدوات",
+      "sav.split": "التوزيع حسب المنصة", "sav.splitSub": "الساعات والقيمة لكل منصة",
+      "sav.annualTitle": "الأثر السنوي", "sav.annualSub": "إسقاط مباشر × 12",
+      "sav.annual": "صافي التوفير السنوي", "sav.annualHours": "ساعة عمل سنوياً",
+      "sav.note": "تقدير يعتمد على أرقامك المعلنة؛ راجع التنفيذات الفعلية شهرياً قبل الاعتماد عليه في أي قرار.",
+      "th.runs": "تنفيذات", "th.tool": "تكلفة الأدوات",
+      "doc.title": "طبيب أخطاء الأتمتة",
+      "doc.sub": "الصق نص الخطأ أو رمز الحالة؛ سأطابقه مع أسباب شائعة في Make وn8n وأعطيك خطوات إصلاح مرتّبة.",
+      "doc.anyPlatform": "كلتا المنصتين", "doc.error": "نص الخطأ / رمز الحالة",
+      "doc.errorPh": "مثال: 401 Unauthorized — invalid credentials",
+      "doc.run": "شخّص الخطأ", "doc.clear": "تفريغ",
+      "doc.resultTitle": "نتيجة التشخيص", "doc.resultSub": "لم يُشخَّص خطأ بعد",
+      "doc.checklistTitle": "فحص سريع قبل التصعيد",
+      "doc.check1": "افتح آخر تنفيذ في Make/n8n واقرأ اسم العقدة الفاشلة أولاً.",
+      "doc.check2": "أعد إرسال الحمولة نفسها يدوياً من لوحة الويب هوك.",
+      "doc.check3": "أعد ربط الحساب إذا كانت الكلمة المفتاحية «401» أو «Unauthorized».",
+      "doc.check4": "راقب عدد العمليات: تجاوز الحد يظهر كخطأ 429 لا كعطل في المخطط.",
+      "doc.check5": "أوقف التفعيل التلقائي للسيناريو أثناء الاختبار لمنع التكرار.",
+      "doc.tip": "قاعدة ذهبية: 80% من أخطاء الأتمتة سببها صلاحية منتهية، أو شكل بيانات مختلف عن المتوقع، أو تجاوز حد الاستخدام — وليست المنصة نفسها.",
+      "foot.left": "ARAB TEMPLATES · ملف واحد يعمل بلا خادم",
+      "foot.right": "© 2026 Arab Templates — Automation Blueprint Vault"
+    },
+    en: {
+      "brand.title": "Automation Blueprint Vault", "brand.sub": "Make & n8n blueprints · ARAB TEMPLATES",
+      "currency": "Currency", "reset": "Restore sample",
+      "tab.dash": "Automation dashboard", "tab.scenarios": "Scenario vault", "tab.webhooks": "Webhooks",
+      "tab.savings": "Savings calculator", "tab.doctor": "Error doctor",
+      "dash.title": "Monthly automation pulse", "dash.sub": "Every figure comes from your scenarios: runs × minutes saved × hourly rate.",
+      "kpi.hours": "Hours saved / month", "kpi.net": "Net savings / month", "kpi.active": "Active scenarios", "kpi.err": "Weighted error rate",
+      "chart.hours": "Hours saved per scenario", "chart.hoursSub": "Monthly — runs × minutes ÷ 60",
+      "chart.runs": "Runs versus errors", "chart.runsSub": "Per scenario over one month",
+      "chart.share": "Savings split by platform", "chart.shareSub": "Net value after tool costs",
+      "chart.offline": "Charts need an internet connection to load Chart.js.",
+      "dash.top": "Top saving scenarios", "dash.topSub": "Ranked by monthly net value", "dash.manage": "Manage",
+      "f.scenario": "Scenario", "th.platform": "Platform", "th.hours": "Hours/mo", "th.net": "Net/mo",
+      "dash.health": "Run health", "dash.healthSub": "Signals to fix before they grow",
+      "scn.add": "Add a scenario", "scn.addSub": "Document the full blueprint: trigger, steps, webhook URL and monthly volume.",
+      "scn.update": "Edit scenario", "scn.namePh": "e.g. WhatsApp invoice → Google Sheets + Slack",
+      "f.name": "Scenario name", "f.platform": "Platform", "f.trigger": "Trigger",
+      "trigger.webhook": "Webhook / inbound call", "trigger.schedule": "Scheduled", "trigger.form": "Form / survey",
+      "trigger.email": "Email", "trigger.crm": "App event (CRM/store)",
+      "f.runs": "Runs per month", "f.minutes": "Manual minutes per run", "f.err": "Error rate %",
+      "f.cost": "Tool cost / month (currency)", "f.webhook": "Webhook URL",
+      "f.steps": "Blueprint steps (one per line)", "scn.stepsPh": "Receive webhook\nValidate fields\nCreate record\nNotify Slack",
+      "f.notes": "Operational notes", "scn.notesPh": "e.g. throttle above 2000 runs/month",
+      "scn.save": "Save scenario", "scn.cancel": "Cancel edit",
+      "scn.hint": "Tip: every step should return a clear result, otherwise add a validation node.",
+      "scn.list": "The vault", "scn.exportJson": "Export JSON", "scn.exportCsv": "Export CSV",
+      "scn.allPlatforms": "All platforms", "scn.search": "Search by name or notes…",
+      "web.title": "Webhook registry", "web.sub": "Inbound URLs your systems call — copy the URL or a ready cURL test command.",
+      "web.hint": "Never send real data to a test URL. Use dummy payloads while testing and verify the shared secret before wiring production.",
+      "th.method": "Method", "web.url": "URL", "web.actions": "Actions",
+      "web.sample": "Ready test payload", "web.sampleSub": "Send this payload to any URL above to verify data arrival.",
+      "web.copySample": "Copy payload",
+      "sav.title": "Time and money saved", "sav.sub": "Adjust the hourly rate and review monthly and annual impact — all amounts in the selected currency.",
+      "sav.rate": "Hourly rate", "sav.tools": "Monthly tool cost", "sav.apply": "Recalculate",
+      "sav.rateHint": "Default is $24/hour. Change it and the entire savings model updates.",
+      "sav.hours": "Hours saved / month", "sav.hoursNote": "Human time recovered",
+      "sav.gross": "Value of time / month", "sav.grossNote": "Before tool costs",
+      "sav.net": "Net savings / month", "sav.roi": "Return on spend", "sav.roiNote": "Net savings ÷ tool cost",
+      "sav.split": "Split by platform", "sav.splitSub": "Hours and value per platform",
+      "sav.annualTitle": "Annual impact", "sav.annualSub": "Straight 12-month projection",
+      "sav.annual": "Annual net savings", "sav.annualHours": "work hours per year",
+      "sav.note": "An estimate based on the numbers you entered; review actual runs monthly before making decisions with it.",
+      "th.runs": "Runs", "th.tool": "Tool cost",
+      "doc.title": "Automation error doctor",
+      "doc.sub": "Paste the error text or status code; I match it to common Make and n8n causes and return ordered fixes.",
+      "doc.anyPlatform": "Both platforms", "doc.error": "Error text / status code",
+      "doc.errorPh": "e.g. 401 Unauthorized — invalid credentials",
+      "doc.run": "Diagnose", "doc.clear": "Clear",
+      "doc.resultTitle": "Diagnosis", "doc.resultSub": "No error diagnosed yet",
+      "doc.checklistTitle": "Quick check before escalating",
+      "doc.check1": "Open the latest run in Make/n8n and read the failing node name first.",
+      "doc.check2": "Re-send the same payload manually from the webhook panel.",
+      "doc.check3": "Reconnect the account when the error says 401 or Unauthorized.",
+      "doc.check4": "Watch operation counts: a quota breach surfaces as 429, not a broken flow.",
+      "doc.check5": "Disable auto-activation while testing to prevent duplicate runs.",
+      "doc.tip": "Rule of thumb: 80% of automation failures are expired credentials, an unexpected data shape, or a usage cap — not the platform itself.",
+      "foot.left": "ARAB TEMPLATES · one file, no server required",
+      "foot.right": "© 2026 Arab Templates — Automation Blueprint Vault"
+    }
+  };
+
+  let state = null;
+  let ui = { lang: "ar", currency: "SAR" };
+  let editingId = null;
+  const charts = { hours: null, runs: null, share: null };
+
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const uid = (p) => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const t = (key) => (DICT[ui.lang] && DICT[ui.lang][key]) || DICT.ar[key] || key;
+  const isAr = () => ui.lang === "ar";
+
+  function num(v, d) {
+    const n = parseFloat(v);
+    return isFinite(n) ? n : d;
+  }
+  function fmtNum(n, digits) {
+    const d = digits == null ? 0 : digits;
+    return new Intl.NumberFormat("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).format(isFinite(n) ? n : 0);
+  }
+  function fmtMoney(usd) {
+    const c = CURRENCIES.find((x) => x.code === ui.currency) || CURRENCIES[0];
+    const v = (isFinite(usd) ? usd : 0) * c.rate;
+    const digits = v >= 1000 ? 0 : 2;
+    return "\u200E" + fmtNum(v, digits) + " " + c.code;
+  }
+  function cur() { return CURRENCIES.find((x) => x.code === ui.currency) || CURRENCIES[0]; }
+  function toast(msg, bad) {
+    const el = $("#toast");
+    el.textContent = msg;
+    el.className = "toast show" + (bad ? " err" : "");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { el.className = "toast"; }, 2600);
+  }
+  function platformLabel(p) { return p === "n8n" ? "n8n" : "Make"; }
+  function triggerLabel(key) { return t("trigger." + key); }
+
+  /* ---------------- state ---------------- */
+  function seed() {
+    const mk = (name, platform, trigger, webhook, runs, minutes, err, cost, steps, notes) => ({
+      id: uid("s"), name: name, platform: platform, trigger: trigger, webhook: webhook,
+      active: true, runs: runs, minutes: minutes, err: err, costUSD: cost,
+      steps: steps, notes: notes, createdAt: Date.now()
+    });
+    return {
+      hourlyUSD: 24,
+      scenarios: [
+        mk("فاتورة واتساب → Google Sheets + إشعار Slack", "make", "webhook",
+          "https://hook.eu2.make.com/7d1c9a4b2e6f8031",
+          1800, 4, 1.2, 9,
+          ["استقبال الويب هوك من واتساب بزنس", "استخراج رقم الفاتورة والمبلغ", "إضافة صف في Google Sheets", "إشعار قناة المبيعات في Slack"],
+          "أوقف الاستقبال عند تجاوز 2,000 تنفيذ شهرياً."),
+        mk("نموذج الموقع → بطاقة عميل في CRM", "n8n", "form",
+          "https://n8n.example.com/webhook/lead-intake",
+          900, 6, 0.8, 5,
+          ["Webhook من نموذج الموقع", "تحقق من البريد والجوال", "بحث عن عميل مكرر", "إنشاء بطاقة في CRM", "إرسال بريد ترحيبي"],
+          "التحقق من التكرار عبر البريد الإلكتروني."),
+        mk("طلبات المتجر → شحن أرامكس + تحديث الحالة", "make", "webhook",
+          "https://hook.eu2.make.com/3b8e5d7c1a9f2406",
+          2400, 2.5, 2.4, 29,
+          ["Webhook من سلة/Zid", "تجهيز بيانات الشحنة", "إنشاء بوليصة أرامكس", "تحديث حالة الطلب", "إرسال رقم التتبع للعميل"],
+          "يعتمد على واجهة الشحن؛ راقب حد الطلبات في المواسم."),
+        mk("تقرير GA4 الأسبوعي إلى البريد", "n8n", "schedule",
+          "",
+          4, 25, 0.5, 0,
+          ["مجدول كل أحد 8 صباحاً", "سحب بيانات GA4", "تجميع المقارنة الأسبوعية", "إرسال تقرير HTML للفريق"],
+          "n8n مستضاف ذاتياً — بلا تكلفة أدوات شهرية."),
+        mk("مزامنة المخزون بين Shopify والمستودع", "n8n", "schedule",
+          "https://n8n.example.com/webhook/stock-sync",
+          720, 1.5, 3.1, 12,
+          ["قراءة SKUs من Shopify", "مطابقة الكميات في المستودع", "تحديث الفروقات فقط", "تسجيل الأصناف الناقصة"],
+          "يعمل كل ساعتين؛ الأخطاء تتركز في أصناف بلا SKU."),
+        mk("بريد الفواتير → استخراج PDF بالذكاء الاصطناعي → Drive", "make", "email",
+          "https://hook.eu2.make.com/6e2a8f4d0c7b3159",
+          600, 5, 4.5, 16,
+          ["مراقبة صندوق الفواتير", "استخراج المرفقات", "قراءة المبلغ والتاريخ بالذكاء الاصطناعي", "حفظ في Drive + تسجيل في Sheets"],
+          "نسبة الخطأ ترتفع مع الفواتير الممسوحة؛ أضف مراجعة يدوية."),
+        mk("تنبيه توقف خط الأتمتة (Heartbeat)", "make", "schedule",
+          "",
+          30, 2, 0, 0,
+          ["فحص آخر تنفيذ لكل سيناريو", "مقارنة بالفترة المتوقعة", "إشعار عند غياب التنفيذ"],
+          "حارس للمخططات الحرجة.")
+      ],
+      ui: { lang: "ar", currency: "SAR" }
+    };
+  }
+
+  function load() {
+    const base = seed();
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { saved = null; }
+    if (saved && typeof saved === "object" && Array.isArray(saved.scenarios)) {
+      state = {
+        hourlyUSD: isFinite(saved.hourlyUSD) && saved.hourlyUSD > 0 ? saved.hourlyUSD : base.hourlyUSD,
+        scenarios: saved.scenarios.map((s) => ({
+          id: s.id || uid("s"), name: String(s.name || ""), platform: s.platform === "n8n" ? "n8n" : "make",
+          trigger: TRIGGERS.indexOf(s.trigger) !== -1 ? s.trigger : "webhook",
+          webhook: String(s.webhook || ""), active: s.active !== false,
+          runs: num(s.runs, 0), minutes: num(s.minutes, 0), err: clamp(num(s.err, 0), 0, 100),
+          costUSD: num(s.costUSD, 0), steps: Array.isArray(s.steps) ? s.steps.filter(Boolean) : [],
+          notes: String(s.notes || ""), createdAt: num(s.createdAt, Date.now())
+        }))
+      };
+      if (saved.ui) {
+        if (saved.ui.lang === "en" || saved.ui.lang === "ar") ui.lang = saved.ui.lang;
+        if (CURRENCIES.some((c) => c.code === saved.ui.currency)) ui.currency = saved.ui.currency;
+      }
+    } else {
+      state = base;
+      ui = { lang: "ar", currency: "SAR" };
+    }
+  }
+  function save() {
+    try {
+      localStorage.setItem(STORE, JSON.stringify({ hourlyUSD: state.hourlyUSD, scenarios: state.scenarios, ui: { lang: ui.lang, currency: ui.currency } }));
+    } catch (e) { /* quota or privacy mode */ }
+  }
+
+  /* ---------------- math ---------------- */
+  const hoursOf = (s) => (num(s.runs, 0) * num(s.minutes, 0)) / 60;
+  const grossOf = (s) => hoursOf(s) * state.hourlyUSD;
+  const netOf = (s) => grossOf(s) - num(s.costUSD, 0);
+  const totalHours = () => state.scenarios.reduce((a, s) => a + hoursOf(s), 0);
+  const totalGross = () => state.scenarios.reduce((a, s) => a + grossOf(s), 0);
+  const totalTools = () => state.scenarios.reduce((a, s) => a + num(s.costUSD, 0), 0);
+  const totalNet = () => totalGross() - totalTools();
+  const weightedErr = () => {
+    const runs = state.scenarios.reduce((a, s) => a + num(s.runs, 0), 0);
+    if (!runs) return 0;
+    return state.scenarios.reduce((a, s) => a + num(s.runs, 0) * num(s.err, 0), 0) / runs;
+  };
+
+  /* ---------------- i18n shell ---------------- */
+  function applyI18n() {
+    document.documentElement.lang = ui.lang;
+    document.documentElement.dir = isAr() ? "rtl" : "ltr";
+    $$("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    $$("[data-i18n-ph]").forEach((el) => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $$("#langSeg button").forEach((b) => b.classList.toggle("on", b.getAttribute("data-lang") === ui.lang));
+    document.title = isAr() ? "خزانة مخططات الأتمتة — Automation Blueprint Vault" : "Automation Blueprint Vault — Make & n8n";
+    $("#formTitle").textContent = editingId ? t("scn.update") : t("scn.add");
+    renderCurrencyOptions();
+  }
+
+  function renderCurrencyOptions() {
+    const sel = $("#currency");
+    sel.innerHTML = CURRENCIES.map((c) => '<option value="' + c.code + '">' + c.code + " — " + esc(isAr() ? c.ar : c.en) + "</option>").join("");
+    sel.value = ui.currency;
+  }
+
+  /* ---------------- dashboard ---------------- */
+  function renderKpis() {
+    $("#kpiHours").textContent = fmtNum(totalHours(), 0);
+    $("#kpiHoursNote").textContent = isAr()
+      ? fmtNum(totalHours() / 4, 1) + " ساعة/أسبوع تقريباً"
+      : "≈ " + fmtNum(totalHours() / 4, 1) + " hours/week";
+
+    $("#kpiNet").textContent = fmtMoney(totalNet());
+    $("#kpiNetNote").textContent = isAr()
+      ? "قبل الأدوات " + fmtMoney(totalGross())
+      : "Gross " + fmtMoney(totalGross());
+
+    const active = state.scenarios.filter((s) => s.active).length;
+    $("#kpiActive").textContent = active;
+    $("#kpiAll").textContent = state.scenarios.length;
+    const paused = state.scenarios.length - active;
+    $("#kpiActiveNote").textContent = paused
+      ? (isAr() ? paused + " موقوفة مؤقتاً" : paused + " paused")
+      : (isAr() ? "كل السيناريوهات تعمل" : "All scenarios running");
+    $("#kpiActiveNote").style.color = paused ? "var(--warn)" : "";
+
+    const err = weightedErr();
+    $("#kpiErr").textContent = fmtNum(err, 1);
+    const worst = state.scenarios.slice().sort((a, b) => num(b.err, 0) - num(a.err, 0))[0];
+    $("#kpiErrNote").textContent = worst && worst.err > 0
+      ? (isAr() ? "الأعلى: " + worst.name.split("→")[0].trim() : "Highest: " + worst.name.split("→")[0].trim())
+      : (isAr() ? "لا أخطاء مسجلة" : "No errors logged");
+    $("#kpiErrNote").style.color = err >= 2.5 ? "var(--bad)" : "";
+
+    const makeCount = state.scenarios.filter((s) => s.platform === "make").length;
+    $("#dashChip").textContent = isAr()
+      ? state.scenarios.length + " سيناريو · Make " + makeCount + " · n8n " + (state.scenarios.length - makeCount)
+      : state.scenarios.length + " scenarios · Make " + makeCount + " · n8n " + (state.scenarios.length - makeCount);
+  }
+
+  function renderTop() {
+    const top = state.scenarios.slice().sort((a, b) => netOf(b) - netOf(a)).slice(0, 5);
+    $("#topRows").innerHTML = top.length ? top.map((s) =>
+      "<tr><td>" + esc(s.name) + "</td>" +
+      '<td><span class="plat ' + s.platform + '">' + platformLabel(s.platform) + "</span></td>" +
+      '<td class="num">' + fmtNum(hoursOf(s), 1) + "</td>" +
+      '<td class="num money">' + esc(fmtMoney(netOf(s))) + "</td></tr>"
+    ).join("") : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px">' + (isAr() ? "لا سيناريوهات بعد" : "No scenarios yet") + "</td></tr>";
+  }
+
+  function renderHealth() {
+    const issues = state.scenarios.filter((s) => !s.active || num(s.err, 0) >= 2.5 || !s.webhook && s.trigger === "webhook" || netOf(s) < 0);
+    $("#healthChip").textContent = issues.length
+      ? (isAr() ? issues.length + " تنبيه" : issues.length + " alerts")
+      : (isAr() ? "سليم" : "Healthy");
+    $("#healthChip").className = "chip " + (issues.length ? "" : "ok");
+    if (!issues.length) {
+      $("#healthList").innerHTML = '<div class="empty">' + (isAr() ? "لا تنبيهات — كل السيناريوهات تعمل ضمن الحدود." : "No alerts — every scenario is within limits.") + "</div>";
+      return;
+    }
+    $("#healthList").innerHTML = issues.map((s) => {
+      let msg = "";
+      let cls = "warn";
+      if (!s.active) { msg = isAr() ? "موقوف مؤقتاً" : "Paused"; cls = ""; }
+      else if (netOf(s) < 0) { msg = isAr() ? "التكلفة أعلى من القيمة الموفَّرة" : "Cost exceeds saved value"; cls = "bad"; }
+      else if (!s.webhook && s.trigger === "webhook") { msg = isAr() ? "بلا رابط ويب هوك" : "Missing webhook URL"; cls = "bad"; }
+      else { msg = (isAr() ? "نسبة خطأ " : "Error rate ") + fmtNum(s.err, 1) + "%"; cls = "warn"; }
+      return '<div class="health-row"><span class="dotbadge ' + cls + '"></span>' +
+        '<div class="grow"><b>' + esc(s.name) + "</b><span>" + esc(platformLabel(s.platform)) + " · " + esc(msg) + "</span></div>" +
+        '<button type="button" class="btn ghost sm" data-diagnose="' + s.id + '">' + (isAr() ? "طبيب" : "Doctor") + "</button></div>";
+    }).join("");
+  }
+
+  /* ---------------- scenarios ---------------- */
+  function renderScenarios() {
+    const f = $("#fPlatform").value;
+    const q = ($("#fSearch").value || "").trim().toLowerCase();
+    let list = state.scenarios.slice();
+    if (f) list = list.filter((s) => s.platform === f);
+    if (q) list = list.filter((s) => (s.name + " " + s.notes + " " + s.steps.join(" ")).toLowerCase().indexOf(q) !== -1);
+
+    const runs = state.scenarios.reduce((a, s) => a + num(s.runs, 0), 0);
+    $("#scnSub").textContent = state.scenarios.length + (isAr() ? " سيناريو · " : " scenarios · ") +
+      fmtNum(runs) + (isAr() ? " تنفيذ/شهر · " : " runs/mo · ") + fmtNum(totalHours(), 1) + (isAr() ? " ساعة" : " h");
+
+    if (!list.length) {
+      $("#scnGrid").innerHTML = '<div class="empty" style="grid-column:1/-1">' + (isAr() ? "لا سيناريوهات مطابقة — أضف واحداً أو غيّر التصفية." : "No matching scenarios — add one or change the filter.") + "</div>";
+      return;
+    }
+
+    $("#scnGrid").innerHTML = list.map((s) => {
+      const steps = (s.steps || []).map((x) => "<li>" + esc(x) + "</li>").join("");
+      return '<article class="scn' + (s.active ? "" : " off") + '">' +
+        '<div class="scn-top"><span class="plat ' + s.platform + '">' + platformLabel(s.platform) + "</span>" +
+        '<span class="chip ' + (s.active ? "ok" : "soft") + '">' + (s.active ? (isAr() ? "نشط" : "Active") : (isAr() ? "موقوف" : "Paused")) + "</span>" +
+        '<span class="chip soft">' + esc(triggerLabel(s.trigger)) + "</span><span class=\"spacer\"></span>" +
+        '<button type="button" class="btn ghost sm" data-togglescn="' + s.id + '">' + (s.active ? (isAr() ? "إيقاف" : "Pause") : (isAr() ? "تفعيل" : "Activate")) + "</button></div>" +
+        "<h3>" + esc(s.name) + "</h3>" +
+        '<div class="meta"><span>' + fmtNum(s.runs) + (isAr() ? " تنفيذ/شهر" : " runs/mo") + "</span><span>·</span><span>" + fmtNum(s.minutes, 1) + (isAr() ? " دقيقة/تنفيذ" : " min/run") + "</span></div>" +
+        '<div class="scn-stats">' +
+        '<div class="stat"><span>' + (isAr() ? "ساعات/شهر" : "Hours/mo") + "</span><b>" + fmtNum(hoursOf(s), 1) + "</b></div>" +
+        '<div class="stat hl"><span>' + (isAr() ? "صافي/شهر" : "Net/mo") + "</span><b>" + esc(fmtMoney(netOf(s))) + "</b></div>" +
+        '<div class="stat"><span>' + (isAr() ? "معدل الخطأ" : "Error rate") + "</span><b>" + fmtNum(s.err, 1) + "%</b></div>" +
+        '<div class="stat"><span>' + (isAr() ? "تكلفة الأدوات" : "Tool cost") + "</span><b>" + (num(s.costUSD, 0) > 0 ? esc(fmtMoney(num(s.costUSD, 0))) : "—") + "</b></div>" +
+        "</div>" +
+        (s.webhook ? '<div class="urlrow"><code>' + esc(s.webhook) + "</code>" +
+          '<button type="button" class="btn ghost" data-copy="' + s.id + '">' + (isAr() ? "نسخ" : "Copy") + "</button>" +
+          '<button type="button" class="btn ghost" data-curl="' + s.id + '">cURL</button></div>' : "") +
+        (steps ? '<details class="stepsbox"><summary>' + (isAr() ? "خطوات المخطط (" + s.steps.length + ")" : "Blueprint steps (" + s.steps.length + ")") + "</summary><ol class=\"steps\">" + steps + "</ol></details>" : "") +
+        (s.notes ? '<div class="tiny muted">' + esc(s.notes) + "</div>" : "") +
+        '<div class="scn-actions"><button type="button" class="btn ghost" data-editscn="' + s.id + '">' + (isAr() ? "تعديل" : "Edit") + "</button>" +
+        '<button type="button" class="btn danger" data-delscn="' + s.id + '">' + (isAr() ? "حذف" : "Delete") + "</button></div>" +
+        "</article>";
+    }).join("");
+  }
+
+  function resetForm() {
+    editingId = null;
+    $("#sName").value = "";
+    $("#sPlatform").value = "make";
+    $("#sTrigger").value = "webhook";
+    $("#sRuns").value = 600;
+    $("#sMinutes").value = 4;
+    $("#sErr").value = 1.5;
+    $("#sCost").value = 9;
+    $("#sWebhook").value = "";
+    $("#sSteps").value = "";
+    $("#sNotes").value = "";
+    $("#formTitle").textContent = t("scn.add");
+    $("#editChip").hidden = true;
+    $("#saveScn").textContent = t("scn.save");
+    $("#cancelEdit").hidden = true;
+  }
+
+  function startEdit(id) {
+    const s = state.scenarios.find((x) => x.id === id);
+    if (!s) return;
+    editingId = id;
+    $("#sName").value = s.name;
+    $("#sPlatform").value = s.platform;
+    $("#sTrigger").value = s.trigger;
+    $("#sRuns").value = s.runs;
+    $("#sMinutes").value = s.minutes;
+    $("#sErr").value = s.err;
+    $("#sCost").value = Math.round(num(s.costUSD, 0) * cur().rate * 100) / 100;
+    $("#sWebhook").value = s.webhook;
+    $("#sSteps").value = (s.steps || []).join("\n");
+    $("#sNotes").value = s.notes;
+    $("#formTitle").textContent = t("scn.update");
+    $("#saveScn").textContent = t("scn.update");
+    $("#cancelEdit").hidden = false;
+    $("#editChip").hidden = false;
+    $("#editChip").textContent = s.name;
+    $$("#tabs .tab").forEach((b) => b.classList.toggle("on", b.getAttribute("data-tab") === "scenarios"));
+    $$(".tabpane").forEach((p) => p.classList.toggle("on", p.id === "pane-scenarios"));
+    window.scrollTo(0, 0);
+  }
+
+  function saveScenario() {
+    const name = $("#sName").value.trim();
+    if (!name) { toast(isAr() ? "أدخل اسم السيناريو" : "Enter a scenario name", true); $("#sName").focus(); return; }
+    const hook = $("#sWebhook").value.trim();
+    if (hook && !/^https?:\/\/\S+$/i.test(hook)) { toast(isAr() ? "رابط الويب هوك يجب أن يبدأ بـ http:// أو https://" : "Webhook URL must start with http:// or https://", true); return; }
+    const payload = {
+      name: name, platform: $("#sPlatform").value, trigger: $("#sTrigger").value,
+      webhook: hook, runs: Math.max(0, num($("#sRuns").value, 0)),
+      minutes: Math.max(0, num($("#sMinutes").value, 0)), err: clamp(num($("#sErr").value, 0), 0, 100),
+      costUSD: Math.max(0, num($("#sCost").value, 0) / cur().rate), notes: $("#sNotes").value.trim(),
+      steps: $("#sSteps").value.split("\n").map((x) => x.trim()).filter(Boolean)
+    };
+    if (editingId) {
+      const s = state.scenarios.find((x) => x.id === editingId);
+      if (s) Object.assign(s, payload);
+      toast(isAr() ? "حُدّث السيناريو" : "Scenario updated");
+    } else {
+      state.scenarios.push(Object.assign({ id: uid("s"), active: true, createdAt: Date.now() }, payload));
+      toast(isAr() ? "أُضيف السيناريو" : "Scenario added");
+    }
+    save();
+    resetForm();
+    renderAll();
+  }
+
+  /* ---------------- webhooks ---------------- */
+  function sampleJSON() { return JSON.stringify(SAMPLE_PAYLOAD, null, 2); }
+
+  function curlFor(url) {
+    return 'curl -X POST "' + url + '" \\\n  -H "Content-Type: application/json" \\\n  -d \'' + JSON.stringify({ event: "order.created", order_id: "ORD-TEST-1", total: 249, currency: "SAR" }) + "'";
+  }
+
+  function renderWebhooks() {
+    const withHooks = state.scenarios.filter((s) => s.webhook);
+    $("#hookCount").textContent = withHooks.length + (isAr() ? " روابط" : " URLs");
+    $("#sampleCode").textContent = sampleJSON();
+    if (!state.scenarios.length) {
+      $("#hookRows").innerHTML = '<tr><td colspan="5" class="muted" style="text-align:center;padding:22px">' + (isAr() ? "لا سيناريوهات — أضف سيناريو ورابطه أولاً." : "No scenarios — add one with a URL first.") + "</td></tr>";
+      return;
+    }
+    $("#hookRows").innerHTML = state.scenarios.map((s) =>
+      "<tr><td>" + esc(s.name) + "</td>" +
+      '<td><span class="plat ' + s.platform + '">' + platformLabel(s.platform) + "</span></td>" +
+      '<td><span class="kbd">POST</span></td>' +
+      (s.webhook ? '<td class="urlcell">' + esc(s.webhook) + "</td>" : '<td class="muted">' + (isAr() ? "— لا رابط" : "— none") + "</td>") +
+      '<td><div class="hook-actions">' +
+      (s.webhook ? '<button type="button" class="btn ghost sm" data-copy="' + s.id + '">' + (isAr() ? "نسخ" : "Copy") + "</button>" +
+        '<button type="button" class="btn ghost sm" data-curl="' + s.id + '">cURL</button>' : "") +
+      '<button type="button" class="btn ghost sm" data-editscn="' + s.id + '">' + (isAr() ? "تحرير" : "Edit") + "</button>" +
+      "</div></td></tr>"
+    ).join("");
+  }
+
+  /* ---------------- savings ---------------- */
+  function renderSavings() {
+    const rate = cur().rate;
+    const hourlyLocal = state.hourlyUSD * rate;
+    if (document.activeElement !== $("#rateInput")) $("#rateInput").value = Math.round(hourlyLocal * 100) / 100;
+    $("#toolsDisplay").value = fmtMoney(totalTools());
+
+    const hours = totalHours();
+    const gross = totalGross();
+    const net = totalNet();
+    $("#savHours").textContent = fmtNum(hours, 0);
+    $("#savGross").textContent = fmtMoney(gross);
+    $("#savNet").textContent = fmtMoney(net);
+    $("#savNetNote").textContent = net >= 0
+      ? (isAr() ? "بعد خصم " + fmtMoney(totalTools()) : "After " + fmtMoney(totalTools()))
+      : (isAr() ? "خسارة صافية" : "Net loss");
+    $("#savNetNote").style.color = net < 0 ? "var(--bad)" : "";
+    const tools = totalTools();
+    $("#savROI").textContent = tools > 0 ? fmtNum((net / tools) * 100, 0) : "∞";
+    $("#savAnnual").textContent = fmtMoney(net * 12);
+    $("#annualHours").textContent = fmtNum(hours * 12, 0);
+
+    const platforms = ["make", "n8n"].map((p) => {
+      const list = state.scenarios.filter((s) => s.platform === p);
+      return {
+        p: p, n: list.length,
+        hours: list.reduce((a, s) => a + hoursOf(s), 0),
+        net: list.reduce((a, s) => a + netOf(s), 0)
+      };
+    });
+    const maxHours = Math.max.apply(null, platforms.map((x) => x.hours).concat([1]));
+    $("#platformSplit").innerHTML = platforms.map((x) =>
+      '<div style="margin-bottom:12px"><div class="ms-top"><b>' + platformLabel(x.p) + " · " + x.n + (isAr() ? " سيناريو" : " scenarios") + '</b>' +
+      '<span class="ms-meta">' + fmtNum(x.hours, 1) + (isAr() ? " ساعة · " : " h · ") + esc(fmtMoney(x.net)) + "</span></div>" +
+      '<div class="bar"><i style="width:' + clamp((x.hours / maxHours) * 100, 0, 100) + '%"></i></div></div>'
+    ).join("");
+
+    $("#savRows").innerHTML = state.scenarios.length ? state.scenarios.map((s) =>
+      "<tr><td>" + esc(s.name) + "</td>" +
+      '<td><span class="plat ' + s.platform + '">' + platformLabel(s.platform) + "</span></td>" +
+      '<td class="num">' + fmtNum(s.runs) + "</td>" +
+      '<td class="num">' + fmtNum(hoursOf(s), 1) + "</td>" +
+      '<td class="num money">' + esc(fmtMoney(grossOf(s))) + "</td>" +
+      '<td class="num money">' + esc(fmtMoney(num(s.costUSD, 0))) + "</td>" +
+      '<td class="num money" style="color:var(--gold-2)">' + esc(fmtMoney(netOf(s))) + "</td></tr>"
+    ).join("") : '<tr><td colspan="7" class="muted" style="text-align:center;padding:20px">' + (isAr() ? "لا بيانات بعد" : "No data yet") + "</td></tr>";
+  }
+
+  /* ---------------- doctor ---------------- */
+  const CHIPS = [
+    { ar: "401 Unauthorized", en: "401 Unauthorized", text: "401 Unauthorized — invalid credentials" },
+    { ar: "429 Rate limit", en: "429 Rate limit", text: "429 Too Many Requests" },
+    { ar: "JSON غير صالح", en: "Invalid JSON", text: "Unexpected token < in JSON at position 0" },
+    { ar: "Webhook 404", en: "Webhook 404", text: "404 webhook not registered" },
+    { ar: "انتهت المهلة", en: "Timeout", text: "ETIMEDOUT socket hang up after 30000ms" },
+    { ar: "تفعيل مزدوج", en: "Duplicate runs", text: "duplicate record created twice" }
+  ];
+
+  function renderChips() {
+    $("#docChips").innerHTML = CHIPS.map((c, i) =>
+      '<button type="button" data-chip="' + i + '">' + esc(isAr() ? c.ar : c.en) + "</button>"
+    ).join("");
+  }
+
+  function diagnose() {
+    const raw = ($("#dError").value || "").trim();
+    if (!raw) { toast(isAr() ? "الصق نص الخطأ أولاً" : "Paste an error first", true); $("#dError").focus(); return; }
+    const text = raw.toLowerCase();
+    let best = null;
+    let bestScore = 0;
+    ERROR_LIB.forEach((e) => {
+      let score = 0;
+      e.keys.forEach((k) => { if (text.indexOf(k.toLowerCase()) !== -1) score += k.length > 3 ? 2 : 3; });
+      if (score > bestScore) { bestScore = score; best = e; }
+    });
+
+    if (!best) {
+      $("#docSub").textContent = isAr() ? "لم أطابق خطأً معروفاً — هذه خطوات الفحص العامة" : "No known match — here is the general checklist";
+      $("#docResult").innerHTML = '<div class="doc-result"><div class="result-meta"><span class="sev mid">' + (isAr() ? "غير مصنّف" : "Unclassified") + "</span></div>" +
+        "<p class='muted' style='font-size:13px'>" + esc(isAr()
+          ? "أرسل رمز الحالة واسم العقدة الفاشلة ونص الرسالة كما هو. غالباً يكمن السبب في صلاحية أو شكل بيانات."
+          : "Send the status code, failing node name and the exact message. The cause is usually credentials or data shape.") + "</p>" +
+        '<ol class="fixlist"><li>' + esc(isAr() ? "افتح آخر تنفيذ وحدّد أول عقدة فاشلة." : "Open the last run and identify the first failing node.") + "</li>" +
+        "<li>" + esc(isAr() ? "أعد إرسال الحمولة نفسها يدوياً." : "Re-send the same payload manually.") + "</li>" +
+        "<li>" + esc(isAr() ? "راجع صلاحية الاتصال وتاريخ انتهائها." : "Review the connection credentials and expiry.") + "</li>" +
+        "<li>" + esc(isAr() ? "أوقف السيناريو أثناء الاختبار لمنع التكرار." : "Pause the scenario while testing to avoid duplicates.") + "</li></ol></div>";
+      return;
+    }
+
+    const sevLabel = best.sev === "high" ? (isAr() ? "خطورة عالية" : "High severity")
+      : best.sev === "mid" ? (isAr() ? "متوسط" : "Medium") : (isAr() ? "منخفض" : "Low");
+    const fixes = (isAr() ? best.fixesAr : best.fixesEn).map((x) => "<li>" + esc(x) + "</li>").join("");
+    $("#docSub").textContent = (isAr() ? "تمت المطابقة مع: " : "Matched: ") + (isAr() ? best.ar : best.en);
+    $("#docResult").innerHTML = '<div class="doc-result">' +
+      '<div class="result-meta"><span class="sev ' + best.sev + '">' + esc(sevLabel) + "</span>" +
+      '<span class="chip soft">' + esc(platformLabel($("#dPlatform").value || "both")) + "</span></div>" +
+      "<h3>" + esc(isAr() ? best.ar : best.en) + "</h3>" +
+      '<p style="font-size:12.5px;color:var(--muted);margin-top:6px">' + esc(isAr() ? best.causeAr : best.causeEn) + "</p>" +
+      '<div class="divider" style="margin:12px 0"></div>' +
+      '<p class="tiny" style="color:var(--gold-2);font-weight:800">' + (isAr() ? "خطوات الإصلاح" : "Fix steps") + "</p>" +
+      '<ol class="fixlist">' + fixes + "</ol>" +
+      '<div class="note-box" style="margin-top:12px"><b>' + (isAr() ? "الوقاية: " : "Prevention: ") + "</b>" + esc(isAr() ? best.prevAr : best.prevEn) + "</div>" +
+      "</div>";
+  }
+
+  /* ---------------- charts ---------------- */
+  function shortName(s, max) {
+    const n = String(s.name || "");
+    const m = max || 24;
+    return n.length > m ? n.slice(0, m - 1) + "…" : n;
+  }
+
+  function renderCharts() {
+    if (typeof window.Chart === "undefined") {
+      ["boxHours", "boxRuns", "boxShare"].forEach((id) => $("#" + id).classList.add("no-chart"));
+      return;
+    }
+    ["boxHours", "boxRuns", "boxShare"].forEach((id) => $("#" + id).classList.remove("no-chart"));
+    window.Chart.defaults.color = "#93A4BF";
+    window.Chart.defaults.font.family = '"Segoe UI", Tahoma, Arial, sans-serif';
+    const tooltip = {
+      backgroundColor: "#0B1222", titleColor: "#EAF0FA", bodyColor: "#C9D5E8",
+      borderColor: "rgba(197,160,89,.35)", borderWidth: 1, padding: 10, cornerRadius: 10, displayColors: false
+    };
+    const legend = { labels: { color: "#C9D5E8", boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "rectRounded", font: { size: 11 } } };
+
+    if (charts.hours) { charts.hours.destroy(); charts.hours = null; }
+    charts.hours = new window.Chart($("#cHours"), {
+      type: "bar",
+      data: {
+        labels: state.scenarios.map((s) => shortName(s, 30)),
+        datasets: [{ label: isAr() ? "ساعات/شهر" : "Hours/month", data: state.scenarios.map((s) => Math.round(hoursOf(s) * 10) / 10), backgroundColor: "rgba(197,160,89,.78)", borderColor: "#E4C88A", borderWidth: 1, borderRadius: 6, maxBarThickness: 22 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: Object.assign({ callbacks: { label: (c) => fmtNum(c.parsed.x, 1) + (isAr() ? " ساعة" : " hours") } }, tooltip)
+        },
+        indexAxis: "y",
+        scales: {
+          x: { beginAtZero: true, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { color: "#C9D5E8", font: { size: 10 } } }
+        }
+      }
+    });
+
+    if (charts.runs) { charts.runs.destroy(); charts.runs = null; }
+    charts.runs = new window.Chart($("#cRuns"), {
+      type: "bar",
+      data: {
+        labels: state.scenarios.map((s) => shortName(s, 14)),
+        datasets: [
+          { label: isAr() ? "نجحة" : "Successful", data: state.scenarios.map((s) => Math.round(num(s.runs, 0) * (1 - num(s.err, 0) / 100))), backgroundColor: "rgba(92,143,214,.62)", borderRadius: 5, maxBarThickness: 18 },
+          { label: isAr() ? "فاشلة" : "Failed", data: state.scenarios.map((s) => Math.round(num(s.runs, 0) * num(s.err, 0) / 100)), backgroundColor: "rgba(217,97,95,.75)", borderRadius: 5, maxBarThickness: 18 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: Object.assign({ position: "bottom" }, legend), tooltip: Object.assign({}, tooltip) },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: "#C9D5E8", font: { size: 9.5 }, maxRotation: 32 } },
+          y: { stacked: true, beginAtZero: true, grid: { color: "rgba(147,164,191,.10)" }, ticks: { color: "#93A4BF", font: { size: 10.5 } } }
+        }
+      }
+    });
+
+    const mHours = state.scenarios.filter((s) => s.platform === "make").reduce((a, s) => a + hoursOf(s), 0);
+    const nHours = state.scenarios.filter((s) => s.platform === "n8n").reduce((a, s) => a + hoursOf(s), 0);
+    if (charts.share) { charts.share.destroy(); charts.share = null; }
+    charts.share = new window.Chart($("#cShare"), {
+      type: "doughnut",
+      data: {
+        labels: ["Make", "n8n"],
+        datasets: [{ data: [Math.round(mHours * 10) / 10, Math.round(nHours * 10) / 10], backgroundColor: ["#C5A059", "#5C8FD6"], borderColor: "#141F35", borderWidth: 3, hoverOffset: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: "62%",
+        plugins: {
+          legend: Object.assign({ position: "bottom" }, legend),
+          tooltip: Object.assign({ callbacks: { label: (c) => c.label + ": " + fmtNum(c.parsed, 1) + (isAr() ? " ساعة" : " hours") } }, tooltip)
+        }
+      }
+    });
+  }
+
+  function renderAll() {
+    renderKpis();
+    renderTop();
+    renderHealth();
+    renderScenarios();
+    renderWebhooks();
+    renderSavings();
+    renderCharts();
+  }
+
+  /* ---------------- export ---------------- */
+  function download(filename, text, type) {
+    const blob = new Blob([text], { type: type || "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  function exportJSON() {
+    download("automation-blueprints.json", JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      hourlyRateUSD: state.hourlyUSD,
+      scenarios: state.scenarios
+    }, null, 2), "application/json");
+    toast(isAr() ? "نُزّل automation-blueprints.json" : "automation-blueprints.json downloaded");
+  }
+
+  function exportCSV() {
+    if (!state.scenarios.length) { toast(isAr() ? "لا سيناريوهات" : "No scenarios", true); return; }
+    const head = ["Name", "Platform", "Trigger", "Webhook", "Runs_Month", "Minutes_Run", "Error_%", "Tool_Cost_USD", "Hours_Month", "Gross_USD", "Net_USD", "Active", "Steps", "Notes"];
+    const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+    const rows = state.scenarios.map((s) => [s.name, s.platform, s.trigger, s.webhook, s.runs, s.minutes, s.err, num(s.costUSD, 0), Math.round(hoursOf(s) * 100) / 100, Math.round(grossOf(s) * 100) / 100, Math.round(netOf(s) * 100) / 100, s.active ? "yes" : "no", (s.steps || []).join(" | "), s.notes].map(q).join(","));
+    download("automation-blueprints.csv", "\uFEFF" + [head.map(q).join(",")].concat(rows).join("\n"), "text/csv;charset=utf-8");
+    toast(isAr() ? "نُزّل automation-blueprints.csv" : "automation-blueprints.csv downloaded");
+  }
+
+  /* ---------------- events ---------------- */
+  function bind() {
+    $$("#tabs .tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-tab");
+        $$("#tabs .tab").forEach((b) => { b.classList.toggle("on", b === btn); b.setAttribute("aria-selected", b === btn ? "true" : "false"); });
+        $$(".tabpane").forEach((p) => p.classList.toggle("on", p.id === "pane-" + key));
+        if (key === "dash" || key === "savings") renderCharts();
+      });
+    });
+    $$("[data-goto]").forEach((btn) => btn.addEventListener("click", () => {
+      const tab = $('.tab[data-tab="' + btn.getAttribute("data-goto") + '"]');
+      if (tab) tab.click();
+    }));
+
+    $$("#langSeg button").forEach((b) => b.addEventListener("click", () => {
+      ui.lang = b.getAttribute("data-lang");
+      save();
+      applyI18n();
+      renderChips();
+      renderAll();
+      if (editingId) { const s = state.scenarios.find((x) => x.id === editingId); if (s) $("#editChip").textContent = s.name; }
+    }));
+    $("#currency").addEventListener("change", (e) => {
+      ui.currency = e.target.value;
+      save();
+      renderAll();
+    });
+
+    $("#saveScn").addEventListener("click", saveScenario);
+    $("#cancelEdit").addEventListener("click", () => { resetForm(); renderAll(); toast(isAr() ? "أُلغي التعديل" : "Edit cancelled"); });
+    $("#fPlatform").addEventListener("change", renderScenarios);
+    $("#fSearch").addEventListener("input", renderScenarios);
+    $("#expJson").addEventListener("click", exportJSON);
+    $("#expCsv").addEventListener("click", exportCSV);
+
+    $("#copySample").addEventListener("click", () => copyText(sampleJSON(), isAr() ? "نُسخت الحمولة" : "Payload copied"));
+
+    $("#rateInput").addEventListener("change", () => {
+      const v = parseFloat($("#rateInput").value);
+      if (!isFinite(v) || v <= 0) { toast(isAr() ? "أدخل سعر ساعة صحيحاً" : "Enter a valid hourly rate", true); renderSavings(); return; }
+      state.hourlyUSD = v / cur().rate;
+      save();
+      renderAll();
+      toast(isAr() ? "حُدّث سعر الساعة" : "Hourly rate updated");
+    });
+    $("#applyRate").addEventListener("click", () => { renderAll(); toast(isAr() ? "أُعيد الحساب" : "Recalculated"); });
+
+    $("#doctorBtn").addEventListener("click", diagnose);
+    $("#clearDoctor").addEventListener("click", () => {
+      $("#dError").value = "";
+      $("#docSub").textContent = t("doc.resultSub");
+      $("#docResult").innerHTML = '<div class="empty">' + (isAr() ? "لم يُشخَّص خطأ بعد — الصق رسالة أو اختر مثالاً." : "No diagnosis yet — paste a message or pick an example.") + "</div>";
+    });
+    $("#docChips").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-chip]");
+      if (!b) return;
+      const chip = CHIPS[num(b.getAttribute("data-chip"), 0)];
+      $("#dError").value = chip ? chip.text : "";
+      diagnose();
+    });
+
+    $("#resetBtn").addEventListener("click", () => {
+      if (!window.confirm(isAr() ? "استعادة النموذج ستحذف تعديلاتك المحلية. متابعة؟" : "Restoring the sample erases local edits. Continue?")) return;
+      try { localStorage.removeItem(STORE); } catch (e) {}
+      editingId = null;
+      load();
+      resetForm();
+      renderAll();
+      renderChips();
+      toast(isAr() ? "استُعيد النموذج" : "Sample restored");
+    });
+
+    document.addEventListener("click", (e) => {
+      const copy = e.target.closest("[data-copy]");
+      if (copy) {
+        const s = state.scenarios.find((x) => x.id === copy.getAttribute("data-copy"));
+        if (s && s.webhook) copyText(s.webhook, isAr() ? "نُسخ الرابط" : "URL copied");
+        return;
+      }
+      const curl = e.target.closest("[data-curl]");
+      if (curl) {
+        const s = state.scenarios.find((x) => x.id === curl.getAttribute("data-curl"));
+        if (s && s.webhook) copyText(curlFor(s.webhook), isAr() ? "نُسخ أمر cURL" : "cURL copied");
+        return;
+      }
+      const edit = e.target.closest("[data-editscn]");
+      if (edit) { startEdit(edit.getAttribute("data-editscn")); return; }
+      const toggle = e.target.closest("[data-togglescn]");
+      if (toggle) {
+        const s = state.scenarios.find((x) => x.id === toggle.getAttribute("data-togglescn"));
+        if (s) { s.active = !s.active; save(); renderAll(); toast(s.active ? (isAr() ? "فُعّل السيناريو" : "Scenario activated") : (isAr() ? "أُوقف مؤقتاً" : "Scenario paused")); }
+        return;
+      }
+      const del = e.target.closest("[data-delscn]");
+      if (del) {
+        const id = del.getAttribute("data-delscn");
+        const s = state.scenarios.find((x) => x.id === id);
+        if (!s) return;
+        if (!window.confirm((isAr() ? "حذف السيناريو: " : "Delete scenario: ") + s.name + "؟")) return;
+        state.scenarios = state.scenarios.filter((x) => x.id !== id);
+        if (editingId === id) resetForm();
+        save();
+        renderAll();
+        return;
+      }
+      const diag = e.target.closest("[data-diagnose]");
+      if (diag) {
+        const s = state.scenarios.find((x) => x.id === diag.getAttribute("data-diagnose"));
+        if (!s) return;
+        $("#dError").value = (isAr() ? "نسبة خطأ مرتفعة " : "High error rate ") + fmtNum(s.err, 1) + "% — " + s.name;
+        $("#dPlatform").value = s.platform;
+        const tab = $('.tab[data-tab="doctor"]');
+        if (tab) tab.click();
+        diagnose();
+      }
+    });
+  }
+
+  function copyText(text, msg) {
+    const done = () => toast(msg || (isAr() ? "نُسخ" : "Copied"));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else fallbackCopy(text, done);
+  }
+  function fallbackCopy(text, done) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) { toast(isAr() ? "تعذّر النسخ" : "Copy failed", true); }
+    document.body.removeChild(ta);
+  }
+
+  /* ---------------- init ---------------- */
+  load();
+  applyI18n();
+  renderChips();
+  bind();
+  renderAll();
+  $("#docResult").innerHTML = '<div class="empty">' + (isAr() ? "لم يُشخَّص خطأ بعد — الصق رسالة أو اختر مثالاً." : "No diagnosis yet — paste a message or pick an example.") + "</div>";
+
+  (function () {
+    const hash = (location.hash || "").replace("#", "");
+    if (!hash) return;
+    const tab = document.querySelector('#tabs .tab[data-tab="' + hash + '"]');
+    if (tab) tab.click();
+  })();
+
+  window.addEventListener("load", () => { if (typeof window.Chart !== "undefined") renderCharts(); });
+})();
+</script>
+</body>
+</html>
