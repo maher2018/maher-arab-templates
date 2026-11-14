@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سرعة الرد وإدارة العملاء المحتملين — Premium Bilingual Templates</title>
+<meta name="description" content="نظام سرعة الرد للعيادات والمكاتب العقارية: إدارة العملاء المحتملين، قياس زمن أول رد، تنبيه الصفقات المتعثرة، ورسائل واتساب جاهزة بضغطة — عربي/إنجليزي.">
+<style>
+:root{--bg:#f2f5f8;--card:#fff;--ink:#0f1e2e;--muted:#5d6b7c;--navy:#0d2b45;--navy2:#123a5c;--teal:#0f766e;--gold:#c1912f;--gold-soft:#f7eeda;--bad:#b3372c;--bad-soft:#fdeceb;--warn:#8a5a08;--warn-soft:#fdf1dc;--ok:#14684a;--ok-soft:#e8f5ef;--line:#e3e7ef;--radius:16px;--shadow:0 10px 30px rgba(15,30,46,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.94rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input[type=datetime-local]{direction:ltr}
+textarea{resize:vertical;min-height:70px;line-height:1.6}
+input:focus,select:focus,textarea:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(18,58,92,.1)}
+label>span{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(242,245,248,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1220px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.9rem}
+.brand strong{display:block;font-size:1.02rem}
+.brand small{color:var(--muted);font-size:.76rem}
+.controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.controls label{margin:0}
+.controls select{width:auto;min-width:130px}
+.btn{border:0;border-radius:11px;padding:10px 15px;font-weight:700;font-size:.86rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{filter:brightness(1.08)}
+.btn.gold{background:var(--gold);color:#231b06}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:6px 11px;font-size:.78rem;border-radius:8px}
+.btn.danger{background:#fff;color:var(--bad);border:1px solid #f0cdc9}
+main{max-width:1220px;margin:0 auto;padding:24px 20px 50px;display:grid;gap:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:11px}
+.kpi{background:linear-gradient(180deg,#fbfcfe,#f3f7fa);border:1px solid var(--line);border-radius:13px;padding:13px}
+.kpi span{display:block;font-size:.75rem;color:var(--muted);margin-bottom:3px}
+.kpi strong{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));border:0;color:#fff}
+.kpi.hero span{color:#c7d8e8}.kpi.hero strong{color:#fff}
+.kpi.bad strong{color:var(--bad)}.kpi.teal strong{color:var(--teal)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.card-head h2{font-size:1rem}
+.layout{display:grid;grid-template-columns:1.55fr .85fr;gap:18px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.toolbar input{flex:1 1 190px}
+.toolbar select{width:auto;min-width:130px}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:.73rem;color:var(--muted);text-align:start;font-weight:700;padding:8px 7px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fbfcfe}
+td{padding:9px 7px;border-bottom:1px solid var(--line);font-size:.85rem;vertical-align:middle}
+tr.lead{cursor:pointer}
+tr.lead:hover td{background:#f8fbfe}
+tr.lead.sel td{background:#eef5fb}
+.lead-name{font-weight:700}
+.lead-sub{font-size:.73rem;color:var(--muted);display:block}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:800;white-space:nowrap}
+.badge.fast{background:var(--ok-soft);color:var(--ok)}
+.badge.ok{background:var(--warn-soft);color:var(--warn)}
+.badge.slow{background:var(--bad-soft);color:var(--bad)}
+.badge.wait{background:#eef2f7;color:var(--muted)}
+.timer{display:inline-block;font-variant-numeric:tabular-nums;font-size:.71rem;font-weight:800;color:var(--muted);margin-inline-start:5px;letter-spacing:.02em}
+.timer.bad{color:var(--bad)}
+.badge.st{background:#eaf1fb;color:#1f4f8a}
+select.mini{width:auto;padding:5px 8px;font-size:.78rem;border-radius:8px}
+.icon{background:none;border:0;color:var(--muted);font-size:1rem;padding:2px 4px}
+.icon:hover{color:var(--navy)}
+.side{position:sticky;top:82px}
+.msg-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.msg-tabs button{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:99px;padding:6px 11px;font-size:.78rem;font-weight:700}
+.msg-tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.preview{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px;min-height:150px;white-space:pre-line;font-size:.9rem}
+.side .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.side .row .btn{flex:1 1 auto;justify-content:center}
+.hint{color:var(--muted);font-size:.78rem;margin:8px 0 0}
+.msg{font-size:.82rem;margin:8px 0 0;min-height:1.1em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.empty{padding:18px 6px;text-align:center;color:var(--muted);font-size:.86rem;border:1px dashed var(--line);border-radius:12px}
+.overlay{position:fixed;inset:0;background:rgba(9,25,40,.5);display:grid;place-items:center;padding:18px;z-index:60;overflow:auto}
+.overlay[hidden]{display:none}
+.modal{background:#fff;border-radius:18px;padding:20px;max-width:640px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:92vh;overflow:auto}
+.modal h2{font-size:1.05rem;margin-bottom:12px}
+.form{display:grid;gap:10px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.79rem;padding:0 20px 28px}
+@media print{.top,.side,.toolbar,.no-print,footer{display:none!important}body{background:#fff}.layout{grid-template-columns:1fr}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">S2L</span>
+      <div><strong data-i18n="brand">سرعة الرد وإدارة العملاء</strong><small data-i18n="tagline">عيادات · مكاتب عقارية · واتساب</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <label><span data-i18n="org">المنشأة</span><input id="orgName" type="text" style="min-width:160px" data-i18n-ph="org.ph"></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn gold" id="addBtn" data-i18n="add">+ عميل محتمل</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+
+  <div class="layout">
+    <section class="card">
+      <div class="card-head">
+        <h2 data-i18n="list.title">قائمة العملاء المحتملين</h2>
+        <span class="hint" style="margin:0" data-i18n="list.hint">اختر عميلًا لعرض رسالة واتساب جاهزة</span>
+      </div>
+      <div class="toolbar no-print">
+        <input id="search" type="search" data-i18n-ph="list.search">
+        <select id="statusFilter"></select>
+        <select id="typeFilter"></select>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th data-i18n="th.lead">العميل</th>
+            <th data-i18n="th.source">المصدر</th>
+            <th data-i18n="th.speed">أول رد</th>
+            <th data-i18n="th.status">الحالة</th>
+            <th data-i18n="th.value">القيمة</th>
+            <th data-i18n="th.actions"></th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="list.note">«تم الرد» يسجّل زمن الرد الآن ويحسّن مؤشر السرعة. الحالات: جديد، تم التواصل، موعد، عرض سعر، صفقة رابحة، خسارة.</p>
+    </section>
+
+    <aside class="card side">
+      <div class="card-head">
+        <h2 data-i18n="wa.title">رسائل واتساب جاهزة</h2>
+        <span class="badge st" id="selBadge" hidden></span>
+      </div>
+      <p class="hint" id="selHint" data-i18n="wa.pick">اختر عميلًا من القائمة لبدء الرسالة.</p>
+      <div class="msg-tabs" id="msgTabs"></div>
+      <div class="preview" id="preview">—</div>
+      <div class="row">
+        <button type="button" class="btn teal" id="waBtn" data-i18n="wa.open">فتح واتساب</button>
+        <button type="button" class="btn ghost" id="copyBtn" data-i18n="wa.copy">نسخ</button>
+      </div>
+      <p class="msg" id="waMsg"></p>
+      <label style="margin-top:10px"><span data-i18n="wa.date">تاريخ الموعد (للرسالة)</span><input id="apptAt" type="datetime-local"></label>
+      <p class="hint" data-i18n="wa.hint">الأرقام يجب أن تكون بصيغة دولية بلا رموز، مثل 9665xxxxxxxx. تُفتح الرسالة في واتساب ويمكنك تعديلها قبل الإرسال.</p>
+    </aside>
+  </div>
+</main>
+
+<footer>Arab Templates — <span data-i18n="footer">نظام سرعة الرد · نسخة ثابتة تعمل بلا خادم</span></footer>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="modal">
+    <h2 id="modalTitle" data-i18n="modal.add">إضافة عميل محتمل</h2>
+    <form class="form" id="leadForm" autocomplete="off">
+      <div class="form-row">
+        <label><span data-i18n="f.name">الاسم</span><input id="fName" type="text" required></label>
+        <label><span data-i18n="f.phone">رقم واتساب</span><input id="fPhone" type="tel" placeholder="9665xxxxxxxx" dir="ltr"></label>
+      </div>
+      <div class="form-row">
+        <label><span data-i18n="f.type">النشاط</span><select id="fType"></select></label>
+        <label><span data-i18n="f.source">المصدر</span><select id="fSource"></select></label>
+      </div>
+      <label><span data-i18n="f.interest">الخدمة/الاهتمام</span><input id="fInterest" type="text"></label>
+      <div class="form-row">
+        <label><span data-i18n="f.status">الحالة</span><select id="fStatus"></select></label>
+        <label><span data-i18n="f.value">قيمة الفرصة</span><input id="fValue" type="number" min="0" step="1" value="0"></label>
+      </div>
+      <div class="form-row">
+        <label><span data-i18n="f.created">وقت وصول الطلب</span><input id="fCreated" type="datetime-local"></label>
+        <label><span data-i18n="f.responded">وقت أول رد (اتركه فارغًا إن لم يُرد)</span><input id="fResponded" type="datetime-local"></label>
+      </div>
+      <div class="form-row">
+        <label><span data-i18n="f.next">الموعد/المتابعة القادمة</span><input id="fNext" type="datetime-local"></label>
+        <label><span data-i18n="f.notes">ملاحظات</span><input id="fNotes" type="text"></label>
+      </div>
+      <p class="msg" id="formMsg"></p>
+      <div class="row">
+        <button type="button" class="btn ghost" id="cancelBtn" data-i18n="modal.cancel">إلغاء</button>
+        <button type="submit" class="btn teal" data-i18n="modal.save">حفظ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", decimals: 3 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", decimals: 3 }
+  };
+
+  var I18N = {
+    ar: {
+      brand: "سرعة الرد وإدارة العملاء", tagline: "عيادات · مكاتب عقارية · واتساب",
+      currency: "العملة", org: "اسم المنشأة", "org.ph": "عيادة النخيل / مكتب الأفق",
+      add: "+ عميل محتمل",
+      "kpi.total": "عملاء محتملون", "kpi.avg": "متوسط أول رد", "kpi.fast": "رُدّ خلال 5 دقائق",
+      "kpi.wait": "بانتظار الرد", "kpi.stalled": "صفقات متعثرة", "kpi.pipeline": "قيمة الفرص المفتوحة",
+      "list.title": "قائمة العملاء المحتملين", "list.hint": "اختر عميلًا لعرض رسالة واتساب جاهزة",
+      "list.search": "ابحث بالاسم أو الرقم أو الخدمة…",
+      "list.note": "«تم الرد» يسجّل زمن الرد الآن ويحسّن مؤشر السرعة. الحالات: جديد، تم التواصل، موعد، عرض سعر، صفقة رابحة، خسارة.",
+      "th.lead": "العميل", "th.source": "المصدر", "th.speed": "أول رد", "th.status": "الحالة",
+      "th.value": "القيمة", "th.actions": "",
+      "speed.fast": "سريع", "speed.ok": "مقبول", "speed.slow": "بطيء", "speed.wait": "بانتظار",
+      "speed.none": "—", "resp.mark": "تم الرد الآن",
+      "st.new": "جديد", "st.contacted": "تم التواصل", "st.appointment": "موعد مؤكد", "st.offer": "عرض سعر",
+      "st.won": "صفقة مغلقة", "st.lost": "خسارة", "st.all": "كل الحالات",
+      "type.clinic": "عيادة", "type.salon": "صالون", "type.realestate": "مكتب عقاري", "type.all": "كل الأنشطة",
+      "speed.waitTitle": "الوقت المنقضي منذ وصول الطلب",
+      "src.instagram": "إنستغرام", "src.whatsapp": "واتساب", "src.walkin": "زيارة مباشرة",
+      "src.website": "الموقع", "src.referral": "توصية", "src.call": "اتصال",
+      "wa.title": "رسائل واتساب جاهزة", "wa.pick": "اختر عميلًا من القائمة لبدء الرسالة.",
+      "wa.open": "فتح واتساب", "wa.short": "واتساب", "wa.copy": "نسخ", "wa.date": "تاريخ الموعد (للرسالة)",
+      "wa.hint": "الأرقام يجب أن تكون بصيغة دولية بلا رموز، مثل 9665xxxxxxxx. تُفتح الرسالة في واتساب ويمكنك تعديلها قبل الإرسال.",
+      "wa.confirm": "تأكيد موعد", "wa.followup": "متابعة متعثرة", "wa.welcome": "رد أول", "wa.reminder": "تذكير بموعد",
+      "wa.noLead": "اختر عميلًا أولًا.", "wa.noPhone": "أضف رقم واتساب لهذا العميل أولًا.",
+      "wa.copied": "تم نسخ الرسالة.", "wa.needName": "اكتب اسم المنشأة أعلى الصفحة لتظهر في الرسالة.",
+      "msg.clinic.confirm": "مرحبًا {name}، تم تأكيد موعدك في {org} بخصوص {interest}{when}. نرجو الحضور قبل عشر دقائق، ولتأكيد الموعد اكتب «نعم».",
+      "msg.clinic.followup": "مرحبًا {name}، نتابع معك بخصوص {interest} في {org}. هل ما زلت ترغب في إكمال الحجز؟ نستطيع ترتيب موعد يناسبك هذا الأسبوع.",
+      "msg.clinic.welcome": "مرحبًا {name}، معك {org}. وصلنا طلبك بخصوص {interest}، وسيتواصل معك فريقنا خلال دقائق. إن كان الأمر عاجلًا أخبرنا هنا.",
+      "msg.clinic.reminder": "تذكير ودّي: موعدك غدًا في {org} بخصوص {interest}{when}. إذا احتجت تغييره أخبرنا قبل الموعد.",
+      "msg.real.confirm": "مرحبًا {name}، تم تثبيت موعد المعاينة في {org} بخصوص {interest}{when}. نرجو الحضور في الوقت المحدد، وللتأكيد اكتب «نعم».",
+      "msg.real.followup": "مرحبًا {name}، أردت المتابعة بخصوص {interest} في {org}. هل ما زلت مهتمًا؟ أستطيع إرسال خيارات محدثة أو ترتيب زيارة قصيرة هذا الأسبوع.",
+      "msg.real.welcome": "مرحبًا {name}، معك {org}. وصلنا استفسارك عن {interest}، وسنعاود التواصل معك خلال دقائق بخيارات مناسبة. هل تفضّل الاتصال أم واتساب؟",
+      "msg.real.reminder": "تذكير: زيارتك غدًا في {org} بخصوص {interest}{when}. أخبرنا إن أردت تغيير الموعد أو إضافة خيارات أخرى.",
+      "msg.salon.confirm": "مرحبًا {name}، تم تأكيد موعدك في {org} بخصوص {interest}{when}. ننصحك بالحضور قبل عشر دقائق، وللتأكيد اكتب «نعم».",
+      "msg.salon.followup": "مرحبًا {name}، نتابع معك بخصوص {interest} في {org}. تحب نحجز لك موعدًا هذا الأسبوع يناسبك؟",
+      "msg.salon.welcome": "مرحبًا {name}، معك {org}. وصلنا طلبك بخصوص {interest}، وسنتواصل معك خلال دقائق. تفضّل موعدًا صباحيًا أم مسائيًا؟",
+      "msg.salon.reminder": "تذكير ودّي: موعدك غدًا في {org} بخصوص {interest}{when}. إذا احتجت تغييره أخبرنا قبل الموعد.",
+      "modal.add": "إضافة عميل محتمل", "modal.edit": "تعديل بيانات العميل",
+      "modal.cancel": "إلغاء", "modal.save": "حفظ", "modal.delete": "حذف العميل",
+      "f.name": "الاسم", "f.phone": "رقم واتساب", "f.type": "النشاط", "f.source": "المصدر",
+      "f.interest": "الخدمة/الاهتمام", "f.status": "الحالة", "f.value": "قيمة الفرصة",
+      "f.created": "وقت وصول الطلب", "f.responded": "وقت أول رد (اتركه فارغًا إن لم يُرد)",
+      "f.next": "الموعد/المتابعة القادمة", "f.notes": "ملاحظات",
+      "err.name": "اكتب اسم العميل.", "del.confirm": "حذف هذا العميل؟",
+      "footer": "نظام سرعة الرد · نسخة ثابتة تعمل بلا خادم",
+      "note.stalled": "متعثرة: موعد/عرض سعر مضى تاريخه، أو طلب بلا رد أكثر من 24 ساعة."
+    },
+    en: {
+      brand: "Speed-to-Lead CRM", tagline: "Clinics · Real estate · WhatsApp",
+      currency: "Currency", org: "Business name", "org.ph": "Palm Clinic / Horizon Realty",
+      add: "+ New lead",
+      "kpi.total": "Leads", "kpi.avg": "Avg. first response", "kpi.fast": "Replied within 5 min",
+      "kpi.wait": "Awaiting reply", "kpi.stalled": "Stalled deals", "kpi.pipeline": "Open pipeline value",
+      "list.title": "Leads", "list.hint": "Select a lead to preview a ready WhatsApp message",
+      "list.search": "Search by name, phone or interest…",
+      "list.note": "“Mark replied” stamps the response time now and improves the speed score. Stages: new, contacted, appointment, offer, won, lost.",
+      "th.lead": "Lead", "th.source": "Source", "th.speed": "First reply", "th.status": "Stage",
+      "th.value": "Value", "th.actions": "",
+      "speed.fast": "Fast", "speed.ok": "Okay", "speed.slow": "Slow", "speed.wait": "Pending",
+      "speed.none": "—", "resp.mark": "Mark replied",
+      "st.new": "New", "st.contacted": "Contacted", "st.appointment": "Confirmed appointment", "st.offer": "Offer",
+      "st.won": "Closed deal", "st.lost": "Lost", "st.all": "All stages",
+      "type.clinic": "Clinic", "type.salon": "Salon", "type.realestate": "Real estate", "type.all": "All businesses",
+      "speed.waitTitle": "Time since the lead arrived",
+      "src.instagram": "Instagram", "src.whatsapp": "WhatsApp", "src.walkin": "Walk-in",
+      "src.website": "Website", "src.referral": "Referral", "src.call": "Phone call",
+      "wa.title": "Ready WhatsApp messages", "wa.pick": "Select a lead from the list to start a message.",
+      "wa.open": "Open WhatsApp", "wa.short": "WhatsApp", "wa.copy": "Copy", "wa.date": "Appointment date (for the message)",
+      "wa.hint": "Phone numbers must be international digits only, e.g. 9665xxxxxxxx. WhatsApp opens with the text and you can edit it before sending.",
+      "wa.confirm": "Confirm appointment", "wa.followup": "Follow up stalled", "wa.welcome": "First reply", "wa.reminder": "Appointment reminder",
+      "wa.noLead": "Select a lead first.", "wa.noPhone": "Add a WhatsApp number for this lead first.",
+      "wa.copied": "Message copied.", "wa.needName": "Add your business name at the top so it appears in messages.",
+      "msg.clinic.confirm": "Hi {name}, your appointment at {org} is confirmed for {interest}{when}. Please arrive 10 minutes early; reply “YES” to confirm.",
+      "msg.clinic.followup": "Hi {name}, following up on your {interest} booking at {org}. Would you still like to complete it? We can arrange a time that suits you this week.",
+      "msg.clinic.welcome": "Hi {name}, this is {org}. We received your request about {interest} and our team will contact you within minutes. If it is urgent, let us know here.",
+      "msg.clinic.reminder": "Friendly reminder: your appointment is tomorrow at {org} for {interest}{when}. Let us know if you need to reschedule.",
+      "msg.real.confirm": "Hi {name}, your viewing at {org} is confirmed for {interest}{when}. Please arrive on time; reply “YES” to confirm.",
+      "msg.real.followup": "Hi {name}, following up on {interest} at {org}. Are you still interested? I can send updated options or arrange a short visit this week.",
+      "msg.real.welcome": "Hi {name}, this is {org}. We received your enquiry about {interest} and will get back to you within minutes with suitable options. Do you prefer a call or WhatsApp?",
+      "msg.real.reminder": "Reminder: your visit at {org} is tomorrow for {interest}{when}. Let us know if you need a different time or more options.",
+      "msg.salon.confirm": "Hi {name}, your appointment at {org} is confirmed for {interest}{when}. Please arrive 10 minutes early; reply “YES” to confirm.",
+      "msg.salon.followup": "Hi {name}, following up on your {interest} booking at {org}. Would you like us to book a time that suits you this week?",
+      "msg.salon.welcome": "Hi {name}, this is {org}. We received your request about {interest} and will get back to you within minutes. Do you prefer a morning or evening appointment?",
+      "msg.salon.reminder": "Friendly reminder: your appointment is tomorrow at {org} for {interest}{when}. Let us know if you need to change it.",
+      "modal.add": "Add a lead", "modal.edit": "Edit lead",
+      "modal.cancel": "Cancel", "modal.save": "Save", "modal.delete": "Delete lead",
+      "f.name": "Name", "f.phone": "WhatsApp number", "f.type": "Business", "f.source": "Source",
+      "f.interest": "Service / interest", "f.status": "Stage", "f.value": "Opportunity value",
+      "f.created": "Lead received at", "f.responded": "First reply at (leave empty if none)",
+      "f.next": "Next appointment / follow-up", "f.notes": "Notes",
+      "err.name": "Enter the lead name.", "del.confirm": "Delete this lead?",
+      "footer": "Speed-to-Lead CRM · static edition, no server needed",
+      "note.stalled": "Stalled: an appointment/offer date has passed, or a lead with no reply for over 24 hours."
+    }
+  };
+
+  var STATUSES = ["new", "contacted", "appointment", "offer", "won", "lost"];
+  var SOURCES = ["instagram", "whatsapp", "walkin", "website", "referral", "call"];
+  var TYPES = ["clinic", "salon", "realestate"];
+  var KEY = "pb_speed_crm_v1";
+  var state = { lang: "ar", currency: "SAR", selected: null, msgType: "confirm", filterStatus: "all", filterType: "all", search: "" };
+
+  function $(id) { return document.getElementById(id); }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toLocaleString() + " " + state.currency; }
+  }
+  function dt(value) {
+    if (!value) return "";
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return "";
+    return new Intl.DateTimeFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+      day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
+    }).format(date);
+  }
+  function dateOnly(value) {
+    if (!value) return "—";
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return "—";
+    return new Intl.DateTimeFormat(state.lang === "ar" ? "ar-SA" : "en-US", { day: "2-digit", month: "2-digit" }).format(date);
+  }
+  function minutesBetween(a, b) {
+    var start = new Date(a).getTime(), end = new Date(b).getTime();
+    if (isNaN(start) || isNaN(end) || end < start) return null;
+    return Math.round((end - start) / 60000);
+  }
+  function localNow() {
+    var d = new Date();
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function hoursSince(value) {
+    var start = new Date(value).getTime();
+    if (isNaN(start)) return 0;
+    return (Date.now() - start) / 3600000;
+  }
+  function elapsedText(ms) {
+    var total = Math.max(0, Math.floor(ms / 1000));
+    var hours = Math.floor(total / 3600);
+    var mins = Math.floor((total % 3600) / 60);
+    var secs = total % 60;
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    return (hours ? hours + ":" + pad(mins) : pad(mins)) + ":" + pad(secs);
+  }
+  function tickTimers() {
+    document.querySelectorAll("[data-created]").forEach(function (el) {
+      var start = new Date(el.getAttribute("data-created")).getTime();
+      if (isNaN(start)) return;
+      var diff = Date.now() - start;
+      el.textContent = "⏱ " + elapsedText(diff);
+      el.classList.toggle("bad", diff > 3600000);
+    });
+  }
+
+  function seed() {
+    var now = Date.now();
+    function iso(minutesAgo) {
+      var d = new Date(now - minutesAgo * 60000);
+      function pad(n) { return (n < 10 ? "0" : "") + n; }
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
+    function isoAt(offsetDays, hour) {
+      var d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      d.setHours(hour, 0, 0, 0);
+      function pad(n) { return (n < 10 ? "0" : "") + n; }
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
+    return [
+      { id: "L1", type: "clinic", name: "نورة العتيبي", phone: "966501112233", interest: "تنظيف أسنان", source: "instagram", status: "appointment", value: 450, created: iso(35), responded: iso(31), next: isoAt(1, 10), notes: "تفضّل المساء" },
+      { id: "L2", type: "clinic", name: "سعود الحربي", phone: "966552223344", interest: "استشارة جلدية", source: "whatsapp", status: "new", value: 300, created: iso(90), responded: "", next: "", notes: "" },
+      { id: "L3", type: "clinic", name: "مريم القحطاني", phone: "966533334455", interest: "متابعة حمل", source: "walkin", status: "contacted", value: 600, created: iso(260), responded: iso(95), next: isoAt(-2, 12), notes: "تنتظر تأكيد التأمين" },
+      { id: "L4", type: "realestate", name: "خالد الدوسري", phone: "966544445566", interest: "شقة 3 غرف — حي الياسمين", source: "website", status: "offer", value: 780000, created: iso(500), responded: iso(470), next: isoAt(-1, 15), notes: "بانتظار موافقة البنك" },
+      { id: "L5", type: "realestate", name: "هند المطيري", phone: "966555556677", interest: "فيلا — شمال الرياض", source: "referral", status: "appointment", value: 2100000, created: iso(120), responded: iso(112), next: isoAt(2, 16), notes: "زيارة معاينة" },
+      { id: "L6", type: "realestate", name: "عبدالله الشمري", phone: "966566667788", interest: "مكتب تجاري — حي العليا", source: "call", status: "contacted", value: 450000, created: iso(1440), responded: iso(20), next: "", notes: "" },
+      { id: "L7", type: "salon", name: "ريم السالم", phone: "966577778899", interest: "قص وتلوين", source: "instagram", status: "appointment", value: 350, created: iso(48), responded: iso(44), next: isoAt(1, 17), notes: "تفضّل العصر" }
+    ];
+  }
+
+  var leads = [];
+  function load() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (raw && Array.isArray(raw.leads)) {
+        leads = raw.leads;
+        if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+        return;
+      }
+    } catch (err) { /* تجاهل */ }
+    leads = seed();
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        leads: leads, currency: state.currency,
+        org: $("orgName").value, lang: state.lang
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function speedOf(lead) {
+    if (!lead.responded) return { kind: "wait", label: t("speed.wait"), minutes: null };
+    var mins = minutesBetween(lead.created, lead.responded);
+    if (mins == null) return { kind: "wait", label: t("speed.wait"), minutes: null };
+    if (mins <= 5) return { kind: "fast", label: t("speed.fast") + " · " + mins + (state.lang === "ar" ? " د" : "m"), minutes: mins };
+    if (mins <= 60) return { kind: "ok", label: t("speed.ok") + " · " + mins + (state.lang === "ar" ? " د" : "m"), minutes: mins };
+    return { kind: "slow", label: t("speed.slow") + " · " + mins + (state.lang === "ar" ? " د" : "m"), minutes: mins };
+  }
+  function isStalled(lead) {
+    if (lead.status === "won" || lead.status === "lost") return false;
+    if (!lead.responded && hoursSince(lead.created) > 24) return true;
+    if ((lead.status === "appointment" || lead.status === "offer") && lead.next && new Date(lead.next).getTime() < Date.now()) return true;
+    return false;
+  }
+
+  function stats() {
+    var total = leads.length;
+    var mins = [];
+    var fast = 0, waiting = 0, stalled = 0, pipeline = 0;
+    leads.forEach(function (lead) {
+      var speed = speedOf(lead);
+      if (speed.minutes != null) {
+        mins.push(speed.minutes);
+        if (speed.minutes <= 5) fast += 1;
+      } else waiting += 1;
+      if (isStalled(lead)) stalled += 1;
+      if (lead.status !== "won" && lead.status !== "lost") pipeline += Number(lead.value) || 0;
+    });
+    var avg = mins.length ? Math.round(mins.reduce(function (a, b) { return a + b; }, 0) / mins.length) : null;
+    return { total: total, avg: avg, fast: fast, waiting: waiting, stalled: stalled, pipeline: pipeline };
+  }
+
+  function renderKpis() {
+    var s = stats();
+    var avg = s.avg == null ? "—" : s.avg + (state.lang === "ar" ? " دقيقة" : " min");
+    var percent = s.total ? Math.round((s.fast / s.total) * 100) : 0;
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.total")) + "</span><strong>" + esc(String(s.total)) + "</strong></div>",
+      '<div class="kpi ' + (s.avg != null && s.avg > 60 ? "bad" : "teal") + '"><span>' + esc(t("kpi.avg")) + "</span><strong>" + esc(avg) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.fast")) + "</span><strong>" + esc(percent + "%") + "</strong></div>",
+      '<div class="kpi ' + (s.waiting ? "bad" : "") + '"><span>' + esc(t("kpi.wait")) + "</span><strong>" + esc(String(s.waiting)) + "</strong></div>",
+      '<div class="kpi ' + (s.stalled ? "bad" : "") + '"><span>' + esc(t("kpi.stalled")) + "</span><strong>" + esc(String(s.stalled)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.pipeline")) + "</span><strong>" + esc(money(s.pipeline)) + "</strong></div>"
+    ].join("");
+  }
+
+  function filtered() {
+    var q = state.search.trim().toLowerCase();
+    return leads.filter(function (lead) {
+      if (state.filterStatus !== "all" && lead.status !== state.filterStatus) return false;
+      if (state.filterType !== "all" && lead.type !== state.filterType) return false;
+      if (!q) return true;
+      return (lead.name + " " + lead.phone + " " + lead.interest).toLowerCase().indexOf(q) >= 0;
+    }).sort(function (a, b) { return new Date(b.created) - new Date(a.created); });
+  }
+
+  function renderRows() {
+    var rows = filtered();
+    if (!rows.length) {
+      $("rows").innerHTML = '<tr><td colspan="6"><div class="empty">' + esc(state.lang === "ar" ? "لا يوجد عملاء مطابقون." : "No matching leads.") + "</div></td></tr>";
+      return;
+    }
+    $("rows").innerHTML = rows.map(function (lead) {
+      var speed = speedOf(lead);
+      var stalled = isStalled(lead);
+      var statusOptions = STATUSES.map(function (key) {
+        return '<option value="' + key + '"' + (lead.status === key ? " selected" : "") + ">" + esc(t("st." + key)) + "</option>";
+      }).join("");
+      var markBtn = (!lead.responded
+        ? '<button type="button" class="btn ghost small" data-act="reply" data-id="' + esc(lead.id) + '">' + esc(t("resp.mark")) + "</button> "
+        : "") +
+        '<button type="button" class="icon" data-act="edit" data-id="' + esc(lead.id) + '" title="' + esc(t("modal.edit")) + '">✎</button>' +
+        '<button type="button" class="icon" data-act="del" data-id="' + esc(lead.id) + '" title="' + esc(t("modal.delete")) + '">✕</button>';
+      return '<tr class="lead' + (state.selected === lead.id ? " sel" : "") + '" data-id="' + esc(lead.id) + '">' +
+        '<td><span class="lead-name">' + esc(lead.name) + "</span><span class=\"lead-sub\">" + esc(lead.interest || "—") + (stalled ? " · ⚠ " + esc(t("kpi.stalled")) : "") + "</span></td>" +
+        '<td>' + esc(t("src." + lead.source)) + "</td>" +
+        '<td><span class="badge ' + speed.kind + '">' + esc(speed.label) + "</span>" +
+        (!lead.responded ? ' <span class="timer" data-created="' + esc(lead.created) + '" title="' + esc(t("speed.waitTitle")) + '">⏱ --:--</span>' : "") + "</td>" +
+        '<td><select class="mini" data-act="status" data-id="' + esc(lead.id) + '">' + statusOptions + "</select></td>" +
+        '<td class="num">' + esc(money(lead.value)) + "</td>" +
+        '<td class="no-print"><button type="button" class="btn ghost small" data-act="wa" data-id="' + esc(lead.id) + '">' + esc(t("wa.short")) + "</button> " + markBtn + "</td></tr>";
+    }).join("");
+    tickTimers();
+  }
+
+  function currentLead() {
+    for (var i = 0; i < leads.length; i += 1) if (leads[i].id === state.selected) return leads[i];
+    return null;
+  }
+  function whenText(lead) {
+    var value = $("apptAt").value || lead.next;
+    if (!value) return "";
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return "";
+    var formatted = new Intl.DateTimeFormat(state.lang === "ar" ? "ar-SA-u-ca-gregory" : "en-US", {
+      weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit"
+    }).format(date);
+    return (state.lang === "ar" ? " يوم " : " on ") + formatted;
+  }
+  function buildMessage(lead, type) {
+    var org = $("orgName").value.trim();
+    var prefix = lead.type === "realestate" ? "real" : lead.type === "salon" ? "salon" : "clinic";
+    var key = "msg." + prefix + "." + type;
+    var text = t(key, {
+      name: lead.name || "",
+      org: org || (state.lang === "ar" ? "المنشأة" : "our team"),
+      interest: lead.interest || t("f.interest"),
+      when: whenText(lead)
+    });
+    return text;
+  }
+  function renderMessage(force) {
+    var lead = currentLead();
+    var tabs = ["confirm", "followup", "welcome", "reminder"];
+    $("msgTabs").innerHTML = tabs.map(function (key) {
+      return '<button type="button" data-msg="' + key + '" class="' + (state.msgType === key ? "on" : "") + '">' + esc(t("wa." + key)) + "</button>";
+    }).join("");
+    if (!lead) {
+      $("selHint").hidden = false;
+      $("selBadge").hidden = true;
+      $("preview").textContent = "—";
+      return;
+    }
+    $("selHint").hidden = true;
+    $("selBadge").hidden = false;
+    $("selBadge").textContent = lead.name;
+    if (force !== false) $("preview").textContent = buildMessage(lead, state.msgType);
+    if (!$("apptAt").value && lead.next) $("apptAt").value = lead.next;
+  }
+
+  function renderAll() {
+    $("currency").value = state.currency;
+    $("statusFilter").value = state.filterStatus;
+    $("typeFilter").value = state.filterType;
+    renderKpis();
+    renderRows();
+    renderMessage(true);
+  }
+
+  function fillControls() {
+    $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+      return '<option value="' + code + '">' + code + " — " + CURRENCIES[code][state.lang] + "</option>";
+    }).join("");
+    $("statusFilter").innerHTML = '<option value="all">' + esc(t("st.all")) + "</option>" + STATUSES.map(function (key) {
+      return '<option value="' + key + '">' + esc(t("st." + key)) + "</option>";
+    }).join("");
+    $("typeFilter").innerHTML = '<option value="all">' + esc(t("type.all")) + "</option>" + TYPES.map(function (key) {
+      return '<option value="' + key + '">' + esc(t("type." + key)) + "</option>";
+    }).join("");
+    $("fType").innerHTML = TYPES.map(function (key) { return '<option value="' + key + '">' + esc(t("type." + key)) + "</option>"; }).join("");
+    $("fSource").innerHTML = SOURCES.map(function (key) { return '<option value="' + key + '">' + esc(t("src." + key)) + "</option>"; }).join("");
+    $("fStatus").innerHTML = STATUSES.map(function (key) { return '<option value="' + key + '">' + esc(t("st." + key)) + "</option>"; }).join("");
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    save();
+    fillControls();
+    renderAll();
+    if (persist) localStorage.setItem("pb_speed_crm_lang", state.lang);
+  }
+
+  function openModal(lead) {
+    $("formMsg").textContent = "";
+    $("formMsg").className = "msg";
+    $("modalTitle").textContent = lead ? t("modal.edit") : t("modal.add");
+    $("leadForm").dataset.id = lead ? lead.id : "";
+    $("fName").value = lead ? lead.name : "";
+    $("fPhone").value = lead ? lead.phone : "";
+    $("fType").value = lead ? lead.type : "clinic";
+    $("fSource").value = lead ? lead.source : "instagram";
+    $("fInterest").value = lead ? lead.interest : "";
+    $("fStatus").value = lead ? lead.status : "new";
+    $("fValue").value = lead ? lead.value : 0;
+    $("fCreated").value = lead ? lead.created : localNow();
+    $("fResponded").value = lead ? lead.responded : "";
+    $("fNext").value = lead ? (lead.next || "") : "";
+    $("fNotes").value = lead ? (lead.notes || "") : "";
+    $("overlay").hidden = false;
+    setTimeout(function () { $("fName").focus(); }, 50);
+  }
+  function closeModal() { $("overlay").hidden = true; }
+
+  function saveLead(event) {
+    event.preventDefault();
+    var name = $("fName").value.trim();
+    if (!name) {
+      $("formMsg").className = "msg bad";
+      $("formMsg").textContent = t("err.name");
+      return;
+    }
+    var id = $("leadForm").dataset.id;
+    var payload = {
+      name: name, phone: $("fPhone").value.trim(),
+      type: $("fType").value, source: $("fSource").value,
+      interest: $("fInterest").value.trim(), status: $("fStatus").value,
+      value: Number($("fValue").value) || 0,
+      created: $("fCreated").value, responded: $("fResponded").value,
+      next: $("fNext").value, notes: $("fNotes").value.trim()
+    };
+    if (id) {
+      for (var i = 0; i < leads.length; i += 1) if (leads[i].id === id) leads[i] = Object.assign({}, leads[i], payload);
+    } else {
+      payload.id = "L" + Date.now();
+      leads.unshift(payload);
+    }
+    state.selected = id || payload.id;
+    save();
+    renderAll();
+    closeModal();
+  }
+
+  $("rows").addEventListener("click", function (event) {
+    var action = event.target.closest("[data-act]");
+    var row = event.target.closest("tr.lead");
+    var id = action ? action.getAttribute("data-id") : (row ? row.getAttribute("data-id") : null);
+    if (!id) return;
+    var lead = leads.filter(function (item) { return item.id === id; })[0];
+    if (!lead) return;
+    var act = action ? action.getAttribute("data-act") : "select";
+    if (event.target.tagName === "SELECT") return;
+    if (act === "reply") {
+      lead.responded = new Date().toISOString().slice(0, 16);
+      if (lead.status === "new") lead.status = "contacted";
+      save(); state.selected = id; renderAll();
+      return;
+    }
+    if (act === "del") {
+      if (window.confirm(t("del.confirm"))) {
+        leads = leads.filter(function (item) { return item.id !== id; });
+        if (state.selected === id) state.selected = null;
+        save(); renderAll();
+      }
+      return;
+    }
+    if (act === "edit") { state.selected = id; openModal(lead); return; }
+    if (act === "wa") { state.selected = id; $("apptAt").value = lead.next || ""; renderAll(); return; }
+    state.selected = id;
+    $("apptAt").value = lead.next || "";
+    renderAll();
+  });
+
+  $("rows").addEventListener("change", function (event) {
+    var select = event.target.closest("select[data-act=status]");
+    if (!select) return;
+    var lead = leads.filter(function (item) { return item.id === select.getAttribute("data-id"); })[0];
+    if (!lead) return;
+    lead.status = select.value;
+    save(); renderAll();
+  });
+
+  $("msgTabs").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-msg]");
+    if (!btn) return;
+    state.msgType = btn.getAttribute("data-msg");
+    renderMessage(true);
+  });
+  $("apptAt").addEventListener("change", function () { renderMessage(true); });
+  $("orgName").addEventListener("input", function () { save(); renderMessage(true); });
+  $("waBtn").addEventListener("click", function () {
+    var lead = currentLead();
+    var msg = $("waMsg");
+    if (!lead) { msg.className = "msg bad"; msg.textContent = t("wa.noLead"); return; }
+    var digits = String(lead.phone || "").replace(/\D/g, "");
+    if (!digits) { msg.className = "msg bad"; msg.textContent = t("wa.noPhone"); return; }
+    var text = $("preview").textContent || "";
+    window.open("https://wa.me/" + digits + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+    msg.className = "msg ok";
+    msg.textContent = "";
+  });
+  $("copyBtn").addEventListener("click", function () {
+    var text = $("preview").textContent || "";
+    var msg = $("waMsg");
+    var done = function () { msg.className = "msg ok"; msg.textContent = t("wa.copied"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else {
+      var area = document.createElement("textarea");
+      area.value = text; document.body.appendChild(area); area.select();
+      try { document.execCommand("copy"); } catch (err) { /* تجاهل */ }
+      document.body.removeChild(area); done();
+    }
+  });
+  $("search").addEventListener("input", function (event) { state.search = event.target.value; renderRows(); });
+  $("statusFilter").addEventListener("change", function (event) { state.filterStatus = event.target.value; renderRows(); });
+  $("typeFilter").addEventListener("change", function (event) { state.filterType = event.target.value; renderRows(); });
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    save(); renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar", true); });
+  $("addBtn").addEventListener("click", function () { openModal(null); });
+  $("cancelBtn").addEventListener("click", closeModal);
+  $("overlay").addEventListener("click", function (event) { if (event.target === $("overlay")) closeModal(); });
+  $("leadForm").addEventListener("submit", saveLead);
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !$("overlay").hidden) closeModal();
+  });
+
+  load();
+  var storedLang = localStorage.getItem("pb_speed_crm_lang");
+  var savedOrg = "";
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    savedOrg = (saved && saved.org) || "";
+    if (saved && saved.lang) storedLang = saved.lang;
+  } catch (err) { /* تجاهل */ }
+  if (savedOrg) $("orgName").value = savedOrg;
+  state.lang = storedLang === "en" ? "en" : "ar";
+  applyLang(state.lang, false);
+  setInterval(tickTimers, 1000);
+})();
+</script>
+</body>
+</html>

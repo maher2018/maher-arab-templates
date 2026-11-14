@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>المساعد الذكي — Arab Templates</title>
 <meta name="description" content="المساعد الذكي الرسمي لمنصة Arab Templates: دعم وتوجيه لاختيار القالب المناسب، واستشارات ضريبية ومحاسبية فورية بالعربية والإنجليزية.">
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
@@ -54,9 +54,11 @@
       </div>
       <div class="chips" id="chips"></div>
       <form class="composer" id="chatForm">
+        <button class="mic" id="voiceBtn" type="button" aria-label="الأوامر الصوتية" title="الأوامر الصوتية">🎤</button>
         <input id="chatInput" type="text" autocomplete="off" data-i18n-ph="chat.placeholder" aria-label="سؤالك">
         <button type="submit" data-i18n="chat.send">إرسال</button>
       </form>
+      <p class="voice-line" id="voiceLine" hidden></p>
       <p class="fine" data-i18n="chat.fine">المساعد يعمل بقواعد معرفة مكتوبة وواضحة داخل الصفحة، وليس استشارة ضريبية معتمدة.</p>
     </section>
 
@@ -203,7 +205,8 @@
   </div>
 </footer>
 
-<script src="/core.js"></script>
-<script src="/app.js"></script>
+<script src="core.js?v=2"></script>
+<script src="app.js?v=3"></script>
+<script src="voice.js?v=2"></script>
 </body>
 </html>

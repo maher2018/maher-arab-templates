@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نظام ربح المتجر الإلكتروني — Premium Bilingual Templates</title>
+<meta name="description" content="نظام تشغيل لتجار سلة وزد: هامش الربح الصافي بعد الإعلانات والشحن وبوابات الدفع والمرتجعات، مع مولد أوصاف منتجات تسويقية — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{--bg:#f2f5f8;--card:#fff;--ink:#0f1e2e;--muted:#5d6b7c;--navy:#0d2b45;--navy2:#123a5c;--teal:#0f766e;--gold:#c1912f;--gold-soft:#f7eeda;--bad:#b3372c;--bad-soft:#fdeceb;--warn:#8a5a08;--warn-soft:#fdf1dc;--ok:#14684a;--ok-soft:#e8f5ef;--line:#e3e7ef;--radius:16px;--shadow:0 10px 30px rgba(15,30,46,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.95rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+textarea{resize:vertical;min-height:82px;line-height:1.6}
+input:focus,select:focus,textarea:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(18,58,92,.1)}
+input[type=number]{direction:ltr;text-align:start}
+label>span{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(242,245,248,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.95rem;letter-spacing:.5px}
+.brand strong{display:block;font-size:1.02rem}
+.brand small{color:var(--muted);font-size:.76rem}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls label{margin:0}
+.controls select{width:auto;min-width:170px}
+.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:.87rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{filter:brightness(1.08)}
+.btn.gold{background:var(--gold);color:#231b06}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--navy2)}
+.btn.small{padding:7px 12px;font-size:.8rem;border-radius:9px}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 50px;display:grid;gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card-head h2{font-size:1.02rem}
+.card-head .sub{color:var(--muted);font-size:.8rem;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+.kpi{background:linear-gradient(180deg,#fbfcfe,#f3f7fa);border:1px solid var(--line);border-radius:13px;padding:14px}
+.kpi span{display:block;font-size:.77rem;color:var(--muted);margin-bottom:4px}
+.kpi strong{font-size:1.12rem;font-variant-numeric:tabular-nums}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));border:0;color:#fff}
+.kpi.hero span{color:#c7d8e8}.kpi.hero strong{color:#fff}
+.kpi.bad strong{color:var(--bad)}.kpi.teal strong{color:var(--teal)}
+.alert{border:1px solid #efd9a7;background:var(--gold-soft);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.alert .dot{width:10px;height:10px;border-radius:99px;background:var(--gold);margin-top:8px;flex:0 0 auto}
+.alert strong{display:block;margin-bottom:2px}
+.alert p{margin:0;font-size:.86rem;color:#5c4413}
+.alert.bad{border-color:#f0cdc9;background:var(--bad-soft)}.alert.bad .dot{background:var(--bad)}.alert.bad p{color:#6d211a}
+.alert.ok{border-color:#bfe0d0;background:var(--ok-soft)}.alert.ok .dot{background:var(--ok)}.alert.ok p{color:#0f4d37}
+.grid2{display:grid;grid-template-columns:1.25fr .9fr;gap:20px}
+@media(max-width:960px){.grid2{grid-template-columns:1fr}}
+.form{display:grid;gap:12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.fieldset{border:1px solid var(--line);border-radius:12px;padding:12px 14px 14px;margin:0}
+.fieldset legend{font-size:.8rem;color:var(--navy);font-weight:800;padding:0 6px}
+.check{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted);margin-top:2px}
+.check input{width:auto}
+table{width:100%;border-collapse:collapse}
+.breakdown td{padding:9px 6px;border-bottom:1px solid var(--line);font-size:.88rem}
+.breakdown td.num{font-variant-numeric:tabular-nums;text-align:end;white-space:nowrap}
+.breakdown tr.total td{font-weight:800;border-top:2px solid var(--line);background:#f8fafc}
+.breakdown tr.cost td:first-child::before{content:"− ";color:var(--bad);font-weight:800}
+.breakdown tr.add td:first-child::before{content:"+ ";color:var(--teal);font-weight:800}
+.gauge{margin-top:14px}
+.gauge-head{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:6px}
+.bar{height:14px;border-radius:99px;background:#e9eef4;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--navy2));transition:width .3s}
+.bar.bad i{background:linear-gradient(90deg,#d76a5f,var(--bad))}
+.bar.warn i{background:linear-gradient(90deg,var(--gold),#a97a1e)}
+.hint{color:var(--muted);font-size:.79rem;margin:10px 0 0}
+.gen-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:18px}
+@media(max-width:960px){.gen-grid{grid-template-columns:1fr}}
+.out{display:grid;gap:12px}
+.out-box{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fbfcfe;position:relative}
+.out-box h3{font-size:.84rem;color:var(--navy);margin-bottom:6px}
+.out-box p{margin:0;font-size:.9rem;white-space:pre-line}
+.out-box .meta{font-size:.72rem;color:var(--muted);margin-top:8px}
+.out-box .copy{position:absolute;top:10px;inset-inline-end:10px}
+.out-box[hidden]{display:none}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:.72rem;background:#eef3f7;color:var(--navy);border-radius:99px;padding:3px 10px}
+.msg{font-size:.82rem;margin:0;min-height:1.2em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.empty{color:var(--muted);font-size:.86rem;padding:14px 4px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
+@media print{.top,.controls,.no-print,footer{display:none!important}body{background:#fff}main{padding:0}.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">POS</span>
+      <div><strong data-i18n="brand">نظام ربح المتجر الإلكتروني</strong><small data-i18n="tagline">هامش صافي · إعلانات · شحن · مرتجعات · أوصاف منتجات</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+  <section id="alertWrap" hidden></section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head">
+        <h2 data-i18n="calc.title">مدخلات الطلب الواحد</h2>
+        <button type="button" class="btn ghost small" id="resetBtn" data-i18n="reset">استعادة الافتراضي</button>
+      </div>
+      <form class="form" id="calcForm" autocomplete="off">
+        <fieldset class="fieldset">
+          <legend data-i18n="group.revenue">الإيراد</legend>
+          <div class="form-row">
+            <label><span data-i18n="f.price">سعر بيع المنتج</span><input id="price" type="number" min="0" step="0.01" value="199"></label>
+            <label><span data-i18n="f.discount">خصم/كوبون لكل طلب</span><input id="discount" type="number" min="0" step="0.01" value="0"></label>
+          </div>
+          <div class="form-row">
+            <label><span data-i18n="f.shipCharge">شحن محصّل من العميل</span><input id="shipCharge" type="number" min="0" step="0.01" value="25"></label>
+            <label><span data-i18n="f.vat">ضريبة القيمة المضافة %</span><input id="vat" type="number" min="0" step="0.1" value="15"></label>
+          </div>
+          <label class="check"><input id="inclusive" type="checkbox" checked><span data-i18n="f.inclusive">الأسعار شاملة الضريبة (تُستبعد من الإيراد)</span></label>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend data-i18n="group.costs">التكاليف المباشرة</legend>
+          <div class="form-row">
+            <label><span data-i18n="f.cogs">تكلفة المنتج</span><input id="cogs" type="number" min="0" step="0.01" value="70"></label>
+            <label><span data-i18n="f.shipCost">تكلفة الشحن الفعلية</span><input id="shipCost" type="number" min="0" step="0.01" value="18"></label>
+          </div>
+          <div class="form-row">
+            <label><span data-i18n="f.gatewayPct">رسوم بوابة الدفع %</span><input id="gatewayPct" type="number" min="0" step="0.01" value="2.5"></label>
+            <label><span data-i18n="f.gatewayFixed">رسوم ثابتة لكل عملية</span><input id="gatewayFixed" type="number" min="0" step="0.01" value="1"></label>
+          </div>
+          <label><span data-i18n="f.cpa">تكلفة الإعلان لكل طلب (CPA)</span><input id="cpa" type="number" min="0" step="0.01" value="45"></label>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend data-i18n="group.returns">المرتجعات والطلب</legend>
+          <div class="form-row">
+            <label><span data-i18n="f.returnRate">نسبة المرتجعات %</span><input id="returnRate" type="number" min="0" max="100" step="0.1" value="8"></label>
+            <label><span data-i18n="f.recoverPct">استرداد تكلفة المنتج %</span><input id="recoverPct" type="number" min="0" max="100" step="1" value="80"></label>
+          </div>
+          <div class="form-row">
+            <label><span data-i18n="f.returnHandling">تكلفة معالجة الإرجاع</span><input id="returnHandling" type="number" min="0" step="0.01" value="10"></label>
+            <label><span data-i18n="f.orders">عدد الطلبات شهريًا</span><input id="orders" type="number" min="0" step="1" value="300"></label>
+          </div>
+        </fieldset>
+        <p class="hint" data-i18n="calc.hint">كل المبالغ بعملة العرض المختارة ولا تُحوَّل؛ غيّر العملة لعرض نفس الأرقام برمزها المحلي.</p>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 data-i18n="res.title">الربح الصافي لكل طلب</h2>
+        <span class="sub" data-i18n="res.sub">بعد كل التكاليف والمرتجعات</span>
+      </div>
+      <table class="breakdown">
+        <tbody id="breakdown"></tbody>
+      </table>
+      <div class="gauge">
+        <div class="gauge-head"><span data-i18n="gauge.label">الهامش الصافي</span><span id="gaugeVal">—</span></div>
+        <div class="bar" id="gaugeBar"><i style="width:0"></i></div>
+      </div>
+      <p class="hint" data-i18n="res.hint">الهامش = صافي الربح ÷ صافي الإيراد بعد استبعاد الضريبة. الأرقام تقديرية حسب مدخلاتك.</p>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="gen.title">مولد أوصاف المنتجات التسويقية</h2>
+        <p class="sub" data-i18n="gen.sub">يكتب وصفًا جاهزًا لسلة أو زد أو منشورات التواصل، بنفس لغة الواجهة.</p>
+      </div>
+      <button type="button" class="btn teal" id="genBtn" data-i18n="gen.button">توليد الأوصاف</button>
+    </div>
+    <div class="gen-grid">
+      <form class="form" id="genForm" autocomplete="off">
+        <div class="form-row">
+          <label><span data-i18n="g.name">اسم المنتج</span><input id="pName" type="text" placeholder="مثال: طقم أواني قهوة سيراميك"></label>
+          <label><span data-i18n="g.category">التصنيف</span><input id="pCategory" type="text" placeholder="المنزل والمطبخ"></label>
+        </div>
+        <div class="form-row">
+          <label><span data-i18n="g.audience">الجمهور المستهدف</span><input id="pAudience" type="text" placeholder="عشاق القهوة المختصة"></label>
+          <label><span data-i18n="g.platform">المنصة</span><select id="pPlatform"></select></label>
+        </div>
+        <label><span data-i18n="g.features">المزايا (كل ميزة في سطر أو مفصولة بفاصلة)</span><textarea id="pFeatures" placeholder="سيراميك مقاوم للحرارة&#10;تصميم خليجي أنيق&#10;آمن في غسالة الأطباق"></textarea></label>
+        <div class="form-row">
+          <label><span data-i18n="g.benefit">الفائدة الأساسية</span><input id="pBenefit" type="text" placeholder="قهوة أطول دافئة وجلسة أجمل"></label>
+          <label><span data-i18n="g.tone">نبرة الوصف</span><select id="pTone"></select></label>
+        </div>
+        <label><span data-i18n="g.keywords">كلمات مفتاحية (اختياري)</span><input id="pKeywords" type="text" placeholder="قهوة، سيراميك، هدية"></label>
+      </form>
+      <div class="out" id="genOut">
+        <div class="empty" data-i18n="gen.empty">املأ بيانات المنتج ثم اضغط «توليد الأوصاف».</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Arab Templates — <span data-i18n="footer">نظام ربح المتجر الإلكتروني · نسخة ثابتة تعمل بلا خادم</span></footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", decimals: 3 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", decimals: 3 }
+  };
+
+  var I18N = {
+    ar: {
+      brand: "نظام ربح المتجر الإلكتروني",
+      tagline: "هامش صافي · إعلانات · شحن · مرتجعات · أوصاف منتجات",
+      currency: "العملة", reset: "استعادة الافتراضي",
+      "calc.title": "مدخلات الطلب الواحد", "calc.hint": "كل المبالغ بعملة العرض المختارة ولا تُحوَّل؛ غيّر العملة لعرض نفس الأرقام برمزها المحلي.",
+      "group.revenue": "الإيراد", "group.costs": "التكاليف المباشرة", "group.returns": "المرتجعات والطلب",
+      "f.price": "سعر بيع المنتج", "f.discount": "خصم/كوبون لكل طلب", "f.shipCharge": "شحن محصّل من العميل",
+      "f.vat": "ضريبة القيمة المضافة %", "f.inclusive": "الأسعار شاملة الضريبة (تُستبعد من الإيراد)",
+      "f.cogs": "تكلفة المنتج", "f.shipCost": "تكلفة الشحن الفعلية",
+      "f.gatewayPct": "رسوم بوابة الدفع %", "f.gatewayFixed": "رسوم ثابتة لكل عملية",
+      "f.cpa": "تكلفة الإعلان لكل طلب (CPA)",
+      "f.returnRate": "نسبة المرتجعات %", "f.recoverPct": "استرداد تكلفة المنتج %",
+      "f.returnHandling": "تكلفة معالجة الإرجاع", "f.orders": "عدد الطلبات شهريًا",
+      "kpi.profit": "الربح الصافي/طلب", "kpi.margin": "الهامش الصافي", "kpi.monthly": "الربح الشهري المتوقع",
+      "kpi.cpaMax": "أقصى CPA للتعادل", "kpi.roas": "ROAS التعادل",
+      "res.title": "الربح الصافي لكل طلب", "res.sub": "بعد كل التكاليف والمرتجعات",
+      "res.hint": "الهامش = صافي الربح ÷ صافي الإيراد بعد استبعاد الضريبة. الأرقام تقديرية حسب مدخلاتك.",
+      "row.revenue": "صافي الإيراد بعد الضريبة", "row.shippingIn": "شحن محصّل (داخل الإيراد)",
+      "row.cogs": "تكلفة المنتج", "row.ship": "تكلفة الشحن", "row.gateway": "رسوم بوابة الدفع",
+      "row.cpa": "تكلفة الإعلان", "row.returns": "خصم المرتجعات المتوقع", "row.profit": "الربح الصافي المتوقع",
+      "row.perOrder": "لكل طلب", "gauge.label": "الهامش الصافي",
+      "alert.badTitle": "الطلب يخسر", "alert.badBody": "كل طلب يخسر {p}. ارفع السعر أو قلّل CPA/الشحن أو أعد التفاوض على تكلفة المنتج.",
+      "alert.warnTitle": "هامش ضعيف", "alert.warnBody": "الهامش {m} فقط. أي ارتفاع بسيط في الإعلان أو المرتجعات سيحوّله إلى خسارة.",
+      "alert.okTitle": "هامش صحي", "alert.okBody": "الهامش {m}، وتتحمل ارتفاع CPA حتى {c} قبل التعادل.",
+      "gen.title": "مولد أوصاف المنتجات التسويقية",
+      "gen.sub": "يكتب وصفًا جاهزًا لسلة أو زد أو منشورات التواصل باللهجة الخليجية أو الإنجليزية، بنفس لغة الواجهة.",
+      "gen.button": "توليد الأوصاف", "gen.empty": "املأ بيانات المنتج ثم اضغط «توليد الأوصاف».",
+      "g.name": "اسم المنتج", "g.category": "التصنيف", "g.audience": "الجمهور المستهدف",
+      "g.platform": "المنصة", "g.features": "المزايا (كل ميزة في سطر أو مفصولة بفاصلة)",
+      "g.benefit": "الفائدة الأساسية", "g.tone": "نبرة الوصف", "g.keywords": "كلمات مفتاحية (اختياري)",
+      "gen.short": "منشور قصير", "gen.long": "وصف المتجر", "gen.seo": "عنوان ووصف لمحركات البحث",
+      "gen.copy": "نسخ", "gen.copied": "تم نسخ النص.", "gen.needName": "اكتب اسم المنتج أولًا.",
+      "gen.fallbackFeature": "جودة عالية وتجربة استخدام مريحة",
+      "tone.gulf": "خليجية", "tone.friendly": "ودّية", "tone.luxury": "فاخرة", "tone.direct": "مباشرة",
+      "platform.salla": "سلة", "platform.zid": "زد", "platform.general": "متجر عام",
+      "gen.cta": "اطلبه الآن", "gen.ship": "شحن سريع لجميع دول الخليج", "gen.return": "إرجاع سهل خلال 14 يومًا",
+      "gen.hashtags": "وسوم مقترحة", "footer": "نظام ربح المتجر الإلكتروني · نسخة ثابتة تعمل بلا خادم"
+    },
+    en: {
+      brand: "E-commerce Profit OS",
+      tagline: "Net margin · ads · shipping · returns · product copy",
+      currency: "Currency", reset: "Reset defaults",
+      "calc.title": "Per-order inputs", "calc.hint": "Amounts use the selected display currency and are not converted; switch currency to show the same numbers with a local symbol.",
+      "group.revenue": "Revenue", "group.costs": "Direct costs", "group.returns": "Returns & volume",
+      "f.price": "Product selling price", "f.discount": "Discount/coupon per order", "f.shipCharge": "Shipping charged to customer",
+      "f.vat": "VAT %", "f.inclusive": "Prices include VAT (excluded from revenue)",
+      "f.cogs": "Product cost", "f.shipCost": "Actual shipping cost",
+      "f.gatewayPct": "Payment gateway fee %", "f.gatewayFixed": "Fixed fee per transaction",
+      "f.cpa": "Ad cost per order (CPA)",
+      "f.returnRate": "Return rate %", "f.recoverPct": "Product cost recovered %",
+      "f.returnHandling": "Return handling cost", "f.orders": "Orders per month",
+      "kpi.profit": "Net profit / order", "kpi.margin": "Net margin", "kpi.monthly": "Projected monthly profit",
+      "kpi.cpaMax": "Break-even CPA", "kpi.roas": "Break-even ROAS",
+      "res.title": "Net profit per order", "res.sub": "After all costs and returns",
+      "res.hint": "Margin = net profit ÷ net revenue after VAT. Figures are estimates based on your inputs.",
+      "row.revenue": "Net revenue after VAT", "row.shippingIn": "Shipping collected (in revenue)",
+      "row.cogs": "Product cost", "row.ship": "Shipping cost", "row.gateway": "Payment gateway fee",
+      "row.cpa": "Ad cost", "row.returns": "Expected return deduction", "row.profit": "Expected net profit",
+      "row.perOrder": "per order", "gauge.label": "Net margin",
+      "alert.badTitle": "This order loses money", "alert.badBody": "Every order loses {p}. Raise the price, cut CPA/shipping, or renegotiate product cost.",
+      "alert.warnTitle": "Thin margin", "alert.warnBody": "Margin is only {m}. A small rise in ads or returns turns this into a loss.",
+      "alert.okTitle": "Healthy margin", "alert.okBody": "Margin {m}, and you can absorb CPA up to {c} before break-even.",
+      "gen.title": "Marketing product description generator",
+      "gen.sub": "Writes ready-to-paste copy for Salla, Zid or social posts in Gulf Arabic or English, following the interface language.",
+      "gen.button": "Generate copy", "gen.empty": "Fill in the product details, then press “Generate copy”.",
+      "g.name": "Product name", "g.category": "Category", "g.audience": "Target audience",
+      "g.platform": "Platform", "g.features": "Features (one per line or comma separated)",
+      "g.benefit": "Core benefit", "g.tone": "Tone", "g.keywords": "Keywords (optional)",
+      "gen.short": "Short post", "gen.long": "Store description", "gen.seo": "SEO title & description",
+      "gen.copy": "Copy", "gen.copied": "Copied.", "gen.needName": "Enter the product name first.",
+      "gen.fallbackFeature": "Great quality and a comfortable experience",
+      "tone.gulf": "Gulf casual", "tone.friendly": "Friendly", "tone.luxury": "Premium", "tone.direct": "Direct",
+      "platform.salla": "Salla", "platform.zid": "Zid", "platform.general": "Online store",
+      "gen.cta": "Order now", "gen.ship": "Fast shipping across the Gulf", "gen.return": "Easy 14-day returns",
+      "gen.hashtags": "Suggested hashtags", "footer": "E-commerce Profit OS · static edition, no server needed"
+    }
+  };
+
+  var DEFAULTS = {
+    price: 199, discount: 0, shipCharge: 25, vat: 15, inclusive: true,
+    cogs: 70, shipCost: 18, gatewayPct: 2.5, gatewayFixed: 1, cpa: 45,
+    returnRate: 8, recoverPct: 80, returnHandling: 10, orders: 300
+  };
+  var FIELDS = ["price", "discount", "shipCharge", "vat", "cogs", "shipCost", "gatewayPct", "gatewayFixed", "cpa", "returnRate", "recoverPct", "returnHandling", "orders"];
+  var GEN_FIELDS = ["pName", "pCategory", "pAudience", "pFeatures", "pBenefit", "pKeywords"];
+  var KEY = "pb_profit_os_v1";
+  var state = { lang: "ar", currency: "SAR" };
+
+  function $(id) { return document.getElementById(id); }
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+  function t(key, vars) {
+    var dict = I18N[state.lang] || I18N.ar;
+    var text = dict[key] || (I18N.ar[key] || key);
+    Object.keys(vars || {}).forEach(function (name) {
+      text = text.split("{" + name + "}").join(vars[name]);
+    });
+    return text;
+  }
+  function num(value) {
+    var n = Number(value);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) {
+      return (Number(value) || 0).toFixed(info.decimals) + " " + state.currency;
+    }
+  }
+  function pct(value) {
+    return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+      minimumFractionDigits: 1, maximumFractionDigits: 1
+    }).format(Number(value) || 0) + "%";
+  }
+
+  function readInputs() {
+    var data = { inclusive: $("inclusive").checked };
+    FIELDS.forEach(function (id) { data[id] = num($(id).value); });
+    return data;
+  }
+
+  function compute(data) {
+    var gross = data.price + data.shipCharge - data.discount;
+    if (gross < 0) gross = 0;
+    var netRevenue = data.inclusive ? gross / (1 + data.vat / 100) : gross;
+    var gateway = gross * (data.gatewayPct / 100) + data.gatewayFixed;
+    var base = netRevenue - data.cogs - data.shipCost - gateway;
+    var r = Math.min(Math.max(data.returnRate / 100, 0), 1);
+    var recovery = data.cogs * Math.min(data.recoverPct, 100) / 100;
+    var returnLoss = netRevenue + data.shipCost + gateway + data.returnHandling - recovery;
+    var expectedCosts = (1 - r) * 0 + data.cogs + data.shipCost + gateway;
+    var profit = (1 - r) * base - r * returnLoss - data.cpa;
+    var cpaMax = (1 - r) * base - r * returnLoss;
+    var margin = netRevenue > 0 ? (profit / netRevenue) * 100 : 0;
+    var monthly = profit * data.orders;
+    var roas = cpaMax > 0 ? (netRevenue / cpaMax) : 0;
+    var returnCost = r * returnLoss;
+    return {
+      gross: gross, netRevenue: netRevenue, gateway: gateway, base: base,
+      profit: profit, cpaMax: cpaMax, margin: margin, monthly: monthly,
+      roas: roas, returnCost: returnCost, orders: data.orders
+    };
+  }
+
+  function render() {
+    var data = readInputs();
+    var res = compute(data);
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.profit")) + "</span><strong>" + esc(money(res.profit)) + "</strong></div>",
+      '<div class="kpi ' + (res.margin < 0 ? "bad" : "teal") + '"><span>' + esc(t("kpi.margin")) + "</span><strong>" + esc(pct(res.margin)) + "</strong></div>",
+      '<div class="kpi ' + (res.monthly < 0 ? "bad" : "") + '"><span>' + esc(t("kpi.monthly")) + "</span><strong>" + esc(money(res.monthly)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.cpaMax")) + "</span><strong>" + esc(money(res.cpaMax)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.roas")) + "</span><strong>" + esc(res.roas > 0 ? res.roas.toFixed(2) + "×" : "—") + "</strong></div>"
+    ].join("");
+
+    var rows = [
+      { label: t("row.revenue"), value: res.netRevenue, cls: "add" },
+      { label: t("row.cogs"), value: data.cogs, cls: "cost" },
+      { label: t("row.ship"), value: data.shipCost, cls: "cost" },
+      { label: t("row.gateway"), value: res.gateway, cls: "cost" },
+      { label: t("row.cpa"), value: data.cpa, cls: "cost" },
+      { label: t("row.returns"), value: res.returnCost, cls: "cost" }
+    ];
+    $("breakdown").innerHTML = rows.map(function (row) {
+      return '<tr class="' + row.cls + '"><td>' + esc(row.label) + '</td><td class="num">' + esc(money(row.value)) + "</td></tr>";
+    }).join("") + '<tr class="total"><td>' + esc(t("row.profit")) + '</td><td class="num">' + esc(money(res.profit)) + "</td></tr>";
+
+    var ratio = Math.max(0, Math.min(res.margin / 40 * 100, 100));
+    var bar = $("gaugeBar");
+    bar.className = "bar" + (res.margin < 0 ? " bad" : (res.margin < 15 ? " warn" : ""));
+    bar.querySelector("i").style.width = ratio + "%";
+    $("gaugeVal").textContent = pct(res.margin);
+
+    var alert = $("alertWrap");
+    if (res.profit < 0) {
+      alert.hidden = false;
+      alert.innerHTML = '<div class="alert bad"><span class="dot"></span><div><strong>' + esc(t("alert.badTitle")) + "</strong><p>" +
+        esc(t("alert.badBody", { p: money(Math.abs(res.profit)) })) + "</p></div></div>";
+    } else if (res.margin < 15) {
+      alert.hidden = false;
+      alert.innerHTML = '<div class="alert"><span class="dot"></span><div><strong>' + esc(t("alert.warnTitle")) + "</strong><p>" +
+        esc(t("alert.warnBody", { m: pct(res.margin) })) + "</p></div></div>";
+    } else {
+      alert.hidden = false;
+      alert.innerHTML = '<div class="alert ok"><span class="dot"></span><div><strong>' + esc(t("alert.okTitle")) + "</strong><p>" +
+        esc(t("alert.okBody", { m: pct(res.margin), c: money(res.cpaMax) })) + "</p></div></div>";
+    }
+    save();
+  }
+
+  function features() {
+    return $("pFeatures").value.split(/[\n,،]+/).map(function (line) { return line.trim(); }).filter(Boolean);
+  }
+
+  function buildCopy() {
+    var name = $("pName").value.trim();
+    if (!name) return null;
+    var category = $("pCategory").value.trim();
+    var audience = $("pAudience").value.trim();
+    var benefit = $("pBenefit").value.trim();
+    var keywords = $("pKeywords").value.trim().split(/[,،]+/).map(function (k) { return k.trim(); }).filter(Boolean);
+    var feats = features();
+    if (!feats.length) feats = [t("gen.fallbackFeature")];
+    var tone = $("pTone").value;
+    var platformKey = $("pPlatform").value;
+    var platform = t("platform." + platformKey);
+    var ar = state.lang === "ar";
+
+    var gulf = ar && tone === "gulf";
+    var hook = ar
+      ? (tone === "gulf" ? "شي يعجبك من أول استخدام" : tone === "luxury" ? "اختيار راقٍ يجمع بين الأناقة والعملية" : tone === "direct" ? "بمواصفات واضحة وسعر يستحق" : "اختيار عملي يعجبك من أول استخدام")
+      : (tone === "luxury" ? "a refined pick that blends elegance with everyday practicality" : tone === "direct" ? "clear specs at a price that makes sense" : "a practical pick you will love from the first use");
+    var audienceLine = audience ? (gulf ? "حق " + audience + "." : ar ? "مصمم ل" + audience + "." : "Made for " + audience + ".") : "";
+    var benefitLine = benefit ? (ar ? benefit + "." : benefit + ".") : "";
+    var featureLine = feats.slice(0, 4).map(function (f) { return ar ? "• " + f : "• " + f; }).join("\n");
+    var ctaLine = ar
+      ? (gulf
+        ? "اطلبه الحين من " + platform + ". يوصلك لباب البيت في كل دول الخليج، وإذا ما عجبك ترجعه خلال 14 يوم بكل سهولة."
+        : t("gen.cta") + " من " + platform + ". " + t("gen.ship") + " و" + t("gen.return") + ".")
+      : t("gen.cta") + " on " + platform + ". " + t("gen.ship") + ". " + t("gen.return") + ".";
+    var short = ar
+      ? name + " — " + hook + ".\n" + (benefitLine ? benefitLine + " " : "") + (audienceLine ? audienceLine + "\n" : "\n") + ctaLine
+      : name + " — " + hook + ".\n" + (benefitLine ? benefitLine + " " : "") + (audienceLine ? audienceLine + "\n" : "\n") + ctaLine;
+    var long = (ar ? name + "\n\n" : name + "\n\n") +
+      (benefitLine ? benefitLine + "\n\n" : "") +
+      (audienceLine ? audienceLine + "\n\n" : "") +
+      (ar ? (gulf ? "ليش تختاره؟\n" : "أبرز المزايا:\n") : "Key features:\n") + featureLine + "\n\n" + ctaLine +
+      (category ? "\n\n" + (ar ? "التصنيف: " : "Category: ") + category : "");
+    var hashtags = keywords.length ? keywords.map(function (k) { return "#" + k.replace(/\s+/g, "_"); }).join(" ") : "";
+    var seoTitle = (name + (category ? " | " + category : "") + " — " + platform).slice(0, 60);
+    var seoDesc = (benefit || feats[0]) + (ar ? " — " + t("gen.ship") + "." : " — " + t("gen.ship") + ".");
+    seoDesc = seoDesc.slice(0, 155);
+    return { short: short, long: long, seo: seoTitle + "\n" + seoDesc, hashtags: hashtags };
+  }
+
+  var lastCopy = null;
+  function renderCopy() {
+    if (!lastCopy) return;
+    var out = $("genOut");
+    out.innerHTML =
+      '<div class="out-box"><h3>' + esc(t("gen.short")) + '</h3><button type="button" class="btn ghost small copy" data-copy="short">' + esc(t("gen.copy")) + '</button><p>' + esc(lastCopy.short) + '</p><div class="meta">' + esc(String(lastCopy.short.length)) + ' ' + (state.lang === "ar" ? "حرفًا" : "chars") + '</div></div>' +
+      '<div class="out-box"><h3>' + esc(t("gen.long")) + '</h3><button type="button" class="btn ghost small copy" data-copy="long">' + esc(t("gen.copy")) + '</button><p>' + esc(lastCopy.long) + '</p><div class="meta">' + esc(String(lastCopy.long.length)) + ' ' + (state.lang === "ar" ? "حرفًا" : "chars") + '</div></div>' +
+      '<div class="out-box"><h3>' + esc(t("gen.seo")) + '</h3><button type="button" class="btn ghost small copy" data-copy="seo">' + esc(t("gen.copy")) + '</button><p>' + esc(lastCopy.seo) + '</p></div>' +
+      (lastCopy.hashtags ? '<div class="out-box"><h3>' + esc(t("gen.hashtags")) + '</h3><p>' + esc(lastCopy.hashtags) + '</p><div class="tags">' + lastCopy.hashtags.split(" ").map(function (tag) { return '<span class="tag">' + esc(tag) + "</span>"; }).join("") + "</div></div>" : "");
+  }
+
+  function generate() {
+    var copy = buildCopy();
+    if (!copy) {
+      $("genOut").innerHTML = '<p class="msg bad">' + esc(t("gen.needName")) + "</p>";
+      return;
+    }
+    lastCopy = copy;
+    renderCopy();
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    fillSelects();
+    if (persist) localStorage.setItem("pb_profit_os_lang", state.lang);
+    if (lastCopy) { lastCopy = buildCopy(); renderCopy(); }
+    render();
+  }
+
+  function fillSelects() {
+    $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+      return '<option value="' + code + '">' + code + " — " + CURRENCIES[code][state.lang] + "</option>";
+    }).join("");
+    $("currency").value = state.currency;
+    var tone = $("pTone").value || "gulf";
+    var platform = $("pPlatform").value || "salla";
+    $("pTone").innerHTML = ["gulf", "friendly", "luxury", "direct"].map(function (key) {
+      return '<option value="' + key + '">' + t("tone." + key) + "</option>";
+    }).join("");
+    $("pTone").value = ["gulf", "friendly", "luxury", "direct"].indexOf(tone) >= 0 ? tone : "gulf";
+    $("pPlatform").innerHTML = ["salla", "zid", "general"].map(function (key) {
+      return '<option value="' + key + '">' + t("platform." + key) + "</option>";
+    }).join("");
+    $("pPlatform").value = ["salla", "zid", "general"].indexOf(platform) >= 0 ? platform : "salla";
+  }
+
+  function save() {
+    var data = readInputs();
+    var gen = {};
+    GEN_FIELDS.forEach(function (id) { gen[id] = $(id).value; });
+    gen.pTone = $("pTone").value;
+    gen.pPlatform = $("pPlatform").value;
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ currency: state.currency, inputs: data, gen: gen }));
+    } catch (err) { /* التخزين المحلي قد يكون معطلًا */ }
+  }
+
+  function restore() {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { saved = null; }
+    if (saved && saved.inputs) {
+      FIELDS.forEach(function (id) { if (saved.inputs[id] != null) $(id).value = saved.inputs[id]; });
+      $("inclusive").checked = saved.inputs.inclusive !== false;
+    }
+    if (saved && saved.gen) {
+      GEN_FIELDS.forEach(function (id) { if (saved.gen[id] != null) $(id).value = saved.gen[id]; });
+      if (saved.gen.pTone) $("pTone").value = saved.gen.pTone;
+      if (saved.gen.pPlatform) $("pPlatform").value = saved.gen.pPlatform;
+    }
+    if (saved && CURRENCIES[saved.currency]) state.currency = saved.currency;
+  }
+
+  function reset() {
+    FIELDS.forEach(function (id) { $(id).value = DEFAULTS[id]; });
+    $("inclusive").checked = DEFAULTS.inclusive;
+    GEN_FIELDS.forEach(function (id) { $(id).value = ""; });
+    lastCopy = null;
+    $("genOut").innerHTML = '<div class="empty">' + esc(t("gen.empty")) + "</div>";
+    render();
+  }
+
+  ["input", "change"].forEach(function (evt) {
+    $("calcForm").addEventListener(evt, render);
+  });
+  $("currency").addEventListener("change", function (event) {
+    state.currency = CURRENCIES[event.target.value] ? event.target.value : "SAR";
+    render();
+    save();
+  });
+  $("langBtn").addEventListener("click", function () {
+    applyLang(state.lang === "ar" ? "en" : "ar", true);
+  });
+  $("resetBtn").addEventListener("click", reset);
+  $("genBtn").addEventListener("click", generate);
+  $("genOut").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-copy]");
+    if (!btn || !lastCopy) return;
+    var text = lastCopy[btn.getAttribute("data-copy")] || "";
+    var done = function () {
+      var old = btn.textContent;
+      btn.textContent = t("gen.copied");
+      setTimeout(function () { btn.textContent = old; }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { done(); });
+    } else {
+      var area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand("copy"); } catch (err) { /* تجاهل */ }
+      document.body.removeChild(area);
+      done();
+    }
+  });
+  GEN_FIELDS.concat(["pTone", "pPlatform"]).forEach(function (id) {
+    $(id).addEventListener("input", save);
+    $(id).addEventListener("change", save);
+  });
+
+  var storedLang = localStorage.getItem("pb_profit_os_lang");
+  state.lang = storedLang === "en" ? "en" : "ar";
+  restore();
+  applyLang(state.lang, false);
+  render();
+})();
+</script>
+</body>
+</html>

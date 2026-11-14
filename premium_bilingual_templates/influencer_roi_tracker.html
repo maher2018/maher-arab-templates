@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تتبع عائد حملات المؤثرين — Influencer ROI Tracker</title>
+<meta name="description" content="احسب ROAS الحقيقي وتكلفة العميل الجديد لكل مؤثر، وقارن المؤثرين لاختيار الأكثر ربحية — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{
+  --bg:#f7f4f6;--card:#fff;--ink:#231624;--muted:#6f6370;
+  --plum:#2a1633;--plum2:#43204f;--coral:#d9533f;--coral-soft:#fbece9;
+  --rose:#b02a63;--rose-soft:#fbeaf1;--mint:#0f7a5f;--mint-soft:#e6f4ef;
+  --gold:#a97b28;--gold-soft:#faf0da;--bad:#a83a2f;--bad-soft:#fbeceb;
+  --line:#ece3ea;--radius:16px;--shadow:0 10px 30px rgba(42,22,51,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:.9rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input:focus,select:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(176,42,99,.12)}
+label>span{display:block;font-size:.74rem;color:var(--muted);margin-bottom:4px;font-weight:650}
+.top{position:sticky;top:0;z-index:20;background:rgba(247,244,246,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1220px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--plum),var(--rose));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.7rem;letter-spacing:.04em}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}.controls select{width:auto;min-width:108px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:750;font-size:.83rem;background:var(--plum);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.14)}
+.btn.rose{background:var(--rose)}
+.btn.ghost{background:#fff;color:var(--plum);border:1px solid var(--line)}
+.btn.small{padding:5px 9px;font-size:.74rem;border-radius:8px}
+.btn.danger{background:var(--bad-soft);color:var(--bad);border:1px solid #eccbc6}
+main{max-width:1220px;margin:0 auto;padding:18px 20px 50px;display:grid;gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.card-head h2{font-size:1.02rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.8rem;max-width:800px}
+.hint{color:var(--muted);font-size:.76rem;margin:8px 0 0}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:700px){.settings{grid-template-columns:1fr 1fr}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:2px}
+.kpi strong{font-size:1.03rem;font-variant-numeric:tabular-nums;display:block}
+.kpi small{font-size:.67rem;color:var(--muted);font-weight:600}
+.kpi.hero{background:linear-gradient(135deg,var(--plum),var(--rose));border:0;color:#fff}
+.kpi.hero span,.kpi.hero small{color:#f0d6e2}.kpi.hero strong{color:#fff}
+.kpi.gold{background:var(--gold-soft);border-color:#ecdcb9}
+.kpi.mint{background:var(--mint-soft);border-color:#d2e8df}
+.kpi.bad{background:var(--bad-soft);border-color:#eccbc6}.kpi.bad strong{color:var(--bad)}
+.verdict{display:flex;gap:11px;align-items:flex-start;background:var(--rose-soft);border:1px solid #f0d3e0;border-radius:12px;padding:11px 13px;font-size:.84rem}
+.verdict .icon{font-size:1.2rem;line-height:1.2}
+.verdict b{font-weight:800}
+.layout{display:grid;grid-template-columns:390px minmax(0,1fr);gap:15px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fields .wide{grid-column:1/-1}
+.editor-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.editor-actions .btn{flex:1 1 auto}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table.roi{width:100%;border-collapse:collapse;font-size:.8rem;min-width:960px}
+.roi th{font-size:.67rem;color:var(--muted);text-align:start;padding:8px 3px;background:#fbf8fa;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:750;position:sticky;top:0}
+.roi td{padding:8px 5px;border-bottom:1px solid #f2ecf0;vertical-align:middle;white-space:nowrap;font-variant-numeric:tabular-nums}
+.roi tbody tr:last-child td{border-bottom:0}
+.roi tbody tr.best td{background:#fdf6ea}
+.roi tbody tr.loss td{background:#fdf4f3}
+.who{white-space:normal;min-width:150px}
+.who b{display:block;font-size:.84rem}
+.who small{color:var(--muted);font-size:.69rem}
+.rank{width:22px;height:22px;border-radius:7px;background:#f1ebf2;color:var(--muted);display:inline-grid;place-items:center;font-size:.68rem;font-weight:800}
+.rank.top{background:var(--gold);color:#fff}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.66rem;font-weight:800;white-space:nowrap}
+.badge.ok{background:var(--mint-soft);color:var(--mint)}
+.badge.warn{background:var(--gold-soft);color:#7a560f}
+.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.actions{display:flex;gap:4px}
+.icon-btn{border:0;background:transparent;color:var(--bad);font-size:1.02rem;line-height:1;padding:4px;border-radius:6px}
+.icon-btn:hover{background:var(--bad-soft)}
+.empty{padding:26px;text-align:center;color:var(--muted);font-size:.85rem}
+.metric-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.metric-btn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:99px;padding:5px 11px;font-size:.75rem;font-weight:750}
+.metric-btn.active{background:var(--plum);border-color:var(--plum);color:#fff}
+.chart-box{position:relative}
+.roi-chart{width:100%;height:auto;display:block}
+.axis-line{stroke:#e6dce4;stroke-width:1}
+.axis-text{fill:#8a7c8b;font-size:9px}
+.bar{transition:opacity .15s}
+.bar:hover{opacity:.78}
+.bar-label{fill:#4a3d4b;font-size:11px}
+.bar-value{fill:#231624;font-size:10px;font-weight:700}
+.avg-line{stroke:#b02a63;stroke-width:1.4;stroke-dasharray:4 4}
+.avg-text{fill:#b02a63;font-size:9px;font-weight:700}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:.74rem;color:var(--muted)}
+.legend-item{display:flex;align-items:center;gap:5px}
+.dot{width:9px;height:9px;border-radius:3px;flex:none}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011}
+.chart-tip{position:fixed;z-index:90;background:var(--plum);color:#fff;padding:5px 9px;border-radius:7px;font-size:.72rem;font-weight:700;pointer-events:none;opacity:0;transition:opacity .1s;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.chart-tip.show{opacity:1}
+.toast{position:fixed;inset-block-end:22px;inset-inline-start:50%;transform:translateX(-50%);background:var(--plum);color:#fff;padding:8px 15px;border-radius:99px;font-size:.8rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:95}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:32px}
+footer{text-align:center;color:var(--muted);font-size:.77rem;padding:0 20px 26px}
+@media print{
+  .top,.no-print,footer,.chart-tip,.toast,#editorCard{display:none!important}
+  body{background:#fff}
+  main{max-width:none;padding:0}
+  .card{box-shadow:none;break-inside:avoid;border-color:#ddd}
+  .layout{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .roi{min-width:0;font-size:9px}
+  .roi th,.roi td{padding:4px 2px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">ROI</span>
+      <div><strong data-i18n="brand">تتبع عائد حملات المؤثرين</strong><small data-i18n="tagline">ROAS حقيقي · تكلفة العميل · مقارنة المؤثرين</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة</button>
+      <button type="button" class="btn ghost no-print" id="resetBtn" data-i18n="reset">استعادة المثال</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="set.title">إعدادات التكلفة</h2><p data-i18n="set.desc">تُطبَّق على كل المؤثرين لاحتساب الربح الإجمالي والعائد الحقيقي بعد التكاليف.</p></div>
+    </div>
+    <div class="settings">
+      <label><span data-i18n="s.cogs">تكلفة البضاعة من المبيعات %</span><input id="cogs" type="number" min="0" max="90" step="1" value="35"></label>
+      <label><span data-i18n="s.fulfill">تكلفة التوصيل للطلب</span><input id="fulfill" type="number" min="0" step="1" value="15"></label>
+      <label><span data-i18n="s.payfee">رسوم الدفع من المبيعات %</span><input id="payfee" type="number" min="0" max="15" step="0.5" value="2.5"></label>
+    </div>
+    <p class="hint" data-i18n="set.hint">تكلفة البضاعة والرسوم تُحسب على المبيعات بعد خصم كود المؤثر، ويُضاف التوصيل لكل طلب — قبل خصم إنفاق الحملة.</p>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+  <section id="verdictBox"></section>
+
+  <div class="layout">
+    <section class="card" id="editorCard">
+      <div class="card-head">
+        <div><h2 id="editorTitle" data-i18n="e.addTitle">إضافة مؤثر / حملة</h2><p data-i18n="e.desc">أدخل إنفاق الحملة والنتائج المنسوبة إليها.</p></div>
+      </div>
+      <div class="fields">
+        <label class="wide"><span data-i18n="e.name">اسم المؤثر (عربي)</span><input id="iName" type="text" data-i18n-ph="e.namePh"></label>
+        <label class="wide"><span data-i18n="e.nameEn">الاسم (إنجليزي — اختياري)</span><input id="iNameEn" type="text" data-i18n-ph="e.nameEnPh"></label>
+        <label><span data-i18n="e.platform">المنصة</span><select id="iPlatform"></select></label>
+        <label><span data-i18n="e.discount">خصم كود المؤثر %</span><input id="iDiscount" type="number" min="0" max="80" step="1" value="0"></label>
+        <label><span data-i18n="e.spend">إنفاق الحملة (شامل الأجر)</span><input id="iSpend" type="number" min="0" step="100" value=""></label>
+        <label><span data-i18n="e.revenue">المبيعات المنسوبة (قبل الخصم)</span><input id="iRevenue" type="number" min="0" step="100" value=""></label>
+        <label><span data-i18n="e.orders">عدد الطلبات</span><input id="iOrders" type="number" min="0" step="1" value=""></label>
+        <label><span data-i18n="e.customers">عملاء جدد</span><input id="iCustomers" type="number" min="0" step="1" value=""></label>
+      </div>
+      <div class="editor-actions">
+        <button type="button" class="btn rose" id="saveItem" data-i18n="e.save">حفظ المؤثر</button>
+        <button type="button" class="btn ghost" id="cancelEdit" data-i18n="e.cancel">إلغاء</button>
+      </div>
+      <p class="hint" data-i18n="e.hint">الإنفاق يشمل أجر المؤثر ودفع التعزيز. اذكر المبيعات المنسوبة من رابط أو كود المؤثر فقط لتجنّب تضخيم النتائج.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="table.title">ترتيب المؤثرين حسب الربحية</h2><p data-i18n="table.desc">ROAS الحقيقي = الربح الإجمالي ÷ الإنفاق، وتكلفة العميل = الإنفاق ÷ العملاء الجدد.</p></div>
+      </div>
+      <div class="metric-bar no-print" id="metricBar"></div>
+      <div class="table-wrap">
+        <table class="roi">
+          <thead><tr>
+            <th data-i18n="th.rank">#</th>
+            <th data-i18n="th.who">المؤثر</th>
+            <th data-i18n="th.spend">الإنفاق</th>
+            <th data-i18n="th.revenue">المبيعات</th>
+            <th data-i18n="th.roas">ROAS</th>
+            <th data-i18n="th.true">ROAS الحقيقي</th>
+            <th data-i18n="th.cac">تكلفة العميل</th>
+            <th data-i18n="th.customers">عملاء جدد</th>
+            <th data-i18n="th.profit">الربح</th>
+            <th data-i18n="th.status">الحالة</th>
+            <th class="no-print"></th>
+          </tr></thead>
+          <tbody id="roiBody"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="table.hint">«المبيعات» قبل الخصم، بينما ROAS الحقيقي والربح بعد الخصم وتكلفة البضاعة والتوصيل ورسوم الدفع.</p>
+    </section>
+  </div>
+
+  <section class="card" id="chartCard">
+    <div class="card-head">
+      <div><h2 id="chartTitle" data-i18n="chart.title">مقارنة المؤثرين</h2><p data-i18n="chart.desc">اختر المقياس؛ يتحرك الترتيب والرسم معًا، ومرّر على الأعمدة للقيم الدقيقة.</p></div>
+    </div>
+    <div class="chart-box" id="chartBox"></div>
+    <div class="legend" id="chartLegend"></div>
+    <p class="note" data-i18n="note">ROAS الإعلاني يقيس المبيعات ÷ الإنفاق، أما ROAS الحقيقي فيقيس الربح الإجمالي بعد التكاليف ÷ الإنفاق. قد يكون الإعلان مربحًا على الورق وخاسرًا بعد الخصم والتوصيل.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">تتبع عائد حملات المؤثرين — أداة تقديرية تعمل بلا خادم، وتعتمد على دقة البيانات المنسوبة.</span></footer>
+<div class="chart-tip" id="chartTip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = { SAR: { d: 2 }, AED: { d: 2 }, KWD: { d: 3 }, QAR: { d: 2 }, OMR: { d: 3 }, BHD: { d: 3 } };
+  var PLATFORMS = ["instagram", "tiktok", "snapchat", "youtube", "x", "other"];
+  var COLORS = ["#b02a63", "#d9533f", "#0f7a5f", "#7048b6", "#17325c", "#a97b28"];
+
+  var SAMPLE = [
+    { id: "s1", name: "نورة الشمري", nameEn: "Noura Alshammari", platform: "instagram", spend: 25000, revenue: 120000, orders: 480, customers: 390, discount: 10 },
+    { id: "s2", name: "فيصل العتيبي", nameEn: "Faisal Alotaibi", platform: "tiktok", spend: 18000, revenue: 64000, orders: 260, customers: 210, discount: 15 },
+    { id: "s3", name: "ريم القحطاني", nameEn: "Reem Alqahtani", platform: "snapchat", spend: 12000, revenue: 21000, orders: 90, customers: 74, discount: 20 },
+    { id: "s4", name: "عمر الحربي", nameEn: "Omar Alharbi", platform: "youtube", spend: 30000, revenue: 95000, orders: 350, customers: 300, discount: 5 }
+  ];
+
+  var I18N = {
+    ar: {
+      brand: "تتبع عائد حملات المؤثرين", tagline: "ROAS حقيقي · تكلفة العميل · مقارنة المؤثرين",
+      currency: "العملة", print: "طباعة", reset: "استعادة المثال",
+      "set.title": "إعدادات التكلفة",
+      "set.desc": "تُطبَّق على كل المؤثرين لاحتساب الربح الإجمالي والعائد الحقيقي بعد التكاليف.",
+      "s.cogs": "تكلفة البضاعة من المبيعات %", "s.fulfill": "تكلفة التوصيل للطلب",
+      "s.payfee": "رسوم الدفع من المبيعات %",
+      "set.hint": "تكلفة البضاعة والرسوم تُحسب على المبيعات بعد خصم كود المؤثر، ويُضاف التوصيل لكل طلب — قبل خصم إنفاق الحملة.",
+      "kpi.spend": "إجمالي الإنفاق", "kpi.revenue": "المبيعات المنسوبة",
+      "kpi.roas": "ROAS الإعلاني", "kpi.true": "ROAS الحقيقي",
+      "kpi.cac": "تكلفة العميل الجديد", "kpi.profit": "صافي الربح",
+      "kpi.customers": "عملاء جدد",
+      "e.addTitle": "إضافة مؤثر / حملة", "e.editTitle": "تعديل المؤثر / الحملة",
+      "e.desc": "أدخل إنفاق الحملة والنتائج المنسوبة إليها.",
+      "e.name": "اسم المؤثر (عربي)", "e.namePh": "مثال: نورة الشمري",
+      "e.nameEn": "الاسم (إنجليزي — اختياري)", "e.nameEnPh": "e.g. Noura Alshammari",
+      "e.platform": "المنصة", "e.discount": "خصم كود المؤثر %",
+      "e.spend": "إنفاق الحملة (شامل الأجر)", "e.revenue": "المبيعات المنسوبة (قبل الخصم)",
+      "e.orders": "عدد الطلبات", "e.customers": "عملاء جدد",
+      "e.save": "حفظ المؤثر", "e.update": "تحديث المؤثر", "e.cancel": "إلغاء",
+      "e.hint": "الإنفاق يشمل أجر المؤثر ودفع التعزيز. اذكر المبيعات المنسوبة من رابط أو كود المؤثر فقط لتجنّب تضخيم النتائج.",
+      "pf.instagram": "إنستغرام", "pf.tiktok": "تيك توك", "pf.snapchat": "سناب شات",
+      "pf.youtube": "يوتيوب", "pf.x": "منصة X", "pf.other": "أخرى",
+      "table.title": "ترتيب المؤثرين حسب الربحية",
+      "table.desc": "ROAS الحقيقي = الربح الإجمالي ÷ الإنفاق، وتكلفة العميل = الإنفاق ÷ العملاء الجدد.",
+      "table.hint": "«المبيعات» قبل الخصم، بينما ROAS الحقيقي والربح بعد الخصم وتكلفة البضاعة والتوصيل ورسوم الدفع.",
+      "th.rank": "#", "th.who": "المؤثر", "th.spend": "الإنفاق", "th.revenue": "المبيعات",
+      "th.roas": "ROAS", "th.true": "ROAS الحقيقي", "th.cac": "تكلفة العميل",
+      "th.customers": "عملاء جدد", "th.profit": "الربح", "th.status": "الحالة",
+      "metric.true": "ROAS الحقيقي", "metric.roas": "ROAS الإعلاني",
+      "metric.cac": "تكلفة العميل", "metric.profit": "الربح",
+      "chart.title": "مقارنة المؤثرين",
+      "chart.desc": "اختر المقياس؛ يتحرك الترتيب والرسم معًا، ومرّر على الأعمدة للقيم الدقيقة.",
+      "chart.avg": "المتوسط", "chart.currency": "القيم بعملة القالب",
+      "status.ok": "مربح", "status.warn": "هامشي", "status.bad": "خاسر",
+      "best.title": "الأكثر ربحية: {name}",
+      "best.text": "ربح {profit} وعائد حقيقي {roas} مقابل إنفاق {spend}. أبقِ هذه الشراكة وزد ميزانيتها تدريجيًا مع مراقبة التكرار.",
+      "worst.title": "الأقل ربحية: {name}",
+      "worst.loss": "خسارة {profit} — أوقف الإنفاق أو أعد التفاوض على الأجر والخصم قبل الجولة القادمة.",
+      "worst.thin": "ربح ضعيف {profit} وعائد حقيقي {roas} — قلّص الميزانية لصالح الأفضل أو اختبر عرضًا جديدًا.",
+      "verdict.empty": "أضف مؤثرًا واحدًا على الأقل لعرض الخلاصة.",
+      "note": "ROAS الإعلاني يقيس المبيعات ÷ الإنفاق، أما ROAS الحقيقي فيقيس الربح الإجمالي بعد التكاليف ÷ الإنفاق. قد يكون الإعلان مربحًا على الورق وخاسرًا بعد الخصم والتوصيل.",
+      "footer": "تتبع عائد حملات المؤثرين — أداة تقديرية تعمل بلا خادم، وتعتمد على دقة البيانات المنسوبة.",
+      "confirm.delete": "حذف هذا المؤثر من المقارنة؟", "confirm.reset": "استبدال بياناتك بالمثال الافتراضي؟",
+      "toast.added": "تمت إضافة المؤثر.", "toast.updated": "تم تحديث المؤثر.", "toast.deleted": "تم حذف المؤثر.",
+      "toast.reset": "تمت استعادة المثال.", "toast.need": "أدخل اسم المؤثر وإنفاقًا أكبر من صفر.",
+      "empty": "لا توجد حملات بعد. أضف أول مؤثر من المحرر."
+    },
+    en: {
+      brand: "Influencer ROI Tracker", tagline: "True ROAS · Cost per customer · Creator comparison",
+      currency: "Currency", print: "Print", reset: "Restore sample",
+      "set.title": "Cost settings",
+      "set.desc": "Applied to every influencer to calculate gross profit and true ROAS after costs.",
+      "s.cogs": "COGS as % of sales", "s.fulfill": "Fulfillment cost per order",
+      "s.payfee": "Payment fees as % of sales",
+      "set.hint": "COGS and fees are calculated on sales after the creator discount, with fulfillment added per order — before deducting campaign spend.",
+      "kpi.spend": "Total spend", "kpi.revenue": "Attributed sales",
+      "kpi.roas": "Media ROAS", "kpi.true": "True ROAS",
+      "kpi.cac": "Cost per new customer", "kpi.profit": "Net profit",
+      "kpi.customers": "New customers",
+      "e.addTitle": "Add influencer / campaign", "e.editTitle": "Edit influencer / campaign",
+      "e.desc": "Enter campaign spend and the results attributed to it.",
+      "e.name": "Influencer name (Arabic)", "e.namePh": "e.g. Noura Alshammari",
+      "e.nameEn": "Name (English — optional)", "e.nameEnPh": "e.g. Noura Alshammari",
+      "e.platform": "Platform", "e.discount": "Creator code discount %",
+      "e.spend": "Campaign spend (incl. fee)", "e.revenue": "Attributed sales (before discount)",
+      "e.orders": "Orders", "e.customers": "New customers",
+      "e.save": "Save influencer", "e.update": "Update influencer", "e.cancel": "Cancel",
+      "e.hint": "Spend includes the creator fee and paid boost. Only record sales attributed by the creator's link or code to avoid inflating results.",
+      "pf.instagram": "Instagram", "pf.tiktok": "TikTok", "pf.snapchat": "Snapchat",
+      "pf.youtube": "YouTube", "pf.x": "X", "pf.other": "Other",
+      "table.title": "Influencer ranking by profitability",
+      "table.desc": "True ROAS = gross profit ÷ spend, and cost per customer = spend ÷ new customers.",
+      "table.hint": "Sales are before discount; true ROAS and profit are after discount, COGS, fulfillment and payment fees.",
+      "th.rank": "#", "th.who": "Influencer", "th.spend": "Spend", "th.revenue": "Sales",
+      "th.roas": "ROAS", "th.true": "True ROAS", "th.cac": "Cost/customer",
+      "th.customers": "New customers", "th.profit": "Profit", "th.status": "Status",
+      "metric.true": "True ROAS", "metric.roas": "Media ROAS",
+      "metric.cac": "Cost per customer", "metric.profit": "Profit",
+      "chart.title": "Influencer comparison",
+      "chart.desc": "Pick a metric; both the ranking and the chart follow it. Hover the bars for exact values.",
+      "chart.avg": "Average", "chart.currency": "Values in the template currency",
+      "status.ok": "Profitable", "status.warn": "Thin", "status.bad": "Losing",
+      "best.title": "Most profitable: {name}",
+      "best.text": "{profit} profit and {roas} true ROAS on {spend} spend. Keep the partnership and scale the budget gradually while watching frequency.",
+      "worst.title": "Least profitable: {name}",
+      "worst.loss": "{profit} loss — pause spend or renegotiate fee and discount before the next round.",
+      "worst.thin": "Weak {profit} profit at {roas} true ROAS — shift budget to the best performer or test a new offer.",
+      "verdict.empty": "Add at least one influencer to see the verdict.",
+      "note": "Media ROAS measures sales ÷ spend, while true ROAS measures gross profit after costs ÷ spend. A campaign can look profitable on paper and lose money after discount and fulfillment.",
+      "footer": "Influencer ROI Tracker — an indicative, serverless tool that depends on accurate attribution data.",
+      "confirm.delete": "Delete this influencer from the comparison?", "confirm.reset": "Replace your data with the default sample?",
+      "toast.added": "Influencer added.", "toast.updated": "Influencer updated.", "toast.deleted": "Influencer deleted.",
+      "toast.reset": "Sample restored.", "toast.need": "Enter an influencer name and spend above zero.",
+      "empty": "No campaigns yet. Add your first influencer in the editor."
+    }
+  };
+
+  var KEY = "pb_influencer_roi_v1";
+  var LANG_KEY = "pb_influencer_roi_lang";
+  var state = { lang: "ar", currency: "SAR", items: [], editingId: null, metric: "true" };
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function n(v) { var x = parseFloat(v); return isFinite(x) ? x : 0; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.d, maximumFractionDigits: info.d
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toFixed(info.d) + " " + state.currency; }
+  }
+  function roas(v) { return (Math.round((Number(v) || 0) * 100) / 100) + "x"; }
+  function itemName(it) { return state.lang === "en" && it.nameEn ? it.nameEn : (it.name || (state.lang === "en" ? "Influencer" : "مؤثر")); }
+
+  function settings() {
+    return {
+      cogs: clamp(num("cogs"), 0, 90) / 100,
+      fulfill: Math.max(0, num("fulfill")),
+      fee: clamp(num("payfee"), 0, 15) / 100
+    };
+  }
+
+  function calcItem(it, s) {
+    var spend = Math.max(0, n(it.spend));
+    var revenue = Math.max(0, n(it.revenue));
+    var orders = Math.max(0, n(it.orders));
+    var customers = Math.max(0, n(it.customers));
+    var discount = clamp(n(it.discount), 0, 80) / 100;
+    var afterDiscount = revenue * (1 - discount);
+    var cogs = afterDiscount * s.cogs;
+    var fulfillment = orders * s.fulfill;
+    var fees = afterDiscount * s.fee;
+    var grossProfit = afterDiscount - cogs - fulfillment - fees;
+    var profit = grossProfit - spend;
+    return {
+      spend: spend, revenue: revenue, orders: orders, customers: customers, discount: discount * 100,
+      afterDiscount: afterDiscount, cogs: cogs, fulfillment: fulfillment, fees: fees,
+      grossProfit: grossProfit, profit: profit,
+      mediaRoas: spend > 0 ? revenue / spend : 0,
+      trueRoas: spend > 0 ? grossProfit / spend : 0,
+      cac: customers > 0 ? spend / customers : null,
+      aov: orders > 0 ? revenue / orders : 0
+    };
+  }
+
+  function analyze() {
+    var s = settings();
+    var rows = state.items.map(function (it) { return { item: it, c: calcItem(it, s) }; });
+    var totals = { spend: 0, revenue: 0, gross: 0, profit: 0, customers: 0, orders: 0 };
+    rows.forEach(function (r) {
+      totals.spend += r.c.spend; totals.revenue += r.c.revenue; totals.gross += r.c.grossProfit;
+      totals.profit += r.c.profit; totals.customers += r.c.customers; totals.orders += r.c.orders;
+    });
+    totals.mediaRoas = totals.spend > 0 ? totals.revenue / totals.spend : 0;
+    totals.trueRoas = totals.spend > 0 ? totals.gross / totals.spend : 0;
+    totals.cac = totals.customers > 0 ? totals.spend / totals.customers : null;
+    return { rows: rows, totals: totals, s: s };
+  }
+
+  function sortRows(rows, metric) {
+    var copy = rows.slice();
+    copy.sort(function (a, b) {
+      if (metric === "cac") {
+        var av = a.c.cac == null ? Infinity : a.c.cac;
+        var bv = b.c.cac == null ? Infinity : b.c.cac;
+        return av - bv;
+      }
+      if (metric === "profit") return b.c.profit - a.c.profit;
+      if (metric === "roas") return b.c.mediaRoas - a.c.mediaRoas;
+      return b.c.trueRoas - a.c.trueRoas;
+    });
+    return copy;
+  }
+
+  function metricValue(r, metric) {
+    if (metric === "cac") return r.c.cac;
+    if (metric === "profit") return r.c.profit;
+    if (metric === "roas") return r.c.mediaRoas;
+    return r.c.trueRoas;
+  }
+
+  function formatMetric(v, metric) {
+    if (v == null) return "—";
+    return metric === "cac" || metric === "profit" ? money(v) : roas(v);
+  }
+
+  function statusOf(r) {
+    if (r.c.profit < 0) return "bad";
+    if (r.c.trueRoas >= 1.5) return "ok";
+    return "warn";
+  }
+
+  function renderKpis(a) {
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.roas")) + "</span><strong>" + roas(a.totals.mediaRoas) + "</strong><small>" + esc(t("kpi.revenue")) + ": " + esc(money(a.totals.revenue)) + "</small></div>",
+      '<div class="kpi gold"><span>' + esc(t("kpi.true")) + "</span><strong>" + roas(a.totals.trueRoas) + "</strong><small>" + esc(t("kpi.spend")) + ": " + esc(money(a.totals.spend)) + "</small></div>",
+      '<div class="kpi mint"><span>' + esc(t("kpi.profit")) + "</span><strong>" + esc(money(a.totals.profit)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.cac")) + "</span><strong>" + (a.totals.cac == null ? "—" : esc(money(a.totals.cac))) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.customers")) + "</span><strong>" + esc(a.totals.customers) + "</strong><small>" + esc(a.totals.orders + (state.lang === "ar" ? " طلب" : " orders")) + "</small></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.spend")) + "</span><strong>" + esc(money(a.totals.spend)) + "</strong></div>"
+    ].join("");
+  }
+
+  function renderVerdict(rows) {
+    if (!rows.length) {
+      $("verdictBox").innerHTML = '<div class="card"><div class="verdict"><span class="icon">💡</span><div>' + esc(t("verdict.empty")) + "</div></div></div>";
+      return;
+    }
+    var byProfit = rows.slice().sort(function (a, b) { return b.c.profit - a.c.profit; });
+    var best = byProfit[0];
+    var worst = byProfit[byProfit.length - 1];
+    var bestText = t("best.text", { profit: money(best.c.profit), roas: roas(best.c.trueRoas), spend: money(best.c.spend) });
+    var worstText = worst.c.profit < 0
+      ? t("worst.loss", { profit: money(Math.abs(worst.c.profit)) })
+      : t("worst.thin", { profit: money(worst.c.profit), roas: roas(worst.c.trueRoas) });
+    var html = '<div class="card"><div class="verdict"><span class="icon">🏆</span><div>' +
+      "<b>" + esc(t("best.title", { name: itemName(best.item) })) + "</b><br>" + esc(bestText) +
+      (rows.length > 1 ? "<br><br><b>" + esc(t("worst.title", { name: itemName(worst.item) })) + "</b><br>" + esc(worstText) : "") +
+      "</div></div></div>";
+    $("verdictBox").innerHTML = html;
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) {
+      $("roiBody").innerHTML = '<tr><td colspan="11"><div class="empty">' + esc(t("empty")) + "</div></td></tr>";
+      return;
+    }
+    var metric = state.metric;
+    $("roiBody").innerHTML = rows.map(function (r, i) {
+      var st = statusOf(r);
+      var cls = r.c.profit < 0 ? "loss" : (i === 0 ? "best" : "");
+      return '<tr class="' + cls + '">' +
+        '<td><span class="rank' + (i === 0 ? " top" : "") + '">' + (i + 1) + "</span></td>" +
+        '<td class="who"><b>' + esc(itemName(r.item)) + "</b><small>" + esc(t("pf." + r.item.platform)) + "</small></td>" +
+        "<td>" + esc(money(r.c.spend)) + "</td>" +
+        "<td>" + esc(money(r.c.revenue)) + "</td>" +
+        "<td>" + roas(r.c.mediaRoas) + "</td>" +
+        "<td><b>" + roas(r.c.trueRoas) + "</b></td>" +
+        "<td>" + (r.c.cac == null ? "—" : esc(money(r.c.cac))) + "</td>" +
+        "<td>" + esc(r.c.customers) + "</td>" +
+        '<td style="font-weight:800;color:' + (r.c.profit < 0 ? "var(--bad)" : "var(--ink)") + '">' + esc(money(r.c.profit)) + "</td>" +
+        '<td><span class="badge ' + st + '">' + esc(t("status." + st)) + "</span></td>" +
+        '<td class="no-print"><div class="actions">' +
+          '<button type="button" class="btn ghost small" data-edit="' + esc(r.item.id) + '">' + esc(state.lang === "ar" ? "تعديل" : "Edit") + "</button>" +
+          '<button type="button" class="icon-btn" data-del="' + esc(r.item.id) + '" title="' + esc(t("confirm.delete")) + '">×</button>' +
+        "</div></td>" +
+      "</tr>";
+    }).join("");
+  }
+
+  function renderMetricBar() {
+    var metrics = [["true", "metric.true"], ["roas", "metric.roas"], ["cac", "metric.cac"], ["profit", "metric.profit"]];
+    $("metricBar").innerHTML = metrics.map(function (m) {
+      return '<button type="button" class="metric-btn' + (state.metric === m[0] ? " active" : "") + '" data-metric="' + m[0] + '">' + esc(t(m[1])) + "</button>";
+    }).join("");
+  }
+
+  function renderChart(rows) {
+    var metric = state.metric;
+    var box = $("chartBox");
+    if (!rows.length) {
+      box.innerHTML = '<div class="empty">' + esc(t("empty")) + "</div>";
+      $("chartLegend").innerHTML = "";
+      return;
+    }
+    var W = 700, rowH = 42, topPad = 18, leftPad = 168, rightPad = 78, bottomPad = 24;
+    var H = topPad + rows.length * rowH + bottomPad;
+    var plotW = W - leftPad - rightPad;
+    var values = rows.map(function (r) { return metricValue(r, metric); });
+    var numeric = values.filter(function (v) { return v != null; });
+    var maxVal = numeric.length ? Math.max.apply(null, numeric.map(Math.abs)) : 1;
+    var hasNegative = numeric.some(function (v) { return v < 0; });
+    if (maxVal <= 0) maxVal = 1;
+    var x0 = leftPad + (hasNegative ? plotW * 0.12 : 0);
+    var drawW = plotW - (hasNegative ? plotW * 0.12 : 0);
+    function x(v) { return x0 + (v / maxVal) * drawW; }
+
+    var bars = rows.map(function (r, i) {
+      var v = metricValue(r, metric);
+      var y = topPad + i * rowH + 9;
+      var barH = 20;
+      var color = v == null ? "#c9c0ca" : (v < 0 ? "#a83a2f" : (i === 0 ? "#a97b28" : COLORS[i % COLORS.length]));
+      var width = v == null ? 0 : Math.max(2, Math.abs(x(v) - x0));
+      var bx = v != null && v < 0 ? x0 - width : x0;
+      var label = itemName(r.item);
+      if (label.length > 21) label = label.slice(0, 20) + "…";
+      var valText = formatMetric(v, metric);
+      return '<text class="bar-label" x="' + (leftPad - 8) + '" y="' + (y + 14) + '" text-anchor="end">' + esc(label) + "</text>" +
+        '<rect class="bar" x="' + bx + '" y="' + y + '" width="' + width + '" height="' + barH + '" rx="5" fill="' + color + '" data-tip="' +
+        esc(label + " · " + valText) + '"></rect>' +
+        '<text class="bar-value" x="' + (v != null && v < 0 ? bx - 5 : x0 + width + 6) + '" y="' + (y + 14) + '" text-anchor="' + (v != null && v < 0 ? "end" : "start") + '">' + esc(valText) + "</text>";
+    }).join("");
+
+    var avg = numeric.length ? numeric.reduce(function (s, v) { return s + v; }, 0) / numeric.length : 0;
+    var avgX = x(avg);
+    var avgLine = numeric.length && avg > 0
+      ? '<line class="avg-line" x1="' + avgX + '" y1="' + (topPad - 4) + '" x2="' + avgX + '" y2="' + (H - bottomPad + 2) + '"></line>' +
+        '<text class="avg-text" x="' + avgX + '" y="' + (topPad - 7) + '" text-anchor="middle">' + esc(t("chart.avg")) + "</text>"
+      : "";
+
+    box.innerHTML = '<svg class="roi-chart" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Influencer comparison">' +
+      '<line class="axis-line" x1="' + x0 + '" y1="' + (topPad - 4) + '" x2="' + x0 + '" y2="' + (H - bottomPad + 2) + '"></line>' +
+      avgLine + bars +
+      '<text class="axis-text" x="' + (W - 4) + '" y="' + (H - 4) + '" text-anchor="end">' + esc(t("chart.currency")) + "</text>" +
+      "</svg>";
+
+    var legend = [["#a97b28", t("best.title", { name: rows[0] ? itemName(rows[0].item) : "" })], ["#a83a2f", t("status.bad")], ["#b02a63", t("chart.avg")]];
+    $("chartLegend").innerHTML = legend.map(function (l) {
+      return '<span class="legend-item"><span class="dot" style="background:' + l[0] + '"></span>' + esc(l[1]) + "</span>";
+    }).join("");
+  }
+
+  function renderAll() {
+    var a = analyze();
+    var rows = sortRows(a.rows, state.metric);
+    renderKpis(a);
+    renderVerdict(a.rows);
+    renderMetricBar();
+    renderTable(rows);
+    renderChart(rows);
+    save();
+  }
+
+  function renderPlatformSelect() {
+    var sel = $("iPlatform");
+    var current = sel.value || "instagram";
+    sel.innerHTML = PLATFORMS.map(function (p) {
+      return '<option value="' + p + '">' + esc(t("pf." + p)) + "</option>";
+    }).join("");
+    sel.value = PLATFORMS.indexOf(current) >= 0 ? current : "instagram";
+  }
+
+  function resetEditor() {
+    state.editingId = null;
+    $("iName").value = ""; $("iNameEn").value = "";
+    $("iSpend").value = ""; $("iRevenue").value = ""; $("iOrders").value = ""; $("iCustomers").value = "";
+    $("iDiscount").value = "0";
+    renderPlatformSelect();
+    $("iPlatform").value = "instagram";
+    $("editorTitle").textContent = t("e.addTitle");
+    $("saveItem").textContent = t("e.save");
+  }
+
+  function startEdit(id) {
+    var item = state.items.find(function (x) { return x.id === id; });
+    if (!item) return;
+    state.editingId = id;
+    $("iName").value = item.name || "";
+    $("iNameEn").value = item.nameEn || "";
+    $("iSpend").value = item.spend;
+    $("iRevenue").value = item.revenue;
+    $("iOrders").value = item.orders;
+    $("iCustomers").value = item.customers;
+    $("iDiscount").value = item.discount;
+    renderPlatformSelect();
+    $("iPlatform").value = PLATFORMS.indexOf(item.platform) >= 0 ? item.platform : "other";
+    $("editorTitle").textContent = t("e.editTitle");
+    $("saveItem").textContent = t("e.update");
+    $("editorCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function saveItem() {
+    var name = $("iName").value.trim();
+    var spend = n($("iSpend").value);
+    if (!name || spend <= 0) { toast(t("toast.need")); return; }
+    var payload = {
+      name: name,
+      nameEn: $("iNameEn").value.trim(),
+      platform: $("iPlatform").value,
+      spend: Math.max(0, spend),
+      revenue: Math.max(0, n($("iRevenue").value)),
+      orders: Math.max(0, Math.round(n($("iOrders").value))),
+      customers: Math.max(0, Math.round(n($("iCustomers").value))),
+      discount: clamp(n($("iDiscount").value), 0, 80)
+    };
+    if (state.editingId) {
+      var idx = state.items.findIndex(function (x) { return x.id === state.editingId; });
+      if (idx >= 0) state.items[idx] = Object.assign({ id: state.editingId }, payload);
+      toast(t("toast.updated"));
+    } else {
+      payload.id = "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      state.items.push(payload);
+      toast(t("toast.added"));
+    }
+    resetEditor();
+    renderAll();
+  }
+
+  function deleteItem(id) {
+    if (!window.confirm(t("confirm.delete"))) return;
+    state.items = state.items.filter(function (x) { return x.id !== id; });
+    if (state.editingId === id) resetEditor();
+    toast(t("toast.deleted"));
+    renderAll();
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1800);
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, currency: state.currency, metric: state.metric, items: state.items,
+        settings: { cogs: $("cogs").value, fulfill: $("fulfill").value, fee: $("payfee").value }
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    $("editorTitle").textContent = state.editingId ? t("e.editTitle") : t("e.addTitle");
+    $("saveItem").textContent = state.editingId ? t("e.update") : t("e.save");
+    renderPlatformSelect();
+    renderAll();
+  }
+
+  document.querySelectorAll("#cogs, #fulfill, #payfee").forEach(function (input) { input.addEventListener("input", renderAll); });
+  $("saveItem").addEventListener("click", saveItem);
+  $("cancelEdit").addEventListener("click", resetEditor);
+  $("roiBody").addEventListener("click", function (event) {
+    var edit = event.target.closest("[data-edit]");
+    var del = event.target.closest("[data-del]");
+    if (edit) startEdit(edit.getAttribute("data-edit"));
+    if (del) deleteItem(del.getAttribute("data-del"));
+  });
+  $("metricBar").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-metric]");
+    if (!btn) return;
+    state.metric = btn.getAttribute("data-metric");
+    renderAll();
+  });
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (c) { return '<option value="' + c + '">' + c + "</option>"; }).join("");
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar"); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("resetBtn").addEventListener("click", function () {
+    if (!window.confirm(t("confirm.reset"))) return;
+    state.items = JSON.parse(JSON.stringify(SAMPLE));
+    $("cogs").value = 35; $("fulfill").value = 15; $("payfee").value = 2.5;
+    resetEditor();
+    toast(t("toast.reset"));
+    renderAll();
+  });
+
+  document.addEventListener("pointerover", function (event) {
+    var el = event.target.closest("[data-tip]");
+    if (!el) return;
+    var tip = $("chartTip");
+    tip.textContent = el.getAttribute("data-tip");
+    tip.classList.add("show");
+    tip.style.left = (event.clientX + 12) + "px";
+    tip.style.top = (event.clientY + 12) + "px";
+  });
+  document.addEventListener("pointermove", function (event) {
+    var tip = $("chartTip");
+    if (!tip.classList.contains("show")) return;
+    tip.style.left = (event.clientX + 12) + "px";
+    tip.style.top = (event.clientY + 12) + "px";
+  });
+  document.addEventListener("pointerout", function (event) {
+    if (event.target.closest && event.target.closest("[data-tip]")) $("chartTip").classList.remove("show");
+  });
+
+  // init
+  state.currency = "SAR";
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+  state.items = JSON.parse(JSON.stringify(SAMPLE));
+  if (raw) {
+    if (Array.isArray(raw.items) && raw.items.length) state.items = raw.items;
+    if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+    if (["true", "roas", "cac", "profit"].indexOf(raw.metric) >= 0) state.metric = raw.metric;
+    if (raw.settings) {
+      if (raw.settings.cogs != null) $("cogs").value = raw.settings.cogs;
+      if (raw.settings.fulfill != null) $("fulfill").value = raw.settings.fulfill;
+      if (raw.settings.fee != null) $("payfee").value = raw.settings.fee;
+    }
+    if (raw.lang === "en" || raw.lang === "ar") state.lang = raw.lang;
+  }
+  var storedLang = localStorage.getItem(LANG_KEY);
+  if (storedLang === "en" || storedLang === "ar") state.lang = storedLang;
+  $("currency").value = state.currency;
+  renderPlatformSelect();
+  resetEditor();
+  applyLang(state.lang);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ميزانية السفر الذكية — Smart Travel Budget OS</title>
+<meta name="description" content="خطّط ميزانية رحلتك، وتتبع مصاريفك اليومية مع تحويل العملات، وجدولًا زمنيًا وقائمة مستندات وأمتعة — عربي/إنجليزي.">
+<style>
+:root{
+  --bg:#f4f1ea;--card:#fffdf8;--ink:#15262b;--muted:#64757a;
+  --teal:#0e5b5f;--teal2:#147a7e;--teal-soft:#e4f1f0;--sand:#f7efe1;
+  --coral:#cf6138;--coral-soft:#fbeee8;--gold:#b0842e;--gold-soft:#faf1da;
+  --ok:#256b4c;--ok-soft:#e8f4ee;--bad:#a83a2f;--bad-soft:#fbeceb;
+  --line:#e6e0d5;--radius:16px;--shadow:0 10px 30px rgba(21,38,43,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:
+  radial-gradient(900px 420px at 95% -10%,#fbf4e7 0,transparent 60%),var(--bg);
+  color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.9rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input[type=date],input[type=time]{direction:ltr}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,91,95,.1)}
+label>span{display:block;font-size:.74rem;color:var(--muted);margin-bottom:4px;font-weight:650}
+.top{position:sticky;top:0;z-index:20;background:rgba(244,241,234,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1220px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.1rem}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:750;font-size:.83rem;background:var(--teal);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.12)}
+.btn.coral{background:var(--coral)}
+.btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--line)}
+.btn.small{padding:5px 9px;font-size:.74rem;border-radius:8px}
+.btn.danger{background:var(--bad-soft);color:var(--bad);border:1px solid #eccbc6}
+main{max-width:1220px;margin:0 auto;padding:18px 20px 50px;display:grid;gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.card-head h2{font-size:1.02rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.8rem;max-width:820px}
+.hint{color:var(--muted);font-size:.76rem;margin:8px 0 0}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011}
+.trip-summary{background:linear-gradient(135deg,var(--teal),#0a4548);border-radius:13px;padding:12px 14px;color:#fff;display:grid;gap:3px;margin-top:10px}
+.trip-summary b{font-size:.98rem}
+.trip-summary span{font-size:.78rem;color:#cfe6e4}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.fields .wide{grid-column:1/-1}
+@media(max-width:820px){.fields{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.fields{grid-template-columns:1fr}}
+.rate-row{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:end}
+.conv-box{margin-top:10px;background:var(--teal-soft);border:1px solid #cfe4e2;border-radius:11px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
+.conv-box label>span{color:#3c6669}
+.conv-out{font-size:.86rem;font-weight:800;padding:8px 0;color:var(--teal);font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:2px}
+.kpi strong{font-size:1.02rem;font-variant-numeric:tabular-nums;display:block}
+.kpi small{font-size:.67rem;color:var(--muted);font-weight:600}
+.kpi.hero{background:linear-gradient(135deg,var(--teal),var(--teal2));border:0;color:#fff}
+.kpi.hero span,.kpi.hero small{color:#cfe6e4}.kpi.hero strong{color:#fff}
+.kpi.coral{background:var(--coral-soft);border-color:#f0d8cd}.kpi.coral strong{color:#933f1d}
+.kpi.gold{background:var(--gold-soft);border-color:#ecdfc2}
+.kpi.bad{background:var(--bad-soft);border-color:#eccbc6}.kpi.bad strong{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:15px;align-items:start}
+@media(max-width:960px){.grid2{grid-template-columns:1fr}}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+.budget-table{min-width:560px}
+th{font-size:.67rem;color:var(--muted);text-align:start;padding:7px 5px;background:#fbf7ef;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:750}
+td{padding:6px 5px;border-bottom:1px solid #f1ece2;vertical-align:middle;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:0}
+.budget-cat{font-weight:700;white-space:nowrap}
+.budget-cat i{font-style:normal;margin-inline-end:5px}
+.budget-table input{padding:5px 7px;font-size:.79rem;min-width:88px}
+.bar{height:6px;border-radius:99px;background:#eee8dd;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--teal)}
+.bar i.warn{background:var(--gold)}
+.bar i.over{background:var(--bad)}
+.total-row td{font-weight:800;background:#fbf7ef;border-top:1px solid var(--line)}
+.unallocated{margin-top:8px;font-size:.77rem;font-weight:750;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.unallocated.bad{color:var(--bad)}
+.expense-form{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.expense-form .wide{grid-column:1/-1}
+.expense-form .actions{grid-column:1/-1;display:flex;gap:6px}
+.expense-list{max-height:330px;overflow:auto;border:1px solid var(--line);border-radius:11px}
+.exp-item{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:8px 10px;border-bottom:1px solid #f1ece2}
+.exp-item:last-child{border-bottom:0}
+.exp-item .desc{font-size:.82rem;font-weight:700}
+.exp-item .meta{font-size:.7rem;color:var(--muted);grid-column:1}
+.exp-item .amt{font-size:.82rem;font-weight:800;text-align:end;white-space:nowrap}
+.exp-item .home{font-size:.69rem;color:var(--muted);text-align:end;grid-column:2}
+.exp-del{border:0;background:transparent;color:var(--muted);font-size:.95rem;padding:0 2px;line-height:1}
+.exp-del:hover{color:var(--bad)}
+.empty{padding:20px;text-align:center;color:var(--muted);font-size:.82rem}
+.itinerary-form{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.itinerary-form .wide{grid-column:1/-1}
+.day-block{margin-bottom:10px}
+.day-head{font-size:.78rem;font-weight:800;color:var(--teal);background:var(--teal-soft);border-radius:8px;padding:4px 9px;margin-bottom:5px;display:flex;justify-content:space-between;gap:8px}
+.day-head span{font-weight:600;color:var(--muted);font-size:.7rem}
+.iti-item{display:grid;grid-template-columns:56px 1fr auto;gap:6px;padding:6px 4px;border-bottom:1px dashed #eee8dd;align-items:start}
+.iti-item:last-child{border-bottom:0}
+.iti-time{font-size:.74rem;font-weight:800;color:var(--coral);font-variant-numeric:tabular-nums}
+.iti-body b{font-size:.82rem;display:block}
+.iti-body small{font-size:.7rem;color:var(--muted);display:block}
+.iti-body em{font-size:.72rem;color:var(--muted);font-style:normal;display:block}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.check-grid{grid-template-columns:1fr}}
+.check-group{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fdfbf6}
+.check-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.check-head h3{font-size:.85rem}
+.check-progress{font-size:.68rem;font-weight:800;color:var(--muted)}
+.check-bar{height:5px;border-radius:99px;background:#eee8dd;overflow:hidden;margin-bottom:7px}
+.check-bar i{display:block;height:100%;background:var(--teal);border-radius:99px}
+.check-list{display:grid;gap:2px;max-height:260px;overflow:auto}
+.check-item{display:flex;align-items:flex-start;gap:7px;font-size:.79rem;padding:3px 2px}
+.check-item input{width:15px;height:15px;margin-top:3px;accent-color:var(--teal);flex:none}
+.check-item label{flex:1;cursor:pointer}
+.check-item.done label{color:var(--muted);text-decoration:line-through}
+.check-x{border:0;background:transparent;color:var(--muted);font-size:.85rem;line-height:1;padding:0 2px}
+.check-x:hover{color:var(--bad)}
+.check-add{display:flex;gap:5px;margin-top:7px}
+.check-add input{padding:5px 7px;font-size:.76rem}
+.check-add .btn{padding:5px 9px;font-size:.72rem;flex:none}
+.toast{position:fixed;inset-block-end:22px;inset-inline-start:50%;transform:translateX(-50%);background:var(--teal);color:#fff;padding:8px 15px;border-radius:99px;font-size:.8rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:95}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:32px}
+footer{text-align:center;color:var(--muted);font-size:.77rem;padding:0 20px 26px}
+@media print{
+  .top,.no-print,footer,.toast,.expense-form,.itinerary-form,.check-add{display:none!important}
+  body{background:#fff}
+  main{max-width:none;padding:0}
+  .card{box-shadow:none;break-inside:avoid;border-color:#ddd}
+  .grid2{grid-template-columns:1fr}
+  .expense-list,.check-list{max-height:none;overflow:visible}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">✈</span>
+      <div><strong data-i18n="brand">ميزانية السفر الذكية</strong><small data-i18n="tagline">ميزانية · مصاريف · جدول · قائمة تحقق</small></div>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة</button>
+      <button type="button" class="btn ghost no-print" id="resetBtn" data-i18n="reset">استعادة المثال</button>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="trip.title">بيانات الرحلة</h2><p data-i18n="trip.desc">الوجهة والتواريخ والميزانية والعملات — يبقى كل شيء محفوظًا على جهازك.</p></div>
+    </div>
+    <div class="fields">
+      <label><span data-i18n="trip.name">اسم الرحلة</span><input id="tName" type="text" data-i18n-ph="trip.namePh"></label>
+      <label><span data-i18n="trip.dest">الوجهة</span><input id="tDest" type="text" data-i18n-ph="trip.destPh"></label>
+      <label><span data-i18n="trip.type">نوع الرحلة</span><select id="tType"><option value="tourism" data-i18n="type.tourism">سياحة</option><option value="business" data-i18n="type.business">عمل</option></select></label>
+      <label><span data-i18n="trip.start">تاريخ الوصول</span><input id="tStart" type="date"></label>
+      <label><span data-i18n="trip.end">تاريخ المغادرة</span><input id="tEnd" type="date"></label>
+      <label><span data-i18n="trip.travelers">عدد المسافرين</span><input id="tTravelers" type="number" min="1" max="20" step="1" value="2"></label>
+      <label><span data-i18n="trip.budget">إجمالي الميزانية</span><input id="tBudget" type="number" min="0" step="100" value="12000"></label>
+      <label><span data-i18n="trip.home">عملة الميزانية</span><select id="cHome"></select></label>
+      <label><span data-i18n="trip.destCur">عملة الوجهة</span><select id="cDest"></select></label>
+      <label><span data-i18n="trip.rate">سعر الصرف: 1 من عملة الوجهة = ؟ من عملة الميزانية</span>
+        <span class="rate-row"><input id="tRate" type="number" min="0.0001" step="0.0001" value="0.115"></span>
+      </label>
+      <div class="wide conv-box">
+        <label><span data-i18n="trip.conv">محوّل سريع: مبلغ بعملة الوجهة</span><input id="convAmount" type="number" min="0" step="1" value="1000"></label>
+        <div><span class="hint" style="margin:0;display:block" data-i18n="trip.convOut">ما يعادله بعملة الميزانية</span><div class="conv-out" id="convOut">—</div></div>
+      </div>
+    </div>
+    <div class="trip-summary" id="tripSummary"><b>—</b><span>—</span></div>
+    <p class="hint" data-i18n="trip.hint">أدخل سعر الصرف يدويًا — لا يتصل القالب بالبنك. تغيير السعر يعيد احتساب كل المصاريف المسجلة بعملة الوجهة.</p>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="budget.title">توزيع الميزانية</h2><p data-i18n="budget.desc">خطّط لكل بند، وقارن المخطط بالمصروف الفعلي.</p></div>
+        <button type="button" class="btn ghost small no-print" id="autoAlloc" data-i18n="budget.auto">توزيع تلقائي</button>
+      </div>
+      <div class="table-wrap">
+        <table class="budget-table">
+          <thead><tr>
+            <th data-i18n="th.category">البند</th>
+            <th data-i18n="th.planned">المخطط</th>
+            <th data-i18n="th.spent">المصروف</th>
+            <th data-i18n="th.left">المتبقي</th>
+            <th data-i18n="th.progress">الاستهلاك</th>
+          </tr></thead>
+          <tbody id="budgetBody"></tbody>
+        </table>
+      </div>
+      <div class="unallocated" id="unallocated"><span data-i18n="budget.unallocated">غير موزع</span><b>—</b></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="exp.title">مصاريف الرحلة</h2><p data-i18n="exp.desc">سجّل كل مصروف بعملة الميزانية أو عملة الوجهة — يُحوَّل تلقائيًا.</p></div>
+      </div>
+      <div class="expense-form">
+        <label><span data-i18n="exp.date">التاريخ</span><input id="eDate" type="date"></label>
+        <label><span data-i18n="exp.cat">البند</span><select id="eCat"></select></label>
+        <label class="wide"><span data-i18n="exp.desc">الوصف</span><input id="eDesc" type="text" data-i18n-ph="exp.descPh"></label>
+        <label><span data-i18n="exp.amount">المبلغ</span><input id="eAmount" type="number" min="0" step="1" value=""></label>
+        <label><span data-i18n="exp.cur">العملة</span><select id="eCur"><option value="dest" data-i18n="exp.curDest">عملة الوجهة</option><option value="home" data-i18n="exp.curHome">عملة الميزانية</option></select></label>
+        <div class="actions"><button type="button" class="btn coral" id="addExpense" data-i18n="exp.add">إضافة المصروف</button></div>
+      </div>
+      <div class="expense-list" id="expenseList"></div>
+      <p class="hint" data-i18n="exp.totalHint">إجمالي المصاريف بعملة الميزانية يظهر في المؤشرات أعلاه.</p>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section class="card" id="itiCard">
+      <div class="card-head">
+        <div><h2 data-i18n="iti.title">الجدول الزمني للرحلة</h2><p data-i18n="iti.desc">مواعيد الوصول والاجتماعات والجولات، مرتبة حسب اليوم.</p></div>
+      </div>
+      <div class="itinerary-form">
+        <label><span data-i18n="iti.date">التاريخ</span><input id="iDate" type="date"></label>
+        <label><span data-i18n="iti.time">الوقت</span><input id="iTime" type="time" value="09:00"></label>
+        <label class="wide"><span data-i18n="iti.what">النشاط</span><input id="iTitle" type="text" data-i18n-ph="iti.whatPh"></label>
+        <label><span data-i18n="iti.place">المكان</span><input id="iPlace" type="text" data-i18n-ph="iti.placePh"></label>
+        <label><span data-i18n="iti.notes">ملاحظات</span><input id="iNotes" type="text" data-i18n-ph="iti.notesPh"></label>
+        <div class="wide"><button type="button" class="btn" id="addIti" data-i18n="iti.add">إضافة للجدول</button></div>
+      </div>
+      <div id="itineraryList"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="chk.title">قائمة المستندات والأمتعة</h2><p data-i18n="chk.desc">علّم ما أنجزته، وأضف بنودًا خاصة برحلتك.</p></div>
+      </div>
+      <div class="check-grid">
+        <div class="check-group">
+          <div class="check-head"><h3 data-i18n="chk.docs">المستندات</h3><span class="check-progress" id="docProgress">—</span></div>
+          <div class="check-bar"><i id="docBar" style="width:0%"></i></div>
+          <div class="check-list" id="docList"></div>
+          <div class="check-add">
+            <input id="docInput" type="text" data-i18n-ph="chk.addPh">
+            <button type="button" class="btn small" data-add-check="documents" data-i18n="chk.add">إضافة</button>
+          </div>
+        </div>
+        <div class="check-group">
+          <div class="check-head"><h3 data-i18n="chk.lug">الأمتعة</h3><span class="check-progress" id="lugProgress">—</span></div>
+          <div class="check-bar"><i id="lugBar" style="width:0%"></i></div>
+          <div class="check-list" id="lugList"></div>
+          <div class="check-add">
+            <input id="lugInput" type="text" data-i18n-ph="chk.addPh">
+            <button type="button" class="btn small" data-add-check="luggage" data-i18n="chk.add">إضافة</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <p class="note" data-i18n="note">أسعار الصرف تُدخل يدويًا وقد تختلف عن سعر البنك أو الشبكة. الميزانية إرشادية؛ احتفظ باحتياطي للطوارئ وتحقق من متطلبات التأشيرة قبل السفر.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">ميزانية السفر الذكية — أداة تقديرية تعمل بلا خادم وتحفظ بياناتك محليًا.</span></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { d: 2 }, AED: { d: 2 }, KWD: { d: 3 }, QAR: { d: 2 }, OMR: { d: 3 }, BHD: { d: 3 },
+    USD: { d: 2 }, EUR: { d: 2 }, GBP: { d: 2 }, TRY: { d: 2 }, EGP: { d: 2 }
+  };
+  var CATS = [
+    { key: "flights", icon: "✈️", weight: 30 },
+    { key: "stay", icon: "🏨", weight: 28 },
+    { key: "transport", icon: "🚕", weight: 8 },
+    { key: "food", icon: "🍽️", weight: 15 },
+    { key: "activities", icon: "🎟️", weight: 7 },
+    { key: "shopping", icon: "🛍️", weight: 4 },
+    { key: "business", icon: "💼", weight: 5 },
+    { key: "contingency", icon: "🧰", weight: 3 }
+  ];
+  var DEFAULT_CHECKS = {
+    documents: ["passport", "visa", "tickets", "hotel", "insurance", "id", "invitation", "copies"],
+    luggage: ["charger", "adapter", "meds", "toiletries", "clothes", "laptop", "cards", "umbrella"]
+  };
+  var SAMPLE = {
+    trip: { name: "رحلة عمل إسطنبول", dest: "إسطنبول", type: "business", start: "2026-11-10", end: "2026-11-16", travelers: 2, budget: 12000, home: "SAR", destCur: "TRY", rate: 0.115 },
+    planned: { flights: 3600, stay: 3360, transport: 960, food: 1800, activities: 840, shopping: 480, business: 600, contingency: 360 },
+    expenses: [
+      { id: "e1", date: "2026-11-10", cat: "stay", desc: "ليلة الفندق الأولى", amount: 3200, cur: "dest" },
+      { id: "e2", date: "2026-11-10", cat: "food", desc: "عشاء بعد الوصول", amount: 850, cur: "dest" },
+      { id: "e3", date: "2026-11-11", cat: "transport", desc: "تاكسي من المطار", amount: 750, cur: "dest" },
+      { id: "e4", date: "2026-11-11", cat: "business", desc: "قاعة اجتماع العميل", amount: 1200, cur: "dest" },
+      { id: "e5", date: "2026-11-12", cat: "activities", desc: "تذاكر متحف", amount: 900, cur: "dest" },
+      { id: "e6", date: "2026-11-13", cat: "food", desc: "غداء عمل", amount: 1100, cur: "dest" }
+    ],
+    itinerary: [
+      { id: "t1", date: "2026-11-10", time: "14:00", title: "الوصول واستلام الفندق", place: "مطار إسطنبول", notes: "تأكد من تأشيرة الدخول" },
+      { id: "t2", date: "2026-11-11", time: "09:30", title: "اجتماع العميل", place: "منطقة ليفنت", notes: "اصطحب العرض المطبوع" },
+      { id: "t3", date: "2026-11-11", time: "19:30", title: "عشاء عمل", place: "مطعم قريب من الفندق", notes: "" },
+      { id: "t4", date: "2026-11-12", time: "10:00", title: "جولة البازار", place: "البازار الكبير", notes: "" },
+      { id: "t5", date: "2026-11-13", time: "09:00", title: "متحف آيا صوفيا", place: "السلطان أحمد", notes: "احجز التذكرة مسبقًا" }
+    ],
+    checks: {
+      documents: DEFAULT_CHECKS.documents.map(function (k) { return { key: k, done: k === "passport" || k === "tickets" }; }),
+      luggage: DEFAULT_CHECKS.luggage.map(function (k) { return { key: k, done: k === "charger" }; })
+    }
+  };
+
+  var I18N = {
+    ar: {
+      brand: "ميزانية السفر الذكية", tagline: "ميزانية · مصاريف · جدول · قائمة تحقق",
+      print: "طباعة", reset: "استعادة المثال",
+      "trip.title": "بيانات الرحلة",
+      "trip.desc": "الوجهة والتواريخ والميزانية والعملات — يبقى كل شيء محفوظًا على جهازك.",
+      "trip.name": "اسم الرحلة", "trip.namePh": "مثال: رحلة عمل إسطنبول",
+      "trip.dest": "الوجهة", "trip.destPh": "مثال: إسطنبول",
+      "trip.type": "نوع الرحلة", "type.tourism": "سياحة", "type.business": "عمل",
+      "trip.start": "تاريخ الوصول", "trip.end": "تاريخ المغادرة",
+      "trip.travelers": "عدد المسافرين", "trip.budget": "إجمالي الميزانية",
+      "trip.home": "عملة الميزانية", "trip.destCur": "عملة الوجهة",
+      "trip.rate": "سعر الصرف: 1 من عملة الوجهة = ؟ من عملة الميزانية",
+      "trip.conv": "محوّل سريع: مبلغ بعملة الوجهة", "trip.convOut": "ما يعادله بعملة الميزانية",
+      "trip.hint": "أدخل سعر الصرف يدويًا — لا يتصل القالب بالبنك. تغيير السعر يعيد احتساب كل المصاريف المسجلة بعملة الوجهة.",
+      "trip.days": "{n} يوم", "trip.people": "{n} مسافر", "trip.dates": "{start} ← {end}",
+      "trip.daysLabel": "الأيام: {n}", "trip.peopleLabel": "المسافرون: {n}",
+      "kpi.budget": "إجمالي الميزانية", "kpi.planned": "المُوزَّع", "kpi.spent": "المصروف",
+      "kpi.left": "المتبقي", "kpi.daily": "متوسط الصرف اليومي", "kpi.days": "أيام الرحلة",
+      "kpi.check": "إنجاز القائمة",
+      "budget.title": "توزيع الميزانية", "budget.desc": "خطّط لكل بند، وقارن المخطط بالمصروف الفعلي.",
+      "budget.auto": "توزيع تلقائي", "budget.unallocated": "غير موزع",
+      "th.category": "البند", "th.planned": "المخطط", "th.spent": "المصروف",
+      "th.left": "المتبقي", "th.progress": "الاستهلاك",
+      "cat.flights": "الطيران", "cat.stay": "الإقامة", "cat.transport": "التنقل",
+      "cat.food": "المطاعم", "cat.activities": "الأنشطة", "cat.shopping": "التسوق",
+      "cat.business": "العمل والتأشيرة", "cat.contingency": "احتياطي الطوارئ",
+      "exp.title": "مصاريف الرحلة", "exp.desc": "سجّل كل مصروف بعملة الميزانية أو عملة الوجهة — يُحوَّل تلقائيًا.",
+      "exp.date": "التاريخ", "exp.cat": "البند", "exp.desc": "الوصف", "exp.descPh": "مثال: تاكسي المطار",
+      "exp.amount": "المبلغ", "exp.cur": "العملة", "exp.curDest": "عملة الوجهة", "exp.curHome": "عملة الميزانية",
+      "exp.add": "إضافة المصروف", "exp.totalHint": "إجمالي المصاريف بعملة الميزانية يظهر في المؤشرات أعلاه.",
+      "exp.empty": "لا توجد مصاريف مسجلة بعد.", "exp.homeEquiv": "ما يعادله",
+      "exp.need": "أدخل وصفًا ومبلغًا أكبر من صفر.",
+      "iti.title": "الجدول الزمني للرحلة", "iti.desc": "مواعيد الوصول والاجتماعات والجولات، مرتبة حسب اليوم.",
+      "iti.date": "التاريخ", "iti.time": "الوقت", "iti.what": "النشاط", "iti.whatPh": "مثال: اجتماع العميل",
+      "iti.place": "المكان", "iti.placePh": "مثال: منطقة ليفنت", "iti.notes": "ملاحظات", "iti.notesPh": "اختياري",
+      "iti.add": "إضافة للجدول", "iti.empty": "لا توجد أنشطة بعد.", "iti.need": "أدخل اسم النشاط وتاريخه.",
+      "chk.title": "قائمة المستندات والأمتعة", "chk.desc": "علّم ما أنجزته، وأضف بنودًا خاصة برحلتك.",
+      "chk.docs": "المستندات", "chk.lug": "الأمتعة", "chk.addPh": "بند جديد", "chk.add": "إضافة",
+      "chk.progress": "{done} / {total}",
+      "chk.passport": "جواز السفر", "chk.visa": "التأشيرة", "chk.tickets": "تذاكر الطيران",
+      "chk.hotel": "حجز الفندق", "chk.insurance": "تأمين السفر", "chk.id": "الهوية الوطنية",
+      "chk.invitation": "خطاب دعوة العمل", "chk.copies": "نسخ من المستندات",
+      "chk.charger": "شاحن الهاتف", "chk.adapter": "محوّل الكهرباء", "chk.meds": "الأدوية",
+      "chk.toiletries": "مستلزمات النظافة", "chk.clothes": "الملابس", "chk.laptop": "الحاسوب المحمول",
+      "chk.cards": "بطاقات العمل", "chk.umbrella": "مظلة",
+      "note": "أسعار الصرف تُدخل يدويًا وقد تختلف عن سعر البنك أو الشبكة. الميزانية إرشادية؛ احتفظ باحتياطي للطوارئ وتحقق من متطلبات التأشيرة قبل السفر.",
+      "footer": "ميزانية السفر الذكية — أداة تقديرية تعمل بلا خادم وتحفظ بياناتك محليًا.",
+      "confirm.reset": "استبدال بياناتك بالمثال الافتراضي؟", "confirm.delete": "حذف هذا البند؟",
+      "toast.expAdd": "تمت إضافة المصروف.", "toast.expDel": "تم حذف المصروف.",
+      "toast.itiAdd": "تمت إضافة النشاط.", "toast.itiDel": "تم حذف النشاط.",
+      "toast.chkAdd": "تمت إضافة البند.", "toast.chkDel": "تم حذف البند.",
+      "toast.auto": "تم توزيع الميزانية تلقائيًا.", "toast.reset": "تمت استعادة المثال."
+    },
+    en: {
+      brand: "Smart Travel Budget", tagline: "Budget · Expenses · Itinerary · Checklist",
+      print: "Print", reset: "Restore sample",
+      "trip.title": "Trip details",
+      "trip.desc": "Destination, dates, budget and currencies — everything stays saved on your device.",
+      "trip.name": "Trip name", "trip.namePh": "e.g. Istanbul business trip",
+      "trip.dest": "Destination", "trip.destPh": "e.g. Istanbul",
+      "trip.type": "Trip type", "type.tourism": "Tourism", "type.business": "Business",
+      "trip.start": "Arrival date", "trip.end": "Departure date",
+      "trip.travelers": "Travellers", "trip.budget": "Total budget",
+      "trip.home": "Budget currency", "trip.destCur": "Destination currency",
+      "trip.rate": "Exchange rate: 1 destination unit = ? budget units",
+      "trip.conv": "Quick converter: amount in destination currency", "trip.convOut": "Equivalent in budget currency",
+      "trip.hint": "Enter the rate manually — the template does not connect to a bank. Changing it recalculates every expense recorded in the destination currency.",
+      "trip.days": "{n} days", "trip.people": "{n} travellers", "trip.dates": "{start} → {end}",
+      "trip.daysLabel": "Days: {n}", "trip.peopleLabel": "Travellers: {n}",
+      "kpi.budget": "Total budget", "kpi.planned": "Allocated", "kpi.spent": "Spent",
+      "kpi.left": "Remaining", "kpi.daily": "Average daily spend", "kpi.days": "Trip days",
+      "kpi.check": "Checklist done",
+      "budget.title": "Budget allocation", "budget.desc": "Plan each category and compare it with actual spend.",
+      "budget.auto": "Auto-allocate", "budget.unallocated": "Unallocated",
+      "th.category": "Category", "th.planned": "Planned", "th.spent": "Spent",
+      "th.left": "Left", "th.progress": "Used",
+      "cat.flights": "Flights", "cat.stay": "Accommodation", "cat.transport": "Transport",
+      "cat.food": "Food & dining", "cat.activities": "Activities", "cat.shopping": "Shopping",
+      "cat.business": "Business & visa", "cat.contingency": "Contingency",
+      "exp.title": "Trip expenses", "exp.desc": "Record each expense in the budget or destination currency — it converts automatically.",
+      "exp.date": "Date", "exp.cat": "Category", "exp.desc": "Description", "exp.descPh": "e.g. Airport taxi",
+      "exp.amount": "Amount", "exp.cur": "Currency", "exp.curDest": "Destination currency", "exp.curHome": "Budget currency",
+      "exp.add": "Add expense", "exp.totalHint": "Total expenses in the budget currency appear in the indicators above.",
+      "exp.empty": "No expenses recorded yet.", "exp.homeEquiv": "Equivalent",
+      "exp.need": "Enter a description and an amount above zero.",
+      "iti.title": "Trip itinerary", "iti.desc": "Arrivals, meetings and tours, grouped by day.",
+      "iti.date": "Date", "iti.time": "Time", "iti.what": "Activity", "iti.whatPh": "e.g. Client meeting",
+      "iti.place": "Place", "iti.placePh": "e.g. Levent district", "iti.notes": "Notes", "iti.notesPh": "Optional",
+      "iti.add": "Add to itinerary", "iti.empty": "No activities yet.", "iti.need": "Enter an activity and its date.",
+      "chk.title": "Documents & luggage checklist", "chk.desc": "Tick what is done and add your own items.",
+      "chk.docs": "Documents", "chk.lug": "Luggage", "chk.addPh": "New item", "chk.add": "Add",
+      "chk.progress": "{done} / {total}",
+      "chk.passport": "Passport", "chk.visa": "Visa", "chk.tickets": "Flight tickets",
+      "chk.hotel": "Hotel booking", "chk.insurance": "Travel insurance", "chk.id": "National ID",
+      "chk.invitation": "Business invitation letter", "chk.copies": "Document copies",
+      "chk.charger": "Phone charger", "chk.adapter": "Power adapter", "chk.meds": "Medication",
+      "chk.toiletries": "Toiletries", "chk.clothes": "Clothes", "chk.laptop": "Laptop",
+      "chk.cards": "Business cards", "chk.umbrella": "Umbrella",
+      "note": "Exchange rates are entered manually and may differ from your bank or network rate. The budget is indicative; keep an emergency buffer and check visa requirements before travelling.",
+      "footer": "Smart Travel Budget — an indicative, serverless tool that stores your data locally.",
+      "confirm.reset": "Replace your data with the default sample?", "confirm.delete": "Delete this item?",
+      "toast.expAdd": "Expense added.", "toast.expDel": "Expense deleted.",
+      "toast.itiAdd": "Activity added.", "toast.itiDel": "Activity deleted.",
+      "toast.chkAdd": "Item added.", "toast.chkDel": "Item deleted.",
+      "toast.auto": "Budget auto-allocated.", "toast.reset": "Sample restored."
+    }
+  };
+
+  var KEY = "pb_travel_budget_v1";
+  var LANG_KEY = "pb_travel_budget_lang";
+  var state = {
+    lang: "ar", trip: null, planned: {}, expenses: [], itinerary: [],
+    checks: { documents: [], luggage: [] }
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function n(v) { var x = parseFloat(v); return isFinite(x) ? x : 0; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function curInfo(code) { return CURRENCIES[code] || CURRENCIES.SAR; }
+  function moneyFor(value, code) {
+    var info = curInfo(code);
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-EG" : "en-US", {
+        style: "currency", currency: code,
+        minimumFractionDigits: info.d, maximumFractionDigits: info.d
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toFixed(info.d) + " " + code; }
+  }
+  function homeMoney(v) { return moneyFor(v, state.trip.home); }
+  function destMoney(v) { return moneyFor(v, state.trip.destCur); }
+  function dateObj(s) {
+    var p = String(s || "").split("-");
+    if (p.length !== 3) return null;
+    var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    return isFinite(d.getTime()) ? d : null;
+  }
+  function fmtDate(s, withWeekday) {
+    var d = dateObj(s);
+    if (!d) return "—";
+    try {
+      return new Intl.DateTimeFormat(state.lang === "ar" ? "ar-EG" : "en-GB",
+        { day: "2-digit", month: "short", year: "numeric", weekday: withWeekday ? "short" : undefined }).format(d);
+    } catch (err) { return s; }
+  }
+  function pad(v) { return (v < 10 ? "0" : "") + v; }
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function daysBetween(start, end) {
+    var a = dateObj(start), b = dateObj(end);
+    if (!a || !b) return 0;
+    var diff = Math.round((b - a) / 86400000) + 1;
+    return Math.max(0, diff);
+  }
+  function catLabel(key) { return t("cat." + key); }
+
+  function chkLabel(item) { return item.key ? t("chk." + item.key) : (item.label || ""); }
+
+  function readTrip() {
+    return {
+      name: $("tName").value.trim(), dest: $("tDest").value.trim(), type: $("tType").value,
+      start: $("tStart").value, end: $("tEnd").value,
+      travelers: Math.max(1, Math.round(num("tTravelers"))),
+      budget: Math.max(0, num("tBudget")),
+      home: $("cHome").value, destCur: $("cDest").value,
+      rate: Math.max(0.0001, num("tRate"))
+    };
+  }
+
+  function syncTrip() {
+    state.trip = readTrip();
+    state.trip.budget = state.trip.budget;
+  }
+
+  function convertToHome(amount, cur) {
+    return cur === "home" ? amount : amount * state.trip.rate;
+  }
+  function expenseHome(e) { return convertToHome(n(e.amount), e.cur); }
+
+  function spentByCat() {
+    var map = {};
+    CATS.forEach(function (c) { map[c.key] = 0; });
+    state.expenses.forEach(function (e) {
+      if (map[e.cat] == null) map[e.cat] = 0;
+      map[e.cat] += expenseHome(e);
+    });
+    return map;
+  }
+
+  function totals() {
+    var spent = state.expenses.reduce(function (s, e) { return s + expenseHome(e); }, 0);
+    var planned = CATS.reduce(function (s, c) { return s + Math.max(0, n(state.planned[c.key])); }, 0);
+    var days = daysBetween(state.trip.start, state.trip.end);
+    var elapsed = 0;
+    if (days > 0) {
+      var start = dateObj(state.trip.start);
+      var today = new Date();
+      var diff = Math.floor((today - start) / 86400000) + 1;
+      elapsed = clamp(diff, 0, days);
+    }
+    var checkTotal = 0, checkDone = 0;
+    ["documents", "luggage"].forEach(function (g) {
+      state.checks[g].forEach(function (item) { checkTotal++; if (item.done) checkDone++; });
+    });
+    return {
+      spent: spent, planned: planned, unallocated: state.trip.budget - planned,
+      remaining: state.trip.budget - spent, days: days, elapsed: elapsed,
+      daily: spent / Math.max(1, elapsed || 1),
+      checkTotal: checkTotal, checkDone: checkDone,
+      checkPct: checkTotal ? Math.round(checkDone / checkTotal * 100) : 0
+    };
+  }
+
+  function renderCurrencySelects() {
+    var home = state.trip ? state.trip.home : "SAR";
+    var dest = state.trip ? state.trip.destCur : "TRY";
+    ["cHome", "cDest"].forEach(function (id) {
+      var sel = $(id);
+      var current = sel.value || (id === "cHome" ? home : dest);
+      sel.innerHTML = Object.keys(CURRENCIES).map(function (c) { return '<option value="' + c + '">' + c + "</option>"; }).join("");
+      sel.value = CURRENCIES[current] ? current : (id === "cHome" ? home : dest);
+    });
+    $("cHome").value = home;
+    $("cDest").value = dest;
+  }
+
+  function renderTripSummary(totals) {
+    var days = totals.days;
+    var typeLabel = t("type." + state.trip.type);
+    var parts = [];
+    parts.push(fmtDate(state.trip.start) + " ← " + fmtDate(state.trip.end));
+    parts.push(t("trip.daysLabel", { n: days || 0 }));
+    parts.push(t("trip.peopleLabel", { n: state.trip.travelers }));
+    parts.push(typeLabel);
+    $("tripSummary").innerHTML = "<b>" + esc(state.trip.dest || state.trip.name || t("trip.title")) + "</b>" +
+      "<span>" + esc(parts.join(" · ")) + "</span>";
+  }
+
+  function renderKpis(totals) {
+    var budget = state.trip.budget;
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.budget")) + "</span><strong>" + esc(homeMoney(budget)) + "</strong><small>" + esc(t("kpi.planned") + ": " + homeMoney(totals.planned)) + "</small></div>",
+      '<div class="kpi ' + (totals.spent > budget ? "bad" : "coral") + '"><span>' + esc(t("kpi.spent")) + "</span><strong>" + esc(homeMoney(totals.spent)) + "</strong><small>" + esc(t("kpi.left") + ": " + homeMoney(totals.remaining)) + "</small></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.daily")) + "</span><strong>" + esc(homeMoney(totals.daily)) + "</strong><small>" + esc(t("kpi.days") + ": " + (totals.elapsed || 0) + " / " + totals.days) + "</small></div>",
+      '<div class="kpi gold"><span>' + esc(t("kpi.check")) + "</span><strong>" + totals.checkPct + "%</strong><small>" + totals.checkDone + " / " + totals.checkTotal + "</small></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.left")) + "</span><strong>" + esc(homeMoney(Math.max(0, totals.remaining))) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.days")) + "</span><strong>" + totals.days + "</strong><small>" + esc(t("trip.peopleLabel", { n: state.trip.travelers })) + "</small></div>"
+    ].join("");
+  }
+
+  function renderBudget() {
+    var spentMap = spentByCat();
+    $("budgetBody").innerHTML = CATS.map(function (c) {
+      var planned = Math.max(0, n(state.planned[c.key]));
+      var spent = spentMap[c.key] || 0;
+      var left = planned - spent;
+      var used = planned > 0 ? spent / planned * 100 : (spent > 0 ? 100 : 0);
+      var cls = used > 100 ? "over" : used > 75 ? "warn" : "";
+      return '<tr data-cat="' + c.key + '">' +
+        '<td class="budget-cat"><i>' + c.icon + "</i>" + esc(catLabel(c.key)) + "</td>" +
+        '<td><input class="planned-input" data-cat="' + c.key + '" type="number" min="0" step="50" value="' + planned + '"></td>' +
+        '<td class="spent-cell">' + esc(homeMoney(spent)) + "</td>" +
+        '<td class="left-cell" style="color:' + (left < 0 ? "var(--bad)" : "inherit") + '">' + esc(homeMoney(left)) + "</td>" +
+        '<td><div class="bar"><i class="' + cls + '" style="width:' + clamp(used, 0, 100) + '%"></i></div></td>' +
+      "</tr>";
+    }).join("");
+    updateBudgetSummary();
+  }
+
+  function updateBudgetSummary() {
+    var total = totals();
+    var spentMap = spentByCat();
+    CATS.forEach(function (c) {
+      var row = document.querySelector('tr[data-cat="' + c.key + '"]');
+      if (!row) return;
+      var planned = Math.max(0, n(state.planned[c.key]));
+      var spent = spentMap[c.key] || 0;
+      var left = planned - spent;
+      var used = planned > 0 ? spent / planned * 100 : (spent > 0 ? 100 : 0);
+      var leftCell = row.querySelector(".left-cell");
+      leftCell.textContent = homeMoney(left);
+      leftCell.style.color = left < 0 ? "var(--bad)" : "inherit";
+      var bar = row.querySelector(".bar i");
+      bar.style.width = clamp(used, 0, 100) + "%";
+      bar.className = used > 100 ? "over" : used > 75 ? "warn" : "";
+    });
+    var un = $("unallocated");
+    un.className = "unallocated" + (total.unallocated < 0 ? " bad" : "");
+    un.innerHTML = "<span>" + esc(t("budget.unallocated")) + "</span><b>" + esc(homeMoney(total.unallocated)) + "</b>";
+    $("convOut").textContent = homeMoney(num("convAmount") * state.trip.rate);
+    renderKpis(total);
+  }
+
+  function renderExpenses() {
+    var list = $("expenseList");
+    if (!state.expenses.length) {
+      list.innerHTML = '<div class="empty">' + esc(t("exp.empty")) + "</div>";
+      return;
+    }
+    var sorted = state.expenses.slice().sort(function (a, b) { return (a.date || "").localeCompare(b.date || ""); });
+    list.innerHTML = sorted.map(function (e) {
+      var orig = moneyFor(n(e.amount), e.cur === "home" ? state.trip.home : state.trip.destCur);
+      var home = e.cur === "home" ? "" : homeMoney(expenseHome(e));
+      return '<div class="exp-item">' +
+        '<div class="desc">' + esc(e.desc || catLabel(e.cat)) + "</div>" +
+        '<div class="amt">' + esc(orig) + "</div>" +
+        '<div class="meta">' + esc(fmtDate(e.date)) + " · " + esc(catLabel(e.cat)) + "</div>" +
+        (home ? '<div class="home">≈ ' + esc(home) + "</div>" : '<div class="home"></div>') +
+        '<div style="grid-column:1/-1;text-align:end"><button type="button" class="exp-del no-print" data-del-exp="' + esc(e.id) + '" title="' + esc(t("confirm.delete")) + '">×</button></div>' +
+      "</div>";
+    }).join("");
+  }
+
+  function renderExpenseCats() {
+    $("eCat").innerHTML = CATS.map(function (c) {
+      return '<option value="' + c.key + '">' + esc(catLabel(c.key)) + "</option>";
+    }).join("");
+  }
+
+  function renderItinerary() {
+    var list = $("itineraryList");
+    if (!state.itinerary.length) {
+      list.innerHTML = '<div class="empty">' + esc(t("iti.empty")) + "</div>";
+      return;
+    }
+    var sorted = state.itinerary.slice().sort(function (a, b) {
+      return ((a.date || "") + " " + (a.time || "")).localeCompare((b.date || "") + " " + (b.time || ""));
+    });
+    var groups = {};
+    sorted.forEach(function (it) { (groups[it.date] = groups[it.date] || []).push(it); });
+    list.innerHTML = Object.keys(groups).sort().map(function (date) {
+      var items = groups[date].map(function (it) {
+        return '<div class="iti-item">' +
+          '<div class="iti-time">' + esc(it.time || "—") + "</div>" +
+          '<div class="iti-body"><b>' + esc(it.title) + "</b>" +
+            (it.place ? "<small>" + esc(it.place) + "</small>" : "") +
+            (it.notes ? "<em>" + esc(it.notes) + "</em>" : "") +
+          "</div>" +
+          '<button type="button" class="exp-del no-print" data-del-iti="' + esc(it.id) + '">×</button>' +
+        "</div>";
+      }).join("");
+      return '<div class="day-block"><div class="day-head">' + esc(fmtDate(date, true)) + "<span>" + items.length + "</span></div>" + items + "</div>";
+    }).join("");
+  }
+
+  function renderChecklist() {
+    ["documents", "luggage"].forEach(function (group) {
+      var listId = group === "documents" ? "docList" : "lugList";
+      var done = state.checks[group].filter(function (i) { return i.done; }).length;
+      var total = state.checks[group].length;
+      var pct = total ? Math.round(done / total * 100) : 0;
+      $(group === "documents" ? "docProgress" : "lugProgress").textContent = t("chk.progress", { done: done, total: total });
+      $(group === "documents" ? "docBar" : "lugBar").style.width = pct + "%";
+      $(listId).innerHTML = state.checks[group].map(function (item, i) {
+        var id = group + "_" + i;
+        return '<div class="check-item' + (item.done ? " done" : "") + '">' +
+          '<input type="checkbox" id="' + id + '" data-check-group="' + group + '" data-check-i="' + i + '"' + (item.done ? " checked" : "") + ">" +
+          '<label for="' + id + '">' + esc(chkLabel(item)) + "</label>" +
+          (item.key ? "" : '<button type="button" class="check-x no-print" data-del-check="' + group + ":" + i + '" title="' + esc(t("confirm.delete")) + '">×</button>') +
+        "</div>";
+      }).join("");
+    });
+  }
+
+  function renderAll() {
+    var total = totals();
+    renderTripSummary(total);
+    renderKpis(total);
+    renderBudget();
+    renderExpenses();
+    renderItinerary();
+    renderChecklist();
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, trip: readonlyTrip(), planned: state.planned,
+        expenses: state.expenses, itinerary: state.itinerary, checks: state.checks
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function readonlyTrip() {
+    return {
+      name: $("tName").value, dest: $("tDest").value, type: $("tType").value,
+      start: $("tStart").value, end: $("tEnd").value,
+      travelers: $("tTravelers").value, budget: $("tBudget").value,
+      home: $("cHome").value, destCur: $("cDest").value, rate: $("tRate").value
+    };
+  }
+
+  function applyTripToInputs(tr) {
+    $("tName").value = tr.name || "";
+    $("tDest").value = tr.dest || "";
+    $("tType").value = tr.type === "business" ? "business" : "tourism";
+    $("tStart").value = tr.start || "";
+    $("tEnd").value = tr.end || "";
+    $("tTravelers").value = tr.travelers != null ? tr.travelers : 2;
+    $("tBudget").value = tr.budget != null ? tr.budget : 12000;
+    $("cHome").value = tr.home || "SAR";
+    $("cDest").value = tr.destCur || "TRY";
+    $("tRate").value = tr.rate != null ? tr.rate : 0.115;
+  }
+
+  function syncFromInputs() {
+    syncTrip();
+    state.trip.budget = Math.max(0, num("tBudget"));
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    try { localStorage.setItem(LANG_KEY, state.lang); } catch (err) { /* تجاهل */ }
+    renderCurrencySelects();
+    renderExpenseCats();
+    renderAll();
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1800);
+  }
+
+  function addExpense() {
+    var desc = $("eDesc").value.trim();
+    var amount = Math.max(0, num("eAmount"));
+    if (!desc || amount <= 0) { toast(t("exp.need")); return; }
+    state.expenses.push({
+      id: "x" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      date: $("eDate").value || todayISO(),
+      cat: $("eCat").value || "food",
+      desc: desc, amount: amount, cur: $("eCur").value === "home" ? "home" : "dest"
+    });
+    $("eDesc").value = ""; $("eAmount").value = "";
+    toast(t("toast.expAdd"));
+    renderAll();
+  }
+
+  function addItinerary() {
+    var title = $("iTitle").value.trim();
+    var date = $("iDate").value;
+    if (!title || !date) { toast(t("iti.need")); return; }
+    state.itinerary.push({
+      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      date: date, time: $("iTime").value || "", title: title,
+      place: $("iPlace").value.trim(), notes: $("iNotes").value.trim()
+    });
+    $("iTitle").value = ""; $("iPlace").value = ""; $("iNotes").value = "";
+    toast(t("toast.itiAdd"));
+    renderAll();
+  }
+
+  function addCheck(group, inputId) {
+    var value = $(inputId).value.trim();
+    if (!value) return;
+    state.checks[group].push({ label: value, done: false });
+    $(inputId).value = "";
+    toast(t("toast.chkAdd"));
+    renderAll();
+  }
+
+  function resetSample() {
+    if (!window.confirm(t("confirm.reset"))) return;
+    state.trip = JSON.parse(JSON.stringify(SAMPLE.trip));
+    state.planned = JSON.parse(JSON.stringify(SAMPLE.planned));
+    state.expenses = JSON.parse(JSON.stringify(SAMPLE.expenses));
+    state.itinerary = JSON.parse(JSON.stringify(SAMPLE.itinerary));
+    state.checks = JSON.parse(JSON.stringify(SAMPLE.checks));
+    applyTripToInputs(state.trip);
+    $("eDate").value = todayISO();
+    $("iDate").value = state.trip.start;
+    toast(t("toast.reset"));
+    renderAll();
+  }
+
+  // events
+  ["tName", "tDest", "tType", "tStart", "tEnd", "tTravelers", "tBudget", "tRate", "convAmount"].forEach(function (id) {
+    $(id).addEventListener("input", function () { syncFromInputs(); renderAll(); });
+  });
+  $("tType").addEventListener("change", function () { syncFromInputs(); renderAll(); });
+  ["cHome", "cDest"].forEach(function (id) {
+    $(id).addEventListener("change", function () { syncFromInputs(); renderAll(); });
+  });
+  $("autoAlloc").addEventListener("click", function () {
+    syncFromInputs();
+    var budget = state.trip.budget;
+    var sum = CATS.reduce(function (s, c) { return s + c.weight; }, 0);
+    CATS.forEach(function (c) { state.planned[c.key] = Math.round(budget * c.weight / sum); });
+    toast(t("toast.auto"));
+    renderBudget();
+    save();
+  });
+  $("budgetBody").addEventListener("input", function (event) {
+    var input = event.target.closest(".planned-input");
+    if (!input) return;
+    syncFromInputs();
+    state.planned[input.getAttribute("data-cat")] = Math.max(0, n(input.value));
+    updateBudgetSummary();
+    save();
+  });
+  $("budgetBody").addEventListener("change", function (event) {
+    if (event.target.closest(".planned-input")) renderBudget();
+  });
+  $("addExpense").addEventListener("click", addExpense);
+  $("expenseList").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-del-exp]");
+    if (!btn) return;
+    state.expenses = state.expenses.filter(function (e) { return e.id !== btn.getAttribute("data-del-exp"); });
+    toast(t("toast.expDel"));
+    renderAll();
+  });
+  $("addIti").addEventListener("click", addItinerary);
+  $("itineraryList").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-del-iti]");
+    if (!btn) return;
+    state.itinerary = state.itinerary.filter(function (it) { return it.id !== btn.getAttribute("data-del-iti"); });
+    toast(t("toast.itiDel"));
+    renderAll();
+  });
+  document.querySelectorAll("[data-add-check]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var group = btn.getAttribute("data-add-check");
+      addCheck(group, group === "documents" ? "docInput" : "lugInput");
+    });
+  });
+  ["docInput", "lugInput"].forEach(function (id) {
+    $(id).addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addCheck(id === "docInput" ? "documents" : "luggage", id);
+      }
+    });
+  });
+  ["docList", "lugList"].forEach(function (listId) {
+    $(listId).addEventListener("change", function (event) {
+      var box = event.target.closest("[data-check-group]");
+      if (!box) return;
+      state.checks[box.getAttribute("data-check-group")][Number(box.getAttribute("data-check-i"))].done = box.checked;
+      renderChecklist();
+      renderKpis(totals());
+      save();
+    });
+    $(listId).addEventListener("click", function (event) {
+      var btn = event.target.closest("[data-del-check]");
+      if (!btn) return;
+      var parts = btn.getAttribute("data-del-check").split(":");
+      state.checks[parts[0]].splice(Number(parts[1]), 1);
+      toast(t("toast.chkDel"));
+      renderAll();
+    });
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar"); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("resetBtn").addEventListener("click", resetSample);
+
+  // init
+  renderCurrencySelects();
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+  state.trip = JSON.parse(JSON.stringify(SAMPLE.trip));
+  state.planned = JSON.parse(JSON.stringify(SAMPLE.planned));
+  state.expenses = JSON.parse(JSON.stringify(SAMPLE.expenses));
+  state.itinerary = JSON.parse(JSON.stringify(SAMPLE.itinerary));
+  state.checks = JSON.parse(JSON.stringify(SAMPLE.checks));
+  if (raw) {
+    if (raw.trip) state.trip = raw.trip;
+    if (raw.planned) state.planned = raw.planned;
+    if (Array.isArray(raw.expenses)) state.expenses = raw.expenses;
+    if (Array.isArray(raw.itinerary)) state.itinerary = raw.itinerary;
+    if (raw.checks && Array.isArray(raw.checks.documents) && Array.isArray(raw.checks.luggage)) state.checks = raw.checks;
+    if (raw.lang === "en" || raw.lang === "ar") state.lang = raw.lang;
+  }
+  var storedLang = localStorage.getItem(LANG_KEY);
+  if (storedLang === "en" || storedLang === "ar") state.lang = storedLang;
+  // remove stale persisted language key handling: store on change
+  applyTripToInputs(state.trip);
+  renderCurrencySelects();
+  $("eDate").value = todayISO();
+  $("iDate").value = state.trip.start || todayISO();
+  renderExpenseCats();
+  applyLang(state.lang);
+})();
+</script>
+</body>
+</html>
