@@ -273,68 +273,9 @@ body.ltr .qr-meta .mono{text-align:left}
 .smtp-status{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 10px}
 .smtp-status .dot{flex:0 0 auto}
 .smtp-card .fine{margin-top:8px;line-height:1.7}
-/* ===== محاكي التفتيش الضريبي ===== */
-.audit-top{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:16px 0 18px}
-.gauge{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;position:relative;flex:0 0 auto;background:conic-gradient(var(--teal) 0deg, rgba(255,255,255,.08) 0)}
-.gauge::before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel-solid)}
-.gauge-in{position:relative;text-align:center;line-height:1.25}
-.gauge-in strong{display:block;font-size:1.95rem}
-.gauge-in span{font-size:.75rem;color:var(--muted)}
-.audit-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;flex:1;min-width:240px}
-.audit-stat{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
-.audit-stat span{display:block;font-size:.72rem;color:var(--muted)}
-.audit-stat strong{font-size:1.1rem}
-.findings{display:flex;flex-direction:column;gap:8px;margin:12px 0}
-.finding{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.03);flex-wrap:wrap}
-.finding.bad{border-color:rgba(239,125,112,.4);background:rgba(239,125,112,.07)}
-.finding.warn{border-color:rgba(226,180,85,.35);background:rgba(226,180,85,.06)}
-.finding .inv{font-size:.73rem;color:var(--muted);white-space:nowrap}
-.finding p{margin:0;font-size:.83rem;flex:1;min-width:220px}
-.sev{font-size:.68rem;font-weight:800;border-radius:999px;padding:2px 8px;white-space:nowrap}
-.sev.bad{background:rgba(239,125,112,.16);color:var(--bad)}
-.sev.warn{background:rgba(226,180,85,.16);color:var(--gold)}
-.recs{margin:8px 0 0;padding-inline-start:20px;display:grid;gap:6px;font-size:.85rem}
-.recs li::marker{color:var(--teal)}
-.audit-clear{border:1px solid rgba(55,194,168,.3);background:rgba(55,194,168,.07);border-radius:12px;padding:12px 14px;font-size:.85rem;margin-top:10px}
-/* ===== الأوامر الصوتية ===== */
-.voice-card{border:1px solid rgba(55,194,168,.25);background:rgba(55,194,168,.05);border-radius:14px;padding:10px 12px;margin:12px 0 4px}
-.voice-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.voice-row input{flex:1;min-width:200px}
-.voice-card .voice-msg{margin:8px 0 0;color:var(--muted)}
-.voice-msg.ok{color:var(--teal)}
-.voice-msg.bad{color:var(--bad)}
-#voiceBtn.listening{background:rgba(239,125,112,.16);border-color:var(--bad);color:var(--bad);animation:voicePulse 1.2s infinite}
-#voiceBtn.disabled{opacity:.55;cursor:not-allowed}
-@keyframes voicePulse{0%{box-shadow:0 0 0 0 rgba(239,125,112,.35)}70%{box-shadow:0 0 0 9px rgba(239,125,112,0)}100%{box-shadow:0 0 0 0 rgba(239,125,112,0)}}
-/* ===== السيولة وكشف الهدر ===== */
-.cf-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
-.cf-kpi{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
-.cf-kpi span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:3px}
-.cf-kpi strong{font-size:1.05rem}
-.cf-kpi.good strong{color:var(--teal)} .cf-kpi.bad strong{color:var(--bad)}
-.cf-chart-wrap{margin:14px 0 6px}
-.cf-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.75rem;color:var(--muted);margin-bottom:8px}
-.cf-legend .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-inline-end:6px}
-.cf-legend .dot.in{background:var(--teal)} .cf-legend .dot.out{background:rgba(239,125,112,.85)} .cf-legend .dot.fc{background:rgba(226,180,85,.9)}
-.cf-chart{width:100%;overflow-x:auto}
-.cf-chart svg{width:100%;height:auto;min-width:560px}
-.cf-h3{font-size:.92rem;margin:16px 0 8px}
-.cf-anom{border:1px solid rgba(239,125,112,.4);background:rgba(239,125,112,.07);border-radius:12px;padding:11px 14px;margin-bottom:10px}
-.cf-anom-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.82rem;margin-bottom:6px}
-.cf-anom-head strong{color:var(--bad)}
-.cf-anom-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
-.cf-anom-meta b{color:var(--ink);font-weight:700}
-.cf-clear{font-size:.85rem;color:var(--teal);border:1px solid rgba(55,194,168,.3);background:rgba(55,194,168,.07);border-radius:12px;padding:11px 14px}
-.cf-proj{color:var(--gold);font-size:.7rem;border:1px solid rgba(226,180,85,.35);border-radius:999px;padding:1px 7px;margin-inline-start:6px}
 </style>
 </head>
 <body>
-<div id="staticBanner" hidden style="background:#fdf6e3;border-bottom:1px solid #e6d6a8;color:#6b551f;padding:10px 16px;font-size:.88rem;line-height:1.6">
-  <div style="max-width:1120px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
-    <span><strong data-i18n="static.title">وضع الملفات الثابتة</strong> — <span data-i18n="static.body">تعمل الصفحة بلا خادم: البناء والحاسبات تعمل، وإصدار الفواتير والمسح والتنبؤ تحتاج الخادم المرفق في مجلد server.</span></span>
-    <button type="button" class="ghost small" onclick="document.getElementById('staticBanner').hidden=true" data-i18n="static.close">إخفاء</button>
-  </div>
-</div>
 <div class="aurora" aria-hidden="true"></div>
 
 <header class="topbar">
@@ -354,8 +295,6 @@ body.ltr .qr-meta .mono{text-align:left}
       <button class="tab active" data-view="invoice" role="tab" data-i18n="nav.invoice">الفواتير الإلكترونية</button>
       <button class="tab" data-view="return" role="tab" data-i18n="nav.return">الإقرار الضريبي</button>
       <button class="tab" data-view="scan" role="tab" data-i18n="nav.scan">الماسح الذكي</button>
-      <button class="tab" data-view="audit" role="tab" data-i18n="nav.audit">محاكي التفتيش</button>
-      <button class="tab" data-view="cashflow" role="tab" data-i18n="nav.cashflow">السيولة والهدر</button>
       <button class="tab" data-view="assistant" role="tab" data-i18n="nav.assistant">المساعد والمحاسب</button>
       <button class="tab" data-view="plans" role="tab" data-i18n="nav.plans">الباقات</button>
     </nav>
@@ -411,15 +350,6 @@ body.ltr .qr-meta .mono{text-align:left}
         </div>
       </div>
       <p class="fine" id="authorityNote">—</p>
-
-      <div class="voice-card" id="voiceCard">
-        <div class="voice-row">
-          <button class="ghost small" id="voiceBtn" type="button" aria-pressed="false" data-i18n="voice.button">🎤 اسأل أو أصدر فاتورة</button>
-          <input id="voiceInput" type="text" autocomplete="off" data-i18n-ph="voice.ph">
-          <button class="small" id="voiceRun" type="button" data-i18n="voice.run">تنفيذ</button>
-        </div>
-        <p class="fine voice-msg" id="voiceMsg" data-i18n="voice.hint"></p>
-      </div>
 
       <div class="cols">
         <fieldset class="card">
@@ -598,85 +528,6 @@ body.ltr .qr-meta .mono{text-align:left}
     </section>
   </section>
 
-  <!-- ============ ٣ب) محاكي التفتيش الضريبي ============ -->
-  <section class="view" id="view-audit" role="tabpanel">
-    <section class="panel">
-      <div class="panel-head">
-        <h2 data-i18n="audit.title">محاكي التفتيش الضريبي المفاجئ</h2>
-        <span class="tag" data-i18n="audit.tag">يفحص كل فاتورة محفوظة</span>
-      </div>
-      <p class="fine" data-i18n="audit.intro">يراجع سجل المبيعات فاتورة فاتورة: الرقم الضريبي، صحة حساب الضريبة، وجود رمز QR، بيانات العميل، تكرار الأرقام، وتاريخ الإصدار — ثم يعطيك نسبة أمان من الغرامات وتوصيات تصحيح فورية.</p>
-      <div class="row">
-        <button id="auditBtn" type="button" data-i18n="audit.run">ابدأ الفحص</button>
-        <span class="fine" id="auditMsg"></span>
-      </div>
-
-      <div class="audit-top" id="auditTop" hidden>
-        <div class="gauge" id="auditGauge">
-          <div class="gauge-in"><strong id="auditScore">—</strong><span id="auditGrade">—</span></div>
-        </div>
-        <div class="audit-stats">
-          <div class="audit-stat"><span data-i18n="audit.scanned">فواتير مفحوصة</span><strong id="auditScanned">٠</strong></div>
-          <div class="audit-stat"><span data-i18n="audit.critical">أخطاء حرجة</span><strong id="auditCritical">٠</strong></div>
-          <div class="audit-stat"><span data-i18n="audit.warnings">تحذيرات</span><strong id="auditWarnings">٠</strong></div>
-          <div class="audit-stat"><span data-i18n="audit.clean">فواتير سليمة</span><strong id="auditClean">٠</strong></div>
-        </div>
-      </div>
-
-      <div id="auditFindings"></div>
-
-      <div id="auditRecWrap" hidden>
-        <h3 style="font-size:.92rem;margin:14px 0 0" data-i18n="audit.recs">توصيات فورية</h3>
-        <ol class="recs" id="auditRecs"></ol>
-      </div>
-      <p class="fine" data-i18n="audit.footnote">الفحص قراءة فقط ولا يعدّل أي فاتورة. النسبة تقديرية حسب الأخطاء المكتشفة في سجلك المحلي.</p>
-    </section>
-  </section>
-
-  <!-- ============ ٣ج) التنبؤ بالسيولة وكشف الهدر ============ -->
-  <section class="view" id="view-cashflow" role="tabpanel">
-    <section class="panel">
-      <div class="panel-head">
-        <h2 data-i18n="cf.title">التنبؤ بالسيولة وكشف الهدر المالي</h2>
-        <span class="tag" data-i18n="cf.tag">تحليل سجل المبيعات والمصاريف</span>
-      </div>
-      <p class="fine" data-i18n="cf.intro">يقرأ آخر ستة أشهر من المبيعات والمشتريات، يرسم توقعات التدفق النقدي للثلاثة أشهر القادمة، وينبهك إلى أي فاتورة مورد أعلى بكثير من معدلها الطبيعي.</p>
-      <div class="row">
-        <button id="cfBtn" type="button" data-i18n="cf.refresh">إعادة التحليل</button>
-        <span class="fine" id="cfStamp"></span>
-      </div>
-
-      <div id="cfBody" hidden>
-        <div class="cf-kpis" id="cfKpis"></div>
-        <div id="cfAlertWrap"></div>
-        <div class="cf-chart-wrap">
-          <div class="cf-legend">
-            <span><i class="dot in"></i><span data-i18n="cf.inflow">تدفق داخل</span></span>
-            <span><i class="dot out"></i><span data-i18n="cf.outflow">تدفق خارج</span></span>
-            <span><i class="dot fc"></i><span data-i18n="cf.forecast">التوقع</span></span>
-          </div>
-          <div id="cfChart"></div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th data-i18n="cf.table.month">الشهر</th>
-              <th data-i18n="cf.inflow">تدفق داخل</th>
-              <th data-i18n="cf.outflow">تدفق خارج</th>
-              <th data-i18n="cf.net">الصافي</th>
-              <th data-i18n="cf.cumulative">الرصيد التراكمي</th>
-            </tr></thead>
-            <tbody id="cfTable"></tbody>
-          </table>
-        </div>
-        <h3 class="cf-h3" data-i18n="cf.anomaly.title">تنبيهات الهدر المالي</h3>
-        <div id="cfAnomalies"></div>
-        <p class="fine" data-i18n="cf.note">التوقع مزيج من اتجاه آخر ستة أشهر ومتوسط الأشهر الثلاثة الأخيرة، وهو تقدير إرشادي لا يغني عن مراجعة محاسبك.</p>
-      </div>
-      <p class="msg" id="cfMsg"></p>
-    </section>
-  </section>
-
   <!-- ============ ٤) المساعد والمحاسب ============ -->
   <section class="view" id="view-assistant" role="tabpanel">
     <div class="layout">
@@ -787,13 +638,6 @@ body.ltr .qr-meta .mono{text-align:left}
         <button id="smtpSignup" type="button" data-i18n="email.signup">تسجيل سريع في SMTP2GO</button>
         <button class="ghost small" id="emailTestBtn" type="button" data-i18n="email.test">اختبار الاتصال</button>
       </div>
-      <div class="field">
-        <label for="emailRefLink" data-i18n="email.ref_link">رابط الإحالة (PartnerStack / SMTP2GO)</label>
-        <div class="row tight">
-          <input id="emailRefLink" type="text" readonly dir="ltr" placeholder="https://www.smtp2go.com/?via=…">
-          <button class="ghost small" id="emailRefCopy" type="button" data-i18n="email.ref_copy">نسخ الرابط</button>
-        </div>
-      </div>
       <p class="msg" id="emailMsg"></p>
       <p class="fine" data-i18n="email.env_note">المفتاح يُخزَّن على الخادم فقط: أضف SMTP2GO_API_KEY في ملف .env (ورابط الإحالة في SMTP2GO_AFFILIATE_LINK). لا يُرسل المفتاح أبدًا إلى المتصفح.</p>
     </fieldset>
@@ -857,97 +701,8 @@ const I18N = {
     "page.title": "نظام المحاسبة والامتثال الضريبي الخليجي — Arab Templates",
     "brand.name": "الامتثال الضريبي الخليجي", "brand.sub": "Gulf Tax & Accounting Suite",
     "ticker.loading": "جارٍ تحميل العملات…",
-    "static.title": "وضع الملفات الثابتة", "static.close": "إخفاء",
-    "static.body": "تعمل الصفحة بلا خادم: البناء والحاسبات تعمل، وإصدار الفواتير والمسح والتنبؤ بالسيولة تحتاج الخادم المرفق في مجلد server.",
-    "static.api": "هذه العملية تحتاج الخادم المرفق — شغّل server/START_SERVER.bat ثم أعد المحاولة.",
     "status.connecting": "جارٍ الاتصال…", "status.online": "الخادم متصل", "status.offline": "الخادم غير متاح",
     "nav.invoice": "الفواتير الإلكترونية", "nav.return": "الإقرار الضريبي", "nav.scan": "الماسح الذكي",
-    "intake.missing_vat": "تم نقل عرض السعر من حاسبة المناقصات — أدخل الرقم الضريبي للمورد ثم اضغط إصدار الفاتورة.",
-    "nav.audit": "محاكي التفتيش",
-    "audit.title": "محاكي التفتيش الضريبي المفاجئ", "audit.tag": "يفحص كل فاتورة محفوظة",
-    "audit.intro": "يراجع سجل المبيعات فاتورة فاتورة: الرقم الضريبي، صحة حساب الضريبة، وجود رمز QR، بيانات العميل، تكرار الأرقام، وتاريخ الإصدار — ثم يعطيك نسبة أمان من الغرامات وتوصيات تصحيح فورية.",
-    "audit.run": "ابدأ الفحص", "audit.running": "جارٍ الفحص…",
-    "audit.scanned": "فواتير مفحوصة", "audit.critical": "أخطاء حرجة", "audit.warnings": "تحذيرات", "audit.clean": "فواتير سليمة",
-    "audit.recs": "توصيات فورية", "audit.empty": "لا توجد فواتير محفوظة في سجل المبيعات بعد. أصدر فاتورة واضغط «حفظ ثم إضافة للمبيعات»، ثم أعد الفحص.",
-    "audit.error": "تعذّر إكمال الفحص: {error}",
-    "audit.stamp": "آخر فحص: {t} · {n} فاتورة",
-    "audit.footnote": "الفحص قراءة فقط ولا يعدّل أي فاتورة. النسبة تقديرية حسب الأخطاء المكتشفة في سجلك المحلي.",
-    "audit.allClear": "لا توجد ملاحظات — كل الفواتير مستوفية للحد الأدنى من المتطلبات.",
-    "audit.sev.critical": "خطأ حرج", "audit.sev.warning": "تحذير",
-    "audit.grade.safe": "آمن من الغرامات", "audit.grade.review": "يحتاج مراجعة",
-    "audit.grade.high": "مخاطر مرتفعة", "audit.grade.critical": "خطر غرامات",
-    "audit.code.vat_missing": "الرقم الضريبي للمورد غير مسجل — الفاتورة قد تُعد غير معتمدة.",
-    "audit.code.vat_invalid": "الرقم الضريبي لا يطابق صيغة الدولة (أرقام أو طول غير صحيح).",
-    "audit.code.qr_missing": "رمز QR غير موجود في الفاتورة المحفوظة.",
-    "audit.code.hash_missing": "تجزئة الفاتورة (Hash) غير محفوظة — تعذّر التحقق من عدم التلاعب.",
-    "audit.code.items_missing": "الفاتورة مسجلة بلا بنود — قد ترفضها لجنة التفتيش.",
-    "audit.code.buyer_missing": "اسم العميل غير مسجل في الفاتورة.",
-    "audit.code.buyer_vat_missing": "الرقم الضريبي للعميل غير مسجل (مطلوب في فواتير B2B).",
-    "audit.code.tax_mismatch": "حساب الضريبة لا يطابق الصافي × النسبة — الفرق {d}.",
-    "audit.code.total_mismatch": "الإجمالي لا يساوي الصافي + الضريبة — الفرق {d}.",
-    "audit.code.amounts_missing": "الصافي أو الضريبة أو الإجمالي غير مسجل — لا يمكن التحقق من الحساب.",
-    "audit.code.bad_date": "تاريخ الإصدار مفقود أو غير صالح.",
-    "audit.code.future_date": "تاريخ الإصدار في المستقبل — تحقق من تاريخ الجهاز أو الإدخال.",
-    "audit.code.duplicate_number": "رقم الفاتورة مكرر في السجل — يحتاج ترقيمًا فريدًا.",
-    "audit.code.meta_missing": "بيانات الدولة أو العملة ناقصة في السجل.",
-    "audit.code.legacy_record": "فاتورة محفوظة بنسخة قديمة بلا بيانات امتثال (QR/الرقم الضريبي) — أعد إصدارها أو أكمل بياناتها.",
-    "audit.rec.vat_missing": "أضف الرقم الضريبي للمورد وأعد إصدار الفواتير غير المعتمدة.",
-    "audit.rec.vat_invalid": "صحّح الرقم الضريبي حسب صيغة الدولة (١٥ رقمًا في السعودية والإمارات).",
-    "audit.rec.qr_missing": "أعد إصدار الفاتورة من المولّد لتحصل على رمز QR المعتمد.",
-    "audit.rec.hash_missing": "احفظ الفاتورة كاملة لضمان وجود التجزئة للتحقق من التلاعب.",
-    "audit.rec.items_missing": "أعد إدخال بنود الفاتورة قبل حفظها في السجل.",
-    "audit.rec.buyer_missing": "سجّل اسم العميل في كل فاتورة.",
-    "audit.rec.buyer_vat_missing": "أضف الرقم الضريبي للعميل في فواتير الشركات.",
-    "audit.rec.tax_mismatch": "أعد حساب الضريبة من الصافي × النسبة، وصحّح الفرق قبل التقديم.",
-    "audit.rec.total_mismatch": "صحّح الإجمالي ليطابق الصافي + الضريبة.",
-    "audit.rec.amounts_missing": "أكمل حقول الصافي والضريبة والإجمالي.",
-    "audit.rec.bad_date": "أدخل تاريخ إصدار صحيحًا بصيغة YYYY-MM-DD.",
-    "audit.rec.future_date": "راجع تاريخ الإصدار قبل رفع الإقرار.",
-    "audit.rec.duplicate_number": "أعد ترقيم الفواتير بأرقام تسلسلية فريدة.",
-    "audit.rec.meta_missing": "أكمل الدولة والعملة في سجل الفواتير.",
-    "audit.rec.legacy_record": "أعد إصدار الفواتير القديمة من النسخة الحالية لتسجيل QR والرقم الضريبي.",
-    "voice.button": "🎤 اسأل أو أصدر فاتورة",
-    "voice.ph": "مثال: أصدر فاتورة لشركة النخيل بمبلغ ١٠٠٠ عن خدمات استشارية",
-    "voice.run": "تنفيذ",
-    "voice.hint": "انطق أمرك أو اكتبه: إصدار فاتورة، أو سؤال عن المبيعات والضريبة والأرباح. التعرف على الصوت يعمل في Chrome وEdge.",
-    "voice.listening": "أستمع… انطق أمرك الآن",
-    "voice.unsupported": "التعرف على الصوت غير متاح في هذا المتصفح — استخدم Chrome أو Edge، أو اكتب الأمر في الحقل.",
-    "voice.heard": "سمعت: {q}",
-    "voice.denied": "لم يُسمح باستخدام الميكروفون — اسمح به من إعدادات المتصفح.",
-    "voice.error": "تعذّر الاستماع: {error}",
-    "voice.needSeller": "أدخل الرقم الضريبي للمورد مرة واحدة في نموذج الفاتورة، وسأحفظه لأوامرك الصوتية القادمة.",
-    "voice.needAmount": "لم ألتقط المبلغ — قل مثلًا: أصدر فاتورة لشركة النخيل بمبلغ ١٠٠٠.",
-    "voice.notUnderstood": "لم أفهم الأمر. جرّب: «كم مبيعاتي؟» أو «كم صافي الضريبة؟» أو «أصدر فاتورة لشركة النخيل بمبلغ ١٠٠٠».",
-    "voice.invoiceDone": "أصدرت الفاتورة {n} بمبلغ {t}. رمز QR والتجزئة جاهزان للطباعة.",
-    "voice.invoiceFailed": "تعذّر إصدار الفاتورة: {error}",
-    "voice.sales": "لديك {n} فاتورة بإجمالي {total}، منها ضريبة {tax}.",
-    "voice.tax": "إجمالي الضريبة المحصّلة {tax} على {n} فاتورة.",
-    "voice.count": "عدد الفواتير المسجلة: {n}.",
-    "voice.net": "صافي الضريبة للفترة {p}: {net}، وموعد التقديم {due}.",
-    "voice.profit": "إجمالي المبيعات {total} والضريبة {tax}. لا تتوفر بيانات تكاليف، فصافي الربح يحتاج ربط المصاريف.",
-    "voice.item": "خدمات استشارية",
-    "nav.cashflow": "السيولة والهدر",
-    "cf.title": "التنبؤ بالسيولة وكشف الهدر المالي", "cf.tag": "تحليل سجل المبيعات والمصاريف",
-    "cf.intro": "يقرأ آخر ستة أشهر من المبيعات والمشتريات، يرسم توقعات التدفق النقدي للثلاثة أشهر القادمة، وينبهك إلى أي فاتورة مورد أعلى بكثير من معدلها الطبيعي.",
-    "cf.refresh": "إعادة التحليل", "cf.loading": "جارٍ التحليل…",
-    "cf.inflow": "تدفق داخل", "cf.outflow": "تدفق خارج", "cf.net": "الصافي",
-    "cf.cumulative": "الرصيد التراكمي", "cf.forecast": "التوقع", "cf.history": "الفعلي",
-    "cf.kpi.inflow": "إجمالي الداخل (٦ أشهر)", "cf.kpi.outflow": "إجمالي الخارج (٦ أشهر)",
-    "cf.kpi.avg": "متوسط الصافي الشهري", "cf.kpi.runway": "مدى السيولة المتوقع",
-    "cf.runwayValue": "{n} شهر", "cf.runwayNa": "لا ينفد حاليًا",
-    "cf.table.month": "الشهر", "cf.table.projection": "توقع",
-    "cf.anomaly.title": "تنبيهات الهدر المالي",
-    "cf.anomaly.body": "{n} فاتورة مورد مشتبه بارتفاعها، بإجمالي {amount}.",
-    "cf.anomaly.field.supplier": "المورد", "cf.anomaly.field.date": "التاريخ",
-    "cf.anomaly.field.amount": "المبلغ", "cf.anomaly.field.baseline": "الخط الأساسي",
-    "cf.anomaly.field.ratio": "المضاعف",
-    "cf.anomaly.kind.outlier": "أعلى بكثير من معدل المورد",
-    "cf.anomaly.kind.single_large": "أول فاتورة وتتجاوز ضعف المعتاد",
-    "cf.anomaly.kind.monthly_spike": "قفزة شهرية غير طبيعية",
-    "cf.noAnomalies": "لا توجد قفزات غير طبيعية في فواتير الموردين خلال الفترة.",
-    "cf.empty": "لا توجد بيانات كافية بعد — أصدر فواتير أو أضف مشتريات من الماسح الذكي ثم أعد التحليل.",
-    "cf.note": "التوقع مزيج من اتجاه آخر ستة أشهر ومتوسط الأشهر الثلاثة الأخيرة، وهو تقدير إرشادي لا يغني عن مراجعة محاسبك.",
-    "cf.error": "تعذّر تحميل التحليل: {error}",
     "nav.assistant": "المساعد والمحاسب", "nav.plans": "الباقات",
     "controls.country": "الدولة", "controls.currency": "العملة", "controls.settings": "الإعدادات",
     "hero.title": "نظام واحد للمحاسبة والامتثال الضريبي في الخليج",
@@ -985,8 +740,6 @@ const I18N = {
     "email.from_name": "اسم المُرسل", "email.ph.name": "Arab Templates",
     "email.from_email": "بريد المُرسل الموثق", "email.reply_to": "بريد الرد (Reply-To)",
     "email.signup": "تسجيل سريع في SMTP2GO", "email.test": "اختبار الاتصال",
-    "email.ref_link": "رابط الإحالة الحالي (يُضبط في SMTP2GO_AFFILIATE_LINK)",
-    "email.ref_copy": "نسخ الرابط", "email.ref_copied": "تم نسخ رابط الإحالة.", "email.ref_missing": "لا يوجد رابط إحالة مضبوط بعد — ضعه في ملف .env ثم أعد تشغيل الخادم.",
     "email.env_note": "المفتاح يُخزَّن على الخادم فقط: أضف SMTP2GO_API_KEY في ملف .env (ورابط الإحالة في SMTP2GO_AFFILIATE_LINK). لا يُرسل المفتاح أبدًا إلى المتصفح.",
     "msg.email_sending": "يُرسل SMTP2GO الرسالة…",
     "msg.email_sent": "أُرسلت الفاتورة {number} إلى {to}.",
@@ -1122,97 +875,8 @@ const I18N = {
     "page.title": "Gulf Tax & Accounting Suite — Arab Templates",
     "brand.name": "Gulf Tax Compliance", "brand.sub": "Gulf Tax & Accounting Suite",
     "ticker.loading": "Loading exchange rates…",
-    "static.title": "Static file mode", "static.close": "Dismiss",
-    "static.body": "This page runs without a server: the builder and calculators work, while invoicing, scanning and cash-flow forecasting need the bundled server folder.",
-    "static.api": "This action needs the bundled server — run server/START_SERVER.bat and try again.",
     "status.connecting": "Connecting…", "status.online": "Server connected", "status.offline": "Server unavailable",
     "nav.invoice": "E-invoices", "nav.return": "VAT return", "nav.scan": "Smart scanner",
-    "intake.missing_vat": "Quote imported from the tender estimator — enter the seller VAT number, then issue the invoice.",
-    "nav.audit": "Audit simulator",
-    "audit.title": "Sudden Tax Audit Simulator", "audit.tag": "Scans every saved invoice",
-    "audit.intro": "Reviews the sales ledger invoice by invoice: VAT number, VAT arithmetic, QR presence, buyer details, duplicate numbers and issue dates — then gives you a penalty-safety score plus immediate fixes.",
-    "audit.run": "Run the check", "audit.running": "Checking…",
-    "audit.scanned": "Invoices scanned", "audit.critical": "Critical issues", "audit.warnings": "Warnings", "audit.clean": "Clean invoices",
-    "audit.recs": "Immediate recommendations", "audit.empty": "No invoices are saved in the sales ledger yet. Issue an invoice, press “Save and add to sales”, then run the check again.",
-    "audit.error": "The check could not complete: {error}",
-    "audit.stamp": "Last check: {t} · {n} invoice(s)",
-    "audit.footnote": "The check is read-only and changes nothing. The score is an estimate based on issues found in your local ledger.",
-    "audit.allClear": "No findings — every invoice meets the minimum requirements.",
-    "audit.sev.critical": "Critical", "audit.sev.warning": "Warning",
-    "audit.grade.safe": "Penalty-safe", "audit.grade.review": "Needs review",
-    "audit.grade.high": "High risk", "audit.grade.critical": "Penalty risk",
-    "audit.code.vat_missing": "Seller VAT number is missing — the invoice may be treated as non-compliant.",
-    "audit.code.vat_invalid": "VAT number does not match the country format (wrong length or characters).",
-    "audit.code.qr_missing": "The saved invoice has no QR code.",
-    "audit.code.hash_missing": "Invoice hash is not stored — tamper checks cannot be verified.",
-    "audit.code.items_missing": "Invoice saved with no line items — an auditor may reject it.",
-    "audit.code.buyer_missing": "Buyer name is missing on the invoice.",
-    "audit.code.buyer_vat_missing": "Buyer VAT number is missing (required on B2B invoices).",
-    "audit.code.tax_mismatch": "VAT does not equal net × rate — difference {d}.",
-    "audit.code.total_mismatch": "Total does not equal net + VAT — difference {d}.",
-    "audit.code.amounts_missing": "Net, VAT or total is missing — the arithmetic cannot be verified.",
-    "audit.code.bad_date": "Issue date is missing or invalid.",
-    "audit.code.future_date": "Issue date is in the future — check the device date or the entry.",
-    "audit.code.duplicate_number": "Invoice number appears more than once in the ledger.",
-    "audit.code.meta_missing": "Country or currency is missing in the record.",
-    "audit.code.legacy_record": "Saved by an older version without compliance data (QR / VAT number) — reissue or complete it.",
-    "audit.rec.vat_missing": "Add the seller VAT number and reissue the non-compliant invoices.",
-    "audit.rec.vat_invalid": "Correct the VAT number to the country format (15 digits in Saudi Arabia and the UAE).",
-    "audit.rec.qr_missing": "Reissue the invoice from the generator to get the compliant QR code.",
-    "audit.rec.hash_missing": "Save the invoice fully so its hash is stored for tamper checks.",
-    "audit.rec.items_missing": "Re-enter the invoice lines before saving it to the ledger.",
-    "audit.rec.buyer_missing": "Record the buyer name on every invoice.",
-    "audit.rec.buyer_vat_missing": "Add the buyer VAT number on company invoices.",
-    "audit.rec.tax_mismatch": "Recalculate VAT as net × rate and fix the difference before filing.",
-    "audit.rec.total_mismatch": "Fix the total so it equals net + VAT.",
-    "audit.rec.amounts_missing": "Complete the net, VAT and total fields.",
-    "audit.rec.bad_date": "Enter a valid issue date in YYYY-MM-DD format.",
-    "audit.rec.future_date": "Review the issue date before submitting the return.",
-    "audit.rec.duplicate_number": "Renumber invoices with unique sequential numbers.",
-    "audit.rec.meta_missing": "Complete the country and currency in the invoice ledger.",
-    "audit.rec.legacy_record": "Reissue legacy invoices from the current version so QR and VAT number are stored.",
-    "voice.button": "🎤 Ask or issue an invoice",
-    "voice.ph": "e.g. Issue an invoice for Palm Trading for 1000 for consulting services",
-    "voice.run": "Run",
-    "voice.hint": "Speak or type your command: issue an invoice, or ask about sales, VAT and profit. Speech recognition works in Chrome and Edge.",
-    "voice.listening": "Listening… say your command now",
-    "voice.unsupported": "Speech recognition is unavailable in this browser — use Chrome or Edge, or type the command in the field.",
-    "voice.heard": "Heard: {q}",
-    "voice.denied": "Microphone permission was denied — allow it in the browser settings.",
-    "voice.error": "Could not listen: {error}",
-    "voice.needSeller": "Enter the seller VAT number in the invoice form first, then repeat the command.",
-    "voice.needAmount": "I did not catch an amount — try: issue an invoice for Palm Trading for 1000.",
-    "voice.notUnderstood": "Command not understood. Try: “How much are my sales?”, “What is the net VAT?”, or “Issue an invoice for Palm Trading for 1000”.",
-    "voice.invoiceDone": "Issued invoice {n} for {t}. The QR code and hash are ready to print.",
-    "voice.invoiceFailed": "The invoice could not be issued: {error}",
-    "voice.sales": "You have {n} invoice(s) totalling {total}, including {tax} VAT.",
-    "voice.tax": "Total VAT collected is {tax} across {n} invoice(s).",
-    "voice.count": "Invoices on record: {n}.",
-    "voice.net": "Net VAT for period {p} is {net}, filing due {due}.",
-    "voice.profit": "Total sales {total} with {tax} VAT. No cost data is available, so net profit needs expenses linked.",
-    "voice.item": "Consulting services",
-    "nav.cashflow": "Cash flow",
-    "cf.title": "AI Cash-Flow & Anomaly Detector", "cf.tag": "Reads sales and purchase ledgers",
-    "cf.intro": "Reads the last six months of sales and purchases, charts a three-month cash-flow forecast, and flags any supplier invoice far above its normal level.",
-    "cf.refresh": "Re-run analysis", "cf.loading": "Analysing…",
-    "cf.inflow": "Inflow", "cf.outflow": "Outflow", "cf.net": "Net",
-    "cf.cumulative": "Cumulative balance", "cf.forecast": "Forecast", "cf.history": "Actual",
-    "cf.kpi.inflow": "Total inflow (6 months)", "cf.kpi.outflow": "Total outflow (6 months)",
-    "cf.kpi.avg": "Average monthly net", "cf.kpi.runway": "Projected cash runway",
-    "cf.runwayValue": "{n} months", "cf.runwayNa": "Not depleting",
-    "cf.table.month": "Month", "cf.table.projection": "Forecast",
-    "cf.anomaly.title": "Financial waste alerts",
-    "cf.anomaly.body": "{n} supplier invoice(s) look abnormally high, totalling {amount}.",
-    "cf.anomaly.field.supplier": "Supplier", "cf.anomaly.field.date": "Date",
-    "cf.anomaly.field.amount": "Amount", "cf.anomaly.field.baseline": "Baseline",
-    "cf.anomaly.field.ratio": "Multiple",
-    "cf.anomaly.kind.outlier": "Far above this supplier's average",
-    "cf.anomaly.kind.single_large": "First invoice and more than double the norm",
-    "cf.anomaly.kind.monthly_spike": "Abnormal month-on-month jump",
-    "cf.noAnomalies": "No abnormal jumps in supplier invoices for this period.",
-    "cf.empty": "Not enough data yet — issue invoices or add purchases from the scanner, then re-run.",
-    "cf.note": "The forecast blends the six-month trend with the last three months' average. It is indicative and does not replace your accountant's review.",
-    "cf.error": "The analysis could not load: {error}",
     "nav.assistant": "Assistant & accountant", "nav.plans": "Plans",
     "controls.country": "Country", "controls.currency": "Currency", "controls.settings": "Settings",
     "hero.title": "One system for Gulf accounting and tax compliance",
@@ -1250,8 +914,6 @@ const I18N = {
     "email.from_name": "Sender name", "email.ph.name": "Arab Templates",
     "email.from_email": "Verified sender email", "email.reply_to": "Reply-To email",
     "email.signup": "Quick SMTP2GO signup", "email.test": "Test connection",
-    "email.ref_link": "Current referral link (set via SMTP2GO_AFFILIATE_LINK)",
-    "email.ref_copy": "Copy link", "email.ref_copied": "Referral link copied.", "email.ref_missing": "No referral link configured yet — add it to .env and restart the server.",
     "email.env_note": "The key lives on the server only: add SMTP2GO_API_KEY to your .env file (affiliate link goes in SMTP2GO_AFFILIATE_LINK). The key is never sent to the browser.",
     "msg.email_sending": "SMTP2GO is sending the message…",
     "msg.email_sent": "Invoice {number} was sent to {to}.",
@@ -1386,7 +1048,6 @@ const I18N = {
 };
 
 const PROFILE_KEY = "at_gulf_profile";
-const SELLER_KEY = "at_gulf_seller";
 const ACCOUNT_KEY = "at_gulf_account";
 const EMAIL_KEY = "at_gulf_email";
 
@@ -1432,35 +1093,11 @@ const fmtNum = (value, digits = 0) => new Intl.NumberFormat(state.lang === "en" 
   minimumFractionDigits: digits, maximumFractionDigits: digits,
 }).format(Number(value || 0));
 
-let staticModeOn = false;
-// نسخة الملفات الثابتة: لا تتصل بأي خادم، وتستخدم اللقطات المدمجة أدناه.
-const STATIC_BUILD = true;
-function enableStaticMode() {
-  if (staticModeOn) return;
-  staticModeOn = true;
-  const banner = $("staticBanner");
-  if (banner) banner.hidden = false;
-}
-
 async function api(path, options) {
-  if (STATIC_BUILD || staticModeOn) {
-    enableStaticMode();
-    throw new Error(t("static.api"));
-  }
-  let res = null;
-  try {
-    res = await fetch(path, { cache: "no-store", ...(options || {}) });
-  } catch (err) {
-    enableStaticMode();
-    throw new Error(t("static.api"));
-  }
+  const res = await fetch(path, { cache: "no-store", ...(options || {}) });
   let data = null;
   try { data = await res.json(); } catch (err) { data = null; }
-  if (!res.ok) {
-    if (res.status === 404 || res.status === 405 || res.status === 501) enableStaticMode();
-    if (staticModeOn) throw new Error(t("static.api"));
-    throw new Error((data && data.error) || ("HTTP " + res.status));
-  }
+  if (!res.ok) throw new Error((data && data.error) || ("HTTP " + res.status));
   return data || {};
 }
 
@@ -1523,24 +1160,6 @@ function readProfile() {
   } catch (err) { return null; }
 }
 
-function readSeller() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(SELLER_KEY) || "null");
-    return raw && typeof raw === "object" ? raw : null;
-  } catch (err) { return null; }
-}
-
-/** يحفظ بيانات المورد بعد كل إصدار ناجح كي تعمل الأوامر الصوتية بلا إعادة إدخال. */
-function rememberSeller() {
-  const seller = {
-    name: $("sellerName").value.trim(), vat: $("sellerVat").value.trim(),
-    address: $("sellerAddress").value.trim(), email: $("sellerEmail").value.trim(),
-    phone: $("sellerPhone").value.trim(),
-  };
-  if (!seller.vat) return;
-  localStorage.setItem(SELLER_KEY, JSON.stringify(seller));
-}
-
 function writeProfile() {
   localStorage.setItem(PROFILE_KEY, JSON.stringify({
     country: state.country, currency: state.currency, lang: state.lang,
@@ -1588,16 +1207,13 @@ async function setLanguage(lang, { persist = true, reload = true } = {}) {
   if (!reload) return;
   await refreshCountries();
   applyCountry(state.country, { keepCurrency: true, reload: false });
-  if (auditCache) renderAudit(auditCache);
-  if (cashflowCache) renderCashflow(cashflowCache);
   if (state.invoice) { fillQrBox(state.invoice); fillPrintDoc(state.invoice); }
-  await Promise.allSettled([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets(), loadEmailConfig()]);
+  await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets(), loadEmailConfig()]);
   renderRatesTicker();
 }
 
 async function refreshCountries() {
-  let data = null;
-  try { data = await api("/api/countries?lang=" + state.lang); } catch (err) { data = STATIC_COUNTRIES[state.lang] || STATIC_COUNTRIES.ar; enableStaticMode(); }
+  const data = await api("/api/countries?lang=" + state.lang);
   state.countries = data.countries || [];
   state.currencies = data.currencies || [];
   if (!state.countries.some((c) => c.code === state.country)) state.country = state.countries[0]?.code || "SA";
@@ -1689,7 +1305,6 @@ function showView(name) {
   if (name === "return") loadReturn();
   if (name === "assistant") { loadNews(); loadTickets(); }
   if (name === "plans") loadPlans();
-  if (name === "cashflow") loadCashflow();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 document.querySelectorAll("#tabsNav .tab").forEach((tab) => {
@@ -1708,15 +1323,9 @@ async function loadHealth() {
   }
 }
 
-const STATIC_RATES = {"base": "SAR", "source": "لقطة احتياطية (offline)", "stale": true, "updated_at": "2026-11-11", "note": "تُستخدم عند تعذّر الوصول إلى مصدر الأسعار الحيّ. القيم إرشادية مقابل الريال السعودي.", "rates": {"USD": 0.2666, "AED": 0.9792, "KWD": 0.0819, "QAR": 0.97, "OMR": 0.1026, "BHD": 0.1004, "EGP": 13.28, "EUR": 0.2455}, "changes": {"USD": 0, "AED": 0, "KWD": 0, "QAR": 0, "OMR": 0, "BHD": 0, "EGP": 0, "EUR": 0}};
-const STATIC_NEWS = {"updated_at": "2026-11-11", "note": "أخبار الامتثال والضريبة في الخليج — تُعرض داخل قالب الامتثال كأسئلة وفرص للمتابعة.", "items": [{"date": "2026-11-10", "tag": "السعودية", "title": "فاتورة: المرحلة التالية من التكامل تشمل الأعمال الصغيرة", "summary": "المنشآت الملتزمة وصلت لنسب إصدار عالية، والتركيز الآن على ربط أنظمة نقاط البيع بالفواتير الإلكترونية لتفادي غرامات عدم الإصدار.", "action": "تأكد أن كل نقطة بيع تصدر فاتورة برمز QR ورقم ضريبي مطابق.", "source": "تجميع داخلي", "tag_en": "Saudi Arabia", "title_en": "E-invoicing: the next integration phase reaches small businesses", "summary_en": "Compliant businesses already issue at high rates; the focus now is connecting point-of-sale systems to e-invoices to avoid non-issuance fines.", "action_en": "Make sure every POS terminal issues an invoice with a QR code and a matching tax number.", "source_en": "Internal digest"}, {"date": "2026-11-06", "tag": "الإمارات", "title": "ضريبة القيمة المضافة الإماراتية: تدقيق أعلى على الفواتير غير المطابقة", "summary": "تشير التحديثات القطاعية إلى تزايد طلبات توضيح الفروق بين الإقرار والمبيعات الفعلية، وأبرز أسبابها بنود بلا تصنيف ضريبي.", "action": "صنّف كل بند بعلامة خاضعة أو معفاة قبل تشغيل تقرير الربع.", "source": "تجميع داخلي", "tag_en": "UAE", "title_en": "UAE VAT: tighter scrutiny of non-matching invoices", "summary_en": "Sector updates point to more reconciliation requests between the return and actual sales, mostly caused by lines without a VAT treatment.", "action_en": "Tag every line as standard-rated or exempt before running the quarterly report.", "source_en": "Internal digest"}, {"date": "2026-11-03", "tag": "الكويت", "title": "الكويت: استعدادات لتوسيع الإفصاح المالي الرقمي", "summary": "المنشآت المتوسطة تبدأ تنظيم سجلاتها المالية استباقًا لأي متطلبات إفصاح جديدة، مع تركيز على أرشفة الفواتير والمستندات.", "action": "احفظ نسخًا رقمية موثّقة للفواتير مع تاريخ المعالجة والمصدر.", "source": "تجميع داخلي", "tag_en": "Kuwait", "title_en": "Kuwait: preparing for wider digital financial disclosure", "summary_en": "Mid-size businesses are organising their records ahead of any new disclosure rules, focusing on archiving invoices and supporting documents.", "action_en": "Keep documented digital copies of invoices with processing date and source.", "source_en": "Internal digest"}, {"date": "2026-10-29", "tag": "الخليج", "title": "اتجاه متزايد لربط واتساب بعمليات الفوترة", "summary": "الشركات الصغيرة تفضّل استلام الفواتير من الموردين عبر واتساب ثم ترحيلها آليًا، لتقليل الإدخال اليدوي وأخطاء الترحيل.", "action": "استخدم المسح الجماعي بدل الإدخال اليدوي، وراجع الفواتير منخفضة الثقة فقط.", "source": "تجميع داخلي", "tag_en": "Gulf", "title_en": "WhatsApp is increasingly connected to invoicing workflows", "summary_en": "Small companies prefer receiving supplier invoices on WhatsApp and posting them automatically, cutting manual entry and posting errors.", "action_en": "Use batch scanning instead of manual entry, and review only low-confidence invoices.", "source_en": "Internal digest"}, {"date": "2026-10-22", "tag": "السعودية", "title": "الزكاة والضريبة: أهمية مطابقة بيانات المورد قبل الخصم", "summary": "الخصم الضريبي يرتبط بصحة بيانات المورد والرقم الضريبي؛ الفواتير الناقصة تُرفض عند التدقيق حتى لو كان المبلغ صحيحًا.", "action": "افحص المورد والرقم الضريبي في كل فاتورة قبل اعتماد الخصم.", "source": "تجميع داخلي", "tag_en": "Saudi Arabia", "title_en": "ZATCA: match supplier details before claiming input VAT", "summary_en": "Input VAT depends on valid supplier details and tax number; incomplete invoices are rejected at audit even when the amount is correct.", "action_en": "Check the supplier name and tax number on every invoice before claiming the deduction.", "source_en": "Internal digest"}, {"date": "2026-10-15", "tag": "الإمارات", "title": "الفواتير الإلكترونية: الاستعداد للمرحلة التجريبية", "summary": "الحديث القطاعي يتجه نحو متطلبات تبادل فواتير إلكتروني بين الشركات، ما يجعل البيانات المنظمة (مورد، تاريخ، مبلغ، ضريبة) شرطًا أساسيًا.", "action": "وحّد حقول الفاتورة الآن حتى لا تضطر لإعادة الترحيل لاحقًا.", "source": "تجميع داخلي", "tag_en": "UAE", "title_en": "E-invoicing: preparing for the pilot phase", "summary_en": "Industry talk is moving toward B2B e-invoice exchange requirements, making structured data (supplier, date, amount, VAT) essential.", "action_en": "Standardise invoice fields now so you do not have to re-post later.", "source_en": "Internal digest"}]};
-const STATIC_COUNTRIES = {"ar": {"countries": [{"authority": "هيئة الزكاة والضريبة والجمارك (ZATCA)", "authority_en": "Zakat, Tax and Customs Authority (ZATCA)", "code": "SA", "currency": "SAR", "currency_info": {"code": "SAR", "decimals": 2, "name": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, "filing": "إقرار شهري أو ربع سنوي — يُقدَّم خلال الشهر التالي لنهاية الفترة", "filing_en": "Monthly or quarterly return — filed in the month after the period ends", "lang": "ar", "name": "السعودية", "name_en": "Saudi Arabia", "period": "monthly", "qr_spec": "ZATCA TLV — المرحلة الأولى (Phase 1)", "qr_spec_en": "ZATCA TLV — Phase 1", "tax_no_hint": "١٥ رقمًا", "tax_no_hint_en": "15 digits", "tax_no_label": "الرقم الضريبي (VAT)", "tax_no_label_en": "VAT number", "tax_no_regex": "^\\d{15}$", "vat_rate": 15.0}, {"authority": "الهيئة الاتحادية للضرائب (FTA)", "authority_en": "Federal Tax Authority (FTA)", "code": "AE", "currency": "AED", "currency_info": {"code": "AED", "decimals": 2, "name": "درهم إماراتي", "name_en": "UAE Dirham", "symbol": "د.إ"}, "filing": "إقرار ربع سنوي — خلال ٢٨ يومًا من نهاية الربع", "filing_en": "Quarterly return — within 28 days of the quarter end", "lang": "ar", "name": "الإمارات", "name_en": "United Arab Emirates", "period": "quarterly", "qr_spec": "FTA QR — اسم المورد، TRN، التاريخ، الإجمالي، الضريبة", "qr_spec_en": "FTA QR — seller, TRN, timestamp, total, VAT", "tax_no_hint": "١٥ رقمًا", "tax_no_hint_en": "15 digits", "tax_no_label": "رقم التسجيل الضريبي (TRN)", "tax_no_label_en": "Tax Registration Number (TRN)", "tax_no_regex": "^\\d{15}$", "vat_rate": 5.0}, {"authority": "جهاز الضرائب", "authority_en": "Tax Authority of Oman", "code": "OM", "currency": "OMR", "currency_info": {"code": "OMR", "decimals": 3, "name": "ريال عُماني", "name_en": "Omani Rial", "symbol": "ر.ع"}, "filing": "إقرار شهري أو ربع سنوي حسب تصنيف المنشأة", "filing_en": "Monthly or quarterly return depending on the business category", "lang": "ar", "name": "عُمان", "name_en": "Oman", "period": "monthly", "qr_spec": "QR ضريبي — بيانات المورد والإجمالي والضريبة", "qr_spec_en": "Tax QR — seller, total and VAT", "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number", "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 5.0}, {"authority": "الجهاز الوطني للإيرادات (NBR)", "authority_en": "National Bureau for Revenue (NBR)", "code": "BH", "currency": "BHD", "currency_info": {"code": "BHD", "decimals": 3, "name": "دينار بحريني", "name_en": "Bahraini Dinar", "symbol": "د.ب"}, "filing": "إقرار شهري أو ربع سنوي حسب حجم التوريدات", "filing_en": "Monthly or quarterly return depending on supply volume", "lang": "ar", "name": "البحرين", "name_en": "Bahrain", "period": "monthly", "qr_spec": "QR ضريبي — بيانات المورد والإجمالي والضريبة", "qr_spec_en": "Tax QR — seller, total and VAT", "tax_no_hint": "١٠ إلى ١٥ رقمًا", "tax_no_hint_en": "10 to 15 digits", "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number", "tax_no_regex": "^\\d{10,15}$", "vat_rate": 10.0}, {"authority": "الهيئة العامة للضرائب", "authority_en": "General Tax Authority", "code": "QA", "currency": "QAR", "currency_info": {"code": "QAR", "decimals": 2, "name": "ريال قطري", "name_en": "Qatari Riyal", "symbol": "ر.ق"}, "filing": "لا ضريبة قيمة مضافة مطبقة حاليًا — القالب جاهز عند تفعيلها", "filing_en": "VAT is not applied yet — the template is ready when it launches", "lang": "ar", "name": "قطر", "name_en": "Qatar", "period": "monthly", "qr_spec": "QR ضريبي", "qr_spec_en": "Tax QR", "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number", "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 0.0}, {"authority": "وزارة المالية — الإدارة الضريبية", "authority_en": "Ministry of Finance — Tax Department", "code": "KW", "currency": "KWD", "currency_info": {"code": "KWD", "decimals": 3, "name": "دينار كويتي", "name_en": "Kuwaiti Dinar", "symbol": "د.ك"}, "filing": "لا ضريبة قيمة مضافة مطبقة حاليًا — القالب جاهز عند تفعيلها", "filing_en": "VAT is not applied yet — the template is ready when it launches", "lang": "ar", "name": "الكويت", "name_en": "Kuwait", "period": "monthly", "qr_spec": "QR ضريبي", "qr_spec_en": "Tax QR", "tax_no_hint": "رقم التسجيل الضريبي", "tax_no_hint_en": "Tax registration number", "tax_no_label": "الرقم الضريبي", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 0.0}], "currencies": [{"code": "SAR", "decimals": 2, "name": "ريال سعودي", "name_ar": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, {"code": "AED", "decimals": 2, "name": "درهم إماراتي", "name_ar": "درهم إماراتي", "name_en": "UAE Dirham", "symbol": "د.إ"}, {"code": "KWD", "decimals": 3, "name": "دينار كويتي", "name_ar": "دينار كويتي", "name_en": "Kuwaiti Dinar", "symbol": "د.ك"}, {"code": "QAR", "decimals": 2, "name": "ريال قطري", "name_ar": "ريال قطري", "name_en": "Qatari Riyal", "symbol": "ر.ق"}, {"code": "OMR", "decimals": 3, "name": "ريال عُماني", "name_ar": "ريال عُماني", "name_en": "Omani Rial", "symbol": "ر.ع"}, {"code": "BHD", "decimals": 3, "name": "دينار بحريني", "name_ar": "دينار بحريني", "name_en": "Bahraini Dinar", "symbol": "د.ب"}, {"code": "USD", "decimals": 2, "name": "دولار أمريكي", "name_ar": "دولار أمريكي", "name_en": "US Dollar", "symbol": "$"}, {"code": "EUR", "decimals": 2, "name": "يورو", "name_ar": "يورو", "name_en": "Euro", "symbol": "€"}], "default": {"authority": "هيئة الزكاة والضريبة والجمارك (ZATCA)", "authority_en": "Zakat, Tax and Customs Authority (ZATCA)", "code": "SA", "currency": "SAR", "currency_info": {"code": "SAR", "decimals": 2, "name": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, "filing": "إقرار شهري أو ربع سنوي — يُقدَّم خلال الشهر التالي لنهاية الفترة", "filing_en": "Monthly or quarterly return — filed in the month after the period ends", "lang": "ar", "name": "السعودية", "name_en": "Saudi Arabia", "period": "monthly", "qr_spec": "ZATCA TLV — المرحلة الأولى (Phase 1)", "qr_spec_en": "ZATCA TLV — Phase 1", "tax_no_hint": "١٥ رقمًا", "tax_no_hint_en": "15 digits", "tax_no_label": "الرقم الضريبي (VAT)", "tax_no_label_en": "VAT number", "tax_no_regex": "^\\d{15}$", "vat_rate": 15.0}, "lang": "ar", "max_items": 200, "periods": ["2026-11", "2026-10", "2026-09", "2026-08", "2026-07", "2026-06", "2026-05", "2026-04"]}, "en": {"countries": [{"authority": "Zakat, Tax and Customs Authority (ZATCA)", "authority_en": "Zakat, Tax and Customs Authority (ZATCA)", "code": "SA", "currency": "SAR", "currency_info": {"code": "SAR", "decimals": 2, "name": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, "filing": "Monthly or quarterly return — filed in the month after the period ends", "filing_en": "Monthly or quarterly return — filed in the month after the period ends", "lang": "en", "name": "Saudi Arabia", "name_en": "Saudi Arabia", "period": "monthly", "qr_spec": "ZATCA TLV — Phase 1", "qr_spec_en": "ZATCA TLV — Phase 1", "tax_no_hint": "15 digits", "tax_no_hint_en": "15 digits", "tax_no_label": "VAT number", "tax_no_label_en": "VAT number", "tax_no_regex": "^\\d{15}$", "vat_rate": 15.0}, {"authority": "Federal Tax Authority (FTA)", "authority_en": "Federal Tax Authority (FTA)", "code": "AE", "currency": "AED", "currency_info": {"code": "AED", "decimals": 2, "name": "درهم إماراتي", "name_en": "UAE Dirham", "symbol": "د.إ"}, "filing": "Quarterly return — within 28 days of the quarter end", "filing_en": "Quarterly return — within 28 days of the quarter end", "lang": "en", "name": "United Arab Emirates", "name_en": "United Arab Emirates", "period": "quarterly", "qr_spec": "FTA QR — seller, TRN, timestamp, total, VAT", "qr_spec_en": "FTA QR — seller, TRN, timestamp, total, VAT", "tax_no_hint": "15 digits", "tax_no_hint_en": "15 digits", "tax_no_label": "Tax Registration Number (TRN)", "tax_no_label_en": "Tax Registration Number (TRN)", "tax_no_regex": "^\\d{15}$", "vat_rate": 5.0}, {"authority": "Tax Authority of Oman", "authority_en": "Tax Authority of Oman", "code": "OM", "currency": "OMR", "currency_info": {"code": "OMR", "decimals": 3, "name": "ريال عُماني", "name_en": "Omani Rial", "symbol": "ر.ع"}, "filing": "Monthly or quarterly return depending on the business category", "filing_en": "Monthly or quarterly return depending on the business category", "lang": "en", "name": "Oman", "name_en": "Oman", "period": "monthly", "qr_spec": "Tax QR — seller, total and VAT", "qr_spec_en": "Tax QR — seller, total and VAT", "tax_no_hint": "Tax registration number", "tax_no_hint_en": "Tax registration number", "tax_no_label": "Tax number", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 5.0}, {"authority": "National Bureau for Revenue (NBR)", "authority_en": "National Bureau for Revenue (NBR)", "code": "BH", "currency": "BHD", "currency_info": {"code": "BHD", "decimals": 3, "name": "دينار بحريني", "name_en": "Bahraini Dinar", "symbol": "د.ب"}, "filing": "Monthly or quarterly return depending on supply volume", "filing_en": "Monthly or quarterly return depending on supply volume", "lang": "en", "name": "Bahrain", "name_en": "Bahrain", "period": "monthly", "qr_spec": "Tax QR — seller, total and VAT", "qr_spec_en": "Tax QR — seller, total and VAT", "tax_no_hint": "10 to 15 digits", "tax_no_hint_en": "10 to 15 digits", "tax_no_label": "Tax number", "tax_no_label_en": "Tax number", "tax_no_regex": "^\\d{10,15}$", "vat_rate": 10.0}, {"authority": "General Tax Authority", "authority_en": "General Tax Authority", "code": "QA", "currency": "QAR", "currency_info": {"code": "QAR", "decimals": 2, "name": "ريال قطري", "name_en": "Qatari Riyal", "symbol": "ر.ق"}, "filing": "VAT is not applied yet — the template is ready when it launches", "filing_en": "VAT is not applied yet — the template is ready when it launches", "lang": "en", "name": "Qatar", "name_en": "Qatar", "period": "monthly", "qr_spec": "Tax QR", "qr_spec_en": "Tax QR", "tax_no_hint": "Tax registration number", "tax_no_hint_en": "Tax registration number", "tax_no_label": "Tax number", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 0.0}, {"authority": "Ministry of Finance — Tax Department", "authority_en": "Ministry of Finance — Tax Department", "code": "KW", "currency": "KWD", "currency_info": {"code": "KWD", "decimals": 3, "name": "دينار كويتي", "name_en": "Kuwaiti Dinar", "symbol": "د.ك"}, "filing": "VAT is not applied yet — the template is ready when it launches", "filing_en": "VAT is not applied yet — the template is ready when it launches", "lang": "en", "name": "Kuwait", "name_en": "Kuwait", "period": "monthly", "qr_spec": "Tax QR", "qr_spec_en": "Tax QR", "tax_no_hint": "Tax registration number", "tax_no_hint_en": "Tax registration number", "tax_no_label": "Tax number", "tax_no_label_en": "Tax number", "tax_no_regex": "^[A-Za-z0-9]{5,20}$", "vat_rate": 0.0}], "currencies": [{"code": "SAR", "decimals": 2, "name": "Saudi Riyal", "name_ar": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, {"code": "AED", "decimals": 2, "name": "UAE Dirham", "name_ar": "درهم إماراتي", "name_en": "UAE Dirham", "symbol": "د.إ"}, {"code": "KWD", "decimals": 3, "name": "Kuwaiti Dinar", "name_ar": "دينار كويتي", "name_en": "Kuwaiti Dinar", "symbol": "د.ك"}, {"code": "QAR", "decimals": 2, "name": "Qatari Riyal", "name_ar": "ريال قطري", "name_en": "Qatari Riyal", "symbol": "ر.ق"}, {"code": "OMR", "decimals": 3, "name": "Omani Rial", "name_ar": "ريال عُماني", "name_en": "Omani Rial", "symbol": "ر.ع"}, {"code": "BHD", "decimals": 3, "name": "Bahraini Dinar", "name_ar": "دينار بحريني", "name_en": "Bahraini Dinar", "symbol": "د.ب"}, {"code": "USD", "decimals": 2, "name": "US Dollar", "name_ar": "دولار أمريكي", "name_en": "US Dollar", "symbol": "$"}, {"code": "EUR", "decimals": 2, "name": "Euro", "name_ar": "يورو", "name_en": "Euro", "symbol": "€"}], "default": {"authority": "Zakat, Tax and Customs Authority (ZATCA)", "authority_en": "Zakat, Tax and Customs Authority (ZATCA)", "code": "SA", "currency": "SAR", "currency_info": {"code": "SAR", "decimals": 2, "name": "ريال سعودي", "name_en": "Saudi Riyal", "symbol": "ر.س"}, "filing": "Monthly or quarterly return — filed in the month after the period ends", "filing_en": "Monthly or quarterly return — filed in the month after the period ends", "lang": "en", "name": "Saudi Arabia", "name_en": "Saudi Arabia", "period": "monthly", "qr_spec": "ZATCA TLV — Phase 1", "qr_spec_en": "ZATCA TLV — Phase 1", "tax_no_hint": "15 digits", "tax_no_hint_en": "15 digits", "tax_no_label": "VAT number", "tax_no_label_en": "VAT number", "tax_no_regex": "^\\d{15}$", "vat_rate": 15.0}, "lang": "en", "max_items": 200, "periods": ["2026-11", "2026-10", "2026-09", "2026-08", "2026-07", "2026-06", "2026-05", "2026-04"]}};
-const STATIC_PLANS = {"ar": {"grace_ratio": 0.1, "lang": "ar", "max_invoices": 5000, "plans": [{"batch": 100, "features": ["مسح نص واتساب", "تصدير CSV", "مساعد ضريبي"], "for": "مكتب محاسبة أو منشأة صغيرة بفواتير محدودة", "key": "starter", "name": "الأساسية", "price": 899, "scans": 300}, {"batch": 500, "features": ["مسح بالجملة ٥٠٠ فاتورة", "تصدير CSV وJSON", "أخبار وعملات", "أولوية دعم"], "for": "شركة متوسطة تستلم مئات الفواتير شهريًا", "key": "growth", "name": "النمو", "price": 1490, "scans": 3000}, {"batch": 2000, "features": ["مسح بالجملة ٢٠٠٠ فاتورة", "سعة شهرية ٢٠٠٠٠", "سماحية تجاوز ١٠٪", "تقارير متعددة الدول"], "for": "مجموعة شركات وفروع متعددة", "key": "scale", "name": "المؤسسات", "price": 2990, "scans": 20000}]}, "en": {"grace_ratio": 0.1, "lang": "en", "max_invoices": 5000, "plans": [{"batch": 100, "features": ["WhatsApp text scanning", "CSV export", "Tax assistant"], "for": "A small accounting office or business with limited invoices", "key": "starter", "name": "Starter", "price": 899, "scans": 300}, {"batch": 500, "features": ["500-invoice batch scan", "CSV and JSON export", "Market news and rates", "Priority support"], "for": "A mid-size company receiving hundreds of invoices every month", "key": "growth", "name": "Growth", "price": 1490, "scans": 3000}, {"batch": 2000, "features": ["2,000-invoice batch scan", "20,000 monthly capacity", "10% overflow grace", "Multi-country reports"], "for": "A group of companies with multiple branches", "key": "scale", "name": "Enterprise", "price": 2990, "scans": 20000}]}};
-
 async function loadRates() {
   try {
-    let data = null;
-    try { data = await api("/api/rates"); } catch (err) { data = STATIC_RATES; enableStaticMode(); }
+    const data = await api("/api/rates");
     const rates = { SAR: 1 };
     Object.keys(data.rates || {}).forEach((code) => {
       const value = Number(data.rates[code]);
@@ -1750,8 +1359,7 @@ function renderRatesTicker() {
 
 async function loadNews() {
   try {
-    let data = null;
-    try { data = await api("/api/news?lang=" + state.lang); } catch (err) { data = STATIC_NEWS; enableStaticMode(); }
+    const data = await api("/api/news?lang=" + state.lang);
     const items = data.items || [];
     $("statNews").textContent = fmtNum(items.length);
     $("newsList").innerHTML = items.length ? items.map((n) => `
@@ -1902,7 +1510,6 @@ async function issueInvoice(save) {
     if (save && inv.saved) message += " " + t("msg.saved");
     if ((inv.notes || []).length) message += " " + inv.notes.join(" ");
     setInvMsg(message, "ok");
-    rememberSeller();
     if (save && inv.saved) {
       state.totals.scanned += 1;
       $("statInvoices").textContent = fmtNum(state.totals.scanned);
@@ -2359,8 +1966,7 @@ $("sendTicketBtn").addEventListener("click", async () => {
 /* ================== الباقات ================== */
 async function loadPlans() {
   try {
-    let data = null;
-    try { data = await api("/api/plans?lang=" + state.lang); } catch (err) { data = STATIC_PLANS[state.lang] || STATIC_PLANS.ar; enableStaticMode(); }
+    const data = await api("/api/plans?lang=" + state.lang);
     state.plans = data.plans || [];
     renderPlans();
     await loadQuota();
@@ -2463,21 +2069,6 @@ async function loadEmailConfig() {
   renderEmailStatus();
   const signup = $("smtpSignup");
   if (signup) signup.disabled = !state.emailConfig;
-  const ref = $("emailRefLink");
-  if (ref) ref.value = (state.emailConfig && state.emailConfig.affiliate_link) || "";
-}
-
-const emailRefCopy = $("emailRefCopy");
-if (emailRefCopy) {
-  emailRefCopy.addEventListener("click", async () => {
-    const ref = $("emailRefLink");
-    const value = ref && ref.value.trim();
-    const message = $("emailMsg");
-    if (!value) { message.className = "msg bad"; message.textContent = t("email.ref_missing"); return; }
-    try { await navigator.clipboard.writeText(value); } catch (err) { ref.select(); document.execCommand("copy"); }
-    message.className = "msg ok";
-    message.textContent = t("email.ref_copied");
-  });
 }
 
 ["emailFromName", "emailFromEmail", "emailReplyTo"].forEach((id) => {
@@ -2602,7 +2193,7 @@ $("obSave").addEventListener("click", async () => {
   applyCurrency(currency, { persist: true, reload: false });
   $("onboarding").hidden = true;
   state.detected = null;
-  await Promise.allSettled([loadPlans(), loadNews(), loadQuota(), loadReturn()]);
+  await Promise.all([loadPlans(), loadNews(), loadQuota(), loadReturn()]);
   setScanMsg("");
 });
 
@@ -2625,484 +2216,6 @@ $("retCountry").addEventListener("change", (e) => applyCountry(e.target.value, {
 $("currencySelect").addEventListener("change", (e) => applyCurrency(e.target.value));
 $("langToggle").addEventListener("click", () => setLanguage(state.lang === "ar" ? "en" : "ar"));
 
-/* ================== التنبؤ بالسيولة وكشف الهدر ================== */
-let cashflowCache = null;
-
-function cfMoney(value, currency) {
-  return legalMoney(Number(value) || 0, currency || state.currency);
-}
-
-function cashflowChart(data) {
-  const history = data.history || [];
-  const forecast = data.forecast || [];
-  const rows = history.map((row) => Object.assign({}, row, { projection: false }))
-    .concat(forecast.map((row) => Object.assign({}, row, { projection: true })));
-  if (!rows.length) return "";
-  const W = 760;
-  const H = 260;
-  const padL = 6;
-  const padR = 6;
-  const padT = 14;
-  const padB = 42;
-  const max = Math.max(1, ...rows.map((row) => Math.max(Number(row.inflow) || 0, Number(row.outflow) || 0)));
-  const slot = (W - padL - padR) / rows.length;
-  const barW = Math.min(26, slot * 0.32);
-  const baseY = H - padB;
-  const scale = (value) => baseY - (Math.max(0, Number(value) || 0) / max) * (baseY - padT);
-  let bars = "";
-  rows.forEach((row, index) => {
-    const cx = padL + slot * index + slot / 2;
-    const inH = baseY - scale(row.inflow);
-    const outH = baseY - scale(row.outflow);
-    const opacity = row.projection ? 0.55 : 1;
-    bars += '<rect x="' + (cx - barW - 2).toFixed(1) + '" y="' + scale(row.inflow).toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + inH.toFixed(1) + '" rx="3" fill="rgba(55,194,168,' + opacity + ')"></rect>';
-    bars += '<rect x="' + (cx + 2).toFixed(1) + '" y="' + scale(row.outflow).toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + outH.toFixed(1) + '" rx="3" fill="rgba(239,125,112,' + opacity + ')"></rect>';
-    const label = String(row.month || "").slice(2).replace("-", "/");
-    bars += '<text x="' + cx.toFixed(1) + '" y="' + (baseY + 16) + '" text-anchor="middle" font-size="10" fill="#93aab9">' + esc(label) + "</text>";
-    if (row.projection) bars += '<text x="' + cx.toFixed(1) + '" y="' + (baseY + 31) + '" text-anchor="middle" font-size="9" fill="#e2b455">' + esc(t("cf.table.projection")) + "</text>";
-  });
-  const grid = [0, 0.5, 1].map((fraction) => {
-    const y = baseY - fraction * (baseY - padT);
-    return '<line x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '" stroke="rgba(120,170,200,.18)" stroke-dasharray="3 4"></line>';
-  }).join("");
-  const dividerX = padL + slot * history.length;
-  const divider = history.length
-    ? '<line x1="' + dividerX.toFixed(1) + '" y1="' + padT + '" x2="' + dividerX.toFixed(1) + '" y2="' + baseY + '" stroke="rgba(226,180,85,.5)" stroke-dasharray="4 4"></line>'
-    : "";
-  return '<div class="cf-chart"><svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(t("cf.title")) + '">' + grid + bars + divider + "</svg></div>";
-}
-
-function renderCashflow(data) {
-  cashflowCache = data;
-  const body = $("cfBody");
-  const message = $("cfMsg");
-  const rows = (data.history || []).concat(data.forecast || []);
-  const hasData = rows.some((row) => (Number(row.inflow) || 0) || (Number(row.outflow) || 0));
-  if (!data || !hasData) {
-    body.hidden = true;
-    message.className = "msg";
-    message.textContent = t("cf.empty");
-    return;
-  }
-  body.hidden = false;
-  message.textContent = "";
-  const currency = data.currency || state.currency;
-  const totals = data.totals || {};
-  const kpis = [
-    ["cf.kpi.inflow", cfMoney(totals.inflow, currency), "good"],
-    ["cf.kpi.outflow", cfMoney(totals.outflow, currency), "bad"],
-    ["cf.kpi.avg", cfMoney(data.avg_net, currency), Number(data.avg_net) >= 0 ? "good" : "bad"],
-    ["cf.kpi.runway", data.runway_months ? t("cf.runwayValue", { n: data.runway_months }) : t("cf.runwayNa"), ""]
-  ];
-  $("cfKpis").innerHTML = kpis.map((item) =>
-    '<div class="cf-kpi ' + item[2] + '"><span>' + esc(t(item[0])) + "</span><strong>" + esc(item[1]) + "</strong></div>"
-  ).join("");
-  $("cfChart").innerHTML = cashflowChart(data);
-  $("cfTable").innerHTML = (data.forecast || []).map((row) =>
-    "<tr><td>" + esc(row.month) + ' <span class="cf-proj">' + esc(t("cf.table.projection")) + "</span></td>" +
-    "<td>" + cfMoney(row.inflow, currency) + "</td>" +
-    "<td>" + cfMoney(row.outflow, currency) + "</td>" +
-    "<td>" + cfMoney(row.net, currency) + "</td>" +
-    "<td>" + cfMoney(row.cumulative, currency) + "</td></tr>"
-  ).join("");
-
-  const anomalies = data.anomalies || [];
-  if (!anomalies.length) {
-    $("cfAlertWrap").innerHTML = '<div class="cf-clear">' + esc(t("cf.noAnomalies")) + "</div>";
-  } else {
-    const total = anomalies.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-    $("cfAlertWrap").innerHTML = anomalies.map((item) =>
-      '<div class="cf-anom"><div class="cf-anom-head"><strong>' + esc(item.supplier) + "</strong><span>" +
-        esc(t("cf.anomaly.kind." + item.code)) + "</span></div><div class=\"cf-anom-meta\">" +
-        "<span>" + esc(t("cf.anomaly.field.date")) + ": <b>" + esc(String(item.date || "—").slice(0, 10)) + "</b></span>" +
-        "<span>" + esc(t("cf.anomaly.field.amount")) + ": <b>" + cfMoney(item.amount, currency) + "</b></span>" +
-        "<span>" + esc(t("cf.anomaly.field.baseline")) + ": <b>" + cfMoney(item.baseline, currency) + "</b></span>" +
-        "<span>" + esc(t("cf.anomaly.field.ratio")) + ": <b>×" + esc(item.ratio) + "</b></span>" +
-        "</div></div>"
-    ).join("") +
-      '<p class="fine">' + esc(t("cf.anomaly.body", { n: fmtNum(anomalies.length), amount: cfMoney(total, currency) })) + "</p>";
-  }
-}
-
-async function loadCashflow() {
-  const button = $("cfBtn");
-  if (!button) return;
-  const label = button.textContent;
-  button.disabled = true;
-  button.textContent = t("cf.loading");
-  try {
-    const data = await api("/api/cashflow?account=" + encodeURIComponent(ACCOUNT) + "&months=3&country=" + encodeURIComponent(state.country));
-    renderCashflow(data);
-    $("cfStamp").textContent = t("audit.stamp", {
-      t: String(data.generated_at || "").replace("T", " ").slice(0, 16),
-      n: (data.history || []).length
-    });
-  } catch (err) {
-    cashflowCache = null;
-    $("cfBody").hidden = true;
-    $("cfMsg").className = "msg bad";
-    $("cfMsg").textContent = t("cf.error", { error: err.message });
-  } finally {
-    button.disabled = false;
-    button.textContent = label;
-  }
-}
-
-$("cfBtn").addEventListener("click", loadCashflow);
-
-/* ================== الأوامر الصوتية (Voice-to-Invoice) ================== */
-const VOICE_AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
-const VOICE_FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
-
-function normalizeSpeech(raw) {
-  return String(raw || "")
-    .replace(/[٠-٩]/g, (digit) => String(VOICE_AR_DIGITS.indexOf(digit)))
-    .replace(/[۰-۹]/g, (digit) => String(VOICE_FA_DIGITS.indexOf(digit)))
-    .replace(/[أإآٱ]/g, "ا")
-    .replace(/ى/g, "ي")
-    .replace(/ة/g, "ه")
-    .replace(/[\u064B-\u0652\u0670]/g, "")
-    .replace(/[،,]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
-}
-
-function speechNumber(text) {
-  const match = normalizeSpeech(text).match(/(\d+(?:\.\d+)?)/);
-  return match ? Number(match[1]) : 0;
-}
-
-function setVoiceMsg(text, kind) {
-  const el = $("voiceMsg");
-  if (!el) return;
-  el.textContent = text || "";
-  el.className = "fine voice-msg" + (kind ? " " + kind : "");
-}
-
-function speakOut(text) {
-  if (!window.speechSynthesis || !text) return;
-  try {
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(String(text).replace(/\s+/g, " ").trim().slice(0, 400));
-    utterance.lang = state.lang === "en" ? "en-US" : "ar-SA";
-    speechSynthesis.speak(utterance);
-  } catch (err) { /* النطق اختياري */ }
-}
-
-function voiceReply(text, kind) {
-  setVoiceMsg(text, kind);
-  speakOut(text);
-}
-
-function parseVoiceCommand(raw) {
-  const text = normalizeSpeech(raw);
-  const rawLite = String(raw || "")
-    .replace(/[٠-٩]/g, (digit) => String(VOICE_AR_DIGITS.indexOf(digit)))
-    .replace(/[۰-۹]/g, (digit) => String(VOICE_FA_DIGITS.indexOf(digit)))
-    .replace(/[\u064B-\u0652\u0670]/g, "")
-    .replace(/[،,]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  let amount = speechNumber(raw);
-  const invoiceWords = /(فاتوره|فاتورة|bill|invoice)/.test(text);
-  const actionWords = /(اصدر|انشي|انشئ|سو|اعمل|حول|issue|create|make|raise)/.test(text);
-  if (invoiceWords && actionWords) {
-    let buyer = "";
-    let desc = "";
-    if (/[\u0600-\u06FF]/.test(rawLite)) {
-      const PARTY = { "شركة": "شركة", "شركه": "شركة", "مؤسسة": "مؤسسة", "مؤسسه": "مؤسسة", "عميل": "عميل", "جهة": "جهة", "جهه": "جهة", "اخ": "", "سيد": "السيد", "سيده": "السيدة", "شخص": "" };
-      const arabic = rawLite.match(/(?:^|\s)ل(شركة|شركه|مؤسسة|مؤسسه|عميل|جهة|جهه|اخ|سيد|سيده|شخص)?\s*(.+?)(?=\s+(?:بمبلغ|بقيمة|بقيمه|مبلغ|قيمة|قيمه|ب\d|عن|علي|$))/);
-      if (arabic) {
-        const label = PARTY[arabic[1]] || "";
-        buyer = (label ? label + " " : "") + arabic[2].trim();
-      }
-      const about = rawLite.match(/عن\s+(?!\d)(.+)$/);
-      if (about) desc = about[1].trim();
-    } else {
-      const english = rawLite.match(/(?:invoice|bill)\s+(?:for|to)\s+(.+?)\s+(?:for|amount|worth|at)\s+([\d.,]+)(?:\s+(?:for|covering)\s+(.+))?$/i);
-      if (english) {
-        buyer = english[1].trim();
-        amount = Number(english[2].replace(/,/g, "")) || amount;
-        if (english[3]) desc = english[3].trim();
-      }
-    }
-    return { kind: "invoice", amount, buyer, desc };
-  }
-  if (/(صافي|net)/.test(text) && /(ضريبه|vat|tax)/.test(text)) return { kind: "net" };
-  if (/(مبيعات|ايرادات|sales|revenue|turnover)/.test(text)) return { kind: "sales" };
-  if (/(ارباح|ربح|profit|margin)/.test(text)) return { kind: "profit" };
-  if (/(فواتير|invoices)/.test(text) && /(كم|عدد|how many|count|number)/.test(text)) return { kind: "count" };
-  if (/(ضريبه|vat|tax)/.test(text)) return { kind: "tax" };
-  return { kind: "unknown" };
-}
-
-async function voiceInvoice(cmd) {
-  if (!cmd.amount || cmd.amount <= 0) {
-    voiceReply(t("voice.needAmount"), "bad");
-    return;
-  }
-  if (!$("sellerVat").value.trim()) {
-    voiceReply(t("voice.needSeller"), "bad");
-    $("sellerVat").focus();
-    return;
-  }
-  $("buyerName").value = cmd.buyer || (state.lang === "ar" ? "عميل نقدي" : "Cash customer");
-  $("invNumber").value = "";
-  $("invDate").value = new Date().toISOString().slice(0, 10);
-  state.items = [{ description: cmd.desc || t("voice.item"), quantity: 1, unit_price: cmd.amount, discount: 0 }];
-  renderItems();
-  recompute();
-  showView("invoice");
-  await issueInvoice(false);
-  if (state.invoice) {
-    voiceReply(t("voice.invoiceDone", {
-      n: state.invoice.number,
-      t: legalMoney(state.invoice.total, state.invoice.currency)
-    }), "ok");
-  } else {
-    voiceReply(t("voice.invoiceFailed", { error: $("invMsg").textContent }), "bad");
-  }
-}
-
-async function voiceQuery(cmd) {
-  const account = encodeURIComponent(ACCOUNT);
-  if (cmd.kind === "net") {
-    const period = new Date().toISOString().slice(0, 7);
-    const data = await api("/api/taxreturn?account=" + account + "&country=" + encodeURIComponent(state.country) + "&period=" + encodeURIComponent(period));
-    const due = data.due && (data.due.due || data.due);
-    voiceReply(t("voice.net", { p: data.period || period, net: legalMoney(data.net, data.currency || state.currency), due: due || "—" }), "ok");
-    return;
-  }
-  const data = await api("/api/ledger?account=" + account);
-  const sales = Array.isArray(data.sales) ? data.sales : [];
-  const total = sales.reduce((sum, row) => sum + (Number(row.total) || 0), 0);
-  const tax = sales.reduce((sum, row) => sum + (Number(row.tax) || 0), 0);
-  const count = sales.length;
-  const currency = (countryBy(state.country) || {}).currency || state.currency;
-  if (cmd.kind === "sales") {
-    voiceReply(t("voice.sales", { n: count, total: legalMoney(total, currency), tax: legalMoney(tax, currency) }), "ok");
-  } else if (cmd.kind === "profit") {
-    voiceReply(t("voice.profit", { total: legalMoney(total, currency), tax: legalMoney(tax, currency) }), "ok");
-  } else if (cmd.kind === "count") {
-    voiceReply(t("voice.count", { n: count }), "ok");
-  } else {
-    voiceReply(t("voice.tax", { n: count, tax: legalMoney(tax, currency) }), "ok");
-  }
-}
-
-async function runVoiceCommand(raw) {
-  const text = String(raw !== undefined && raw !== null ? raw : $("voiceInput").value || "").trim();
-  if (!text) {
-    voiceReply(t("voice.notUnderstood"), "bad");
-    return;
-  }
-  const cmd = parseVoiceCommand(text);
-  setVoiceMsg(t("voice.heard", { q: text }), "");
-  try {
-    if (cmd.kind === "invoice") await voiceInvoice(cmd);
-    else if (cmd.kind === "unknown") voiceReply(t("voice.notUnderstood"), "bad");
-    else await voiceQuery(cmd);
-  } catch (err) {
-    voiceReply(t("voice.invoiceFailed", { error: err.message }), "bad");
-  }
-}
-
-let voiceRecognition = null;
-let voiceListening = false;
-
-(function setupVoice() {
-  const button = $("voiceBtn");
-  const input = $("voiceInput");
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  $("voiceRun").addEventListener("click", () => runVoiceCommand(input.value));
-  input.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      runVoiceCommand(input.value);
-    }
-  });
-  if (!SpeechRecognition) {
-    button.disabled = true;
-    button.classList.add("disabled");
-    setVoiceMsg(t("voice.unsupported"));
-    return;
-  }
-  voiceRecognition = new SpeechRecognition();
-  voiceRecognition.continuous = false;
-  voiceRecognition.interimResults = true;
-  voiceRecognition.maxAlternatives = 1;
-  voiceRecognition.lang = state.lang === "en" ? "en-US" : "ar-SA";
-
-  voiceRecognition.addEventListener("result", (event) => {
-    let interim = "";
-    let final = "";
-    for (let i = event.resultIndex; i < event.results.length; i += 1) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) final += transcript;
-      else interim += transcript;
-    }
-    if (interim) setVoiceMsg(t("voice.listening") + " — " + interim);
-    if (final.trim()) {
-      input.value = final.trim();
-      runVoiceCommand(final.trim());
-    }
-  });
-
-  voiceRecognition.addEventListener("error", (event) => {
-    voiceListening = false;
-    button.classList.remove("listening");
-    const code = (event && event.error) || "error";
-    const denied = code === "not-allowed" || code === "service-not-allowed";
-    setVoiceMsg(denied ? t("voice.denied") : t("voice.error", { error: code }), "bad");
-  });
-
-  voiceRecognition.addEventListener("end", () => {
-    voiceListening = false;
-    button.classList.remove("listening");
-    button.setAttribute("aria-pressed", "false");
-  });
-
-  button.addEventListener("click", () => {
-    if (voiceListening) {
-      voiceRecognition.stop();
-      return;
-    }
-    try {
-      if (window.speechSynthesis) speechSynthesis.cancel();
-      voiceRecognition.lang = state.lang === "en" ? "en-US" : "ar-SA";
-      voiceRecognition.start();
-      voiceListening = true;
-      button.classList.add("listening");
-      button.setAttribute("aria-pressed", "true");
-      setVoiceMsg(t("voice.listening"));
-    } catch (err) {
-      setVoiceMsg(t("voice.error", { error: err.message }), "bad");
-    }
-  });
-})();
-
-/* ================== محاكي التفتيش الضريبي ================== */
-let auditCache = null;
-
-function renderAudit(data) {
-  auditCache = data;
-  const top = $("auditTop");
-  const findingsBox = $("auditFindings");
-  const recWrap = $("auditRecWrap");
-  if (!data || !data.scanned) {
-    top.hidden = true;
-    recWrap.hidden = true;
-    findingsBox.innerHTML = '<p class="fine">' + esc(t("audit.empty")) + "</p>";
-    $("auditMsg").textContent = "";
-    return;
-  }
-  top.hidden = false;
-  const score = Math.max(0, Math.min(100, Number(data.score) || 0));
-  const grade = data.grade || "review";
-  const color = score >= 90 ? "var(--teal)" : score >= 70 ? "var(--gold)" : "var(--bad)";
-  $("auditGauge").style.background = "conic-gradient(" + color + " " + (score * 3.6).toFixed(1) + "deg, rgba(255,255,255,.08) 0)";
-  $("auditScore").textContent = fmtNum(score) + "%";
-  $("auditGrade").textContent = t("audit.grade." + grade);
-  const counts = data.counts || {};
-  $("auditScanned").textContent = fmtNum(data.scanned);
-  $("auditCritical").textContent = fmtNum(counts.critical || 0);
-  $("auditWarnings").textContent = fmtNum(counts.warning || 0);
-  $("auditClean").textContent = fmtNum(counts.clean || 0);
-  const findings = data.findings || [];
-  findingsBox.innerHTML = findings.length
-    ? '<div class="findings">' + findings.map((finding) => {
-        const bad = finding.severity === "critical";
-        const vars = { d: fmtNum(Math.abs(Number(finding.diff) || 0), 2) };
-        return '<div class="finding ' + (bad ? "bad" : "warn") + '">' +
-          '<span class="sev ' + (bad ? "bad" : "warn") + '">' + esc(t(bad ? "audit.sev.critical" : "audit.sev.warning")) + "</span>" +
-          '<span class="inv">' + esc(finding.number || "—") + (finding.date ? " · " + esc(String(finding.date).slice(0, 10)) : "") + "</span>" +
-          "<p>" + esc(t("audit.code." + finding.code, vars)) + "</p></div>";
-      }).join("") + "</div>"
-    : '<div class="audit-clear">' + esc(t("audit.allClear")) + "</div>";
-  const recs = data.recommendations || [];
-  recWrap.hidden = !recs.length;
-  $("auditRecs").innerHTML = recs.map((code) => "<li>" + esc(t("audit.rec." + code)) + "</li>").join("");
-  const stamp = String(data.checked_at || "").replace("T", " ").slice(0, 16);
-  $("auditMsg").textContent = t("audit.stamp", { t: stamp, n: fmtNum(data.scanned) });
-}
-
-async function runAudit() {
-  const button = $("auditBtn");
-  const label = button.textContent;
-  button.disabled = true;
-  button.textContent = t("audit.running");
-  $("auditMsg").textContent = t("audit.running");
-  try {
-    const data = await api("/api/audit?account=" + encodeURIComponent(ACCOUNT));
-    renderAudit(data);
-  } catch (err) {
-    auditCache = null;
-    $("auditTop").hidden = true;
-    $("auditRecWrap").hidden = true;
-    $("auditFindings").innerHTML = "";
-    $("auditMsg").textContent = t("audit.error", { error: err.message });
-  } finally {
-    button.disabled = false;
-    button.textContent = label;
-  }
-}
-
-$("auditBtn").addEventListener("click", runAudit);
-
-/* ================== استقبال عرض السعر من حاسبة المناقصات ================== */
-function readIntake() {
-  const marker = "#intake=";
-  if (!location.hash || !location.hash.startsWith(marker)) return null;
-  try {
-    const raw = location.hash.slice(marker.length).replace(/-/g, "+").replace(/_/g, "/");
-    const padded = raw + "=".repeat((4 - (raw.length % 4)) % 4);
-    const bin = atob(padded);
-    const bytes = Uint8Array.from(bin, (ch) => ch.charCodeAt(0));
-    return JSON.parse(new TextDecoder().decode(bytes));
-  } catch (err) { return null; }
-}
-
-async function applyIntake(payload) {
-  if (!payload || typeof payload !== "object") return false;
-  if (payload.lang === "ar" || payload.lang === "en") await setLanguage(payload.lang, { persist: false, reload: false });
-  const code = String(payload.country || "").toUpperCase();
-  if (countryBy(code)) {
-    applyCountry(code, { keepCurrency: true, reload: false, persist: false });
-    const currency = state.currencies.some((c) => c.code === payload.currency) ? payload.currency : (countryBy(code) || {}).currency;
-    if (currency) applyCurrency(currency, { persist: false, reload: false });
-  }
-  if (payload.vat_rate !== undefined && payload.vat_rate !== null) $("invRate").value = payload.vat_rate;
-  if (payload.date) $("invDate").value = payload.date;
-  const seller = payload.seller || {};
-  const buyer = payload.buyer || {};
-  $("sellerName").value = seller.name || "";
-  $("sellerVat").value = seller.vat_number || "";
-  $("sellerAddress").value = seller.address || "";
-  $("sellerEmail").value = seller.email || "";
-  $("sellerPhone").value = seller.phone || "";
-  $("buyerName").value = buyer.name || "";
-  $("buyerVat").value = buyer.vat_number || "";
-  $("buyerAddress").value = buyer.address || "";
-  $("buyerEmail").value = buyer.email || "";
-  const lines = Array.isArray(payload.items) ? payload.items.filter((item) => item && String(item.description || "").trim()) : [];
-  state.items = lines.length ? lines.map((item) => ({
-    description: String(item.description).slice(0, 160),
-    quantity: Math.max(0, Number(item.quantity) || 1),
-    unit_price: Math.max(0, Number(item.unit_price) || 0),
-    discount: 0,
-  })) : [blankItem()];
-  renderItems();
-  recompute();
-  showView("invoice");
-  if (!seller.vat_number) {
-    setInvMsg(t("intake.missing_vat"), "bad");
-    return true;
-  }
-  await issueInvoice(false);
-  return true;
-}
-
 /* ================== الإقلاع ================== */
 async function boot() {
   const profile = readProfile();
@@ -3120,14 +2233,6 @@ async function boot() {
   $("invDate").value = new Date().toISOString().slice(0, 10);
 
   applyStaticTexts();
-  const savedSeller = readSeller();
-  if (savedSeller && savedSeller.vat && !$("sellerVat").value.trim()) {
-    $("sellerName").value = $("sellerName").value || savedSeller.name || "";
-    $("sellerVat").value = savedSeller.vat;
-    $("sellerAddress").value = $("sellerAddress").value || savedSeller.address || "";
-    $("sellerEmail").value = $("sellerEmail").value || savedSeller.email || "";
-    $("sellerPhone").value = $("sellerPhone").value || savedSeller.phone || "";
-  }
   renderItems();
   renderSuggestions();
   loadHealth();
@@ -3153,13 +2258,7 @@ async function boot() {
 
   await Promise.all([loadPlans(), loadNews(), loadReturn(), loadQuota(), loadTickets(), loadEmailConfig()]);
   renderSuggestions();
-  const intake = readIntake();
-  if (intake) {
-    history.replaceState(null, "", location.pathname + location.search);
-    await applyIntake(intake);
-  } else if (!profile) {
-    openOnboarding({ firstRun: true });
-  }
+  if (!profile) openOnboarding({ firstRun: true });
 }
 
 boot();

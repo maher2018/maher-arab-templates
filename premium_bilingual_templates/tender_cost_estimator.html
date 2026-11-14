@@ -119,8 +119,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
       <label><span data-i18n="meta.validity">صلاحية العرض (يوم)</span><input id="validity" type="number" min="1" step="1" value="30" data-store="validity"></label>
       <label><span data-i18n="meta.contact">للتواصل</span><input id="contact" type="text" data-store="contact" placeholder="name@company.com"></label>
       <label><span data-i18n="meta.scope">نطاق العمل</span><input id="scope" type="text" data-store="scope"></label>
-      <label><span data-i18n="meta.vat">الرقم الضريبي لشركتك</span><input id="companyVat" type="text" inputmode="numeric" data-store="companyVat" placeholder="310123456700003"></label>
-      <label><span data-i18n="meta.clientVat">الرقم الضريبي للعميل (اختياري)</span><input id="clientVat" type="text" inputmode="numeric" data-store="clientVat"></label>
     </div>
   </section>
 
@@ -215,11 +213,9 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
   </section>
 
   <div class="actions">
-    <button type="button" class="btn gold" id="invoiceBtn" data-i18n="toInvoice">تحويل إلى فاتورة ضريبية</button>
     <button type="button" class="btn ghost" id="sampleBtn" data-i18n="sample">تحميل مثال</button>
     <button type="button" class="btn ghost" id="resetBtn" data-i18n="reset">تفريغ الكل</button>
   </div>
-  <p class="hint" id="invoiceMsg" style="text-align:center;margin:0" hidden></p>
 </main>
 
 <footer>Premium Bilingual Templates — <span data-i18n="footer">قالب جاهز للتخصيص · عربي/إنجليزي · عملات خليجية</span></footer>
@@ -264,15 +260,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
       "quote.title": "عرض السعر الجاهز للطباعة", "quote.hint": "يتحدّث تلقائيًا مع كل تعديل",
       "quote.companyFallback": "اسم شركتك", "quote.item": "البند", "quote.amount": "المبلغ",
       "footer": "قالب جاهز للتخصيص · عربي/إنجليزي · عملات خليجية",
-      "meta.vat": "الرقم الضريبي لشركتك", "meta.clientVat": "الرقم الضريبي للعميل (اختياري)",
-      toInvoice: "تحويل إلى فاتورة ضريبية",
-      "inv.hint": "يفتح نظام الفواتير الضريبية وينقل العميل والبنود والأسعار ويصدر الفاتورة برمز QR فورًا.",
-      "inv.needCompany": "أدخل اسم شركتك أولًا — فهو اسم المورد في الفاتورة.",
-      "inv.needVat": "أدخل الرقم الضريبي لشركتك — لا تُصدر الفاتورة الضريبية بدونه.",
-      "inv.needItems": "أضف بندًا واحدًا صحيحًا على الأقل قبل التحويل.",
-      "inv.blocked": "المتصفح منع فتح نافذة جديدة — اسمح بالنوافذ أو افتح الرابط: ",
-      "inv.opened": "تم فتح نظام الفواتير في نافذة جديدة وتوليد الفاتورة برمز QR.",
-      "inv.rowMaterials": "المواد الخام", "inv.rowLabor": "العمالة",
       sample: "تحميل مثال", reset: "تفريغ الكل",
       "bar.materials": "المواد", "bar.labor": "العمالة", "bar.indirect": "إداري وطوارئ", "bar.profit": "الربح",
       "health.bad": "هامش منخفض — راجع التكاليف", "health.warn": "هامش مقبول لكنه هامشي",
@@ -318,15 +305,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
       "quote.title": "Print-ready quotation", "quote.hint": "Updates automatically with every change",
       "quote.companyFallback": "Your company", "quote.item": "Item", "quote.amount": "Amount",
       "footer": "Customisable template · Arabic/English · Gulf currencies",
-      "meta.vat": "Your VAT number", "meta.clientVat": "Client VAT number (optional)",
-      toInvoice: "Convert to Tax Invoice",
-      "inv.hint": "Opens the e-invoicing app, carries over the client, line items and prices, and issues the invoice with its QR instantly.",
-      "inv.needCompany": "Enter your company name first — it becomes the seller on the invoice.",
-      "inv.needVat": "Enter your VAT number — a tax invoice cannot be issued without it.",
-      "inv.needItems": "Add at least one valid line before converting.",
-      "inv.blocked": "The browser blocked the new window — allow pop-ups or open this link: ",
-      "inv.opened": "The invoicing app opened in a new window with the invoice and QR generated.",
-      "inv.rowMaterials": "Raw materials", "inv.rowLabor": "Labour",
       sample: "Load sample", reset: "Clear all",
       "bar.materials": "Materials", "bar.labor": "Labour", "bar.indirect": "Overhead", "bar.profit": "Profit",
       "health.bad": "Margin too low — revisit costs", "health.warn": "Acceptable but thin margin",
@@ -354,7 +332,7 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
     currency: "SAR",
     items: { mat: [], lab: [] },
     rates: { overhead: 8, contingency: 5, margin: 15, vat: 15 },
-    meta: { project: "", client: "", ref: "", company: "", date: "", validity: 30, contact: "", scope: "", companyVat: "", clientVat: "" }
+    meta: { project: "", client: "", ref: "", company: "", date: "", validity: 30, contact: "", scope: "" }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -408,7 +386,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
     });
     document.querySelectorAll('#matBody input[data-k="unit"]').forEach((input) => input.setAttribute("placeholder", t("ph.unit")));
     $("langBtn").textContent = ar ? "English" : "العربية";
-    $("invoiceBtn").title = t("inv.hint");
     renderCurrencies();
     if (persist) localStorage.setItem("pb_estimator_lang", state.lang);
     recalc();
@@ -660,105 +637,13 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
 
   function resetAll() {
     state.items = { mat: [], lab: [] };
-    state.meta = { project: "", client: "", ref: "", company: "", date: "", validity: 30, contact: "", scope: "", companyVat: "", clientVat: "" };
+    state.meta = { project: "", client: "", ref: "", company: "", date: "", validity: 30, contact: "", scope: "" };
     state.rates = { overhead: 8, contingency: 5, margin: 15, vat: CURRENCIES[state.currency].vat };
     localStorage.removeItem("pb_estimator_state");
     fillMetaInputs();
     renderRows("mat");
     renderRows("lab");
     recalc();
-  }
-
-  /* ---------- التحويل إلى فاتورة ضريبية ---------- */
-  const COUNTRY_BY_CURRENCY = { SAR: "SA", AED: "AE", KWD: "KW", QAR: "QA", OMR: "OM", BHD: "BH", USD: "SA" };
-  const TAX_APP_URL = (function () {
-    try {
-      const custom = new URLSearchParams(location.search).get("tax");
-      if (custom && /^https?:\/\//i.test(custom)) return custom;
-    } catch (err) { /* تجاهل */ }
-    return "http://127.0.0.1:5075/";
-  })();
-
-  function b64url(text) {
-    const bytes = new TextEncoder().encode(text);
-    let bin = "";
-    bytes.forEach((byte) => { bin += String.fromCharCode(byte); });
-    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  }
-
-  function setInvoiceMsg(text, kind) {
-    const el = $("invoiceMsg");
-    el.hidden = !text;
-    el.textContent = text || "";
-    el.style.color = kind === "bad" ? "var(--bad)" : kind === "ok" ? "var(--teal)" : "var(--muted)";
-  }
-
-  function buildIntake() {
-    const data = totals();
-    const meta = state.meta;
-    const items = [];
-    state.items.mat.forEach((item, index) => {
-      const qty = Math.max(0, num(item.qty));
-      const cost = Math.max(0, num(item.cost));
-      if (!qty || !cost) return;
-      items.push({
-        description: String(item.desc || "").trim() || (t("inv.rowMaterials") + " " + (index + 1)),
-        quantity: qty, unit_price: cost
-      });
-    });
-    state.items.lab.forEach((item, index) => {
-      const head = Math.max(0, num(item.head));
-      const days = Math.max(0, num(item.days));
-      const rate = Math.max(0, num(item.rate));
-      if (!head || !days || !rate) return;
-      const label = String(item.role || "").trim() || (t("inv.rowLabor") + " " + (index + 1));
-      items.push({ description: label + " (" + head + " × " + days + ")", quantity: head * days, unit_price: rate });
-    });
-    if (data.overhead > 0) items.push({ description: t("row.overhead", { p: num(state.rates.overhead).toFixed(1) }), quantity: 1, unit_price: data.overhead });
-    if (data.contingency > 0) items.push({ description: t("row.contingency", { p: num(state.rates.contingency).toFixed(1) }), quantity: 1, unit_price: data.contingency });
-    if (data.profit > 0) items.push({ description: t("row.profit", { p: data.margin.toFixed(1) }), quantity: 1, unit_price: data.profit });
-    const contact = String(meta.contact || "").trim();
-    return {
-      lang: state.lang,
-      country: COUNTRY_BY_CURRENCY[state.currency] || "SA",
-      currency: state.currency,
-      vat_rate: num(state.rates.vat),
-      date: meta.date || new Date().toISOString().slice(0, 10),
-      seller: {
-        name: String(meta.company || "").trim(),
-        vat_number: String(meta.companyVat || "").trim(),
-        address: "",
-        email: contact.indexOf("@") > 0 ? contact : "",
-        phone: contact.indexOf("@") > 0 ? "" : contact
-      },
-      buyer: {
-        name: String(meta.client || "").trim() || (state.lang === "ar" ? "عميل نقدي" : "Cash customer"),
-        vat_number: String(meta.clientVat || "").trim(),
-        address: ""
-      },
-      items
-    };
-  }
-
-  function convertToInvoice() {
-    const payload = buildIntake();
-    if (!payload.seller.name) { setInvoiceMsg(t("inv.needCompany"), "bad"); return; }
-    if (!payload.seller.vat_number) { setInvoiceMsg(t("inv.needVat"), "bad"); return; }
-    if (!payload.items.length) { setInvoiceMsg(t("inv.needItems"), "bad"); return; }
-    const url = TAX_APP_URL.replace(/#.*$/, "") + "#intake=" + b64url(JSON.stringify(payload));
-    const popup = window.open(url, "_blank");
-    if (popup) {
-      try { popup.opener = null; } catch (err) { /* متصفح يمنع */ }
-      setInvoiceMsg(t("inv.opened"), "ok");
-      return;
-    }
-    setInvoiceMsg(t("inv.blocked"), "bad");
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.textContent = TAX_APP_URL;
-    $("invoiceMsg").appendChild(link);
   }
 
   /* ---------- الأحداث ---------- */
@@ -779,7 +664,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 28px}
     });
     $("langBtn").addEventListener("click", () => applyLang(state.lang === "ar" ? "en" : "ar", true));
     $("printBtn").addEventListener("click", () => window.print());
-    $("invoiceBtn").addEventListener("click", convertToInvoice);
     $("sampleBtn").addEventListener("click", sample);
     $("resetBtn").addEventListener("click", resetAll);
 

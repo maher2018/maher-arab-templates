@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arab Templates — Hero Visual Showcase</title>
+<meta name="description" content="عرض حي لأنظمة Arab Templates: الأتمتة المالية والضريبية، أرباح المتاجر، الميدان والمقاولات، والمساعد الذكي ثنائي اللغة.">
+<style>
+:root{
+  --navy:#0F172A;
+  --navy-2:#111E36;
+  --navy-3:#0B1223;
+  --gold:#C5A059;
+  --gold-2:#E7CC94;
+  --gold-soft:rgba(197,160,89,.14);
+  --ink:#F5F7FB;
+  --muted:#93A1B8;
+  --line:rgba(197,160,89,.22);
+  --line-soft:rgba(148,163,184,.16);
+  --green:#38D39F;
+  --red:#F2776B;
+  --radius:22px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:"Segoe UI",Tahoma,system-ui,-apple-system,Arial,sans-serif;
+  background:
+    radial-gradient(900px 520px at 82% -10%,rgba(197,160,89,.16),transparent 60%),
+    radial-gradient(700px 480px at -5% 30%,rgba(37,99,235,.12),transparent 65%),
+    var(--navy);
+  color:var(--ink);
+  min-height:100vh;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(148,163,184,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.05) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at 50% 20%,#000 30%,transparent 78%);
+}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3,h4,p{margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.gold{color:var(--gold-2)}
+
+/* header */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 0 8px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(135deg,rgba(197,160,89,.28),rgba(197,160,89,.05));
+  border:1px solid var(--line);color:var(--gold-2);font-weight:900;font-size:.82rem;letter-spacing:.06em;
+  box-shadow:inset 0 0 18px rgba(197,160,89,.12);
+}
+.brand-name{font-size:1rem;font-weight:800;letter-spacing:.02em;line-height:1.3}
+.brand-name small{display:block;color:var(--muted);font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.top-actions{display:flex;align-items:center;gap:10px}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:99px;
+  padding:6px 13px;font-size:.72rem;font-weight:800;color:var(--gold-2);background:var(--gold-soft);white-space:nowrap;
+}
+.badge i{width:6px;height:6px;border-radius:50%;background:var(--gold-2);box-shadow:0 0 10px var(--gold-2)}
+.lang-btn{
+  border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);
+  border-radius:99px;padding:8px 16px;font-size:.8rem;font-weight:800;transition:.18s;
+}
+.lang-btn:hover{background:var(--gold);border-color:var(--gold);color:#1A1408}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:42px;align-items:center;padding:34px 0 18px}
+@media(max-width:980px){.hero{grid-template-columns:1fr;gap:26px;padding-top:20px}}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--gold-2);font-size:.76rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+h1{font-size:clamp(2rem,3.6vw,3.45rem);line-height:1.18;font-weight:800;margin:16px 0 16px;letter-spacing:-.01em}
+body[dir="ltr"] h1{letter-spacing:-.025em}
+.sub{color:var(--muted);font-size:.98rem;max-width:520px}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.stat-chip{
+  display:flex;align-items:center;gap:9px;border:1px solid var(--line-soft);border-radius:12px;
+  padding:9px 13px;background:rgba(255,255,255,.025);font-size:.76rem;color:var(--muted);
+}
+.stat-chip b{color:var(--ink);font-size:.92rem;font-variant-numeric:tabular-nums}
+.stat-chip b.gold{color:var(--gold-2)}
+
+/* showcase */
+.showcase{
+  border:1px solid var(--line);border-radius:var(--radius);padding:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  box-shadow:0 40px 90px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;
+}
+.showcase::after{
+  content:"";position:absolute;inset:0;border-radius:var(--radius);pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(197,160,89,.08);
+}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+@media(max-width:620px){.tabs{grid-template-columns:1fr 1fr}}
+.tab{
+  border:1px solid transparent;border-radius:11px;padding:9px 10px;text-align:start;
+  background:transparent;color:var(--muted);transition:.2s var(--ease);
+  display:flex;align-items:center;gap:8px;min-width:0;
+}
+.tab:hover{background:rgba(255,255,255,.035);color:var(--ink)}
+.tab .tab-no{
+  font-size:.62rem;font-weight:900;letter-spacing:.04em;color:var(--gold);
+  border:1px solid var(--line);border-radius:6px;padding:1px 5px;flex:none;
+}
+.tab .tab-txt{min-width:0}
+.tab b{display:block;font-size:.78rem;font-weight:800;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab small{display:block;font-size:.64rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab[aria-selected="true"]{
+  background:linear-gradient(135deg,rgba(197,160,89,.18),rgba(197,160,89,.04));
+  border-color:var(--line);color:var(--ink);
+}
+.tab[aria-selected="true"] .tab-no{background:var(--gold);border-color:var(--gold);color:#1A1408}
+.tab:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+
+/* stage */
+.stage{
+  position:relative;border:1px solid var(--line-soft);border-radius:16px;overflow:hidden;
+  background:
+    radial-gradient(640px 300px at 70% 0%,rgba(197,160,89,.10),transparent 60%),
+    radial-gradient(500px 300px at 15% 100%,rgba(37,99,235,.10),transparent 65%),
+    linear-gradient(180deg,#0D1628,#0A1120);
+  min-height:446px;
+  display:flex;flex-direction:column;
+}
+.stage::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.10) .7px,transparent .7px);
+  background-size:26px 26px;opacity:.28;
+  mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 80%);
+}
+.stage-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px 9px;position:relative;z-index:2;border-bottom:1px solid rgba(148,163,184,.10)}
+.stage-left{display:flex;align-items:center;gap:9px;min-width:0}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(56,211,159,.6);animation:pulseDot 2.2s infinite;flex:none}
+.live-label{font-size:.65rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.stage-title{font-size:.78rem;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage-meta{font-size:.63rem;color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.pause-tag{display:none;color:var(--gold-2);font-weight:800}
+.stage.paused .pause-tag{display:inline}
+.auto-progress{position:absolute;inset-inline:0;bottom:0;height:2px;background:rgba(148,163,184,.12);z-index:3}
+.auto-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2));box-shadow:0 0 12px rgba(197,160,89,.6);transition:width .1s linear}
+.scene-host{padding:16px;flex:1;display:flex;position:relative;z-index:2}
+.scene{width:100%;animation:sceneIn .55s var(--ease) both}
+@keyframes sceneIn{from{opacity:0;transform:translateY(10px) scale(.995)}to{opacity:1;transform:none}}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(56,211,159,.55)}70%{box-shadow:0 0 0 7px rgba(56,211,159,0)}100%{box-shadow:0 0 0 0 rgba(56,211,159,0)}}
+
+/* shared scene bits */
+.scene-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:14px;width:100%;align-items:stretch}
+@media(max-width:720px){.scene-grid{grid-template-columns:1fr}}
+.glass{
+  border:1px solid rgba(148,163,184,.16);border-radius:14px;
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+  box-shadow:0 18px 40px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.side-stack{display:flex;flex-direction:column;gap:9px}
+.mini-stat{
+  border:1px solid rgba(148,163,184,.14);border-radius:11px;padding:9px 11px;
+  background:rgba(255,255,255,.028);
+}
+.mini-stat span{display:block;font-size:.65rem;color:var(--muted);font-weight:700}
+.mini-stat b{font-size:1.02rem;font-variant-numeric:tabular-nums;color:var(--gold-2);font-weight:800}
+.mini-stat small{font-size:.64rem;color:var(--muted);margin-inline-start:3px;font-weight:700}
+.status-chip{display:inline-flex;align-items:center;gap:7px;font-size:.67rem;color:var(--muted);padding:4px 2px}
+.status-chip i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(56,211,159,.7)}
+
+/* 1 finance */
+.invoice-card{position:relative;overflow:hidden;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(165deg,#0E1A2F,#0B1424);display:flex;flex-direction:column;gap:9px;min-height:286px}
+.invoice-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.035),transparent);transform:translateX(-100%);animation:sheen 5.2s ease-in-out infinite}
+@keyframes sheen{0%,55%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
+.inv-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.inv-head b{font-size:.82rem}
+.inv-head span{font-size:.64rem;color:var(--muted);letter-spacing:.06em}
+.inv-body{display:flex;gap:13px;align-items:flex-start}
+.qr-wrap{background:#F7F5EF;border-radius:9px;padding:6px;flex:none;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.qr-wrap svg{display:block;width:64px;height:64px}
+.inv-lines{flex:1;display:grid;gap:7px;min-width:0}
+.inv-line{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.7rem;color:var(--muted)}
+.inv-line b{color:var(--ink);font-variant-numeric:tabular-nums;font-size:.74rem}
+.inv-line b.gold{color:var(--gold-2)}
+.inv-divider{height:1px;background:rgba(148,163,184,.14)}
+.inv-total{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.76rem;font-weight:800}
+.inv-total b{font-size:1.02rem;color:var(--gold-2);font-variant-numeric:tabular-nums}
+.scan-beam{position:absolute;inset-inline:8%;top:8%;height:2px;border-radius:99px;background:linear-gradient(90deg,transparent,var(--gold-2),transparent);box-shadow:0 0 18px rgba(197,160,89,.65);animation:scan 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes scan{0%{top:9%;opacity:.1}12%{opacity:1}50%{top:88%;opacity:.9}88%{opacity:.15}100%{top:9%;opacity:.1}}
+.verified{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:5px;
+  font-size:.63rem;font-weight:800;color:var(--green);background:rgba(56,211,159,.09);
+  border:1px solid rgba(56,211,159,.28);border-radius:99px;padding:2px 9px;
+}
+.currency-cycle{
+  grid-column:1/-1;border:1px dashed rgba(197,160,89,.35);border-radius:10px;padding:7px 10px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(197,160,89,.05);
+}
+.currency-cycle span{font-size:.64rem;color:var(--muted);font-weight:700}
+.currency-cycle b{font-size:.82rem;color:var(--gold-2);font-variant-numeric:tabular-nums;transition:opacity .2s}
+.currency-cycle b.flash{animation:flashValue .45s ease}
+@keyframes flashValue{0%{opacity:.1;transform:translateY(3px)}100%{opacity:1;transform:none}}
+
+/* 2 ecommerce */
+.chart-card{padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:286px}
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.chart-head span{font-size:.68rem;color:var(--muted);font-weight:700}
+.chart-head b{font-size:1.05rem;color:var(--gold-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bars{flex:1;display:flex;align-items:flex-end;gap:7px;min-height:150px;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%}
+.bar-col i{
+  display:block;width:100%;max-width:26px;border-radius:6px 6px 3px 3px;
+  background:linear-gradient(180deg,var(--gold-2),rgba(197,160,89,.35));
+  height:var(--h);animation:growBar 1.05s var(--ease) both;transform-origin:bottom;
+}
+.bar-col.best i{background:linear-gradient(180deg,#F3DCA8,var(--gold));box-shadow:0 0 18px rgba(197,160,89,.35)}
+.bar-col small{font-size:.58rem;color:var(--muted);white-space:nowrap}
+@keyframes growBar{from{height:0;opacity:.35}to{height:var(--h);opacity:1}}
+.kpi-float{border:1px solid rgba(148,163,184,.14);border-radius:11px;padding:8px 10px;background:rgba(255,255,255,.03);display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.kpi-float span{font-size:.64rem;color:var(--muted);font-weight:700}
+.kpi-float b{font-size:.94rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.kpi-float b.gold{color:var(--gold-2)}
+.kpi-float em{font-style:normal;font-size:.6rem;font-weight:800;color:var(--green);background:rgba(56,211,159,.1);border-radius:99px;padding:1px 6px}
+.order-pop{
+  display:flex;align-items:center;gap:6px;font-size:.66rem;color:var(--green);font-weight:800;
+  border:1px solid rgba(56,211,159,.25);background:rgba(56,211,159,.07);border-radius:10px;padding:7px 10px;
+  animation:floaty 3.8s ease-in-out infinite;
+}
+.order-pop i{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#062018;font-size:.55rem;font-style:normal}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.spark{height:34px;width:100%;opacity:.8}
+
+/* 3 field */
+.project-card{padding:13px 14px;display:flex;flex-direction:column;gap:10px;min-height:286px}
+.proj-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.proj-head b{font-size:.82rem}
+.proj-head span{font-size:.6rem;font-weight:800;color:var(--gold-2);border:1px solid var(--line);border-radius:99px;padding:2px 7px;white-space:nowrap}
+.progress-line{display:flex;align-items:center;gap:9px}
+.progress-track{flex:1;height:7px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden}
+.progress-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:68%;box-shadow:0 0 12px rgba(197,160,89,.35);animation:fillBar 1.3s var(--ease) both}
+.progress-line b{font-size:.82rem;color:var(--gold-2);font-variant-numeric:tabular-nums}
+@keyframes fillBar{from{width:0}to{width:68%}}
+.milestones{list-style:none;display:grid;gap:5px;margin:0;padding:0}
+.milestones li{display:flex;align-items:center;gap:7px;font-size:.68rem;color:var(--muted)}
+.milestones i{width:14px;height:14px;border-radius:5px;display:grid;place-items:center;font-size:.55rem;font-style:normal;flex:none;background:rgba(56,211,159,.12);color:var(--green);border:1px solid rgba(56,211,159,.25)}
+.milestones li.pending i{background:rgba(197,160,89,.08);color:var(--gold-2);border-color:var(--line)}
+.gantt{display:grid;gap:6px;margin-top:2px}
+.gantt-row{display:grid;grid-template-columns:58px 1fr;align-items:center;gap:7px;font-size:.62rem;color:var(--muted)}
+.gantt-track{height:7px;border-radius:99px;background:rgba(148,163,184,.10);overflow:hidden}
+.gantt-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,rgba(197,160,89,.55),var(--gold-2));animation:growGantt 1.2s var(--ease) both}
+@keyframes growGantt{from{width:0}to{width:var(--w)}}
+.hall-card{padding:12px 13px;display:flex;flex-direction:column;gap:7px;justify-content:space-between}
+.hall-card header{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.62rem;color:var(--muted);font-weight:700}
+.hall-card header b{color:var(--gold-2);font-size:.6rem;border:1px solid var(--line);border-radius:99px;padding:1px 7px}
+.hall-card h3{font-size:.88rem}
+.hall-card em{font-style:normal;font-size:.64rem;color:var(--muted)}
+.seat-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:3px}
+.seat-grid i{aspect-ratio:1;border-radius:3px;background:rgba(148,163,184,.16)}
+.seat-grid i.on{background:var(--gold);box-shadow:0 0 6px rgba(197,160,89,.25)}
+.seat-note{display:flex;justify-content:space-between;font-size:.58rem;color:var(--muted);margin-top:2px}
+
+/* 4 assistant */
+.chat-card{padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:286px}
+.msg{max-width:92%;border-radius:12px;padding:8px 11px;font-size:.72rem;line-height:1.65;position:relative}
+.msg.user{align-self:flex-start;background:rgba(255,255,255,.055);border:1px solid rgba(148,163,184,.14);color:var(--ink)}
+.msg.bot{align-self:flex-end;background:linear-gradient(145deg,rgba(197,160,89,.17),rgba(197,160,89,.05));border:1px solid var(--line);min-height:76px;max-width:96%}
+.msg.bot p{min-height:34px;color:var(--gold-2);font-weight:700}
+.typing{display:flex;gap:4px;margin-bottom:5px}
+.typing i{width:5px;height:5px;border-radius:50%;background:var(--gold-2);animation:typing 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.caret{display:inline-block;width:1px;height:11px;background:var(--gold-2);margin-inline-start:2px;vertical-align:-1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.lang-chips{display:flex;gap:5px;margin-top:auto}
+.lang-chips span{font-size:.6rem;font-weight:900;letter-spacing:.05em;border:1px solid rgba(148,163,184,.16);border-radius:99px;padding:2px 8px;color:var(--muted)}
+.lang-chips span.on{background:var(--gold);border-color:var(--gold);color:#1A1408}
+.orb-wrap{display:grid;place-items:center;padding:6px 0 2px;position:relative}
+.orb{
+  width:78px;height:78px;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#F2DDAE,var(--gold) 55%,#8A6A2E);
+  box-shadow:0 0 34px rgba(197,160,89,.35),inset 0 0 22px rgba(255,255,255,.25);
+  animation:orbFloat 4.6s ease-in-out infinite;
+}
+.orb::before,.orb::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:1px solid rgba(197,160,89,.25);animation:spin 9s linear infinite}
+.orb::after{inset:-22px;border-style:dashed;border-color:rgba(197,160,89,.16);animation-direction:reverse;animation-duration:14s}
+.orb b{font-size:.62rem;color:#241B07;letter-spacing:.06em;font-weight:900}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wave{display:flex;align-items:center;gap:3px;height:26px;justify-content:center}
+.wave i{width:3px;border-radius:99px;background:var(--gold-2);height:var(--h);animation:wave 1.1s ease-in-out infinite;opacity:.75}
+.wave i:nth-child(2n){animation-delay:.12s}.wave i:nth-child(3n){animation-delay:.24s}
+@keyframes wave{0%,100%{height:var(--h)}50%{height:calc(var(--h) * .45)}}
+.assistant-tags{display:flex;flex-wrap:wrap;gap:5px}
+.assistant-tags span{font-size:.58rem;color:var(--muted);border:1px solid rgba(148,163,184,.14);border-radius:99px;padding:1px 7px}
+
+/* currency strip */
+.currency-strip{margin-top:10px;border:1px solid rgba(148,163,184,.12);border-radius:11px;padding:7px 0;background:rgba(255,255,255,.018);position:relative;overflow:hidden}
+.currency-strip::before,.currency-strip::after{content:"";position:absolute;top:0;bottom:0;width:38px;z-index:2;pointer-events:none}
+.currency-strip::before{inset-inline-start:0;background:linear-gradient(90deg,var(--navy),transparent)}
+.currency-strip::after{inset-inline-end:0;background:linear-gradient(270deg,var(--navy),transparent)}
+.strip-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px 5px;font-size:.6rem;color:var(--muted)}
+.strip-head b{color:var(--gold-2);font-size:.62rem;font-weight:800}
+.marquee{overflow:hidden;white-space:nowrap;position:relative}
+.marquee-track{display:inline-flex;gap:6px;padding:1px 6px;animation:marquee 58s linear infinite;will-change:transform}
+.currency-strip:hover .marquee-track{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.cur-chip{
+  display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(148,163,184,.13);
+  border-radius:8px;padding:3px 8px;background:rgba(255,255,255,.022);
+}
+.cur-chip b{font-size:.62rem;color:var(--gold-2);font-weight:900;letter-spacing:.03em}
+.cur-chip span{font-size:.62rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.cur-chip small{font-size:.56rem;color:var(--muted)}
+
+.hint{margin-top:12px;font-size:.66rem;color:rgba(147,161,184,.75);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+footer{border-top:1px solid rgba(148,163,184,.10);margin-top:26px;padding:16px 0 26px;font-size:.7rem;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+
+@media(max-width:520px){
+  .wrap{padding:0 16px}
+  .tab{padding:7px 7px;gap:5px}
+  .tab b{font-size:.7rem}
+  .tab small{display:none}
+  .stage{min-height:430px}
+  .scene-host{padding:11px}
+  .inv-body{gap:9px}
+  .qr-wrap svg{width:52px;height:52px}
+  .msg{max-width:100%}
+  .hero-stats{gap:7px}
+}
+@media (prefers-reduced-motion: reduce){
+  .scan-beam,.invoice-card::after,.live-dot,.orb,.orb::before,.orb::after,.wave i,.order-pop,.typing i,.caret,.marquee-track{animation:none!important}
+  .scene{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">AT</span>
+      <div class="brand-name">Arab Templates<small data-i18n="brandSub">أنظمة عربية جاهزة</small></div>
+    </div>
+    <div class="top-actions">
+      <span class="badge"><i></i><span data-i18n="badge">عرض تفاعلي حي</span></span>
+      <button type="button" class="lang-btn" id="langBtn" aria-label="Switch language">English</button>
+    </div>
+  </header>
+
+  <main class="hero">
+    <section class="hero-copy">
+      <div class="eyebrow" data-i18n="eyebrow">منصة القوالب العربية</div>
+      <h1 id="headline"></h1>
+      <p class="sub" data-i18n="sub">أنظمة تشغيل جاهزة للفوترة والضرائب والتجارة والميدان — ثنائية اللغة، تعمل بلا خادم، وبسرعة تحميل فائقة.</p>
+      <div class="hero-stats">
+        <span class="stat-chip"><b class="gold">22</b><span data-i18n="statCur">عملة عربية</span></span>
+        <span class="stat-chip"><b>4</b><span data-i18n="statScenes">مشاهد حية</span></span>
+        <span class="stat-chip"><b class="gold">AR / EN</b><span data-i18n="statLang">تبديل فوري</span></span>
+      </div>
+    </section>
+
+    <section class="showcase" aria-label="Interactive product showcase">
+      <div class="tabs" id="tabs" role="tablist" aria-label="Showcase scenes"></div>
+
+      <div class="stage" id="stage">
+        <div class="stage-bar">
+          <div class="stage-left">
+            <i class="live-dot"></i>
+            <span class="live-label" data-i18n="live">مباشر</span>
+            <span class="stage-title" id="sceneTitle">—</span>
+          </div>
+          <div class="stage-meta">
+            <span id="sceneCounter">01 / 04</span>
+            <span class="pause-tag" data-i18n="paused">إيقاف مؤقت</span>
+            <span data-i18n="auto">تبديل تلقائي 6 ث</span>
+          </div>
+        </div>
+        <div class="scene-host" id="sceneHost"></div>
+        <div class="auto-progress"><i id="autoBar"></i></div>
+      </div>
+
+      <div class="currency-strip">
+        <div class="strip-head">
+          <b data-i18n="currencies">22 عملة عربية — تحديث حي</b>
+          <span data-i18n="indicative">قيم استرشادية</span>
+        </div>
+        <div class="marquee"><div class="marquee-track" id="currencyTrack"></div></div>
+      </div>
+      <div class="hint">
+        <span data-i18n="hintHover">مرّر المؤشر على الشاشة لإيقاف التبديل التلقائي.</span>
+        <span data-i18n="hintNoVideo">حركة حية بـ CSS / SVG — بلا فيديو أو ملفات خارجية.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Arab Templates — arabiatemplates.com</span>
+    <span data-i18n="footer">عرض تفاعلي مستقل — ملف HTML واحد بلا مكتبات خارجية.</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = [
+    { code: "SAR", ar: "ريال سعودي", en: "Saudi riyal", rate: 1, d: 2 },
+    { code: "AED", ar: "درهم إماراتي", en: "UAE dirham", rate: 0.98, d: 2 },
+    { code: "KWD", ar: "دينار كويتي", en: "Kuwaiti dinar", rate: 0.082, d: 3 },
+    { code: "QAR", ar: "ريال قطري", en: "Qatari riyal", rate: 0.97, d: 2 },
+    { code: "OMR", ar: "ريال عماني", en: "Omani rial", rate: 0.103, d: 3 },
+    { code: "BHD", ar: "دينار بحريني", en: "Bahraini dinar", rate: 0.1, d: 3 },
+    { code: "JOD", ar: "دينار أردني", en: "Jordanian dinar", rate: 0.189, d: 3 },
+    { code: "EGP", ar: "جنيه مصري", en: "Egyptian pound", rate: 12.9, d: 2 },
+    { code: "IQD", ar: "دينار عراقي", en: "Iraqi dinar", rate: 350, d: 0 },
+    { code: "SYP", ar: "ليرة سورية", en: "Syrian pound", rate: 3600, d: 0 },
+    { code: "LBP", ar: "ليرة لبنانية", en: "Lebanese pound", rate: 23900, d: 0 },
+    { code: "YER", ar: "ريال يمني", en: "Yemeni rial", rate: 135, d: 0 },
+    { code: "SDG", ar: "جنيه سوداني", en: "Sudanese pound", rate: 160, d: 0 },
+    { code: "LYD", ar: "دينار ليبي", en: "Libyan dinar", rate: 1.3, d: 3 },
+    { code: "TND", ar: "دينار تونسي", en: "Tunisian dinar", rate: 0.83, d: 3 },
+    { code: "DZD", ar: "دينار جزائري", en: "Algerian dinar", rate: 36, d: 0 },
+    { code: "MAD", ar: "درهم مغربي", en: "Moroccan dirham", rate: 2.7, d: 2 },
+    { code: "MRU", ar: "أوقية موريتانية", en: "Mauritanian ouguiya", rate: 10.7, d: 2 },
+    { code: "SOS", ar: "شلن صومالي", en: "Somali shilling", rate: 155, d: 0 },
+    { code: "DJF", ar: "فرنك جيبوتي", en: "Djiboutian franc", rate: 47.5, d: 0 },
+    { code: "KMF", ar: "فرنك قمري", en: "Comorian franc", rate: 121, d: 0 },
+    { code: "ILS", ar: "شيكل", en: "Shekel", rate: 0.99, d: 2 }
+  ];
+
+  var TABS = [
+    { key: "finance", no: "01", title: "المالية والضرائب", titleEn: "Finance & Tax", sub: "فواتير وإقرارات", subEn: "Invoices & returns", scene: "sceneFinance" },
+    { key: "ecommerce", no: "02", title: "أرباح المتاجر", titleEn: "Store Profits", sub: "هامش وROAS", subEn: "Margin & ROAS", scene: "sceneEcommerce" },
+    { key: "field", no: "03", title: "الميدان والمقاولات", titleEn: "Field & Contracting", sub: "مشاريع وقاعات", subEn: "Projects & halls", scene: "sceneField" },
+    { key: "assistant", no: "04", title: "المساعد الذكي", titleEn: "Smart Assistant", sub: "عربي / إنجليزي", subEn: "Arabic / English", scene: "sceneAssistant" }
+  ];
+
+  var I18N = {
+    ar: {
+      brandSub: "أنظمة عربية جاهزة",
+      badge: "عرض تفاعلي حي",
+      eyebrow: "منصة القوالب العربية",
+      headlineA: "أنظمة جاهزة",
+      headlineGold: "تعمل من أول نقرة",
+      sub: "أنظمة تشغيل جاهزة للفوترة والضرائب والتجارة والميدان — ثنائية اللغة، تعمل بلا خادم، وبسرعة تحميل فائقة.",
+      statCur: "عملة عربية", statScenes: "مشاهد حية", statLang: "تبديل فوري",
+      live: "مباشر", paused: "إيقاف مؤقت", auto: "تبديل تلقائي 6 ث",
+      currencies: "22 عملة عربية — تحديث حي", indicative: "قيم استرشادية",
+      hintHover: "مرّر المؤشر على الشاشة لإيقاف التبديل التلقائي.",
+      hintNoVideo: "حركة حية بـ CSS / SVG — بلا فيديو أو ملفات خارجية.",
+      footer: "عرض تفاعلي مستقل — ملف HTML واحد بلا مكتبات خارجية.",
+      tabs: [
+        { title: "المالية والضرائب", sub: "فواتير وإقرارات" },
+        { title: "أرباح المتاجر", sub: "هامش وROAS" },
+        { title: "الميدان والمقاولات", sub: "مشاريع وقاعات" },
+        { title: "المساعد الذكي", sub: "عربي / إنجليزي" }
+      ],
+      scene: {
+        finance: {
+          title: "الأتمتة المالية والضريبية",
+          invoice: "فاتورة ضريبية", no: "INV-2048",
+          item: "خدمات تصميم", vat: "ضريبة القيمة المضافة 15%", total: "الإجمالي",
+          verified: "تم التحقق", accuracy: "دقة المطابقة", process: "زمن المعالجة", seconds: "ث",
+          connected: "متصل بالمنصة", equivalent: "ما يعادلها", amount: "قيمة الفاتورة",
+          buyer: "شركة الأفق"
+        },
+        ecommerce: {
+          title: "أرباح المتاجر الإلكترونية",
+          chart: "صافي الربح — آخر 7 أيام", orders: "الطلبات", newOrder: "طلب جديد مكتمل",
+          roas: "ROAS", margin: "الهامش", days: ["س", "ح", "ن", "ث", "ر", "خ", "ج"]
+        },
+        field: {
+          title: "الميدان والمقاولات والقاعات",
+          project: "فيلا النخيل", inProgress: "قيد التنفيذ",
+          design: "التصميم", structure: "الهيكل", finishing: "التشطيب",
+          hall: "حجز قاعة", hallName: "قاعة الأفق", hallMeta: "24 نوفمبر · 180 ضيف",
+          booked: "مؤكد", seats: "الإشغال", gantt: "الجدول الزمني"
+        },
+        assistant: {
+          title: "المساعد الذكي ثنائي اللغة",
+          question: "ما نسبة الضريبة في السعودية؟",
+          answer: "ضريبة القيمة المضافة في السعودية 15%، وتُحتسب على الفاتورة قبل الإجمالي.",
+          match: "مطابقة المعرفة", liveNow: "يجيب الآن", tags: ["قاعدة معرفة", "تدقيق قيود", "توصية قوالب"]
+        }
+      }
+    },
+    en: {
+      brandSub: "Ready Arabic systems",
+      badge: "Live interactive showcase",
+      eyebrow: "The Arabic templates platform",
+      headlineA: "Ready systems that",
+      headlineGold: "work on first click",
+      sub: "Ready-to-run systems for invoicing, tax, commerce and field operations — bilingual, serverless and extremely fast to load.",
+      statCur: "Arab currencies", statScenes: "live scenes", statLang: "instant switch",
+      live: "LIVE", paused: "Paused", auto: "Auto-rotate 6s",
+      currencies: "22 Arab currencies — live update", indicative: "Indicative values",
+      hintHover: "Hover the screen to pause auto-rotation.",
+      hintNoVideo: "Live CSS / SVG motion — no video or external files.",
+      footer: "Standalone showcase — one HTML file, no external libraries.",
+      tabs: [
+        { title: "Finance & Tax", sub: "Invoices & returns" },
+        { title: "Store Profits", sub: "Margin & ROAS" },
+        { title: "Field & Contracting", sub: "Projects & halls" },
+        { title: "Smart Assistant", sub: "Arabic / English" }
+      ],
+      scene: {
+        finance: {
+          title: "Financial & tax automation",
+          invoice: "Tax invoice", no: "INV-2048",
+          item: "Design services", vat: "VAT 15%", total: "Total",
+          verified: "Verified", accuracy: "Match accuracy", process: "Processing time", seconds: "s",
+          connected: "Connected to platform", equivalent: "Equivalent", amount: "Invoice value",
+          buyer: "Alufuq Co."
+        },
+        ecommerce: {
+          title: "E-commerce profitability",
+          chart: "Net profit — last 7 days", orders: "Orders", newOrder: "New order completed",
+          roas: "ROAS", margin: "Margin", days: ["S", "M", "T", "W", "T", "F", "S"]
+        },
+        field: {
+          title: "Field, contracting & venues",
+          project: "Al Nakheel Villa", inProgress: "In progress",
+          design: "Design", structure: "Structure", finishing: "Finishing",
+          hall: "Venue booking", hallName: "Al Ufuq Hall", hallMeta: "24 Nov · 180 guests",
+          booked: "Confirmed", seats: "Occupancy", gantt: "Timeline"
+        },
+        assistant: {
+          title: "Bilingual smart assistant",
+          question: "What is the VAT rate in Saudi Arabia?",
+          answer: "VAT in Saudi Arabia is 15%, applied to the invoice value before the total.",
+          match: "Knowledge match", liveNow: "Answering now", tags: ["Knowledge base", "Entry audit", "Template match"]
+        }
+      }
+    }
+  };
+
+  var state = { lang: "ar", index: 0, paused: false, elapsed: 0 };
+  var sceneTimers = [];
+  var typeTimer = null;
+
+  function $(id) { return document.getElementById(id); }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function tx(key) { return I18N[state.lang][key]; }
+  function sceneText(key) { return I18N[state.lang].scene[key]; }
+  function locale() { return state.lang === "ar" ? "ar-EG" : "en-US"; }
+
+  function fmtNum(value, decimals) {
+    var d = decimals == null ? 0 : decimals;
+    try {
+      return new Intl.NumberFormat(locale(), { minimumFractionDigits: d, maximumFractionDigits: d }).format(value);
+    } catch (err) { return String(value); }
+  }
+  function fmtMoney(value, code, decimals) {
+    try {
+      return new Intl.NumberFormat(locale(), {
+        style: "currency", currency: code,
+        minimumFractionDigits: decimals == null ? 2 : decimals,
+        maximumFractionDigits: decimals == null ? 2 : decimals
+      }).format(value);
+    } catch (err) { return fmtNum(value, decimals) + " " + code; }
+  }
+  function compact(value, d) {
+    try {
+      return new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: d == null ? 1 : d }).format(value);
+    } catch (err) { return fmtNum(value, 0); }
+  }
+
+  function clearSceneTimers() {
+    sceneTimers.forEach(function (id) { clearInterval(id); clearTimeout(id); });
+    sceneTimers = [];
+    if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+  }
+  function after(ms, fn) {
+    var id = setTimeout(fn, ms);
+    sceneTimers.push(id);
+    return id;
+  }
+  function every(ms, fn) {
+    var id = setInterval(fn, ms);
+    sceneTimers.push(id);
+    return id;
+  }
+
+  function animateCount(el, target, opts) {
+    var options = opts || {};
+    var decimals = options.decimals || 0;
+    var duration = options.duration || 1200;
+    var start = performance.now();
+    function frame(now) {
+      if (!el.isConnected) return;
+      var p = Math.min(1, (now - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var value = target * eased;
+      el.textContent = fmtNum(value, decimals);
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = fmtNum(target, decimals);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function qrMarkup() {
+    var n = 21;
+    var cells = "";
+    var seed = 7;
+    function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    function inFinder(x, y) {
+      return (x < 7 && y < 7) || (x >= n - 7 && y < 7) || (x < 7 && y >= n - 7);
+    }
+    for (var y = 0; y < n; y++) {
+      for (var x = 0; x < n; x++) {
+        if (inFinder(x, y)) continue;
+        if (rnd() > 0.54) cells += '<rect x="' + x + '" y="' + y + '" width="1" height="1"/>';
+      }
+    }
+    function finder(ox, oy) {
+      return '<rect x="' + ox + '" y="' + oy + '" width="7" height="7" fill="#0F172A"/>' +
+        '<rect x="' + (ox + 1) + '" y="' + (oy + 1) + '" width="5" height="5" fill="#F7F5EF"/>' +
+        '<rect x="' + (ox + 2) + '" y="' + (oy + 2) + '" width="3" height="3" fill="#0F172A"/>';
+    }
+    return '<svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<rect width="21" height="21" fill="#F7F5EF"/><g fill="#0F172A">' + cells + "</g>" +
+      finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7) + "</svg>";
+  }
+
+  function sparkline() {
+    return '<svg class="spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true">' +
+      '<defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#C5A059" stop-opacity=".45"/><stop offset="1" stop-color="#C5A059" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="M0 32 L30 27 L60 30 L90 18 L120 22 L150 12 L180 15 L220 5 L220 40 L0 40 Z" fill="url(#sparkGrad)"/>' +
+      '<path d="M0 32 L30 27 L60 30 L90 18 L120 22 L150 12 L180 15 L220 5" fill="none" stroke="#E7CC94" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+      "</svg>";
+  }
+
+  function sceneFinance() {
+    var s = sceneText("finance");
+    return '<div class="scene">' +
+      '<div class="scene-grid">' +
+        '<div class="invoice-card">' +
+          '<div class="inv-head"><b>' + esc(s.invoice) + "</b><span>" + esc(s.no) + " · " + esc(s.buyer) + "</span></div>" +
+          '<div class="inv-body">' +
+            '<div class="qr-wrap">' + qrMarkup() + "</div>" +
+            '<div class="inv-lines">' +
+              '<div class="inv-line"><span>' + esc(s.item) + "</span><b>" + fmtNum(1000, 2) + "</b></div>" +
+              '<div class="inv-line"><span>' + esc(s.vat) + '</span><b class="gold">' + fmtNum(150, 2) + "</b></div>" +
+              '<div class="inv-divider"></div>' +
+              '<div class="inv-total"><span>' + esc(s.total) + '</span><b id="invTotal">' + fmtNum(1150, 2) + "</b></div>" +
+            "</div>" +
+          "</div>" +
+          '<span class="verified">✓ ' + esc(s.verified) + "</span>" +
+          '<div class="scan-beam"></div>' +
+        "</div>" +
+        '<div class="side-stack">' +
+          '<div class="currency-cycle"><span>' + esc(s.amount) + '</span><b id="liveCurrency">—</b></div>' +
+          '<div class="mini-stat"><span>' + esc(s.accuracy) + '</span><b data-count="98">0</b><small>%</small></div>' +
+          '<div class="mini-stat"><span>' + esc(s.process) + '</span><b data-count="1.2" data-dec="1">0</b><small>' + esc(s.seconds) + "</small></div>" +
+          '<div class="status-chip"><i></i>' + esc(s.connected) + "</div>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  }
+
+  function sceneEcommerce() {
+    var s = sceneText("ecommerce");
+    var heights = [42, 58, 49, 72, 63, 84, 96];
+    var bars = heights.map(function (h, i) {
+      return '<div class="bar-col' + (h === 96 ? " best" : "") + '"><i style="--h:' + h + '%"></i><small>' + esc(s.days[i]) + "</small></div>";
+    }).join("");
+    return '<div class="scene">' +
+      '<div class="scene-grid">' +
+        '<div class="chart-card glass">' +
+          '<div class="chart-head"><span>' + esc(s.chart) + '</span><b><span id="profitNum">0</span> SAR</b></div>' +
+          '<div class="bars">' + bars + "</div>" +
+          sparkline() +
+        "</div>" +
+        '<div class="side-stack">' +
+          '<div class="kpi-float"><span>' + esc(s.roas) + '</span><b class="gold">3.8x</b><em>+22%</em></div>' +
+          '<div class="kpi-float"><span>' + esc(s.orders) + '</span><b>246</b></div>' +
+          '<div class="kpi-float"><span>' + esc(s.margin) + '</span><b class="gold">61%</b></div>' +
+          '<div class="order-pop"><i>✓</i>' + esc(s.newOrder) + "</div>" +
+          '<div class="status-chip"><i></i>' + esc(I18N[state.lang].scene.finance.connected) + "</div>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  }
+
+  function sceneField() {
+    var s = sceneText("field");
+    var seats = "";
+    for (var i = 0; i < 30; i++) seats += '<i class="' + (i < 22 ? "on" : "") + '"></i>';
+    return '<div class="scene">' +
+      '<div class="scene-grid">' +
+        '<div class="project-card glass">' +
+          '<div class="proj-head"><b>' + esc(s.project) + '</b><span>' + esc(s.inProgress) + "</span></div>" +
+          '<div class="progress-line"><div class="progress-track"><i></i></div><b>68%</b></div>' +
+          '<ul class="milestones">' +
+            '<li><i>✓</i>' + esc(s.design) + " · 100%</li>" +
+            '<li><i>✓</i>' + esc(s.structure) + " · 72%</li>" +
+            '<li class="pending"><i>◐</i>' + esc(s.finishing) + " · 34%</li>" +
+          "</ul>" +
+          '<div class="gantt">' +
+            '<div class="gantt-row"><span>' + esc(s.design) + '</span><div class="gantt-track"><i style="--w:100%"></i></div></div>' +
+            '<div class="gantt-row"><span>' + esc(s.structure) + '</span><div class="gantt-track"><i style="--w:72%"></i></div></div>' +
+            '<div class="gantt-row"><span>' + esc(s.finishing) + '</span><div class="gantt-track"><i style="--w:34%"></i></div></div>' +
+          "</div>" +
+        "</div>" +
+        '<div class="hall-card glass">' +
+          '<header><span>' + esc(s.hall) + "</span><b>" + esc(s.booked) + "</b></header>" +
+          "<h3>" + esc(s.hallName) + "</h3>" +
+          "<em>" + esc(s.hallMeta) + "</em>" +
+          '<div class="seat-grid">' + seats + "</div>" +
+          '<div class="seat-note"><span>' + esc(s.seats) + "</span><span>22 / 30</span></div>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  }
+
+  function sceneAssistant() {
+    var s = sceneText("assistant");
+    var tags = s.tags.map(function (tag) { return "<span>" + esc(tag) + "</span>"; }).join("");
+    var wave = "";
+    for (var i = 0; i < 16; i++) wave += '<i style="--h:' + (8 + (i * 7) % 17) + 'px"></i>';
+    return '<div class="scene">' +
+      '<div class="scene-grid">' +
+        '<div class="chat-card glass">' +
+          '<div class="msg user">' + esc(s.question) + "</div>" +
+          '<div class="msg bot">' +
+            '<div class="typing" id="typingDots"><i></i><i></i><i></i></div>' +
+            '<p><span id="typedAnswer"></span><span class="caret"></span></p>' +
+          "</div>" +
+          '<div class="lang-chips"><span class="' + (state.lang === "ar" ? "on" : "") + '">AR</span><span class="' + (state.lang === "en" ? "on" : "") + '">EN</span></div>' +
+        "</div>" +
+        '<div class="side-stack">' +
+          '<div class="orb-wrap"><div class="orb"><b>AI</b></div></div>' +
+          '<div class="mini-stat"><span>' + esc(s.match) + '</span><b data-count="94">0</b><small>%</small></div>' +
+          '<div class="mini-stat"><span>' + esc(s.liveNow) + '</span><div class="wave">' + wave + "</div></div>" +
+          '<div class="assistant-tags">' + tags + "</div>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+  }
+
+  var SCENE_BUILDERS = { finance: sceneFinance, ecommerce: sceneEcommerce, field: sceneField, assistant: sceneAssistant };
+
+  function renderTabs() {
+    var tabs = I18N[state.lang].tabs;
+    $("tabs").innerHTML = tabs.map(function (tab, i) {
+      return '<button type="button" class="tab" role="tab" id="tab-' + i + '" aria-selected="' + (i === state.index) + '" aria-controls="sceneHost" tabindex="' + (i === state.index ? "0" : "-1") + '" data-tab="' + i + '">' +
+        '<span class="tab-no">' + TABS[i].no + "</span>" +
+        '<span class="tab-txt"><b>' + esc(tab.title) + "</b><small>" + esc(tab.sub) + "</small></span>" +
+      "</button>";
+    }).join("");
+  }
+
+  function renderScene() {
+    clearSceneTimers();
+    var tab = TABS[state.index];
+    var meta = I18N[state.lang].tabs[state.index];
+    $("sceneTitle").textContent = meta.title;
+    $("sceneCounter").textContent = tab.no + " / 04";
+    $("sceneHost").innerHTML = SCENE_BUILDERS[tab.key]();
+    var root = $("sceneHost");
+
+    root.querySelectorAll("[data-count]").forEach(function (el) {
+      animateCount(el, parseFloat(el.getAttribute("data-count")), { decimals: parseInt(el.getAttribute("data-dec") || "0", 10) });
+    });
+
+    if (tab.key === "finance") {
+      startCurrencyCycle();
+    } else if (tab.key === "ecommerce") {
+      animateCount($("profitNum"), 18420, { duration: 1400 });
+    } else if (tab.key === "assistant") {
+      startTyping(sceneText("assistant").answer);
+    }
+  }
+
+  function startCurrencyCycle() {
+    var picks = ["SAR", "AED", "KWD", "QAR", "OMR", "BHD"];
+    var i = 0;
+    var el = $("liveCurrency");
+    if (!el) return;
+    function show() {
+      var target = $("liveCurrency");
+      if (!target) return;
+      var c = CURRENCIES.filter(function (x) { return x.code === picks[i % picks.length]; })[0];
+      target.textContent = fmtMoney(1150 * c.rate, c.code, c.d);
+      target.classList.remove("flash");
+      void target.offsetWidth;
+      target.classList.add("flash");
+      i++;
+    }
+    show();
+    every(2200, show);
+  }
+
+  function startTyping(text) {
+    var el = $("typedAnswer");
+    var dots = $("typingDots");
+    if (!el) return;
+    el.textContent = "";
+    if (dots) dots.style.display = "flex";
+    after(750, function () {
+      if (dots) dots.style.display = "none";
+      var i = 0;
+      typeTimer = setInterval(function () {
+        if (!el.isConnected) { clearInterval(typeTimer); typeTimer = null; return; }
+        i++;
+        el.textContent = text.slice(0, i);
+        if (i >= text.length) { clearInterval(typeTimer); typeTimer = null; }
+      }, 28);
+    });
+  }
+
+  function setTab(index, resetTimer) {
+    state.index = (index + TABS.length) % TABS.length;
+    if (resetTimer) {
+      state.elapsed = 0;
+      $("autoBar").style.width = "0%";
+    }
+    renderTabs();
+    renderScene();
+  }
+
+  function renderHeadline() {
+    var dict = I18N[state.lang];
+    $("headline").innerHTML = esc(dict.headlineA) + ' <span class="gold">' + esc(dict.headlineGold) + "</span>";
+  }
+
+  function renderCurrencyStrip() {
+    var chips = CURRENCIES.map(function (c) {
+      var value = 1150 * c.rate;
+      var name = state.lang === "ar" ? c.ar : c.en;
+      return '<span class="cur-chip"><b>' + c.code + "</b><span>" + compact(value, c.d === 0 ? 0 : 1) + "</span><small>" + esc(name) + "</small></span>";
+    }).join("");
+    $("currencyTrack").innerHTML = chips + chips;
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      var dict = I18N[state.lang];
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+    renderHeadline();
+    renderTabs();
+    renderCurrencyStrip();
+    renderScene();
+    try { localStorage.setItem("pb_hero_lang", state.lang); } catch (err) { /* ignore */ }
+  }
+
+  // interactions
+  $("tabs").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-tab]");
+    if (!btn) return;
+    setTab(Number(btn.getAttribute("data-tab")), true);
+  });
+  $("tabs").addEventListener("keydown", function (event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    var dir = event.key === "ArrowRight" ? 1 : -1;
+    if (state.lang === "ar") dir = -dir;
+    setTab(state.index + dir, true);
+    var next = document.querySelector('[data-tab="' + state.index + '"]');
+    if (next) next.focus();
+  });
+  $("langBtn").addEventListener("click", function () {
+    applyLang(state.lang === "ar" ? "en" : "ar");
+  });
+
+  var stage = $("stage");
+  stage.addEventListener("mouseenter", function () {
+    state.paused = true;
+    stage.classList.add("paused");
+  });
+  stage.addEventListener("mouseleave", function () {
+    state.paused = false;
+    stage.classList.remove("paused");
+  });
+  stage.addEventListener("focusin", function () {
+    state.paused = true;
+    stage.classList.add("paused");
+  });
+  stage.addEventListener("focusout", function () {
+    state.paused = false;
+    stage.classList.remove("paused");
+  });
+
+  // auto rotation tick (100ms precision, pauses on hover / hidden tab).
+  // Kept outside sceneTimers so switching scenes never clears the rotation.
+  var autoTick = setInterval(function () {
+    if (state.paused || document.hidden) return;
+    state.elapsed += 100;
+    var pct = Math.min(100, state.elapsed / 6000 * 100);
+    var bar = $("autoBar");
+    if (bar) bar.style.width = pct + "%";
+    if (state.elapsed >= 6000) {
+      state.elapsed = 0;
+      if (bar) bar.style.width = "0%";
+      setTab(state.index + 1, false);
+    }
+  }, 100);
+  void autoTick;
+
+  // init
+  var stored = null;
+  try { stored = localStorage.getItem("pb_hero_lang"); } catch (err) { stored = null; }
+  state.lang = stored === "en" ? "en" : "ar";
+  applyLang(state.lang);
+})();
+</script>
+</body>
+</html>

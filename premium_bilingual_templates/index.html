@@ -3,683 +3,588 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>قوالب Premium ثنائية اللغة — Premium Bilingual Templates</title>
-<meta name="description" content="فهرس ثمانية قوالب احترافية في ملفات مستقلة: تسعير المناقصات، الأتمتة الدائرية، كشوف الحساب، ربح المتجر، سرعة الرد، الزكاة والتمويل الإسلامي، إدارة المكاتب الهندسية، وإعادة تدوير المحتوى — عربي/إنجليزي.">
+<meta name="color-scheme" content="dark">
+<title>Arab Templates — القوالب التنفيذية ثنائية اللغة</title>
+<meta name="description" content="فهرس Arab Templates التنفيذي: عشرة قوالب مستقلة بملف HTML واحد، عربية وإنجليزية، مصنفة حسب القطاع مع معاينة فورية.">
 <style>
-:root{--bg:#f3f4f8;--card:#fff;--ink:#0e1c2c;--muted:#5c6b7c;--navy:#0d2b45;--navy2:#143f63;--gold:#c1912f;--gold-soft:#f7efdc;--teal:#0f766e;--line:#e2e6ef;--radius:18px;--shadow:0 12px 34px rgba(13,43,69,.08)}
+:root{
+  --navy:#0F172A; --navy-2:#14213A; --navy-3:#1B2A46; --bg:#080E19;
+  --gold:#C5A059; --gold-2:#E7D09A; --gold-3:#9A7A3E; --gold-dim:rgba(197,160,89,.11);
+  --blue:#5B8CFF; --blue-dim:rgba(91,140,255,.12); --green:#4FCFA4;
+  --text:#F3F0E8; --muted:#9AA8BC; --muted-2:#71819A;
+  --line:rgba(197,160,89,.25); --line-soft:rgba(255,255,255,.075);
+  --shadow:0 24px 60px rgba(0,0,0,.3); --radius:18px;
+  --sans:"Segoe UI",Tahoma,"Helvetica Neue",Arial,sans-serif;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
-h1,h2,h3{margin:0;line-height:1.3}
-a{color:inherit}
-.top{position:sticky;top:0;z-index:10;background:rgba(243,244,248,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top-in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:11px}
-.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--gold));color:#fff;display:grid;place-items:center;font-weight:900;letter-spacing:.5px}
-.brand strong{display:block;font-size:1.02rem}
-.brand small{color:var(--muted);font-size:.76rem}
-.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:.87rem;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:.16s}
-.btn.gold{background:var(--gold);color:#241b05}
-.btn.gold:hover{filter:brightness(1.06)}
-.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
-.btn.ghost:hover{border-color:var(--navy2)}
-.btn.navy{background:var(--navy);color:#fff}
-.btn.navy:hover{filter:brightness(1.12)}
-main{max-width:1080px;margin:0 auto;padding:34px 20px 50px}
-.hero{text-align:center;padding:14px 0 30px}
-.badge{display:inline-block;margin-bottom:16px;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.82rem;color:var(--navy);font-weight:700}
-.hero h1{font-size:clamp(1.7rem,3.6vw,2.5rem);letter-spacing:-.4px;margin-bottom:12px}
-.hero p{max-width:660px;margin:0 auto;color:var(--muted);font-size:1.02rem}
-.facts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-.fact{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:.8rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
-.fact b{color:var(--ink);font-weight:700}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
-@media(max-width:880px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
-.card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(13,43,69,.14)}
-.card::before{content:"";position:absolute;inset-block-start:0;inset-inline:0;height:5px;background:linear-gradient(90deg,var(--navy),var(--gold))}
-.card .no{font-size:.74rem;font-weight:800;letter-spacing:.12em;color:var(--gold)}
-.card .kicker{font-size:.78rem;color:var(--teal);font-weight:700}
-.card h2{font-size:1.24rem}
-.card p.desc{color:var(--muted);font-size:.93rem;margin:0}
-.card ul{margin:2px 0 0;padding-inline-start:19px;color:var(--muted);font-size:.88rem;line-height:1.95}
-.card ul li::marker{color:var(--gold)}
-.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
-.tag{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:#eef3f9;color:var(--navy2)}
-.tag.green{background:#e6f4ef;color:#0b6b52}
-.tag.gold{background:var(--gold-soft);color:#7c5a12}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:14px;border-top:1px dashed var(--line)}
-.note{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow)}
-.note h3{font-size:.98rem;margin-bottom:8px}
-.note ul{margin:0;padding-inline-start:19px;color:var(--muted);font-size:.87rem;line-height:2}
-footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 30px}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(900px 520px at 94% -6%,rgba(197,160,89,.10),transparent 65%),
+    radial-gradient(760px 500px at 0 12%,rgba(49,92,180,.15),transparent 64%),
+    linear-gradient(180deg,#0A1220 0%,#080E19 48%,#0A111E 100%);
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:62px 62px;mask-image:linear-gradient(180deg,rgba(0,0,0,.8),transparent 85%);
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+h1,h2,h3,p{margin:0}
+::selection{background:rgba(197,160,89,.3);color:#fff}
+.wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 22px}
+.top{position:sticky;top:0;z-index:30;background:rgba(8,14,25,.86);border-bottom:1px solid var(--line-soft);backdrop-filter:blur(16px)}
+.top-in{max-width:1220px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{width:42px;height:42px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;font-size:.72rem;font-weight:900;letter-spacing:.05em;color:#1A1509;
+  background:linear-gradient(145deg,var(--gold-2),var(--gold) 56%,#A58342);border:1px solid rgba(255,255,255,.3);box-shadow:0 8px 24px rgba(197,160,89,.20),inset 0 1px 0 rgba(255,255,255,.5)}
+.brand-copy{min-width:0}
+.brand-copy strong{display:block;font-size:.94rem;line-height:1.3;letter-spacing:-.01em}
+.brand-copy span{display:block;color:var(--muted);font-size:.61rem;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.lang-btn{height:35px;border-radius:9px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(197,160,89,.18),rgba(197,160,89,.07));color:var(--gold-2);font-size:.67rem;font-weight:800;padding:0 13px;white-space:nowrap;transition:.16s}
+.lang-btn:hover{background:rgba(197,160,89,.23)}
+.hero{padding:42px 0 25px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr);gap:24px;align-items:center;min-height:330px}
+.hero-copy{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;color:var(--gold-2);font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px}
+.eyebrow::before{content:"";width:20px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3.2rem);line-height:1.22;font-weight:800;letter-spacing:-.025em;max-width:770px}
+html[dir=rtl] .hero h1{letter-spacing:0}
+.hero h1 em{font-style:normal;color:var(--gold-2)}
+.hero p{color:var(--muted);font-size:.92rem;line-height:1.85;max-width:680px;margin-top:10px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:19px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(255,255,255,.04);color:var(--text);font-size:.73rem;font-weight:700;padding:9px 14px;white-space:nowrap;transition:.17s}
+.btn:hover{border-color:var(--line);background:rgba(197,160,89,.08);color:var(--gold-2)}
+.btn.gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:rgba(255,255,255,.22);color:#1A1509;box-shadow:0 10px 24px rgba(197,160,89,.18)}
+.btn.gold:hover{filter:brightness(1.04);color:#1A1509}
+.btn .arr{font-size:.9rem;line-height:1}
+.hero-mark{display:flex;align-items:center;justify-content:center;min-width:0}
+.seal{width:230px;height:230px;border-radius:50%;position:relative;display:grid;place-items:center;border:1px solid var(--line);background:
+  radial-gradient(circle at 50% 34%,rgba(197,160,89,.16),transparent 58%),
+  linear-gradient(160deg,rgba(18,30,53,.92),rgba(10,18,32,.9));box-shadow:var(--shadow)}
+.seal::before{content:"";position:absolute;inset:14px;border-radius:50%;border:1px dashed rgba(197,160,89,.28)}
+.seal::after{content:"";position:absolute;inset:30px;border-radius:50%;border:1px solid rgba(91,140,255,.15)}
+.seal-in{position:relative;z-index:1;text-align:center;padding:22px}
+.seal-in b{display:block;color:var(--gold-2);font-size:2.4rem;line-height:1;font-weight:800}
+.seal-in span{display:block;color:var(--text);font-size:.65rem;font-weight:700;margin-top:5px;letter-spacing:.08em;text-transform:uppercase}
+.seal-in em{display:block;color:var(--muted);font-style:normal;font-size:.54rem;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 34px}
+.stat{border:1px solid var(--line-soft);border-radius:12px;background:linear-gradient(165deg,rgba(19,31,54,.72),rgba(12,21,38,.78));padding:10px 12px;min-width:0}
+.stat b{display:block;color:var(--gold-2);font-size:1.25rem;line-height:1.25;font-weight:800;font-variant-numeric:tabular-nums}
+.stat span{display:block;color:var(--muted);font-size:.58rem;line-height:1.5;margin-top:1px}
+.catalog-head{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;padding-top:7px;margin-bottom:17px;flex-wrap:wrap}
+.catalog-head h2{font-size:clamp(1.3rem,2.5vw,1.85rem);line-height:1.3;font-weight:800}
+.catalog-head p{color:var(--muted);font-size:.73rem;line-height:1.7;margin-top:3px;max-width:640px}
+.catalog-badge{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;background:var(--gold-dim);color:var(--gold-2);padding:4px 10px;font-size:.59rem;font-weight:800;white-space:nowrap}
+.catalog-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.sector{margin-top:29px;min-width:0}
+.sector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+.sector-title{display:flex;align-items:flex-start;gap:9px;min-width:0}
+.sector-no{flex:0 0 auto;width:27px;height:27px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--line);background:var(--gold-dim);color:var(--gold-2);font-size:.55rem;font-weight:800;margin-top:2px}
+.sector-title h3{font-size:1.02rem;line-height:1.4;font-weight:800}
+.sector-title p{color:var(--muted);font-size:.62rem;line-height:1.6;margin-top:1px;max-width:700px}
+.sector-count{flex:0 0 auto;color:var(--muted);font-size:.58rem;border:1px solid var(--line-soft);border-radius:999px;padding:2px 8px;white-space:nowrap;margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.tpl-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid var(--line-soft);border-radius:var(--radius);background:
+  radial-gradient(350px 170px at 100% 0,rgba(197,160,89,.055),transparent 65%),
+  linear-gradient(160deg,rgba(20,33,57,.8),rgba(11,20,36,.87));padding:13px;overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s}
+.tpl-card::before{content:"";position:absolute;inset-block-start:0;inset-inline:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.65}
+.tpl-card:hover{transform:translateY(-2px);border-color:rgba(197,160,89,.33);box-shadow:0 18px 38px rgba(0,0,0,.22)}
+.tpl-card.new{border-color:rgba(197,160,89,.34);background:
+  radial-gradient(380px 190px at 100% 0,rgba(197,160,89,.1),transparent 64%),
+  linear-gradient(160deg,rgba(23,37,62,.86),rgba(12,22,39,.9))}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
+.card-no{color:var(--muted-2);font-size:.54rem;font-weight:800;letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.pills{display:flex;align-items:center;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-flex;align-items:center;gap:3px;border:1px solid var(--line-soft);border-radius:999px;padding:1px 6px;font-size:.49rem;font-weight:700;line-height:1.6;white-space:nowrap}
+.pill.complete{border-color:rgba(79,207,164,.26);background:rgba(79,207,164,.08);color:#A7EBD4}
+.pill.new{border-color:var(--line);background:var(--gold-dim);color:var(--gold-2)}
+.kicker{display:block;color:var(--muted);font-size:.55rem;font-weight:700;margin-top:7px;line-height:1.4}
+.tpl-card h4{margin:2px 0 0;font-size:.94rem;line-height:1.45;font-weight:800;overflow-wrap:anywhere}
+.tpl-card .desc{color:var(--muted);font-size:.63rem;line-height:1.65;margin-top:4px;min-height:3.3em}
+.features{list-style:none;margin:7px 0 0;padding:0;display:grid;gap:2px}
+.features li{position:relative;padding-inline-start:11px;color:#C6D0DF;font-size:.57rem;line-height:1.55;overflow-wrap:anywhere}
+.features li::before{content:"";position:absolute;inset-inline-start:1px;top:.55em;width:3px;height:3px;border-radius:50%;background:var(--gold)}
+.tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.tag{display:inline-flex;border:1px solid var(--line-soft);border-radius:999px;padding:1px 6px;color:var(--muted);font-size:.49rem;line-height:1.6;background:rgba(255,255,255,.018);white-space:nowrap}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;padding-top:10px;border-top:1px dashed rgba(255,255,255,.08)}
+.preview{display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,rgba(197,160,89,.19),rgba(197,160,89,.08));color:var(--gold-2);font-size:.58rem;font-weight:800;padding:5px 8px;white-space:nowrap;transition:.16s}
+.preview:hover{background:rgba(197,160,89,.26);border-color:var(--gold)}
+.preview .arr{font-size:.75rem;line-height:1}
+.file{color:var(--muted-2);font-family:Consolas,monospace;font-size:.45rem;max-width:135px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:end}
+.closing{margin:34px 0 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(160deg,rgba(197,160,89,.07),rgba(91,140,255,.035));padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.closing h3{font-size:.92rem;line-height:1.45}
+.closing p{color:var(--muted);font-size:.63rem;line-height:1.65;margin-top:2px;max-width:720px}
+.closing .btn{font-size:.65rem;padding:7px 11px}
+footer{margin-top:26px;padding:13px 0 26px;border-top:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted-2);font-size:.57rem;line-height:1.6}
+footer b{color:var(--gold-2)}
+@media(max-width:1020px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{grid-template-columns:1fr;padding-top:34px;min-height:0}
+  .hero-mark{justify-content:flex-start}
+  .seal{width:190px;height:190px}
+  .seal-in b{font-size:2rem}
+}
+@media(max-width:760px){
+  .wrap{padding:0 12px}
+  .top-in{padding:9px 12px}
+  .brand-copy span{display:none}
+  .hero{padding:28px 0 18px}
+  .hero h1{font-size:1.75rem}
+  .hero p{font-size:.82rem}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:25px}
+  .hero-mark{display:none}
+  .grid{grid-template-columns:1fr}
+  .catalog-head{padding-top:0}
+  .sector{margin-top:24px}
+  .sector-title p{font-size:.59rem}
+  .tpl-card .desc{min-height:0}
+  .file{max-width:150px}
+  .closing{align-items:flex-start}
+}
+@media(max-width:430px){
+  .hero h1{font-size:1.48rem}
+  .hero-actions .btn{flex:1 1 auto;justify-content:center}
+  .stats{gap:6px}
+  .stat b{font-size:1.07rem}
+  .sector-head{flex-wrap:wrap;gap:4px}
+  .sector-count{margin-inline-start:36px}
+  .card-foot{flex-wrap:wrap}
+  .file{max-width:100%;text-align:start}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .tpl-card,.btn,.preview,.lang-btn{transition:none}
+}
+@media print{
+  body{background:#fff;color:#111}
+  body::before,.lang-btn,.hero-actions,.closing{display:none}
+  .top{position:static;background:#fff;border-color:#ddd}
+  .tpl-card{border-color:#ddd;background:#fff;break-inside:avoid}
+  .tpl-card h4,.tpl-card .desc,.features li{color:#111}
+}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="top-in">
     <div class="brand">
-      <span class="logo">PB</span>
-      <div>
-        <strong data-i18n="brand">قوالب Premium ثنائية اللغة</strong>
-        <small data-i18n="tagline">ملف واحد لكل قالب · عربي/إنجليزي · عملات خليجية</small>
+      <span class="logo">AT</span>
+      <div class="brand-copy">
+        <strong data-i18n="brand.name">Arab Templates</strong>
+        <span data-i18n="brand.sub">القوالب التنفيذية ثنائية اللغة · إصدار 2026</span>
       </div>
     </div>
-    <button type="button" class="btn ghost" id="langBtn">English</button>
+    <div class="top-actions">
+      <button class="lang-btn" id="langBtn" type="button">English</button>
+    </div>
   </div>
 </header>
 
-<main>
+<main class="wrap">
   <section class="hero">
-    <span class="badge" data-i18n="hero.badge">مجموعة Premium — إصدار 2026</span>
-    <h1 data-i18n="hero.title">ثمانية قوالب احترافية تختصر أسابيع من بناء الأدوات</h1>
-    <p data-i18n="hero.sub">كل قالب ملف HTML واحد مستقل: CSS و JavaScript مدمجان بلا مكتبات خارجية، يعمل بفتحه مباشرة في أي متصفح، مع تبديل فوري بين العربية والإنجليزية واتجاه RTL/LTR.</p>
-    <div class="facts">
-      <span class="fact"><b data-i18n="fact.count">8</b> <span data-i18n="fact.templates">قوالب جاهزة</span></span>
-      <span class="fact"><b data-i18n="fact.currencies">7</b> <span data-i18n="fact.currenciesLabel">عملات</span></span>
-      <span class="fact"><b data-i18n="fact.external">0</b> <span data-i18n="fact.externalLabel">مراجع خارجية</span></span>
-      <span class="fact"><b data-i18n="fact.print">A4</b> <span data-i18n="fact.printLabel">طباعة جاهزة</span></span>
+    <div class="hero-copy">
+      <span class="eyebrow" data-i18n="hero.eyebrow">ARAB TEMPLATES · EXECUTIVE SUITE 2026</span>
+      <h1><span data-i18n="hero.titleA">قوالب تنفيذية جاهزة،</span><br><em data-i18n="hero.titleB">بهوية واحدة ونظام واحد.</em></h1>
+      <p data-i18n="hero.desc">عشرة قوالب مستقلة بملف HTML واحد لكل قالب: واجهات عربية وإنجليزية، بيانات محلية، ورسوم تفاعلية. مصنفة حسب القطاع وجاهزة للمعاينة والتخصيص والتسليم.</p>
+      <div class="hero-actions">
+        <a class="btn gold" href="#catalog"><span data-i18n="hero.cta">استعرض القوالب</span><span class="arr">↓</span></a>
+        <a class="btn" href="automation_blueprint_vault_os.html" target="_blank" rel="noopener"><span data-i18n="hero.latest">أحدث إضافة: Automation Vault</span><span class="arr">↗</span></a>
+      </div>
+    </div>
+    <div class="hero-mark" aria-hidden="true">
+      <div class="seal">
+        <div class="seal-in">
+          <b>10</b>
+          <span data-i18n="seal.label">Templates</span>
+          <em data-i18n="seal.hint">7 قطاعات · ملف واحد لكل قالب</em>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="grid">
-    <article class="card">
-      <span class="no">01</span>
-      <span class="kicker" data-i18n="t3.kicker">مقاولات · مناقصات · تسعير</span>
-      <h2 data-i18n="t3.title">حاسبة تسعير المشاريع والمناقصات</h2>
-      <p class="desc" data-i18n="t3.desc">قدّر تكلفة المواد والعمالة والمصاريف الإدارية والطوارئ، وحدّد هامش الربح الصافي وضريبة القيمة المضافة، ثم أصدر عرض سعر جاهزًا للطباعة.</p>
-      <ul>
-        <li data-i18n="t3.b1">جداول مواد خام وعمالة قابلة للإضافة مع إجمالي كل سطر</li>
-        <li data-i18n="t3.b2">هامش ربح على سعر البيع (Margin) مع إظهار ما يعادله Markup</li>
-        <li data-i18n="t3.b3">ضريبة تلقائية حسب العملة وقابلة للتعديل لكل دولة</li>
-        <li data-i18n="t3.b4">ملخّص بصري وتنبيهات للبنود السالبة والهامش المنخفض</li>
-        <li data-i18n="t3.b5">عرض سعر كامل بشروط، وطباعة تُخفي كل شيء عداه</li>
-      </ul>
-      <div class="tags">
-        <span class="tag gold" data-i18n="tag.margin">هامش وضريبة</span>
-        <span class="tag" data-i18n="tag.quote">عرض سعر</span>
-        <span class="tag green" data-i18n="tag.offline">يعمل بلا خادم</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="tender_cost_estimator.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="tender_cost_estimator.html#quoteWrap" data-i18n="openQuote">عرض السعر الجاهز</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">02</span>
-      <span class="kicker" data-i18n="t4.kicker">مصانع · خطوط إنتاج · استدامة</span>
-      <h2 data-i18n="t4.title">لوحة الأتمتة الدائرية للمصانع</h2>
-      <p class="desc" data-i18n="t4.desc">أدر خطوط الإنتاج، واحسب كميات المخلفات ونسب تحويلها إلى منتجات ذات قيمة مضافة، وأصدر تقرير كفاءة يوميًا للمديرين والمشرفين.</p>
-      <ul>
-        <li data-i18n="t4.b1">جدول خطوط الإنتاج مع الهدر والوزن ونسبتي التدوير والتحويل</li>
-        <li data-i18n="t4.b2">حساب فوري للمخلفات والمسترجَع والمفقود والقيمة المضافة</li>
-        <li data-i18n="t4.b3">مقارنة كل خط بهدف استرجاع يومي وتلوين ما دونه</li>
-        <li data-i18n="t4.b4">رسم الدورة الدائرية: مدخلات → إنتاج → مخلفات → منتج معاد</li>
-        <li data-i18n="t4.b5">تقرير كفاءة قابل للنسخ والطباعة مع توصيات للمشرف</li>
-        <li data-i18n="t4.b6">الحفظ التلقائي يعيد بيانات التشغيل بعد إعادة التحميل</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.circular">اقتصاد دائري</span>
-        <span class="tag" data-i18n="tag.report">تقرير يومي</span>
-        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="factory_circular_ops.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="factory_circular_ops.html#reportCard" data-i18n="openReport">تقرير الكفاءة</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">03</span>
-      <span class="kicker" data-i18n="t5.kicker">محاسبة · تحصيل · كشوف حساب</span>
-      <h2 data-i18n="t5.title">كشوف حساب العملاء والتحصيل</h2>
-      <p class="desc" data-i18n="t5.desc">تابع رصيد كل عميل من فواتيره ودفعاته الجزئية، وشوف المتأخر 30 و60 يومًا قبل ما يكبر، وأرسل كشف حساب مطبوعًا أو ملف CSV.</p>
-      <ul>
-        <li data-i18n="t5.b1">رصيد لكل عميل: إجمالي الفواتير، المسدّد، والمتبقي</li>
-        <li data-i18n="t5.b2">حالة كل فاتورة: مسددة، دفعة جزئية، غير مسددة، أو لم تستحق</li>
-        <li data-i18n="t5.b3">أعمار ديون بثلاث شرائح: 1–30، 31–60، وأكثر من 60 يومًا</li>
-        <li data-i18n="t5.b4">كشف حركة برصيد تراكمي (مدين/دائن) لكل فاتورة ودفعة</li>
-        <li data-i18n="t5.b5">تسجيل دفعة جزئية تُخصم من المتبقي وتحدّث التنبيهات فورًا</li>
-        <li data-i18n="t5.b6">طباعة A4 وتصدير CSV بترميز UTF-8 يفتح في إكسل</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.aging">تنبيهات تأخير</span>
-        <span class="tag" data-i18n="tag.csv">تصدير CSV</span>
-        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="customer_ledger_statement.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="customer_ledger_statement.html#stmtCard" data-i18n="openStatement">كشف الحساب</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">04</span>
-      <span class="kicker" data-i18n="t6.kicker">تجارة إلكترونية · سلة وزد · هوامش</span>
-      <h2 data-i18n="t6.title">نظام ربح المتجر الإلكتروني</h2>
-      <p class="desc" data-i18n="t6.desc">اعرف ربحك الصافي الحقيقي لكل طلب بعد الإعلانات والشحن وبوابات الدفع والمرتجعات، وأقصى تكلفة إعلان قبل الخسارة، مع مولّد أوصاف منتجات جاهزة للنشر.</p>
-      <ul>
-        <li data-i18n="t6.b1">تفصيل التكلفة: منتج، شحن، رسوم بوابة، إعلان، ومرتجعات متوقعة</li>
-        <li data-i18n="t6.b2">مؤشرات فورية: الهامش الصافي، الربح الشهري، وROAS التعادل</li>
-        <li data-i18n="t6.b3">مولّد ثلاثة أوصاف: منشور قصير، وصف متجر، وعنوان SEO — بنسخ بضغطة</li>
-        <li data-i18n="t6.b4">تنبيه واضح عند هامش ضعيف أو طلب خاسر</li>
-        <li data-i18n="t6.b5">ست عملات خليجية بدقة عشرية صحيحة للدينار والريال العماني</li>
-      </ul>
-      <div class="tags">
-        <span class="tag gold" data-i18n="tag.margin">هامش وضريبة</span>
-        <span class="tag" data-i18n="tag.copy">أوصاف منتجات</span>
-        <span class="tag green" data-i18n="tag.offline">يعمل بلا خادم</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="ecommerce_profit_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="ecommerce_profit_os.html#genBtn" data-i18n="openCopy">مولّد الأوصاف</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">05</span>
-      <span class="kicker" data-i18n="t7.kicker">عيادات · مكاتب عقارية · واتساب</span>
-      <h2 data-i18n="t7.title">سرعة الرد وإدارة العملاء المحتملين</h2>
-      <p class="desc" data-i18n="t7.desc">أدر العملاء المحتملين، واعرف كم دقيقة يستغرق أول رد على كل طلب، واكتشف الصفقات المتعثرة قبل ضياعها، ثم أرسل رسالة واتساب جاهزة بضغطة.</p>
-      <ul>
-        <li data-i18n="t7.b1">قائمة عملاء بالحالة والمصدر وقيمة الفرصة والموعد القادم</li>
-        <li data-i18n="t7.b2">مؤشر سرعة: متوسط أول رد ونسبة الرد خلال 5 دقائق وتصنيف لكل عميل</li>
-        <li data-i18n="t7.b3">تحديد الصفقات المتعثرة: موعد فائت أو طلب بلا رد أكثر من 24 ساعة</li>
-        <li data-i18n="t7.b4">أربع رسائل واتساب: تأكيد موعد، متابعة متعثرة، رد أول، وتذكير — بنصوص للعيادة والعقار</li>
-        <li data-i18n="t7.b5">فتح واتساب مباشرة أو نسخ الرسالة، مع حفظ محلي لكل البيانات</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.speed">سرعة استجابة</span>
-        <span class="tag" data-i18n="tag.whatsapp">رسائل واتساب</span>
-        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="speed_to_lead_crm.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="speed_to_lead_crm.html#preview" data-i18n="openMessages">رسائل واتساب</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">06</span>
-      <span class="kicker" data-i18n="t8.kicker">زكاة · مرابحة · ميزانيات</span>
-      <h2 data-i18n="t8.title">نظام الزكاة والتمويل الإسلامي</h2>
-      <p class="desc" data-i18n="t8.desc">احسب زكاة الفرد والشركة بالنصاب وخصم الالتزامات، وقارن تكلفة المرابحة بالتمويل التجاري، ووزّع ميزانية المشاريع بالأوزان — في ملف واحد.</p>
-      <ul>
-        <li data-i18n="t8.b1">حاسبة زكاة للأفراد والشركات: نقد وذهب وفضة واستثمارات ومخزون وذمم</li>
-        <li data-i18n="t8.b2">نصاب الذهب (85غ) أو الفضة (595غ) بأسعار قابلة للتعديل وحالة وجوب واضحة</li>
-        <li data-i18n="t8.b3">مقارنة المرابحة بالتمويل التجاري: القسط، الإجمالي، تكلفة التمويل، وAPR الفعلي</li>
-        <li data-i18n="t8.b4">توزيع ميزانية على المشاريع بالأوزان مع تطبيع 100% وتوزيع متساوٍ</li>
-        <li data-i18n="t8.b5">زر «استخدم الزكاة المستحقة» لتحويلها إلى ميزانية توزيع، مع حفظ محلي وطباعة</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.zakat">زكاة ونصاب</span>
-        <span class="tag" data-i18n="tag.murabaha">مرابحة</span>
-        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="islamic_finance_zakat_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="islamic_finance_zakat_os.html#financeCard" data-i18n="openFinance">مقارنة التمويل</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">07</span>
-      <span class="kicker" data-i18n="t9.kicker">مكاتب هندسية · مقاولات · مستخلصات</span>
-      <h2 data-i18n="t9.title">نظام المكاتب الهندسية والمقاولات</h2>
-      <p class="desc" data-i18n="t9.desc">تابع مراحل مشاريعك ونسب الإنجاز، وأدر مستخلصات العملاء واحتجاز الضمان، وسجّل تكاليف المواد في الموقع — في لوحة واحدة.</p>
-      <ul>
-        <li data-i18n="t9.b1">عدة مشاريع بقيمة عقد ونسبة احتجاز مستقلة لكل مشروع</li>
-        <li data-i18n="t9.b2">مراحل بأوزان ونسب إنجاز، مع إنجاز كلي وقيمة مكتسبة تلقائية</li>
-        <li data-i18n="t9.b3">مستخلصات وجدول دفعات: مقدم، معتمد، مدفوع، متبقٍ، ومحتجز</li>
-        <li data-i18n="t9.b4">زر «مستخلص من الإنجاز» ينشئ مسودة بقيمة العمل غير المفوتر</li>
-        <li data-i18n="t9.b5">تكاليف المواد: كمية × سعر وحدة، ومتابعة مطلوب/مستلم/مستخدم</li>
-        <li data-i18n="t9.b6">حفظ محلي وطباعة تقرير المشروع بشروطه ومراحله ومستخلصاته</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.claims">مستخلصات</span>
-        <span class="tag" data-i18n="tag.materials">تكاليف مواد</span>
-        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="engineering_studio_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="engineering_studio_os.html#claimsCard" data-i18n="openClaims">مستخلصات العملاء</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">08</span>
-      <span class="kicker" data-i18n="t10.kicker">صنّاع محتوى · ثريد · ريلز</span>
-      <h2 data-i18n="t10.title">مُعيد تدوير المحتوى</h2>
-      <p class="desc" data-i18n="t10.desc">حوّل أي نص طويل إلى سلسلة تغريدات، وسيناريو ريلز/تيك توك، ونشرة بريدية — بضغطة واحدة ومع عدّاد أحرف ذكي لكل منصة.</p>
-      <ul>
-        <li data-i18n="t10.b1">ثريد X بتقسيم ذكي على حدود الجمل وترقيم تلقائي وحد 280 حرفًا</li>
-        <li data-i18n="t10.b2">عدّاد أحرف حي لكل تغريدة ولكل كابشن، مع تحذير قبل التجاوز</li>
-        <li data-i18n="t10.b3">سيناريو ريلز/تيك توك بمشاهد وتوقيت وتعليق صوتي ونص على الشاشة</li>
-        <li data-i18n="t10.b4">كابشن جاهز بوسوم، بحدود Instagram وTikTok وX</li>
-        <li data-i18n="t10.b5">نشرة بعنوان ≤ 60 ومعاينة ≤ 90 وعدّادات فورية</li>
-        <li data-i18n="t10.b6">تعديل مباشر لكل مقطع، نسخ بضغطة، وحفظ محلي للنص والمخرجات</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.thread">ثريد</span>
-        <span class="tag" data-i18n="tag.reels">ريلز وتيك توك</span>
-        <span class="tag gold" data-i18n="tag.offline">يعمل بلا خادم</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="viral_content_repurposer.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="viral_content_repurposer.html#threadList" data-i18n="openThread">سلسلة التغريدات</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">09</span>
-      <span class="kicker" data-i18n="t11.kicker">مطاعم · كافيهات · هندسة قوائم</span>
-      <h2 data-i18n="t11.title">هندسة قوائم المطاعم والكافيهات</h2>
-      <p class="desc" data-i18n="t11.desc">احسب تكلفة كل وصفة من مكوناتها، واخصم الضريبة وعمولة التوصيل، وصنّف أصنافك نجومًا وخيول عمل وألغازًا وأصنافًا ضعيفة، مع سعر مقترح لكل صنف.</p>
-      <ul>
-        <li data-i18n="t11.b1">وصفات بمكونات: الكمية × تكلفة الوحدة، مع تغليف وعمالة مباشرة لكل صنف</li>
-        <li data-i18n="t11.b2">صافي إيراد بعد الضريبة وعمولة التوصيل حسب قناة البيع (صالة، سفري، توصيل)</li>
-        <li data-i18n="t11.b3">هامش مساهمة شهري وتصنيف تلقائي: نجوم، خيول عمل، ألغاز، أصناف ضعيفة</li>
-        <li data-i18n="t11.b4">سعر مقترح حسب نسبة تكلفة الطعام المستهدفة، مع حد أدنى يغطي التكلفة والعمولة</li>
-        <li data-i18n="t11.b5">إضافة وتعديل وحذف الأصناف، حفظ محلي، وطباعة تقرير القائمة</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.menu">هندسة قوائم</span>
-        <span class="tag" data-i18n="tag.commission">ضريبة وعمولات</span>
-        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="restaurant_menu_engineering_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="restaurant_menu_engineering_os.html#recCard" data-i18n="openMenu">تصنيف القائمة</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">10</span>
-      <span class="kicker" data-i18n="t12.kicker">شركات ناشئة · مؤسسون · جولات</span>
-      <h2 data-i18n="t12.title">جدول الملكية وجولات الاستثمار</h2>
-      <p class="desc" data-i18n="t12.desc">وزّع الحصص بين المؤسسين بالأوزان، واحسب التقييم والتخفيف عبر ثلاث جولات، وشاهد الملكية تتغير برسوم بيانية تفاعلية.</p>
-      <ul>
-        <li data-i18n="t12.b1">توزيع عادل بأربعة أوزان: رأس المال، الوقت، الخبرة، والدور</li>
-        <li data-i18n="t12.b2">مؤشر توازن الحصص مع الوقت وتنبيهات للفجوات الكبيرة</li>
-        <li data-i18n="t12.b3">ثلاث جولات: التقييم قبل وبعد، نسبة المستثمر، سعر السهم، وتوسيع خيارات الموظفين</li>
-        <li data-i18n="t12.b4">جدول ملكية بعد كل جولة مع تتبع التخفيف على مستوى الأسهم</li>
-        <li data-i18n="t12.b5">رسوم تفاعلية: دونات الحصص، أشرطة الملكية، ومسار التقييم — مع حفظ وطباعة</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.equity">حصص وتخفيف</span>
-        <span class="tag" data-i18n="tag.valuation">تقييم الجولات</span>
-        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="startup_cap_table_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="startup_cap_table_os.html#valCard" data-i18n="openValuation">مسار التقييم</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">11</span>
-      <span class="kicker" data-i18n="t13.kicker">مؤثرون · حملات · ROAS</span>
-      <h2 data-i18n="t13.title">تتبع عائد حملات المؤثرين</h2>
-      <p class="desc" data-i18n="t13.desc">احسب ROAS الحقيقي وتكلفة العميل الجديد لكل مؤثر بعد الخصم وتكلفة المنتج والتوصيل، وقارن المؤثرين لاختيار الأكثر ربحية.</p>
-      <ul>
-        <li data-i18n="t13.b1">إنفاق الحملة والمبيعات المنسوبة والطلبات والعملاء الجدد لكل مؤثر</li>
-        <li data-i18n="t13.b2">تكاليف قابلة للتعديل: البضاعة والتوصيل ورسوم الدفع، مع خصم كود المؤثر</li>
-        <li data-i18n="t13.b3">ROAS إعلاني وROAS حقيقي، تكلفة العميل الجديد، والربح بعد خصم الإنفاق</li>
-        <li data-i18n="t13.b4">ترتيب تلقائي حسب الربحية أو ROAS أو تكلفة العميل أو الربح</li>
-        <li data-i18n="t13.b5">رسم مقارنة تفاعلي وخلاصة تحدد الأكثر والأقل ربحية، مع حفظ وطباعة</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.roas">ROAS حقيقي</span>
-        <span class="tag" data-i18n="tag.cac">تكلفة العميل</span>
-        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="influencer_roi_tracker.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="influencer_roi_tracker.html#chartCard" data-i18n="openCompare">مقارنة المؤثرين</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="no">12</span>
-      <span class="kicker" data-i18n="t14.kicker">سفر · ميزانية · مصاريف</span>
-      <h2 data-i18n="t14.title">ميزانية السفر الذكية</h2>
-      <p class="desc" data-i18n="t14.desc">وزّع ميزانية رحلتك على الطيران والإقامة والمطاعم، وتتبع مصاريفك اليومية مع تحويل العملات، وجدولًا زمنيًا وقائمة مستندات وأمتعة.</p>
-      <ul>
-        <li data-i18n="t14.b1">وجهة وتواريخ ومسافرون ونوع رحلة (عمل/سياحة) مع ميزانية إجمالية</li>
-        <li data-i18n="t14.b2">توزيع على ثمانية بنود: مخطط، مصروف، متبقٍ، وشريط استهلاك وتنبيه تجاوز</li>
-        <li data-i18n="t14.b3">محوّل عملات فوري (11 عملة) وتسجيل المصاريف بعملة الوجهة أو الميزانية</li>
-        <li data-i18n="t14.b4">جدول زمني يومي للأنشطة والمواعيد والأماكن والملاحظات</li>
-        <li data-i18n="t14.b5">قائمة مستندات وأمتعة تفاعلية مع إضافة بنود خاصة، حفظ محلي وطباعة</li>
-      </ul>
-      <div class="tags">
-        <span class="tag green" data-i18n="tag.travel">ميزانية سفر</span>
-        <span class="tag" data-i18n="tag.fx">تحويل عملات</span>
-        <span class="tag gold" data-i18n="tag.offline">يعمل بلا خادم</span>
-      </div>
-      <div class="actions">
-        <a class="btn gold" href="smart_travel_budget_os.html" data-i18n="open">افتح القالب</a>
-        <a class="btn ghost" href="smart_travel_budget_os.html#itiCard" data-i18n="openTrip">الجدول والقائمة</a>
-      </div>
-    </article>
+  <section class="stats" aria-label="Collection statistics">
+    <div class="stat"><b id="statTemplates">10</b><span data-i18n="stats.templates">قوالب مكتملة</span></div>
+    <div class="stat"><b>7</b><span data-i18n="stats.sectors">قطاعات تشغيلية</span></div>
+    <div class="stat"><b>22+</b><span data-i18n="stats.currencies">عملة عربية + الدولار</span></div>
+    <div class="stat"><b>RTL / LTR</b><span data-i18n="stats.bilingual">تبديل فوري للغة والاتجاه</span></div>
   </section>
 
-  <section class="note">
-    <h3 data-i18n="note.title">مشترك في كل قالب</h3>
-    <ul>
-      <li data-i18n="note.1">تبديل فوري بين العربية والإنجليزية يقلب الاتجاه ويحدّث كل العناوين والأرقام والشروط.</li>
-      <li data-i18n="note.2">سبع عملات: SAR، AED، KWD، QAR، OMR، BHD وUSD بفواصل عشرية صحيحة (3 للدينار والريال العماني).</li>
-      <li data-i18n="note.3">حفظ تلقائي محلي (localStorage) للبيانات واللغة والعملة — بلا حساب ولا خادم.</li>
-      <li data-i18n="note.4">تصميم متجاوب يعمل على الجوال واللوحي، وقواعد طباعة A4 جاهزة.</li>
-      <li data-i18n="note.5">لا مكتبات خارجية ولا طلبات شبكة: افتح الملف مباشرة أو أرسله للعميل كما هو.</li>
-    </ul>
+  <div class="catalog-head" id="catalog">
+    <div>
+      <div class="eyebrow" data-i18n="catalog.eyebrow">THE COLLECTION</div>
+      <h2 data-i18n="catalog.title">مكتبة القوالب التنفيذية</h2>
+      <p data-i18n="catalog.desc">كل بطاقة تفتح القالب مباشرة في تبويب جديد. القوالب مرتبة حسب قطاع الاستخدام، والقديم والجديد في مساحة واحدة.</p>
+    </div>
+    <span class="catalog-badge" id="catalogCount">10 قوالب</span>
+  </div>
+
+  <div id="sectorList"></div>
+
+  <section class="closing">
+    <div>
+      <h3 data-i18n="closing.title">نظام تصميم موحّد، وقوالب قابلة للتسليم كما هي.</h3>
+      <p data-i18n="closing.desc">كل قالب يعمل دون خادم أو مكتبات خارجية وقت التشغيل، ويحفظ بياناته محليًا في المتصفح. للتخصيص: غيّر الاسم والألوان والبيانات ثم أعد التسليم.</p>
+    </div>
+    <a class="btn gold" href="automation_blueprint_vault_os.html" target="_blank" rel="noopener"><span data-i18n="closing.cta">افتح أحدث قالب</span><span class="arr">↗</span></a>
   </section>
+
+  <footer>
+    <div><b>Arab Templates</b> — <span data-i18n="footer.tagline">قوالب تنفيذية بملف واحد · عربي/إنجليزي</span></div>
+    <div data-i18n="footer.copy">© 2026 Arab Templates · جميع القوالب جاهزة للمعاينة</div>
+  </footer>
 </main>
-
-<footer>
-  Premium Bilingual Templates — <span data-i18n="footer">ملف واحد لكل قالب · جاهز للتخصيص والتسليم</span>
-</footer>
 
 <script>
 (function () {
   "use strict";
+  var STORAGE_KEY = "arab_templates_index_lang";
 
-  const I18N = {
+  var SECTORS = [
+    {
+      id: "technology",
+      ar: { name: "التقنية والذكاء الاصطناعي", desc: "أدوات بناء وتقدير للمنتجات البرمجية وفرق الذكاء الاصطناعي." },
+      en: { name: "Technology & AI", desc: "Build and estimation tools for software products and AI teams." },
+      templates: [
+        {
+          file: "ai_prompt_dev_studio_os.html",
+          ar: {
+            title: "استوديو تطوير أوامر الذكاء الاصطناعي",
+            desc: "صائغ أوامر هندسية، خزنة أوامر وأكواد مع نسخ فوري، وحاسبة تكلفة توكنز بـ22 عملة عربية.",
+            features: ["صائغ أوامر هندسية منظمة", "خزنة أوامر وأكواد قابلة للنسخ", "حاسبة Tokens بـ22 عملة"],
+            tags: ["ذكاء اصطناعي", "22 عملة", "3 رسوم"]
+          },
+          en: {
+            title: "AI Prompt Dev Studio",
+            desc: "A structured prompt builder, a copy-ready prompt and snippet vault, and a token cost calculator across 22 Arab currencies.",
+            features: ["Structured prompt builder", "Copy-ready prompt and code vault", "Token calculator in 22 currencies"],
+            tags: ["AI", "22 currencies", "3 charts"]
+          }
+        },
+        {
+          file: "software_project_estimator_os.html",
+          ar: {
+            title: "استوديو تسعير المشاريع البرمجية",
+            desc: "قدّر النطاق والمهام والمخاطر والتكلفة، وأدر هامش الربح مع رسوم تحليلية للمشروع.",
+            features: ["تقدير النطاق والمهام والمخاطر", "هامش ربح وتحليل تكلفة", "رسوم Chart.js تفاعلية"],
+            tags: ["برمجة", "تسعير", "تحليلات"]
+          },
+          en: {
+            title: "Software Project Estimator",
+            desc: "Estimate scope, tasks, risk and cost, then manage project margin with analytical charts.",
+            features: ["Scope, task and risk estimation", "Margin and cost analysis", "Interactive Chart.js visuals"],
+            tags: ["Software", "Pricing", "Analytics"]
+          }
+        }
+      ]
+    },
+    {
+      id: "education",
+      ar: { name: "التعليم والجامعات", desc: "منصات للطالب والمعلم وإدارة مشروع التخرج من الفكرة إلى المناقشة." },
+      en: { name: "Education & Universities", desc: "Platforms for students, teachers and graduation projects from proposal to defense." },
+      templates: [
+        {
+          file: "university_student_master_os.html",
+          ar: {
+            title: "Campus Gold — منصة الطالب الجامعي",
+            desc: "حاسبة معدل تراكمي، متتبع واجبات واختبارات، مساعد مذاكرة بالتكرار المتباعد، وميزانية بـ22 عملة.",
+            features: ["حاسبة GPA ومتتبع المهام", "مذاكرة بالتكرار المتباعد", "ميزانية بـ22 عملة عربية"],
+            tags: ["طالب جامعي", "GPA", "ميزانية"]
+          },
+          en: {
+            title: "Campus Gold — University Student OS",
+            desc: "A GPA calculator, assignment and exam tracker, spaced-repetition study assistant, and a 22-currency budget.",
+            features: ["GPA and task tracker", "Spaced-repetition study helper", "Budget in 22 Arab currencies"],
+            tags: ["Student", "GPA", "Budget"]
+          }
+        },
+        {
+          file: "teacher_quiz_architect_os.html",
+          ar: {
+            title: "Lesson Atelier — استوديو المعلم",
+            desc: "مولد خطط دروس وبنك أسئلة، سجل فصول وحضور ودرجات، وإدارة إيرادات الدروس والدورات.",
+            features: ["مولد خطط دروس وبنك أسئلة", "سجل فصول وحضور ودرجات", "إيرادات الدروس بـ22 عملة"],
+            tags: ["تعليم", "خطط دروس", "اختبارات"]
+          },
+          en: {
+            title: "Lesson Atelier — Teacher Studio",
+            desc: "A lesson plan and question bank generator, class attendance and gradebook, plus lesson and course revenue management.",
+            features: ["Lesson plans and question bank", "Classes, attendance and grades", "Lesson revenue in 22 currencies"],
+            tags: ["Education", "Lesson plans", "Quizzes"]
+          }
+        },
+        {
+          file: "graduation_research_os.html",
+          ar: {
+            title: "Graduation Research OS — مشروع التخرج",
+            desc: "إدارة الفصول والفريق والمراجع والميزانية، مع مساعد لأسئلة المناقشة وثلاثة رسوم للجاهزية.",
+            features: ["فصول وفريق ومراجع وميزانية", "مساعد أسئلة لجنة المناقشة", "3 رسوم لمتابعة الجاهزية"],
+            tags: ["تخرج", "بحث علمي", "مناقشة"]
+          },
+          en: {
+            title: "Graduation Research OS",
+            desc: "Manage chapters, team, references and budget, with a defense question assistant and three readiness charts.",
+            features: ["Chapters, team, references and budget", "Defense committee question assistant", "3 readiness charts"],
+            tags: ["Graduation", "Research", "Defense"]
+          }
+        }
+      ]
+    },
+    {
+      id: "trade",
+      ar: { name: "التجارة والاستيراد", desc: "حساب التكلفة الواصلة والشحن والجمارك وشراكات الاستيراد من الصين." },
+      en: { name: "Trade & Import", desc: "Landed cost, shipping, customs and import partnerships from China to Arab markets." },
+      templates: [
+        {
+          file: "china_import_trade_mobile_os.html",
+          ar: {
+            title: "Silk Bridge — منصة الاستيراد الذكي",
+            desc: "مقارنة شحن وتكلفة واصلة ورمز جمركي وتوزيع أرباح الشركاء ومفكرة موردين في مساحة واحدة.",
+            features: ["مقارنة شحن وتكلفة واصلة", "رمز جمركي وتوزيع أرباح الشركاء", "مفكرة موردين و22 عملة"],
+            tags: ["استيراد", "شحن", "جمارك"]
+          },
+          en: {
+            title: "Silk Bridge — China–Arab Import OS",
+            desc: "Compare shipping and landed cost, look up HS codes, split partner profit, and keep a supplier notebook in one place.",
+            features: ["Shipping and landed cost comparison", "HS code and partner profit split", "Supplier notebook and 22 currencies"],
+            tags: ["Import", "Shipping", "Customs"]
+          }
+        }
+      ]
+    },
+    {
+      id: "cloud",
+      ar: { name: "السحابة والبنية الرقمية", desc: "مراقبة النطاقات والاستضافات وشهادات SSL وتكاليف البنية التحتية." },
+      en: { name: "Cloud & Infrastructure", desc: "Monitor domains, hosting, SSL certificates and infrastructure costs." },
+      templates: [
+        {
+          file: "cloud_domains_monitor_os.html",
+          ar: {
+            title: "Cloud Radar — رادار النطاقات والاستضافات",
+            desc: "راقب النطاقات والاستضافات وشهادات SSL، وتابع التجديدات والتكاليف بـ22 عملة عربية.",
+            features: ["مراقبة النطاقات والاستضافات", "تنبيهات تجديد شهادات SSL", "تكاليف بـ22 عملة عربية"],
+            tags: ["سحابة", "SSL", "تكاليف"]
+          },
+          en: {
+            title: "Cloud Radar — Domains & Hosting Monitor",
+            desc: "Monitor domains, hosting and SSL certificates, with renewal alerts and costs across 22 Arab currencies.",
+            features: ["Domain and hosting monitoring", "SSL renewal alerts", "Costs in 22 Arab currencies"],
+            tags: ["Cloud", "SSL", "Costs"]
+          }
+        }
+      ]
+    },
+    {
+      id: "automation",
+      ar: { name: "الأتمتة والربط", desc: "خزنة سيناريوهات Make وn8n وروابط Webhooks، مع تقدير التوفير ومعالجة الأخطاء." },
+      en: { name: "Automation & Integration", desc: "A Make and n8n workflow vault with webhooks, savings estimates and error handling." },
+      templates: [
+        {
+          file: "automation_blueprint_vault_os.html",
+          fresh: true,
+          ar: {
+            title: "Automation Blueprint Vault — خزنة الأتمتة",
+            desc: "سجّل سيناريوهات Make وn8n وروابط الـ Webhooks، واحسب الساعات والمال الموفرين، مع مساعد أخطاء و3 رسوم.",
+            features: ["خزنة Make وn8n وروابط Webhooks", "حاسبة ساعات ومال بـ22 عملة", "مساعد أخطاء و3 رسوم Chart.js"],
+            tags: ["أتمتة", "Webhooks", "توفير"]
+          },
+          en: {
+            title: "Automation Blueprint Vault",
+            desc: "Record Make and n8n workflows and webhook URLs, calculate time and money saved, with an error assistant and three charts.",
+            features: ["Make and n8n workflow vault", "Time and money calculator in 22 currencies", "Error assistant and 3 Chart.js visuals"],
+            tags: ["Automation", "Webhooks", "Savings"]
+          }
+        }
+      ]
+    },
+    {
+      id: "contracting",
+      ar: { name: "المقاولات والمناقصات", desc: "تسعير المواد والعمالة والضرائب وإصدار عروض أسعار جاهزة للطباعة." },
+      en: { name: "Contracting & Tenders", desc: "Price materials, labour and tax, and issue print-ready quotations." },
+      templates: [
+        {
+          file: "tender_cost_estimator.html",
+          ar: {
+            title: "حاسبة تسعير المشاريع والمناقصات",
+            desc: "قدّر المواد والعمالة والمصاريف والطوارئ، وحدّد الهامش والضريبة، ثم أصدر عرض سعر جاهزًا.",
+            features: ["مواد وعمالة ومصاريف وطوارئ", "هامش ربح وضريبة قيمة مضافة", "عرض سعر جاهز للطباعة"],
+            tags: ["مقاولات", "مناقصات", "عرض سعر"]
+          },
+          en: {
+            title: "Tender & Project Cost Estimator",
+            desc: "Estimate materials, labour, overhead and contingency, set margin and VAT, then issue a print-ready quotation.",
+            features: ["Materials, labour and contingency", "Profit margin and VAT", "Print-ready quotation"],
+            tags: ["Contracting", "Tenders", "Quotation"]
+          }
+        }
+      ]
+    },
+    {
+      id: "manufacturing",
+      ar: { name: "التصنيع والاستدامة", desc: "خطوط الإنتاج والمخلفات الصناعية والاقتصاد الدائري وتقارير الكفاءة." },
+      en: { name: "Manufacturing & Sustainability", desc: "Production lines, industrial waste, circular economy and efficiency reporting." },
+      templates: [
+        {
+          file: "factory_circular_ops.html",
+          ar: {
+            title: "لوحة الأتمتة الدائرية للمصانع",
+            desc: "أدر خطوط الإنتاج، واحسب المخلفات ونسب التحويل، وأصدر تقرير كفاءة يوميًا للمشرفين.",
+            features: ["خطوط إنتاج ومخلفات وتحويل", "مقارنة الأهداف اليومية", "تقرير كفاءة قابل للطباعة"],
+            tags: ["مصانع", "اقتصاد دائري", "تقرير"]
+          },
+          en: {
+            title: "Factory Circular Operations Board",
+            desc: "Run production lines, calculate waste and conversion, and issue a daily efficiency report for supervisors.",
+            features: ["Production, waste and conversion", "Daily target comparison", "Printable efficiency report"],
+            tags: ["Factories", "Circular economy", "Reporting"]
+          }
+        }
+      ]
+    }
+  ];
+
+  var I18N = {
     ar: {
-      brand: "قوالب Premium ثنائية اللغة",
-      tagline: "ملف واحد لكل قالب · عربي/إنجليزي · عملات خليجية",
-      "hero.badge": "مجموعة Premium — إصدار 2026",
-      "hero.title": "ثمانية قوالب احترافية تختصر أسابيع من بناء الأدوات",
-      "hero.sub": "كل قالب ملف HTML واحد مستقل: CSS و JavaScript مدمجان بلا مكتبات خارجية، يعمل بفتحه مباشرة في أي متصفح، مع تبديل فوري بين العربية والإنجليزية واتجاه RTL/LTR.",
-      "fact.count": "8", "fact.templates": "قوالب جاهزة",
-      "fact.currencies": "7", "fact.currenciesLabel": "عملات",
-      "fact.external": "0", "fact.externalLabel": "مراجع خارجية",
-      "fact.print": "A4", "fact.printLabel": "طباعة جاهزة",
-      "t3.kicker": "مقاولات · مناقصات · تسعير",
-      "t3.title": "حاسبة تسعير المشاريع والمناقصات",
-      "t3.desc": "قدّر تكلفة المواد والعمالة والمصاريف الإدارية والطوارئ، وحدّد هامش الربح الصافي وضريبة القيمة المضافة، ثم أصدر عرض سعر جاهزًا للطباعة.",
-      "t3.b1": "جداول مواد خام وعمالة قابلة للإضافة مع إجمالي كل سطر",
-      "t3.b2": "هامش ربح على سعر البيع (Margin) مع إظهار ما يعادله Markup",
-      "t3.b3": "ضريبة تلقائية حسب العملة وقابلة للتعديل لكل دولة",
-      "t3.b4": "ملخّص بصري وتنبيهات للبنود السالبة والهامش المنخفض",
-      "t3.b5": "عرض سعر كامل بشروط، وطباعة تُخفي كل شيء عداه",
-      "t4.kicker": "مصانع · خطوط إنتاج · استدامة",
-      "t4.title": "لوحة الأتمتة الدائرية للمصانع",
-      "t4.desc": "أدر خطوط الإنتاج، واحسب كميات المخلفات ونسب تحويلها إلى منتجات ذات قيمة مضافة، وأصدر تقرير كفاءة يوميًا للمديرين والمشرفين.",
-      "t4.b1": "جدول خطوط الإنتاج مع الهدر والوزن ونسبتي التدوير والتحويل",
-      "t4.b2": "حساب فوري للمخلفات والمسترجَع والمفقود والقيمة المضافة",
-      "t4.b3": "مقارنة كل خط بهدف استرجاع يومي وتلوين ما دونه",
-      "t4.b4": "رسم الدورة الدائرية: مدخلات ← إنتاج ← مخلفات ← منتج معاد",
-      "t4.b5": "تقرير كفاءة قابل للنسخ والطباعة مع توصيات للمشرف",
-      "t4.b6": "الحفظ التلقائي يعيد بيانات التشغيل بعد إعادة التحميل",
-      "t5.kicker": "محاسبة · تحصيل · كشوف حساب",
-      "t5.title": "كشوف حساب العملاء والتحصيل",
-      "t5.desc": "تابع رصيد كل عميل من فواتيره ودفعاته الجزئية، وشوف المتأخر 30 و60 يومًا قبل ما يكبر، وأرسل كشف حساب مطبوعًا أو ملف CSV.",
-      "t5.b1": "رصيد لكل عميل: إجمالي الفواتير، المسدّد، والمتبقي",
-      "t5.b2": "حالة كل فاتورة: مسددة، دفعة جزئية، غير مسددة، أو لم تستحق",
-      "t5.b3": "أعمار ديون بثلاث شرائح: 1–30، 31–60، وأكثر من 60 يومًا",
-      "t6.kicker": "تجارة إلكترونية · سلة وزد · هوامش",
-      "t6.title": "نظام ربح المتجر الإلكتروني",
-      "t6.desc": "اعرف ربحك الصافي الحقيقي لكل طلب بعد الإعلانات والشحن وبوابات الدفع والمرتجعات، وأقصى تكلفة إعلان قبل الخسارة، مع مولّد أوصاف منتجات جاهزة للنشر.",
-      "t6.b1": "تفصيل التكلفة: منتج، شحن، رسوم بوابة، إعلان، ومرتجعات متوقعة",
-      "t6.b2": "مؤشرات فورية: الهامش الصافي، الربح الشهري، وROAS التعادل",
-      "t6.b3": "مولّد أوصاف باللهجة الخليجية أو الإنجليزية: منشور، وصف متجر، عنوان SEO، ووسوم — بنسخ بضغطة",
-      "t6.b4": "تنبيه واضح عند هامش ضعيف أو طلب خاسر",
-      "t6.b5": "ست عملات خليجية بدقة عشرية صحيحة للدينار والريال العماني",
-      "tag.copy": "أوصاف منتجات", "openCopy": "مولّد الأوصاف",
-      "t7.kicker": "عيادات · صالونات · عقارات · واتساب",
-      "t7.title": "سرعة الرد وإدارة العملاء المحتملين",
-      "t7.desc": "أدر العملاء المحتملين، واعرف كم دقيقة يستغرق أول رد على كل طلب، واكتشف الصفقات المتعثرة قبل ضياعها، ثم أرسل رسالة واتساب جاهزة بضغطة.",
-      "t7.b1": "قائمة عملاء بالحالة والمصدر وقيمة الفرصة والموعد القادم",
-      "t7.b2": "مؤشر سرعة: متوسط أول رد ونسبة الرد خلال 5 دقائق ومؤقت حي لكل طلب منتظر",
-      "t7.b3": "تحديد الصفقات المتعثرة: موعد فائت أو طلب بلا رد أكثر من 24 ساعة",
-      "t7.b4": "أربع رسائل واتساب: تأكيد موعد، متابعة متعثرة، رد أول، وتذكير — بنصوص للعيادة والصالون والعقار",
-      "t7.b5": "فتح واتساب مباشرة أو نسخ الرسالة، مع حفظ محلي لكل البيانات",
-      "tag.speed": "سرعة استجابة", "tag.whatsapp": "رسائل واتساب", openMessages: "رسائل واتساب",
-      "t8.kicker": "زكاة · مرابحة وإجارة · ميزانيات",
-      "t8.title": "نظام الزكاة والتمويل الإسلامي",
-      "t8.desc": "احسب زكاة الفرد والشركة بالنصاب وخصم الالتزامات، وقارن تكلفة المرابحة بالتمويل التجاري، ووزّع ميزانية المشاريع بالأوزان — في ملف واحد.",
-      "t8.b1": "حاسبة زكاة للأفراد والشركات: نقد وذهب وفضة واستثمارات ومخزون وذمم",
-      "t8.b2": "نصاب الذهب (85غ) أو الفضة (595غ) وتقرير زكاة مفصّل قابل للطباعة",
-      "t8.b3": "مقارنة عرضَي مرابحة وإجارة: القسط، الإجمالي، تكلفة التمويل، وAPR الفعلي لكل عرض",
-      "t8.b4": "توزيع ميزانية على المشاريع بالأوزان مع تطبيع 100% وتوزيع متساوٍ",
-      "t8.b5": "زر «استخدم الزكاة المستحقة» لتحويلها إلى ميزانية توزيع، مع حفظ محلي وطباعة",
-      "tag.zakat": "زكاة ونصاب", "tag.murabaha": "مرابحة", "tag.currency6": "6 عملات", openFinance: "مقارنة التمويل",
-      "t9.kicker": "مكاتب هندسية · مقاولات · مستخلصات",
-      "t9.title": "نظام المكاتب الهندسية والمقاولات",
-      "t9.desc": "تابع مراحل مشاريعك ونسب الإنجاز، وأدر مستخلصات العملاء واحتجاز الضمان، وسجّل تكاليف المواد في الموقع — في لوحة واحدة.",
-      "t9.b1": "عدة مشاريع بقيمة عقد ونسبة احتجاز مستقلة لكل مشروع",
-      "t9.b2": "مراحل بأوزان ونسب إنجاز، مع إنجاز كلي وقيمة مكتسبة تلقائية",
-      "t9.b3": "مستخلصات وجدول دفعات: مقدم، معتمد، مدفوع، متبقٍ، ومحتجز",
-      "t9.b4": "زر «مستخلص من الإنجاز» ينشئ مسودة بقيمة العمل غير المفوتر",
-      "t9.b5": "تكاليف المواد: كمية × سعر وحدة، ومتابعة مطلوب/مستلم/مستخدم",
-      "t9.b6": "حفظ محلي وطباعة تقرير المشروع بمراحله ومستخلصاته",
-      "tag.claims": "مستخلصات", "tag.materials": "تكاليف مواد", openClaims: "مستخلصات العملاء",
-      "t10.kicker": "صنّاع محتوى · ثريد · ريلز",
-      "t10.title": "مُعيد تدوير المحتوى",
-      "t10.desc": "حوّل أي نص طويل إلى سلسلة تغريدات، وسيناريو ريلز/تيك توك، ونشرة بريدية — بضغطة واحدة ومع عدّاد أحرف ذكي لكل منصة.",
-      "t10.b1": "ثريد X بتقسيم ذكي على حدود الجمل وترقيم تلقائي وحد 280 حرفًا",
-      "t10.b2": "عدّاد أحرف حي لكل تغريدة ولكل كابشن، مع تحذير قبل التجاوز",
-      "t10.b3": "سيناريو ريلز/تيك توك بمشاهد وتوقيت وتعليق صوتي ونص على الشاشة",
-      "t10.b4": "كابشن جاهز بوسوم، بحدود Instagram وTikTok وX",
-      "t10.b5": "نشرة بعنوان ≤ 60 ومعاينة ≤ 90 وعدّادات فورية",
-      "t10.b6": "تعديل مباشر لكل مقطع، نسخ بضغطة، وحفظ محلي للنص والمخرجات",
-      "t11.kicker": "مطاعم · كافيهات · هندسة قوائم",
-      "t11.title": "هندسة قوائم المطاعم والكافيهات",
-      "t11.desc": "احسب تكلفة كل وصفة من مكوناتها، واخصم الضريبة وعمولة التوصيل، وصنّف أصنافك نجومًا وخيول عمل وألغازًا وأصنافًا ضعيفة، مع سعر مقترح لكل صنف.",
-      "t11.b1": "وصفات بمكونات: الكمية × تكلفة الوحدة، مع تغليف وعمالة مباشرة لكل صنف",
-      "t11.b2": "صافي إيراد بعد الضريبة وعمولة التوصيل حسب قناة البيع (صالة، سفري، توصيل)",
-      "t11.b3": "هامش مساهمة شهري وتصنيف تلقائي: نجوم، خيول عمل، ألغاز، أصناف ضعيفة",
-      "t11.b4": "سعر مقترح حسب نسبة تكلفة الطعام المستهدفة، مع حد أدنى يغطي التكلفة والعمولة",
-      "t11.b5": "إضافة وتعديل وحذف الأصناف، حفظ محلي، وطباعة تقرير القائمة",
-      "tag.menu": "هندسة قوائم", "tag.commission": "ضريبة وعمولات",
-      "openMenu": "تصنيف القائمة",
-      "t12.kicker": "شركات ناشئة · مؤسسون · جولات",
-      "t12.title": "جدول الملكية وجولات الاستثمار",
-      "t12.desc": "وزّع الحصص بين المؤسسين بالأوزان، واحسب التقييم والتخفيف عبر ثلاث جولات، وشاهد الملكية تتغير برسوم بيانية تفاعلية.",
-      "t12.b1": "توزيع عادل بأربعة أوزان: رأس المال، الوقت، الخبرة، والدور",
-      "t12.b2": "مؤشر توازن الحصص مع الوقت وتنبيهات للفجوات الكبيرة",
-      "t12.b3": "ثلاث جولات: التقييم قبل وبعد، نسبة المستثمر، سعر السهم، وتوسيع خيارات الموظفين",
-      "t12.b4": "جدول ملكية بعد كل جولة مع تتبع التخفيف على مستوى الأسهم",
-      "t12.b5": "رسوم تفاعلية: دونات الحصص، أشرطة الملكية، ومسار التقييم — مع حفظ وطباعة",
-      "tag.equity": "حصص وتخفيف", "tag.valuation": "تقييم الجولات",
-      "openValuation": "مسار التقييم",
-      "t13.kicker": "مؤثرون · حملات · ROAS",
-      "t13.title": "تتبع عائد حملات المؤثرين",
-      "t13.desc": "احسب ROAS الحقيقي وتكلفة العميل الجديد لكل مؤثر بعد الخصم وتكلفة المنتج والتوصيل، وقارن المؤثرين لاختيار الأكثر ربحية.",
-      "t13.b1": "إنفاق الحملة والمبيعات المنسوبة والطلبات والعملاء الجدد لكل مؤثر",
-      "t13.b2": "تكاليف قابلة للتعديل: البضاعة والتوصيل ورسوم الدفع، مع خصم كود المؤثر",
-      "t13.b3": "ROAS إعلاني وROAS حقيقي، تكلفة العميل الجديد، والربح بعد خصم الإنفاق",
-      "t13.b4": "ترتيب تلقائي حسب الربحية أو ROAS أو تكلفة العميل أو الربح",
-      "t13.b5": "رسم مقارنة تفاعلي وخلاصة تحدد الأكثر والأقل ربحية، مع حفظ وطباعة",
-      "tag.roas": "ROAS حقيقي", "tag.cac": "تكلفة العميل",
-      "openCompare": "مقارنة المؤثرين",
-      "t14.kicker": "سفر · ميزانية · مصاريف",
-      "t14.title": "ميزانية السفر الذكية",
-      "t14.desc": "وزّع ميزانية رحلتك على الطيران والإقامة والمطاعم، وتتبع مصاريفك اليومية مع تحويل العملات، وجدولًا زمنيًا وقائمة مستندات وأمتعة.",
-      "t14.b1": "وجهة وتواريخ ومسافرون ونوع رحلة (عمل/سياحة) مع ميزانية إجمالية",
-      "t14.b2": "توزيع على ثمانية بنود: مخطط، مصروف، متبقٍ، وشريط استهلاك وتنبيه تجاوز",
-      "t14.b3": "محوّل عملات فوري (11 عملة) وتسجيل المصاريف بعملة الوجهة أو الميزانية",
-      "t14.b4": "جدول زمني يومي للأنشطة والمواعيد والأماكن والملاحظات",
-      "t14.b5": "قائمة مستندات وأمتعة تفاعلية مع إضافة بنود خاصة، حفظ محلي وطباعة",
-      "tag.travel": "ميزانية سفر", "tag.fx": "تحويل عملات",
-      "openTrip": "الجدول والقائمة",
-      "tag.thread": "ثريد", "tag.reels": "ريلز وتيك توك", openThread: "سلسلة التغريدات",
-      "t5.b4": "كشف حركة برصيد تراكمي (مدين/دائن) لكل فاتورة ودفعة",
-      "t5.b5": "تسجيل دفعة جزئية تُخصم من المتبقي وتحدّث التنبيهات فورًا",
-      "t5.b6": "طباعة A4 وتصدير CSV بترميز UTF-8 يفتح في إكسل",
-      "tag.aging": "تنبيهات تأخير", "tag.csv": "تصدير CSV", openStatement: "كشف الحساب",
-      "tag.margin": "هامش وضريبة", "tag.quote": "عرض سعر", "tag.offline": "يعمل بلا خادم",
-      "tag.circular": "اقتصاد دائري", "tag.report": "تقرير يومي", "tag.currency": "7 عملات",
-      open: "افتح القالب", openQuote: "عرض السعر الجاهز", openReport: "تقرير الكفاءة",
-      "note.title": "مشترك في كل قالب",
-      "note.1": "تبديل فوري بين العربية والإنجليزية يقلب الاتجاه ويحدّث كل العناوين والأرقام والشروط.",
-      "note.2": "سبع عملات: SAR، AED، KWD، QAR، OMR، BHD وUSD بفواصل عشرية صحيحة (3 للدينار والريال العماني).",
-      "note.3": "حفظ تلقائي محلي (localStorage) للبيانات واللغة والعملة — بلا حساب ولا خادم.",
-      "note.4": "تصميم متجاوب يعمل على الجوال واللوحي، وقواعد طباعة A4 جاهزة.",
-      "note.5": "لا مكتبات خارجية ولا طلبات شبكة: افتح الملف مباشرة أو أرسله للعميل كما هو.",
-      footer: "ملف واحد لكل قالب · جاهز للتخصيص والتسليم"
+      "meta.title": "Arab Templates — القوالب التنفيذية ثنائية اللغة",
+      "brand.name": "Arab Templates",
+      "brand.sub": "القوالب التنفيذية ثنائية اللغة · إصدار 2026",
+      "lang.switch": "English",
+      "hero.eyebrow": "ARAB TEMPLATES · EXECUTIVE SUITE 2026",
+      "hero.titleA": "قوالب تنفيذية جاهزة،",
+      "hero.titleB": "بهوية واحدة ونظام واحد.",
+      "hero.desc": "عشرة قوالب مستقلة بملف HTML واحد لكل قالب: واجهات عربية وإنجليزية، بيانات محلية، ورسوم تفاعلية. مصنفة حسب القطاع وجاهزة للمعاينة والتخصيص والتسليم.",
+      "hero.cta": "استعرض القوالب",
+      "hero.latest": "أحدث إضافة: Automation Vault",
+      "seal.label": "Templates",
+      "seal.hint": "7 قطاعات · ملف واحد لكل قالب",
+      "stats.templates": "قوالب مكتملة",
+      "stats.sectors": "قطاعات تشغيلية",
+      "stats.currencies": "عملة عربية + الدولار",
+      "stats.bilingual": "تبديل فوري للغة والاتجاه",
+      "catalog.eyebrow": "THE COLLECTION",
+      "catalog.title": "مكتبة القوالب التنفيذية",
+      "catalog.desc": "كل بطاقة تفتح القالب مباشرة في تبويب جديد. القوالب مرتبة حسب قطاع الاستخدام، والقديم والجديد في مساحة واحدة.",
+      "catalog.count": "{n} قوالب",
+      "card.preview": "معاينة فورية",
+      "card.complete": "مكتمل",
+      "card.new": "جديد",
+      "sector.count": "{n} قوالب",
+      "closing.title": "نظام تصميم موحّد، وقوالب قابلة للتسليم كما هي.",
+      "closing.desc": "كل قالب يعمل دون خادم أو مكتبات خارجية وقت التشغيل، ويحفظ بياناته محليًا في المتصفح. للتخصيص: غيّر الاسم والألوان والبيانات ثم أعد التسليم.",
+      "closing.cta": "افتح أحدث قالب",
+      "footer.tagline": "قوالب تنفيذية بملف واحد · عربي/إنجليزي",
+      "footer.copy": "© 2026 Arab Templates · جميع القوالب جاهزة للمعاينة"
     },
     en: {
-      brand: "Premium Bilingual Templates",
-      tagline: "One file per template · Arabic/English · Gulf currencies",
-      "hero.badge": "Premium collection — 2026 edition",
-      "hero.title": "Eight professional tools that save weeks of building",
-      "hero.sub": "Every template is a single self-contained HTML file: CSS and JavaScript inlined with no external libraries. Open it in any browser and it just works, with instant Arabic/English switching and RTL/LTR support.",
-      "fact.count": "8", "fact.templates": "ready templates",
-      "fact.currencies": "7", "fact.currenciesLabel": "currencies",
-      "fact.external": "0", "fact.externalLabel": "external references",
-      "fact.print": "A4", "fact.printLabel": "print ready",
-      "t3.kicker": "Contracting · Tenders · Pricing",
-      "t3.title": "Tender & Project Cost Estimator",
-      "t3.desc": "Build up material, labour, admin and contingency costs, set the net profit margin and VAT, then issue a print-ready quotation.",
-      "t3.b1": "Add-as-you-go material and labour tables with per-line totals",
-      "t3.b2": "Margin taken on the selling price, with the equivalent markup shown",
-      "t3.b3": "VAT auto-set from the currency and editable per country",
-      "t3.b4": "Visual breakdown plus warnings for negative lines and thin margins",
-      "t3.b5": "Full quotation with terms; printing hides everything else",
-      "t4.kicker": "Factories · Production lines · Sustainability",
-      "t4.title": "Factory Circular Operations Board",
-      "t4.desc": "Run production lines, calculate industrial waste and how much converts into value-added product, and issue a daily efficiency report for managers and supervisors.",
-      "t4.b1": "Line table with scrap, unit weight, recyclable share and conversion rate",
-      "t4.b2": "Live waste, recovered, lost and value-added figures",
-      "t4.b3": "Each line compared to a daily recovery target and flagged when below it",
-      "t4.b4": "Circular flow diagram: inputs → production → waste → recycled product",
-      "t4.b5": "Copyable, printable efficiency report with supervisor actions",
-      "t4.b6": "Autosave restores the shift data after a reload",
-      "t5.kicker": "Accounting · Collections · Statements",
-      "t5.title": "Customer Ledger & Collections",
-      "t5.desc": "Track each client's balance from invoices and partial payments, catch 30- and 60-day overdue amounts early, and send a printed statement or CSV.",
-      "t5.b1": "Balance per client: total invoiced, paid, and remaining",
-      "t5.b2": "Every invoice status: paid, partial, unpaid, or not yet due",
-      "t5.b3": "Three ageing buckets: 1–30, 31–60 and more than 60 days",
-      "t6.kicker": "E-commerce · Salla & Zid · Margins",
-      "t6.title": "E-commerce Profit OS",
-      "t6.desc": "See the real net profit per order after ads, shipping, payment fees and returns, the maximum ad cost before you lose money, and generate ready-to-publish product copy.",
-      "t6.b1": "Full cost breakdown: product, shipping, gateway, ads and expected returns",
-      "t6.b2": "Live KPIs: net margin, monthly profit and break-even ROAS",
-      "t6.b3": "Gulf Arabic or English copy — short post, store description, SEO title and hashtags, copied in one click",
-      "t6.b4": "Clear alert when the margin is thin or the order loses money",
-      "t6.b5": "Six Gulf currencies with correct decimals for dinar and Omani rial",
-      "tag.copy": "Product copy", "openCopy": "Copy generator",
-      "t7.kicker": "Clinics · Salons · Real estate · WhatsApp",
-      "t7.title": "Speed-to-Lead CRM",
-      "t7.desc": "Manage leads, see how many minutes the first reply takes, catch stalled deals before they are lost, and send a ready WhatsApp message in one click.",
-      "t7.b1": "Lead list with stage, source, opportunity value and next appointment",
-      "t7.b2": "Speed score: average first reply, share answered within 5 minutes, and a live timer on every waiting lead",
-      "t7.b3": "Stalled deals flagged: a passed appointment date or no reply for over 24 hours",
-      "t7.b4": "Four WhatsApp messages: appointment confirmation, stalled follow-up, first reply and reminder — clinic, salon and real estate wording",
-      "t7.b5": "Open WhatsApp directly or copy the message, with all data saved locally",
-      "tag.speed": "Response speed", "tag.whatsapp": "WhatsApp messages", openMessages: "WhatsApp messages",
-      "t8.kicker": "Zakat · Murabaha & ijara · Budgets",
-      "t8.title": "Islamic Finance & Zakat OS",
-      "t8.desc": "Calculate individual and corporate zakat with nisab and liability deductions, compare murabaha against commercial financing, and split project budgets by weight — in one file.",
-      "t8.b1": "Zakat calculator for individuals and companies: cash, gold, silver, investments, inventory and receivables",
-      "t8.b2": "Gold (85g) or silver (595g) nisab with a detailed, print-ready zakat report",
-      "t8.b3": "Murabaha vs ijara offers: installment, total paid, cost of finance and effective APR for each",
-      "t8.b4": "Budget allocation across projects by weight with normalisation to 100% and equal split",
-      "t8.b5": "“Use zakat due” turns the obligation into a distribution budget, with local save and print",
-      "tag.zakat": "Zakat & nisab", "tag.murabaha": "Murabaha", "tag.currency6": "6 currencies", openFinance: "Financing comparison",
-      "t9.kicker": "Engineering offices · Contracting · Claims",
-      "t9.title": "Engineering Studio & Contracting OS",
-      "t9.desc": "Track project phases and completion, manage client progress claims and retention, and record site material costs — in one dashboard.",
-      "t9.b1": "Multiple projects, each with its own contract value and retention rate",
-      "t9.b2": "Weighted phases with completion percentages, overall progress and earned value",
-      "t9.b3": "Claims and payment schedule: submitted, approved, paid, outstanding and retention held",
-      "t9.b4": "“Claim from progress” creates a draft for the unclaimed earned value",
-      "t9.b5": "Material costs: quantity × unit price, tracking ordered, delivered and used",
-      "t9.b6": "Local save and a printable project report with its phases and claims",
-      "tag.claims": "Progress claims", "tag.materials": "Material costs", openClaims: "Client claims",
-      "t10.kicker": "Creators · Threads · Reels",
-      "t10.title": "Viral Content Repurposer",
-      "t10.desc": "Turn any long text into an X thread, a Reels/TikTok script and an email newsletter — in one click, with a smart character counter per platform.",
-      "t10.b1": "X thread split smartly on sentence boundaries, auto-numbered and capped at 280 characters",
-      "t10.b2": "Live character counters for every tweet and caption, with an over-limit warning",
-      "t10.b3": "Reels/TikTok script with scenes, timing, voiceover and on-screen text",
-      "t10.b4": "Ready caption with hashtags, within Instagram, TikTok and X limits",
-      "t10.b5": "Newsletter with a ≤60 subject and ≤90 preview, counted live",
-      "t10.b6": "Edit any block inline, copy in one click, and keep text and outputs saved locally",
-      "t11.kicker": "Restaurants · Cafés · Menu engineering",
-      "t11.title": "Restaurant & Café Menu Engineering",
-      "t11.desc": "Cost every recipe from its ingredients, deduct VAT and delivery commission, classify dishes as stars, plowhorses, puzzles or dogs, and get a suggested price for each.",
-      "t11.b1": "Ingredient-based recipes: quantity × unit cost, plus packaging and direct labour per item",
-      "t11.b2": "Net revenue after VAT and delivery commission by sales channel (dine-in, takeaway, delivery)",
-      "t11.b3": "Monthly contribution margin with automatic four-way menu classification",
-      "t11.b4": "Suggested price from your target food cost, with a floor that covers cost and commission",
-      "t11.b5": "Add, edit and delete items, save locally, and print the menu report",
-      "tag.menu": "Menu engineering", "tag.commission": "Tax & commission",
-      "openMenu": "Menu classification",
-      "t12.kicker": "Startups · Founders · Rounds",
-      "t12.title": "Startup Cap Table & Rounds",
-      "t12.desc": "Split equity between founders by weighted contribution, model valuation and dilution across three rounds, and watch ownership change in interactive charts.",
-      "t12.b1": "Fair split with four weights: capital, time, expertise and role",
-      "t12.b2": "Equity-vs-time balance score with alerts on large gaps",
-      "t12.b3": "Three rounds: pre/post-money, investor share, share price and option pool top-up",
-      "t12.b4": "Ownership table after every round, tracking dilution at share level",
-      "t12.b5": "Interactive donut, ownership bars and valuation path — with local save and print",
-      "tag.equity": "Equity & dilution", "tag.valuation": "Round valuation",
-      "openValuation": "Valuation path",
-      "t13.kicker": "Influencers · Campaigns · ROAS",
-      "t13.title": "Influencer Campaign ROI Tracker",
-      "t13.desc": "Measure true ROAS and cost per new customer per creator after discount, COGS and fulfillment, then compare creators to pick the most profitable.",
-      "t13.b1": "Campaign spend, attributed sales, orders and new customers for each influencer",
-      "t13.b2": "Editable COGS, fulfillment and payment fees, plus the creator discount code",
-      "t13.b3": "Media ROAS, true ROAS, cost per new customer and profit after spend",
-      "t13.b4": "Automatic ranking by true ROAS, media ROAS, cost per customer or profit",
-      "t13.b5": "Interactive comparison chart and a verdict naming the best and worst creators, with local save and print",
-      "tag.roas": "True ROAS", "tag.cac": "Cost per customer",
-      "openCompare": "Creator comparison",
-      "t14.kicker": "Travel · Budget · Expenses",
-      "t14.title": "Smart Travel Budget",
-      "t14.desc": "Split your trip budget across flights, stay and dining, track daily expenses with currency conversion, and keep an itinerary plus a documents and luggage checklist.",
-      "t14.b1": "Destination, dates, travellers and trip type (business or tourism) with a total budget",
-      "t14.b2": "Eight categories with planned, spent, left, usage bar and overspend warning",
-      "t14.b3": "Instant 11-currency converter, with expenses recorded in the destination or budget currency",
-      "t14.b4": "Day-by-day itinerary for activities, times, places and notes",
-      "t14.b5": "Interactive documents and luggage checklist with custom items, local save and print",
-      "tag.travel": "Travel budget", "tag.fx": "Currency conversion",
-      "openTrip": "Itinerary & checklist",
-      "tag.thread": "Threads", "tag.reels": "Reels & TikTok", openThread: "X thread",
-      "t5.b4": "Activity statement with a running balance (debit/credit) per invoice and payment",
-      "t5.b5": "Record a partial payment that reduces the remaining balance and refreshes alerts",
-      "t5.b6": "A4 printing and UTF-8 CSV export that opens cleanly in Excel",
-      "tag.aging": "Overdue alerts", "tag.csv": "CSV export", openStatement: "View statement",
-      "tag.margin": "Margin & VAT", "tag.quote": "Quotation", "tag.offline": "Works offline",
-      "tag.circular": "Circular economy", "tag.report": "Daily report", "tag.currency": "7 currencies",
-      open: "Open template", openQuote: "View the quotation", openReport: "Efficiency report",
-      "note.title": "Shared by every template",
-      "note.1": "Instant Arabic/English switching that flips the direction and updates every heading, number and term.",
-      "note.2": "Seven currencies: SAR, AED, KWD, QAR, OMR, BHD and USD with correct decimals (3 for dinar and Omani rial).",
-      "note.3": "Automatic local save (localStorage) of data, language and currency — no account, no server.",
-      "note.4": "Responsive on phone and tablet, with A4 print rules included.",
-      "note.5": "No external libraries and no network calls: open the file directly or send it to a client as is.",
-      footer: "One file per template · Ready to customise and deliver"
+      "meta.title": "Arab Templates — Bilingual Executive Templates",
+      "brand.name": "Arab Templates",
+      "brand.sub": "Bilingual executive templates · 2026 edition",
+      "lang.switch": "العربية",
+      "hero.eyebrow": "ARAB TEMPLATES · EXECUTIVE SUITE 2026",
+      "hero.titleA": "Executive templates, ready to ship,",
+      "hero.titleB": "one identity and one system.",
+      "hero.desc": "Ten standalone single-file HTML templates: Arabic and English interfaces, local data and interactive charts. Grouped by sector and ready to preview, customise and deliver.",
+      "hero.cta": "Browse the collection",
+      "hero.latest": "Latest: Automation Vault",
+      "seal.label": "Templates",
+      "seal.hint": "7 sectors · one file per template",
+      "stats.templates": "completed templates",
+      "stats.sectors": "operational sectors",
+      "stats.currencies": "Arab currencies + USD",
+      "stats.bilingual": "instant language and direction switch",
+      "catalog.eyebrow": "THE COLLECTION",
+      "catalog.title": "The executive template library",
+      "catalog.desc": "Every card opens the template in a new tab. Templates are grouped by sector, with older and newer work in one place.",
+      "catalog.count": "{n} templates",
+      "card.preview": "Instant preview",
+      "card.complete": "Complete",
+      "card.new": "New",
+      "sector.count": "{n} templates",
+      "closing.title": "One design system, templates you can deliver as they are.",
+      "closing.desc": "Each template runs with no server or runtime third-party libraries and stores data locally in the browser. To customise, change the name, colours and data, then hand it over.",
+      "closing.cta": "Open the latest template",
+      "footer.tagline": "Single-file executive templates · Arabic/English",
+      "footer.copy": "© 2026 Arab Templates · Every template ready to preview"
     }
   };
 
-  const state = { lang: "ar" };
-  const t = (key) => {
-    const table = I18N[state.lang] || I18N.ar;
-    return table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
-  };
-
-  function applyLang(lang, persist) {
-    state.lang = lang === "en" ? "en" : "ar";
-    const ar = state.lang === "ar";
-    document.documentElement.lang = ar ? "ar" : "en";
-    document.documentElement.dir = ar ? "rtl" : "ltr";
-    document.title = ar ? "قوالب Premium ثنائية اللغة — فهرس القوالب"
-      : "Premium Bilingual Templates — Template index";
-    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
-    document.getElementById("langBtn").textContent = ar ? "English" : "العربية";
-    if (persist) localStorage.setItem("pb_index_lang", state.lang);
-  }
-
-  document.getElementById("langBtn").addEventListener("click", () => {
-    applyLang(state.lang === "ar" ? "en" : "ar", true);
+  var state = { lang: "ar" };
+  var count = 0;
+  SECTORS.forEach(function (sector) {
+    sector.templates.forEach(function (template) { template.order = ++count; });
   });
 
-  const stored = localStorage.getItem("pb_index_lang");
-  applyLang(stored === "en" ? "en" : "ar", false);
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+  function t(key) {
+    var table = I18N[state.lang] || I18N.ar;
+    return table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+  }
+  function tf(key, vars) {
+    return t(key).replace(/\{(\w+)\}/g, function (match, name) {
+      return vars && vars[name] != null ? vars[name] : match;
+    });
+  }
+  function sectorText(sector) { return sector[state.lang === "en" ? "en" : "ar"]; }
+  function templateText(template) { return template[state.lang === "en" ? "en" : "ar"]; }
+
+  function render() {
+    var list = document.getElementById("sectorList");
+    list.innerHTML = SECTORS.map(function (sector, index) {
+      var info = sectorText(sector);
+      var countLabel = tf("sector.count", { n: sector.templates.length });
+      var cards = sector.templates.map(function (template) {
+        var copy = templateText(template);
+        var features = copy.features.map(function (item) { return "<li>" + esc(item) + "</li>"; }).join("");
+        var tags = copy.tags.map(function (item) { return '<span class="tag">' + esc(item) + "</span>"; }).join("");
+        var pills = '<span class="pill complete">✓ ' + esc(t("card.complete")) + "</span>" +
+          (template.fresh ? '<span class="pill new">' + esc(t("card.new")) + "</span>" : "");
+        return '<article class="tpl-card' + (template.fresh ? " new" : "") + '">' +
+          '<div class="card-top"><span class="card-no">' + String(template.order).padStart(2, "0") + " / " + String(count).padStart(2, "0") + "</span>" +
+          '<div class="pills">' + pills + "</div></div>" +
+          '<span class="kicker">' + esc(info.name) + "</span>" +
+          "<h4>" + esc(copy.title) + "</h4>" +
+          '<p class="desc">' + esc(copy.desc) + "</p>" +
+          '<ul class="features">' + features + "</ul>" +
+          '<div class="tags">' + tags + "</div>" +
+          '<div class="card-foot"><a class="preview" href="' + esc(template.file) + '" target="_blank" rel="noopener">' +
+          esc(t("card.preview")) + '<span class="arr">↗</span></a>' +
+          '<span class="file" dir="ltr" title="' + esc(template.file) + '">' + esc(template.file) + "</span></div></article>";
+      }).join("");
+      return '<section class="sector" id="sector-' + esc(sector.id) + '">' +
+        '<div class="sector-head"><div class="sector-title"><span class="sector-no">' + String(index + 1).padStart(2, "0") + "</span>" +
+        "<div><h3>" + esc(info.name) + "</h3><p>" + esc(info.desc) + "</p></div></div>" +
+        '<span class="sector-count">' + esc(countLabel) + "</span></div>" +
+        '<div class="grid">' + cards + "</div></section>";
+    }).join("");
+    document.getElementById("statTemplates").textContent = String(count);
+    document.getElementById("catalogCount").textContent = tf("catalog.count", { n: count });
+  }
+
+  function applyLang() {
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.title = t("meta.title");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.getElementById("langBtn").textContent = t("lang.switch");
+    render();
+  }
+
+  document.getElementById("langBtn").addEventListener("click", function () {
+    state.lang = state.lang === "ar" ? "en" : "ar";
+    try { localStorage.setItem(STORAGE_KEY, state.lang); } catch (err) { /* local storage may be unavailable */ }
+    applyLang();
+  });
+
+  var stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (err) { /* ignore */ }
+  state.lang = stored === "en" ? "en" : "ar";
+  applyLang();
 })();
 </script>
 </body>

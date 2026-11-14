@@ -17,10 +17,6 @@ const I18N = {
     "chat.greeting": "أهلًا بك! أنا المساعد الذكي لمنصة Arab Templates. أستطيع اختيار قالب يناسب نشاطك، شرح خطوات استخدامه، والإجابة عن أسئلتك الضريبية والمحاسبية.",
     "chat.placeholder": "اكتب سؤالك… مثال: ما نسبة الضريبة في عُمان؟", "chat.send": "إرسال",
     "chat.fine": "المساعد يعمل بقواعد معرفة مكتوبة وواضحة داخل الصفحة، وليس استشارة ضريبية معتمدة.",
-    "voice.start": "انقر وتحدث", "voice.stop": "إيقاف الاستماع", "voice.listening": "أستمع… انطق سؤالك",
-    "voice.heard": "سؤالك الصوتي: {q}", "voice.unsupported": "التعرف على الصوت غير متاح في هذا المتصفح — استخدم Chrome أو Edge، أو اكتب سؤالك في الحقل.",
-    "voice.error": "تعذّر الاستماع: {error}", "voice.denied": "لم يُسمح باستخدام الميكروفون — اسمح به من إعدادات المتصفح.",
-    "voice.off": "تم إيقاف الاستماع.",
     "side.quick": "أسئلة سريعة", "side.guide": "دليل سريع", "side.guide.tag": "٣ خطوات",
     "side.step1": "اختر نشاطك من زر «اختر لي القالب المناسب».",
     "side.step2": "اسأل عن النسبة أو الموعد أو حقول الفاتورة في أي وقت.",
@@ -139,10 +135,6 @@ const I18N = {
     "chat.greeting": "Welcome! I am the official Arab Templates assistant. I can pick a template for your business, explain its setup steps, and answer your tax and accounting questions.",
     "chat.placeholder": "Type your question… e.g. What is the VAT rate in Oman?", "chat.send": "Send",
     "chat.fine": "The assistant answers from a written knowledge base in this page — it is not certified tax advice.",
-    "voice.start": "Tap and speak", "voice.stop": "Stop listening", "voice.listening": "Listening… say your question",
-    "voice.heard": "Your spoken question: {q}", "voice.unsupported": "Speech recognition is unavailable in this browser — use Chrome or Edge, or type your question.",
-    "voice.error": "Could not listen: {error}", "voice.denied": "Microphone permission was denied — allow it in the browser settings.",
-    "voice.off": "Listening stopped.",
     "side.quick": "Quick questions", "side.guide": "Quick guide", "side.guide.tag": "3 steps",
     "side.step1": "Choose your activity with the “Recommend a template” button.",
     "side.step2": "Ask about rates, deadlines or invoice fields at any time.",
@@ -513,9 +505,7 @@ function ask(question) {
   typing.classList.add("typing");
   setTimeout(() => {
     typing.remove();
-    const answer = answerFor(q);
-    appendMsg("bot", answer);
-    document.dispatchEvent(new CustomEvent("assistant:answer", { detail: { text: answer } }));
+    appendMsg("bot", answerFor(q));
     if (isUnanswered(q)) logUnanswered(q);
   }, 420);
 }
@@ -760,9 +750,6 @@ function applyLang(lang, persist = true) {
   renderCurrencyOptions();
   if (state.audit) runAudit();
   if (state.lines) auditLines();
-  if (window.VoiceAssistant && typeof window.VoiceAssistant.setLang === "function") {
-    window.VoiceAssistant.setLang(state.lang);
-  }
   if (persist) localStorage.setItem("at_assistant_lang", state.lang);
 }
 
