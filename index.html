@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قوالب Premium ثنائية اللغة — Premium Bilingual Templates</title>
+<meta name="description" content="فهرس ثمانية قوالب احترافية في ملفات مستقلة: تسعير المناقصات، الأتمتة الدائرية، كشوف الحساب، ربح المتجر، سرعة الرد، الزكاة والتمويل الإسلامي، إدارة المكاتب الهندسية، وإعادة تدوير المحتوى — عربي/إنجليزي.">
+<style>
+:root{--bg:#f3f4f8;--card:#fff;--ink:#0e1c2c;--muted:#5c6b7c;--navy:#0d2b45;--navy2:#143f63;--gold:#c1912f;--gold-soft:#f7efdc;--teal:#0f766e;--line:#e2e6ef;--radius:18px;--shadow:0 12px 34px rgba(13,43,69,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+h1,h2,h3{margin:0;line-height:1.3}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:10;background:rgba(243,244,248,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--gold));color:#fff;display:grid;place-items:center;font-weight:900;letter-spacing:.5px}
+.brand strong{display:block;font-size:1.02rem}
+.brand small{color:var(--muted);font-size:.76rem}
+.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:.87rem;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:.16s}
+.btn.gold{background:var(--gold);color:#241b05}
+.btn.gold:hover{filter:brightness(1.06)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--navy2)}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.navy:hover{filter:brightness(1.12)}
+main{max-width:1080px;margin:0 auto;padding:34px 20px 50px}
+.hero{text-align:center;padding:14px 0 30px}
+.badge{display:inline-block;margin-bottom:16px;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.82rem;color:var(--navy);font-weight:700}
+.hero h1{font-size:clamp(1.7rem,3.6vw,2.5rem);letter-spacing:-.4px;margin-bottom:12px}
+.hero p{max-width:660px;margin:0 auto;color:var(--muted);font-size:1.02rem}
+.facts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.fact{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:.8rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.fact b{color:var(--ink);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(13,43,69,.14)}
+.card::before{content:"";position:absolute;inset-block-start:0;inset-inline:0;height:5px;background:linear-gradient(90deg,var(--navy),var(--gold))}
+.card .no{font-size:.74rem;font-weight:800;letter-spacing:.12em;color:var(--gold)}
+.card .kicker{font-size:.78rem;color:var(--teal);font-weight:700}
+.card h2{font-size:1.24rem}
+.card p.desc{color:var(--muted);font-size:.93rem;margin:0}
+.card ul{margin:2px 0 0;padding-inline-start:19px;color:var(--muted);font-size:.88rem;line-height:1.95}
+.card ul li::marker{color:var(--gold)}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.tag{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:#eef3f9;color:var(--navy2)}
+.tag.green{background:#e6f4ef;color:#0b6b52}
+.tag.gold{background:var(--gold-soft);color:#7c5a12}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:14px;border-top:1px dashed var(--line)}
+.note{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow)}
+.note h3{font-size:.98rem;margin-bottom:8px}
+.note ul{margin:0;padding-inline-start:19px;color:var(--muted);font-size:.87rem;line-height:2}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 30px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">PB</span>
+      <div>
+        <strong data-i18n="brand">قوالب Premium ثنائية اللغة</strong>
+        <small data-i18n="tagline">ملف واحد لكل قالب · عربي/إنجليزي · عملات خليجية</small>
+      </div>
+    </div>
+    <button type="button" class="btn ghost" id="langBtn">English</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="badge" data-i18n="hero.badge">مجموعة Premium — إصدار 2026</span>
+    <h1 data-i18n="hero.title">ثمانية قوالب احترافية تختصر أسابيع من بناء الأدوات</h1>
+    <p data-i18n="hero.sub">كل قالب ملف HTML واحد مستقل: CSS و JavaScript مدمجان بلا مكتبات خارجية، يعمل بفتحه مباشرة في أي متصفح، مع تبديل فوري بين العربية والإنجليزية واتجاه RTL/LTR.</p>
+    <div class="facts">
+      <span class="fact"><b data-i18n="fact.count">8</b> <span data-i18n="fact.templates">قوالب جاهزة</span></span>
+      <span class="fact"><b data-i18n="fact.currencies">7</b> <span data-i18n="fact.currenciesLabel">عملات</span></span>
+      <span class="fact"><b data-i18n="fact.external">0</b> <span data-i18n="fact.externalLabel">مراجع خارجية</span></span>
+      <span class="fact"><b data-i18n="fact.print">A4</b> <span data-i18n="fact.printLabel">طباعة جاهزة</span></span>
+    </div>
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <span class="no">01</span>
+      <span class="kicker" data-i18n="t3.kicker">مقاولات · مناقصات · تسعير</span>
+      <h2 data-i18n="t3.title">حاسبة تسعير المشاريع والمناقصات</h2>
+      <p class="desc" data-i18n="t3.desc">قدّر تكلفة المواد والعمالة والمصاريف الإدارية والطوارئ، وحدّد هامش الربح الصافي وضريبة القيمة المضافة، ثم أصدر عرض سعر جاهزًا للطباعة.</p>
+      <ul>
+        <li data-i18n="t3.b1">جداول مواد خام وعمالة قابلة للإضافة مع إجمالي كل سطر</li>
+        <li data-i18n="t3.b2">هامش ربح على سعر البيع (Margin) مع إظهار ما يعادله Markup</li>
+        <li data-i18n="t3.b3">ضريبة تلقائية حسب العملة وقابلة للتعديل لكل دولة</li>
+        <li data-i18n="t3.b4">ملخّص بصري وتنبيهات للبنود السالبة والهامش المنخفض</li>
+        <li data-i18n="t3.b5">عرض سعر كامل بشروط، وطباعة تُخفي كل شيء عداه</li>
+      </ul>
+      <div class="tags">
+        <span class="tag gold" data-i18n="tag.margin">هامش وضريبة</span>
+        <span class="tag" data-i18n="tag.quote">عرض سعر</span>
+        <span class="tag green" data-i18n="tag.offline">يعمل بلا خادم</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="tender_cost_estimator.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="tender_cost_estimator.html#quoteWrap" data-i18n="openQuote">عرض السعر الجاهز</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">02</span>
+      <span class="kicker" data-i18n="t4.kicker">مصانع · خطوط إنتاج · استدامة</span>
+      <h2 data-i18n="t4.title">لوحة الأتمتة الدائرية للمصانع</h2>
+      <p class="desc" data-i18n="t4.desc">أدر خطوط الإنتاج، واحسب كميات المخلفات ونسب تحويلها إلى منتجات ذات قيمة مضافة، وأصدر تقرير كفاءة يوميًا للمديرين والمشرفين.</p>
+      <ul>
+        <li data-i18n="t4.b1">جدول خطوط الإنتاج مع الهدر والوزن ونسبتي التدوير والتحويل</li>
+        <li data-i18n="t4.b2">حساب فوري للمخلفات والمسترجَع والمفقود والقيمة المضافة</li>
+        <li data-i18n="t4.b3">مقارنة كل خط بهدف استرجاع يومي وتلوين ما دونه</li>
+        <li data-i18n="t4.b4">رسم الدورة الدائرية: مدخلات → إنتاج → مخلفات → منتج معاد</li>
+        <li data-i18n="t4.b5">تقرير كفاءة قابل للنسخ والطباعة مع توصيات للمشرف</li>
+        <li data-i18n="t4.b6">الحفظ التلقائي يعيد بيانات التشغيل بعد إعادة التحميل</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.circular">اقتصاد دائري</span>
+        <span class="tag" data-i18n="tag.report">تقرير يومي</span>
+        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="factory_circular_ops.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="factory_circular_ops.html#reportCard" data-i18n="openReport">تقرير الكفاءة</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">03</span>
+      <span class="kicker" data-i18n="t5.kicker">محاسبة · تحصيل · كشوف حساب</span>
+      <h2 data-i18n="t5.title">كشوف حساب العملاء والتحصيل</h2>
+      <p class="desc" data-i18n="t5.desc">تابع رصيد كل عميل من فواتيره ودفعاته الجزئية، وشوف المتأخر 30 و60 يومًا قبل ما يكبر، وأرسل كشف حساب مطبوعًا أو ملف CSV.</p>
+      <ul>
+        <li data-i18n="t5.b1">رصيد لكل عميل: إجمالي الفواتير، المسدّد، والمتبقي</li>
+        <li data-i18n="t5.b2">حالة كل فاتورة: مسددة، دفعة جزئية، غير مسددة، أو لم تستحق</li>
+        <li data-i18n="t5.b3">أعمار ديون بثلاث شرائح: 1–30، 31–60، وأكثر من 60 يومًا</li>
+        <li data-i18n="t5.b4">كشف حركة برصيد تراكمي (مدين/دائن) لكل فاتورة ودفعة</li>
+        <li data-i18n="t5.b5">تسجيل دفعة جزئية تُخصم من المتبقي وتحدّث التنبيهات فورًا</li>
+        <li data-i18n="t5.b6">طباعة A4 وتصدير CSV بترميز UTF-8 يفتح في إكسل</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.aging">تنبيهات تأخير</span>
+        <span class="tag" data-i18n="tag.csv">تصدير CSV</span>
+        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="customer_ledger_statement.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="customer_ledger_statement.html#stmtCard" data-i18n="openStatement">كشف الحساب</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">04</span>
+      <span class="kicker" data-i18n="t6.kicker">تجارة إلكترونية · سلة وزد · هوامش</span>
+      <h2 data-i18n="t6.title">نظام ربح المتجر الإلكتروني</h2>
+      <p class="desc" data-i18n="t6.desc">اعرف ربحك الصافي الحقيقي لكل طلب بعد الإعلانات والشحن وبوابات الدفع والمرتجعات، وأقصى تكلفة إعلان قبل الخسارة، مع مولّد أوصاف منتجات جاهزة للنشر.</p>
+      <ul>
+        <li data-i18n="t6.b1">تفصيل التكلفة: منتج، شحن، رسوم بوابة، إعلان، ومرتجعات متوقعة</li>
+        <li data-i18n="t6.b2">مؤشرات فورية: الهامش الصافي، الربح الشهري، وROAS التعادل</li>
+        <li data-i18n="t6.b3">مولّد ثلاثة أوصاف: منشور قصير، وصف متجر، وعنوان SEO — بنسخ بضغطة</li>
+        <li data-i18n="t6.b4">تنبيه واضح عند هامش ضعيف أو طلب خاسر</li>
+        <li data-i18n="t6.b5">ست عملات خليجية بدقة عشرية صحيحة للدينار والريال العماني</li>
+      </ul>
+      <div class="tags">
+        <span class="tag gold" data-i18n="tag.margin">هامش وضريبة</span>
+        <span class="tag" data-i18n="tag.copy">أوصاف منتجات</span>
+        <span class="tag green" data-i18n="tag.offline">يعمل بلا خادم</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="ecommerce_profit_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="ecommerce_profit_os.html#genBtn" data-i18n="openCopy">مولّد الأوصاف</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">05</span>
+      <span class="kicker" data-i18n="t7.kicker">عيادات · مكاتب عقارية · واتساب</span>
+      <h2 data-i18n="t7.title">سرعة الرد وإدارة العملاء المحتملين</h2>
+      <p class="desc" data-i18n="t7.desc">أدر العملاء المحتملين، واعرف كم دقيقة يستغرق أول رد على كل طلب، واكتشف الصفقات المتعثرة قبل ضياعها، ثم أرسل رسالة واتساب جاهزة بضغطة.</p>
+      <ul>
+        <li data-i18n="t7.b1">قائمة عملاء بالحالة والمصدر وقيمة الفرصة والموعد القادم</li>
+        <li data-i18n="t7.b2">مؤشر سرعة: متوسط أول رد ونسبة الرد خلال 5 دقائق وتصنيف لكل عميل</li>
+        <li data-i18n="t7.b3">تحديد الصفقات المتعثرة: موعد فائت أو طلب بلا رد أكثر من 24 ساعة</li>
+        <li data-i18n="t7.b4">أربع رسائل واتساب: تأكيد موعد، متابعة متعثرة، رد أول، وتذكير — بنصوص للعيادة والعقار</li>
+        <li data-i18n="t7.b5">فتح واتساب مباشرة أو نسخ الرسالة، مع حفظ محلي لكل البيانات</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.speed">سرعة استجابة</span>
+        <span class="tag" data-i18n="tag.whatsapp">رسائل واتساب</span>
+        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="speed_to_lead_crm.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="speed_to_lead_crm.html#preview" data-i18n="openMessages">رسائل واتساب</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">06</span>
+      <span class="kicker" data-i18n="t8.kicker">زكاة · مرابحة · ميزانيات</span>
+      <h2 data-i18n="t8.title">نظام الزكاة والتمويل الإسلامي</h2>
+      <p class="desc" data-i18n="t8.desc">احسب زكاة الفرد والشركة بالنصاب وخصم الالتزامات، وقارن تكلفة المرابحة بالتمويل التجاري، ووزّع ميزانية المشاريع بالأوزان — في ملف واحد.</p>
+      <ul>
+        <li data-i18n="t8.b1">حاسبة زكاة للأفراد والشركات: نقد وذهب وفضة واستثمارات ومخزون وذمم</li>
+        <li data-i18n="t8.b2">نصاب الذهب (85غ) أو الفضة (595غ) بأسعار قابلة للتعديل وحالة وجوب واضحة</li>
+        <li data-i18n="t8.b3">مقارنة المرابحة بالتمويل التجاري: القسط، الإجمالي، تكلفة التمويل، وAPR الفعلي</li>
+        <li data-i18n="t8.b4">توزيع ميزانية على المشاريع بالأوزان مع تطبيع 100% وتوزيع متساوٍ</li>
+        <li data-i18n="t8.b5">زر «استخدم الزكاة المستحقة» لتحويلها إلى ميزانية توزيع، مع حفظ محلي وطباعة</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.zakat">زكاة ونصاب</span>
+        <span class="tag" data-i18n="tag.murabaha">مرابحة</span>
+        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="islamic_finance_zakat_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="islamic_finance_zakat_os.html#financeCard" data-i18n="openFinance">مقارنة التمويل</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">07</span>
+      <span class="kicker" data-i18n="t9.kicker">مكاتب هندسية · مقاولات · مستخلصات</span>
+      <h2 data-i18n="t9.title">نظام المكاتب الهندسية والمقاولات</h2>
+      <p class="desc" data-i18n="t9.desc">تابع مراحل مشاريعك ونسب الإنجاز، وأدر مستخلصات العملاء واحتجاز الضمان، وسجّل تكاليف المواد في الموقع — في لوحة واحدة.</p>
+      <ul>
+        <li data-i18n="t9.b1">عدة مشاريع بقيمة عقد ونسبة احتجاز مستقلة لكل مشروع</li>
+        <li data-i18n="t9.b2">مراحل بأوزان ونسب إنجاز، مع إنجاز كلي وقيمة مكتسبة تلقائية</li>
+        <li data-i18n="t9.b3">مستخلصات وجدول دفعات: مقدم، معتمد، مدفوع، متبقٍ، ومحتجز</li>
+        <li data-i18n="t9.b4">زر «مستخلص من الإنجاز» ينشئ مسودة بقيمة العمل غير المفوتر</li>
+        <li data-i18n="t9.b5">تكاليف المواد: كمية × سعر وحدة، ومتابعة مطلوب/مستلم/مستخدم</li>
+        <li data-i18n="t9.b6">حفظ محلي وطباعة تقرير المشروع بشروطه ومراحله ومستخلصاته</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.claims">مستخلصات</span>
+        <span class="tag" data-i18n="tag.materials">تكاليف مواد</span>
+        <span class="tag gold" data-i18n="tag.currency">7 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="engineering_studio_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="engineering_studio_os.html#claimsCard" data-i18n="openClaims">مستخلصات العملاء</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">08</span>
+      <span class="kicker" data-i18n="t10.kicker">صنّاع محتوى · ثريد · ريلز</span>
+      <h2 data-i18n="t10.title">مُعيد تدوير المحتوى</h2>
+      <p class="desc" data-i18n="t10.desc">حوّل أي نص طويل إلى سلسلة تغريدات، وسيناريو ريلز/تيك توك، ونشرة بريدية — بضغطة واحدة ومع عدّاد أحرف ذكي لكل منصة.</p>
+      <ul>
+        <li data-i18n="t10.b1">ثريد X بتقسيم ذكي على حدود الجمل وترقيم تلقائي وحد 280 حرفًا</li>
+        <li data-i18n="t10.b2">عدّاد أحرف حي لكل تغريدة ولكل كابشن، مع تحذير قبل التجاوز</li>
+        <li data-i18n="t10.b3">سيناريو ريلز/تيك توك بمشاهد وتوقيت وتعليق صوتي ونص على الشاشة</li>
+        <li data-i18n="t10.b4">كابشن جاهز بوسوم، بحدود Instagram وTikTok وX</li>
+        <li data-i18n="t10.b5">نشرة بعنوان ≤ 60 ومعاينة ≤ 90 وعدّادات فورية</li>
+        <li data-i18n="t10.b6">تعديل مباشر لكل مقطع، نسخ بضغطة، وحفظ محلي للنص والمخرجات</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.thread">ثريد</span>
+        <span class="tag" data-i18n="tag.reels">ريلز وتيك توك</span>
+        <span class="tag gold" data-i18n="tag.offline">يعمل بلا خادم</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="viral_content_repurposer.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="viral_content_repurposer.html#threadList" data-i18n="openThread">سلسلة التغريدات</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">09</span>
+      <span class="kicker" data-i18n="t11.kicker">مطاعم · كافيهات · هندسة قوائم</span>
+      <h2 data-i18n="t11.title">هندسة قوائم المطاعم والكافيهات</h2>
+      <p class="desc" data-i18n="t11.desc">احسب تكلفة كل وصفة من مكوناتها، واخصم الضريبة وعمولة التوصيل، وصنّف أصنافك نجومًا وخيول عمل وألغازًا وأصنافًا ضعيفة، مع سعر مقترح لكل صنف.</p>
+      <ul>
+        <li data-i18n="t11.b1">وصفات بمكونات: الكمية × تكلفة الوحدة، مع تغليف وعمالة مباشرة لكل صنف</li>
+        <li data-i18n="t11.b2">صافي إيراد بعد الضريبة وعمولة التوصيل حسب قناة البيع (صالة، سفري، توصيل)</li>
+        <li data-i18n="t11.b3">هامش مساهمة شهري وتصنيف تلقائي: نجوم، خيول عمل، ألغاز، أصناف ضعيفة</li>
+        <li data-i18n="t11.b4">سعر مقترح حسب نسبة تكلفة الطعام المستهدفة، مع حد أدنى يغطي التكلفة والعمولة</li>
+        <li data-i18n="t11.b5">إضافة وتعديل وحذف الأصناف، حفظ محلي، وطباعة تقرير القائمة</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.menu">هندسة قوائم</span>
+        <span class="tag" data-i18n="tag.commission">ضريبة وعمولات</span>
+        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="restaurant_menu_engineering_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="restaurant_menu_engineering_os.html#recCard" data-i18n="openMenu">تصنيف القائمة</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">10</span>
+      <span class="kicker" data-i18n="t12.kicker">شركات ناشئة · مؤسسون · جولات</span>
+      <h2 data-i18n="t12.title">جدول الملكية وجولات الاستثمار</h2>
+      <p class="desc" data-i18n="t12.desc">وزّع الحصص بين المؤسسين بالأوزان، واحسب التقييم والتخفيف عبر ثلاث جولات، وشاهد الملكية تتغير برسوم بيانية تفاعلية.</p>
+      <ul>
+        <li data-i18n="t12.b1">توزيع عادل بأربعة أوزان: رأس المال، الوقت، الخبرة، والدور</li>
+        <li data-i18n="t12.b2">مؤشر توازن الحصص مع الوقت وتنبيهات للفجوات الكبيرة</li>
+        <li data-i18n="t12.b3">ثلاث جولات: التقييم قبل وبعد، نسبة المستثمر، سعر السهم، وتوسيع خيارات الموظفين</li>
+        <li data-i18n="t12.b4">جدول ملكية بعد كل جولة مع تتبع التخفيف على مستوى الأسهم</li>
+        <li data-i18n="t12.b5">رسوم تفاعلية: دونات الحصص، أشرطة الملكية، ومسار التقييم — مع حفظ وطباعة</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.equity">حصص وتخفيف</span>
+        <span class="tag" data-i18n="tag.valuation">تقييم الجولات</span>
+        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="startup_cap_table_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="startup_cap_table_os.html#valCard" data-i18n="openValuation">مسار التقييم</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">11</span>
+      <span class="kicker" data-i18n="t13.kicker">مؤثرون · حملات · ROAS</span>
+      <h2 data-i18n="t13.title">تتبع عائد حملات المؤثرين</h2>
+      <p class="desc" data-i18n="t13.desc">احسب ROAS الحقيقي وتكلفة العميل الجديد لكل مؤثر بعد الخصم وتكلفة المنتج والتوصيل، وقارن المؤثرين لاختيار الأكثر ربحية.</p>
+      <ul>
+        <li data-i18n="t13.b1">إنفاق الحملة والمبيعات المنسوبة والطلبات والعملاء الجدد لكل مؤثر</li>
+        <li data-i18n="t13.b2">تكاليف قابلة للتعديل: البضاعة والتوصيل ورسوم الدفع، مع خصم كود المؤثر</li>
+        <li data-i18n="t13.b3">ROAS إعلاني وROAS حقيقي، تكلفة العميل الجديد، والربح بعد خصم الإنفاق</li>
+        <li data-i18n="t13.b4">ترتيب تلقائي حسب الربحية أو ROAS أو تكلفة العميل أو الربح</li>
+        <li data-i18n="t13.b5">رسم مقارنة تفاعلي وخلاصة تحدد الأكثر والأقل ربحية، مع حفظ وطباعة</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.roas">ROAS حقيقي</span>
+        <span class="tag" data-i18n="tag.cac">تكلفة العميل</span>
+        <span class="tag gold" data-i18n="tag.currency6">6 عملات</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="influencer_roi_tracker.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="influencer_roi_tracker.html#chartCard" data-i18n="openCompare">مقارنة المؤثرين</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="no">12</span>
+      <span class="kicker" data-i18n="t14.kicker">سفر · ميزانية · مصاريف</span>
+      <h2 data-i18n="t14.title">ميزانية السفر الذكية</h2>
+      <p class="desc" data-i18n="t14.desc">وزّع ميزانية رحلتك على الطيران والإقامة والمطاعم، وتتبع مصاريفك اليومية مع تحويل العملات، وجدولًا زمنيًا وقائمة مستندات وأمتعة.</p>
+      <ul>
+        <li data-i18n="t14.b1">وجهة وتواريخ ومسافرون ونوع رحلة (عمل/سياحة) مع ميزانية إجمالية</li>
+        <li data-i18n="t14.b2">توزيع على ثمانية بنود: مخطط، مصروف، متبقٍ، وشريط استهلاك وتنبيه تجاوز</li>
+        <li data-i18n="t14.b3">محوّل عملات فوري (11 عملة) وتسجيل المصاريف بعملة الوجهة أو الميزانية</li>
+        <li data-i18n="t14.b4">جدول زمني يومي للأنشطة والمواعيد والأماكن والملاحظات</li>
+        <li data-i18n="t14.b5">قائمة مستندات وأمتعة تفاعلية مع إضافة بنود خاصة، حفظ محلي وطباعة</li>
+      </ul>
+      <div class="tags">
+        <span class="tag green" data-i18n="tag.travel">ميزانية سفر</span>
+        <span class="tag" data-i18n="tag.fx">تحويل عملات</span>
+        <span class="tag gold" data-i18n="tag.offline">يعمل بلا خادم</span>
+      </div>
+      <div class="actions">
+        <a class="btn gold" href="smart_travel_budget_os.html" data-i18n="open">افتح القالب</a>
+        <a class="btn ghost" href="smart_travel_budget_os.html#itiCard" data-i18n="openTrip">الجدول والقائمة</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="note">
+    <h3 data-i18n="note.title">مشترك في كل قالب</h3>
+    <ul>
+      <li data-i18n="note.1">تبديل فوري بين العربية والإنجليزية يقلب الاتجاه ويحدّث كل العناوين والأرقام والشروط.</li>
+      <li data-i18n="note.2">سبع عملات: SAR، AED، KWD، QAR، OMR، BHD وUSD بفواصل عشرية صحيحة (3 للدينار والريال العماني).</li>
+      <li data-i18n="note.3">حفظ تلقائي محلي (localStorage) للبيانات واللغة والعملة — بلا حساب ولا خادم.</li>
+      <li data-i18n="note.4">تصميم متجاوب يعمل على الجوال واللوحي، وقواعد طباعة A4 جاهزة.</li>
+      <li data-i18n="note.5">لا مكتبات خارجية ولا طلبات شبكة: افتح الملف مباشرة أو أرسله للعميل كما هو.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  Premium Bilingual Templates — <span data-i18n="footer">ملف واحد لكل قالب · جاهز للتخصيص والتسليم</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const I18N = {
+    ar: {
+      brand: "قوالب Premium ثنائية اللغة",
+      tagline: "ملف واحد لكل قالب · عربي/إنجليزي · عملات خليجية",
+      "hero.badge": "مجموعة Premium — إصدار 2026",
+      "hero.title": "ثمانية قوالب احترافية تختصر أسابيع من بناء الأدوات",
+      "hero.sub": "كل قالب ملف HTML واحد مستقل: CSS و JavaScript مدمجان بلا مكتبات خارجية، يعمل بفتحه مباشرة في أي متصفح، مع تبديل فوري بين العربية والإنجليزية واتجاه RTL/LTR.",
+      "fact.count": "8", "fact.templates": "قوالب جاهزة",
+      "fact.currencies": "7", "fact.currenciesLabel": "عملات",
+      "fact.external": "0", "fact.externalLabel": "مراجع خارجية",
+      "fact.print": "A4", "fact.printLabel": "طباعة جاهزة",
+      "t3.kicker": "مقاولات · مناقصات · تسعير",
+      "t3.title": "حاسبة تسعير المشاريع والمناقصات",
+      "t3.desc": "قدّر تكلفة المواد والعمالة والمصاريف الإدارية والطوارئ، وحدّد هامش الربح الصافي وضريبة القيمة المضافة، ثم أصدر عرض سعر جاهزًا للطباعة.",
+      "t3.b1": "جداول مواد خام وعمالة قابلة للإضافة مع إجمالي كل سطر",
+      "t3.b2": "هامش ربح على سعر البيع (Margin) مع إظهار ما يعادله Markup",
+      "t3.b3": "ضريبة تلقائية حسب العملة وقابلة للتعديل لكل دولة",
+      "t3.b4": "ملخّص بصري وتنبيهات للبنود السالبة والهامش المنخفض",
+      "t3.b5": "عرض سعر كامل بشروط، وطباعة تُخفي كل شيء عداه",
+      "t4.kicker": "مصانع · خطوط إنتاج · استدامة",
+      "t4.title": "لوحة الأتمتة الدائرية للمصانع",
+      "t4.desc": "أدر خطوط الإنتاج، واحسب كميات المخلفات ونسب تحويلها إلى منتجات ذات قيمة مضافة، وأصدر تقرير كفاءة يوميًا للمديرين والمشرفين.",
+      "t4.b1": "جدول خطوط الإنتاج مع الهدر والوزن ونسبتي التدوير والتحويل",
+      "t4.b2": "حساب فوري للمخلفات والمسترجَع والمفقود والقيمة المضافة",
+      "t4.b3": "مقارنة كل خط بهدف استرجاع يومي وتلوين ما دونه",
+      "t4.b4": "رسم الدورة الدائرية: مدخلات ← إنتاج ← مخلفات ← منتج معاد",
+      "t4.b5": "تقرير كفاءة قابل للنسخ والطباعة مع توصيات للمشرف",
+      "t4.b6": "الحفظ التلقائي يعيد بيانات التشغيل بعد إعادة التحميل",
+      "t5.kicker": "محاسبة · تحصيل · كشوف حساب",
+      "t5.title": "كشوف حساب العملاء والتحصيل",
+      "t5.desc": "تابع رصيد كل عميل من فواتيره ودفعاته الجزئية، وشوف المتأخر 30 و60 يومًا قبل ما يكبر، وأرسل كشف حساب مطبوعًا أو ملف CSV.",
+      "t5.b1": "رصيد لكل عميل: إجمالي الفواتير، المسدّد، والمتبقي",
+      "t5.b2": "حالة كل فاتورة: مسددة، دفعة جزئية، غير مسددة، أو لم تستحق",
+      "t5.b3": "أعمار ديون بثلاث شرائح: 1–30، 31–60، وأكثر من 60 يومًا",
+      "t6.kicker": "تجارة إلكترونية · سلة وزد · هوامش",
+      "t6.title": "نظام ربح المتجر الإلكتروني",
+      "t6.desc": "اعرف ربحك الصافي الحقيقي لكل طلب بعد الإعلانات والشحن وبوابات الدفع والمرتجعات، وأقصى تكلفة إعلان قبل الخسارة، مع مولّد أوصاف منتجات جاهزة للنشر.",
+      "t6.b1": "تفصيل التكلفة: منتج، شحن، رسوم بوابة، إعلان، ومرتجعات متوقعة",
+      "t6.b2": "مؤشرات فورية: الهامش الصافي، الربح الشهري، وROAS التعادل",
+      "t6.b3": "مولّد أوصاف باللهجة الخليجية أو الإنجليزية: منشور، وصف متجر، عنوان SEO، ووسوم — بنسخ بضغطة",
+      "t6.b4": "تنبيه واضح عند هامش ضعيف أو طلب خاسر",
+      "t6.b5": "ست عملات خليجية بدقة عشرية صحيحة للدينار والريال العماني",
+      "tag.copy": "أوصاف منتجات", "openCopy": "مولّد الأوصاف",
+      "t7.kicker": "عيادات · صالونات · عقارات · واتساب",
+      "t7.title": "سرعة الرد وإدارة العملاء المحتملين",
+      "t7.desc": "أدر العملاء المحتملين، واعرف كم دقيقة يستغرق أول رد على كل طلب، واكتشف الصفقات المتعثرة قبل ضياعها، ثم أرسل رسالة واتساب جاهزة بضغطة.",
+      "t7.b1": "قائمة عملاء بالحالة والمصدر وقيمة الفرصة والموعد القادم",
+      "t7.b2": "مؤشر سرعة: متوسط أول رد ونسبة الرد خلال 5 دقائق ومؤقت حي لكل طلب منتظر",
+      "t7.b3": "تحديد الصفقات المتعثرة: موعد فائت أو طلب بلا رد أكثر من 24 ساعة",
+      "t7.b4": "أربع رسائل واتساب: تأكيد موعد، متابعة متعثرة، رد أول، وتذكير — بنصوص للعيادة والصالون والعقار",
+      "t7.b5": "فتح واتساب مباشرة أو نسخ الرسالة، مع حفظ محلي لكل البيانات",
+      "tag.speed": "سرعة استجابة", "tag.whatsapp": "رسائل واتساب", openMessages: "رسائل واتساب",
+      "t8.kicker": "زكاة · مرابحة وإجارة · ميزانيات",
+      "t8.title": "نظام الزكاة والتمويل الإسلامي",
+      "t8.desc": "احسب زكاة الفرد والشركة بالنصاب وخصم الالتزامات، وقارن تكلفة المرابحة بالتمويل التجاري، ووزّع ميزانية المشاريع بالأوزان — في ملف واحد.",
+      "t8.b1": "حاسبة زكاة للأفراد والشركات: نقد وذهب وفضة واستثمارات ومخزون وذمم",
+      "t8.b2": "نصاب الذهب (85غ) أو الفضة (595غ) وتقرير زكاة مفصّل قابل للطباعة",
+      "t8.b3": "مقارنة عرضَي مرابحة وإجارة: القسط، الإجمالي، تكلفة التمويل، وAPR الفعلي لكل عرض",
+      "t8.b4": "توزيع ميزانية على المشاريع بالأوزان مع تطبيع 100% وتوزيع متساوٍ",
+      "t8.b5": "زر «استخدم الزكاة المستحقة» لتحويلها إلى ميزانية توزيع، مع حفظ محلي وطباعة",
+      "tag.zakat": "زكاة ونصاب", "tag.murabaha": "مرابحة", "tag.currency6": "6 عملات", openFinance: "مقارنة التمويل",
+      "t9.kicker": "مكاتب هندسية · مقاولات · مستخلصات",
+      "t9.title": "نظام المكاتب الهندسية والمقاولات",
+      "t9.desc": "تابع مراحل مشاريعك ونسب الإنجاز، وأدر مستخلصات العملاء واحتجاز الضمان، وسجّل تكاليف المواد في الموقع — في لوحة واحدة.",
+      "t9.b1": "عدة مشاريع بقيمة عقد ونسبة احتجاز مستقلة لكل مشروع",
+      "t9.b2": "مراحل بأوزان ونسب إنجاز، مع إنجاز كلي وقيمة مكتسبة تلقائية",
+      "t9.b3": "مستخلصات وجدول دفعات: مقدم، معتمد، مدفوع، متبقٍ، ومحتجز",
+      "t9.b4": "زر «مستخلص من الإنجاز» ينشئ مسودة بقيمة العمل غير المفوتر",
+      "t9.b5": "تكاليف المواد: كمية × سعر وحدة، ومتابعة مطلوب/مستلم/مستخدم",
+      "t9.b6": "حفظ محلي وطباعة تقرير المشروع بمراحله ومستخلصاته",
+      "tag.claims": "مستخلصات", "tag.materials": "تكاليف مواد", openClaims: "مستخلصات العملاء",
+      "t10.kicker": "صنّاع محتوى · ثريد · ريلز",
+      "t10.title": "مُعيد تدوير المحتوى",
+      "t10.desc": "حوّل أي نص طويل إلى سلسلة تغريدات، وسيناريو ريلز/تيك توك، ونشرة بريدية — بضغطة واحدة ومع عدّاد أحرف ذكي لكل منصة.",
+      "t10.b1": "ثريد X بتقسيم ذكي على حدود الجمل وترقيم تلقائي وحد 280 حرفًا",
+      "t10.b2": "عدّاد أحرف حي لكل تغريدة ولكل كابشن، مع تحذير قبل التجاوز",
+      "t10.b3": "سيناريو ريلز/تيك توك بمشاهد وتوقيت وتعليق صوتي ونص على الشاشة",
+      "t10.b4": "كابشن جاهز بوسوم، بحدود Instagram وTikTok وX",
+      "t10.b5": "نشرة بعنوان ≤ 60 ومعاينة ≤ 90 وعدّادات فورية",
+      "t10.b6": "تعديل مباشر لكل مقطع، نسخ بضغطة، وحفظ محلي للنص والمخرجات",
+      "t11.kicker": "مطاعم · كافيهات · هندسة قوائم",
+      "t11.title": "هندسة قوائم المطاعم والكافيهات",
+      "t11.desc": "احسب تكلفة كل وصفة من مكوناتها، واخصم الضريبة وعمولة التوصيل، وصنّف أصنافك نجومًا وخيول عمل وألغازًا وأصنافًا ضعيفة، مع سعر مقترح لكل صنف.",
+      "t11.b1": "وصفات بمكونات: الكمية × تكلفة الوحدة، مع تغليف وعمالة مباشرة لكل صنف",
+      "t11.b2": "صافي إيراد بعد الضريبة وعمولة التوصيل حسب قناة البيع (صالة، سفري، توصيل)",
+      "t11.b3": "هامش مساهمة شهري وتصنيف تلقائي: نجوم، خيول عمل، ألغاز، أصناف ضعيفة",
+      "t11.b4": "سعر مقترح حسب نسبة تكلفة الطعام المستهدفة، مع حد أدنى يغطي التكلفة والعمولة",
+      "t11.b5": "إضافة وتعديل وحذف الأصناف، حفظ محلي، وطباعة تقرير القائمة",
+      "tag.menu": "هندسة قوائم", "tag.commission": "ضريبة وعمولات",
+      "openMenu": "تصنيف القائمة",
+      "t12.kicker": "شركات ناشئة · مؤسسون · جولات",
+      "t12.title": "جدول الملكية وجولات الاستثمار",
+      "t12.desc": "وزّع الحصص بين المؤسسين بالأوزان، واحسب التقييم والتخفيف عبر ثلاث جولات، وشاهد الملكية تتغير برسوم بيانية تفاعلية.",
+      "t12.b1": "توزيع عادل بأربعة أوزان: رأس المال، الوقت، الخبرة، والدور",
+      "t12.b2": "مؤشر توازن الحصص مع الوقت وتنبيهات للفجوات الكبيرة",
+      "t12.b3": "ثلاث جولات: التقييم قبل وبعد، نسبة المستثمر، سعر السهم، وتوسيع خيارات الموظفين",
+      "t12.b4": "جدول ملكية بعد كل جولة مع تتبع التخفيف على مستوى الأسهم",
+      "t12.b5": "رسوم تفاعلية: دونات الحصص، أشرطة الملكية، ومسار التقييم — مع حفظ وطباعة",
+      "tag.equity": "حصص وتخفيف", "tag.valuation": "تقييم الجولات",
+      "openValuation": "مسار التقييم",
+      "t13.kicker": "مؤثرون · حملات · ROAS",
+      "t13.title": "تتبع عائد حملات المؤثرين",
+      "t13.desc": "احسب ROAS الحقيقي وتكلفة العميل الجديد لكل مؤثر بعد الخصم وتكلفة المنتج والتوصيل، وقارن المؤثرين لاختيار الأكثر ربحية.",
+      "t13.b1": "إنفاق الحملة والمبيعات المنسوبة والطلبات والعملاء الجدد لكل مؤثر",
+      "t13.b2": "تكاليف قابلة للتعديل: البضاعة والتوصيل ورسوم الدفع، مع خصم كود المؤثر",
+      "t13.b3": "ROAS إعلاني وROAS حقيقي، تكلفة العميل الجديد، والربح بعد خصم الإنفاق",
+      "t13.b4": "ترتيب تلقائي حسب الربحية أو ROAS أو تكلفة العميل أو الربح",
+      "t13.b5": "رسم مقارنة تفاعلي وخلاصة تحدد الأكثر والأقل ربحية، مع حفظ وطباعة",
+      "tag.roas": "ROAS حقيقي", "tag.cac": "تكلفة العميل",
+      "openCompare": "مقارنة المؤثرين",
+      "t14.kicker": "سفر · ميزانية · مصاريف",
+      "t14.title": "ميزانية السفر الذكية",
+      "t14.desc": "وزّع ميزانية رحلتك على الطيران والإقامة والمطاعم، وتتبع مصاريفك اليومية مع تحويل العملات، وجدولًا زمنيًا وقائمة مستندات وأمتعة.",
+      "t14.b1": "وجهة وتواريخ ومسافرون ونوع رحلة (عمل/سياحة) مع ميزانية إجمالية",
+      "t14.b2": "توزيع على ثمانية بنود: مخطط، مصروف، متبقٍ، وشريط استهلاك وتنبيه تجاوز",
+      "t14.b3": "محوّل عملات فوري (11 عملة) وتسجيل المصاريف بعملة الوجهة أو الميزانية",
+      "t14.b4": "جدول زمني يومي للأنشطة والمواعيد والأماكن والملاحظات",
+      "t14.b5": "قائمة مستندات وأمتعة تفاعلية مع إضافة بنود خاصة، حفظ محلي وطباعة",
+      "tag.travel": "ميزانية سفر", "tag.fx": "تحويل عملات",
+      "openTrip": "الجدول والقائمة",
+      "tag.thread": "ثريد", "tag.reels": "ريلز وتيك توك", openThread: "سلسلة التغريدات",
+      "t5.b4": "كشف حركة برصيد تراكمي (مدين/دائن) لكل فاتورة ودفعة",
+      "t5.b5": "تسجيل دفعة جزئية تُخصم من المتبقي وتحدّث التنبيهات فورًا",
+      "t5.b6": "طباعة A4 وتصدير CSV بترميز UTF-8 يفتح في إكسل",
+      "tag.aging": "تنبيهات تأخير", "tag.csv": "تصدير CSV", openStatement: "كشف الحساب",
+      "tag.margin": "هامش وضريبة", "tag.quote": "عرض سعر", "tag.offline": "يعمل بلا خادم",
+      "tag.circular": "اقتصاد دائري", "tag.report": "تقرير يومي", "tag.currency": "7 عملات",
+      open: "افتح القالب", openQuote: "عرض السعر الجاهز", openReport: "تقرير الكفاءة",
+      "note.title": "مشترك في كل قالب",
+      "note.1": "تبديل فوري بين العربية والإنجليزية يقلب الاتجاه ويحدّث كل العناوين والأرقام والشروط.",
+      "note.2": "سبع عملات: SAR، AED، KWD، QAR، OMR، BHD وUSD بفواصل عشرية صحيحة (3 للدينار والريال العماني).",
+      "note.3": "حفظ تلقائي محلي (localStorage) للبيانات واللغة والعملة — بلا حساب ولا خادم.",
+      "note.4": "تصميم متجاوب يعمل على الجوال واللوحي، وقواعد طباعة A4 جاهزة.",
+      "note.5": "لا مكتبات خارجية ولا طلبات شبكة: افتح الملف مباشرة أو أرسله للعميل كما هو.",
+      footer: "ملف واحد لكل قالب · جاهز للتخصيص والتسليم"
+    },
+    en: {
+      brand: "Premium Bilingual Templates",
+      tagline: "One file per template · Arabic/English · Gulf currencies",
+      "hero.badge": "Premium collection — 2026 edition",
+      "hero.title": "Eight professional tools that save weeks of building",
+      "hero.sub": "Every template is a single self-contained HTML file: CSS and JavaScript inlined with no external libraries. Open it in any browser and it just works, with instant Arabic/English switching and RTL/LTR support.",
+      "fact.count": "8", "fact.templates": "ready templates",
+      "fact.currencies": "7", "fact.currenciesLabel": "currencies",
+      "fact.external": "0", "fact.externalLabel": "external references",
+      "fact.print": "A4", "fact.printLabel": "print ready",
+      "t3.kicker": "Contracting · Tenders · Pricing",
+      "t3.title": "Tender & Project Cost Estimator",
+      "t3.desc": "Build up material, labour, admin and contingency costs, set the net profit margin and VAT, then issue a print-ready quotation.",
+      "t3.b1": "Add-as-you-go material and labour tables with per-line totals",
+      "t3.b2": "Margin taken on the selling price, with the equivalent markup shown",
+      "t3.b3": "VAT auto-set from the currency and editable per country",
+      "t3.b4": "Visual breakdown plus warnings for negative lines and thin margins",
+      "t3.b5": "Full quotation with terms; printing hides everything else",
+      "t4.kicker": "Factories · Production lines · Sustainability",
+      "t4.title": "Factory Circular Operations Board",
+      "t4.desc": "Run production lines, calculate industrial waste and how much converts into value-added product, and issue a daily efficiency report for managers and supervisors.",
+      "t4.b1": "Line table with scrap, unit weight, recyclable share and conversion rate",
+      "t4.b2": "Live waste, recovered, lost and value-added figures",
+      "t4.b3": "Each line compared to a daily recovery target and flagged when below it",
+      "t4.b4": "Circular flow diagram: inputs → production → waste → recycled product",
+      "t4.b5": "Copyable, printable efficiency report with supervisor actions",
+      "t4.b6": "Autosave restores the shift data after a reload",
+      "t5.kicker": "Accounting · Collections · Statements",
+      "t5.title": "Customer Ledger & Collections",
+      "t5.desc": "Track each client's balance from invoices and partial payments, catch 30- and 60-day overdue amounts early, and send a printed statement or CSV.",
+      "t5.b1": "Balance per client: total invoiced, paid, and remaining",
+      "t5.b2": "Every invoice status: paid, partial, unpaid, or not yet due",
+      "t5.b3": "Three ageing buckets: 1–30, 31–60 and more than 60 days",
+      "t6.kicker": "E-commerce · Salla & Zid · Margins",
+      "t6.title": "E-commerce Profit OS",
+      "t6.desc": "See the real net profit per order after ads, shipping, payment fees and returns, the maximum ad cost before you lose money, and generate ready-to-publish product copy.",
+      "t6.b1": "Full cost breakdown: product, shipping, gateway, ads and expected returns",
+      "t6.b2": "Live KPIs: net margin, monthly profit and break-even ROAS",
+      "t6.b3": "Gulf Arabic or English copy — short post, store description, SEO title and hashtags, copied in one click",
+      "t6.b4": "Clear alert when the margin is thin or the order loses money",
+      "t6.b5": "Six Gulf currencies with correct decimals for dinar and Omani rial",
+      "tag.copy": "Product copy", "openCopy": "Copy generator",
+      "t7.kicker": "Clinics · Salons · Real estate · WhatsApp",
+      "t7.title": "Speed-to-Lead CRM",
+      "t7.desc": "Manage leads, see how many minutes the first reply takes, catch stalled deals before they are lost, and send a ready WhatsApp message in one click.",
+      "t7.b1": "Lead list with stage, source, opportunity value and next appointment",
+      "t7.b2": "Speed score: average first reply, share answered within 5 minutes, and a live timer on every waiting lead",
+      "t7.b3": "Stalled deals flagged: a passed appointment date or no reply for over 24 hours",
+      "t7.b4": "Four WhatsApp messages: appointment confirmation, stalled follow-up, first reply and reminder — clinic, salon and real estate wording",
+      "t7.b5": "Open WhatsApp directly or copy the message, with all data saved locally",
+      "tag.speed": "Response speed", "tag.whatsapp": "WhatsApp messages", openMessages: "WhatsApp messages",
+      "t8.kicker": "Zakat · Murabaha & ijara · Budgets",
+      "t8.title": "Islamic Finance & Zakat OS",
+      "t8.desc": "Calculate individual and corporate zakat with nisab and liability deductions, compare murabaha against commercial financing, and split project budgets by weight — in one file.",
+      "t8.b1": "Zakat calculator for individuals and companies: cash, gold, silver, investments, inventory and receivables",
+      "t8.b2": "Gold (85g) or silver (595g) nisab with a detailed, print-ready zakat report",
+      "t8.b3": "Murabaha vs ijara offers: installment, total paid, cost of finance and effective APR for each",
+      "t8.b4": "Budget allocation across projects by weight with normalisation to 100% and equal split",
+      "t8.b5": "“Use zakat due” turns the obligation into a distribution budget, with local save and print",
+      "tag.zakat": "Zakat & nisab", "tag.murabaha": "Murabaha", "tag.currency6": "6 currencies", openFinance: "Financing comparison",
+      "t9.kicker": "Engineering offices · Contracting · Claims",
+      "t9.title": "Engineering Studio & Contracting OS",
+      "t9.desc": "Track project phases and completion, manage client progress claims and retention, and record site material costs — in one dashboard.",
+      "t9.b1": "Multiple projects, each with its own contract value and retention rate",
+      "t9.b2": "Weighted phases with completion percentages, overall progress and earned value",
+      "t9.b3": "Claims and payment schedule: submitted, approved, paid, outstanding and retention held",
+      "t9.b4": "“Claim from progress” creates a draft for the unclaimed earned value",
+      "t9.b5": "Material costs: quantity × unit price, tracking ordered, delivered and used",
+      "t9.b6": "Local save and a printable project report with its phases and claims",
+      "tag.claims": "Progress claims", "tag.materials": "Material costs", openClaims: "Client claims",
+      "t10.kicker": "Creators · Threads · Reels",
+      "t10.title": "Viral Content Repurposer",
+      "t10.desc": "Turn any long text into an X thread, a Reels/TikTok script and an email newsletter — in one click, with a smart character counter per platform.",
+      "t10.b1": "X thread split smartly on sentence boundaries, auto-numbered and capped at 280 characters",
+      "t10.b2": "Live character counters for every tweet and caption, with an over-limit warning",
+      "t10.b3": "Reels/TikTok script with scenes, timing, voiceover and on-screen text",
+      "t10.b4": "Ready caption with hashtags, within Instagram, TikTok and X limits",
+      "t10.b5": "Newsletter with a ≤60 subject and ≤90 preview, counted live",
+      "t10.b6": "Edit any block inline, copy in one click, and keep text and outputs saved locally",
+      "t11.kicker": "Restaurants · Cafés · Menu engineering",
+      "t11.title": "Restaurant & Café Menu Engineering",
+      "t11.desc": "Cost every recipe from its ingredients, deduct VAT and delivery commission, classify dishes as stars, plowhorses, puzzles or dogs, and get a suggested price for each.",
+      "t11.b1": "Ingredient-based recipes: quantity × unit cost, plus packaging and direct labour per item",
+      "t11.b2": "Net revenue after VAT and delivery commission by sales channel (dine-in, takeaway, delivery)",
+      "t11.b3": "Monthly contribution margin with automatic four-way menu classification",
+      "t11.b4": "Suggested price from your target food cost, with a floor that covers cost and commission",
+      "t11.b5": "Add, edit and delete items, save locally, and print the menu report",
+      "tag.menu": "Menu engineering", "tag.commission": "Tax & commission",
+      "openMenu": "Menu classification",
+      "t12.kicker": "Startups · Founders · Rounds",
+      "t12.title": "Startup Cap Table & Rounds",
+      "t12.desc": "Split equity between founders by weighted contribution, model valuation and dilution across three rounds, and watch ownership change in interactive charts.",
+      "t12.b1": "Fair split with four weights: capital, time, expertise and role",
+      "t12.b2": "Equity-vs-time balance score with alerts on large gaps",
+      "t12.b3": "Three rounds: pre/post-money, investor share, share price and option pool top-up",
+      "t12.b4": "Ownership table after every round, tracking dilution at share level",
+      "t12.b5": "Interactive donut, ownership bars and valuation path — with local save and print",
+      "tag.equity": "Equity & dilution", "tag.valuation": "Round valuation",
+      "openValuation": "Valuation path",
+      "t13.kicker": "Influencers · Campaigns · ROAS",
+      "t13.title": "Influencer Campaign ROI Tracker",
+      "t13.desc": "Measure true ROAS and cost per new customer per creator after discount, COGS and fulfillment, then compare creators to pick the most profitable.",
+      "t13.b1": "Campaign spend, attributed sales, orders and new customers for each influencer",
+      "t13.b2": "Editable COGS, fulfillment and payment fees, plus the creator discount code",
+      "t13.b3": "Media ROAS, true ROAS, cost per new customer and profit after spend",
+      "t13.b4": "Automatic ranking by true ROAS, media ROAS, cost per customer or profit",
+      "t13.b5": "Interactive comparison chart and a verdict naming the best and worst creators, with local save and print",
+      "tag.roas": "True ROAS", "tag.cac": "Cost per customer",
+      "openCompare": "Creator comparison",
+      "t14.kicker": "Travel · Budget · Expenses",
+      "t14.title": "Smart Travel Budget",
+      "t14.desc": "Split your trip budget across flights, stay and dining, track daily expenses with currency conversion, and keep an itinerary plus a documents and luggage checklist.",
+      "t14.b1": "Destination, dates, travellers and trip type (business or tourism) with a total budget",
+      "t14.b2": "Eight categories with planned, spent, left, usage bar and overspend warning",
+      "t14.b3": "Instant 11-currency converter, with expenses recorded in the destination or budget currency",
+      "t14.b4": "Day-by-day itinerary for activities, times, places and notes",
+      "t14.b5": "Interactive documents and luggage checklist with custom items, local save and print",
+      "tag.travel": "Travel budget", "tag.fx": "Currency conversion",
+      "openTrip": "Itinerary & checklist",
+      "tag.thread": "Threads", "tag.reels": "Reels & TikTok", openThread: "X thread",
+      "t5.b4": "Activity statement with a running balance (debit/credit) per invoice and payment",
+      "t5.b5": "Record a partial payment that reduces the remaining balance and refreshes alerts",
+      "t5.b6": "A4 printing and UTF-8 CSV export that opens cleanly in Excel",
+      "tag.aging": "Overdue alerts", "tag.csv": "CSV export", openStatement: "View statement",
+      "tag.margin": "Margin & VAT", "tag.quote": "Quotation", "tag.offline": "Works offline",
+      "tag.circular": "Circular economy", "tag.report": "Daily report", "tag.currency": "7 currencies",
+      open: "Open template", openQuote: "View the quotation", openReport: "Efficiency report",
+      "note.title": "Shared by every template",
+      "note.1": "Instant Arabic/English switching that flips the direction and updates every heading, number and term.",
+      "note.2": "Seven currencies: SAR, AED, KWD, QAR, OMR, BHD and USD with correct decimals (3 for dinar and Omani rial).",
+      "note.3": "Automatic local save (localStorage) of data, language and currency — no account, no server.",
+      "note.4": "Responsive on phone and tablet, with A4 print rules included.",
+      "note.5": "No external libraries and no network calls: open the file directly or send it to a client as is.",
+      footer: "One file per template · Ready to customise and deliver"
+    }
+  };
+
+  const state = { lang: "ar" };
+  const t = (key) => {
+    const table = I18N[state.lang] || I18N.ar;
+    return table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+  };
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    const ar = state.lang === "ar";
+    document.documentElement.lang = ar ? "ar" : "en";
+    document.documentElement.dir = ar ? "rtl" : "ltr";
+    document.title = ar ? "قوالب Premium ثنائية اللغة — فهرس القوالب"
+      : "Premium Bilingual Templates — Template index";
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.getElementById("langBtn").textContent = ar ? "English" : "العربية";
+    if (persist) localStorage.setItem("pb_index_lang", state.lang);
+  }
+
+  document.getElementById("langBtn").addEventListener("click", () => {
+    applyLang(state.lang === "ar" ? "en" : "ar", true);
+  });
+
+  const stored = localStorage.getItem("pb_index_lang");
+  applyLang(stored === "en" ? "en" : "ar", false);
+})();
+</script>
+</body>
+</html>

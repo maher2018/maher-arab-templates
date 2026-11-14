@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مُعيد تدوير المحتوى — Viral Content Repurposer</title>
+<meta name="description" content="حوّل أي نص طويل إلى سلسلة تغريدات، سيناريو ريلز/تيك توك، ونشرة بريدية بضغطة واحدة — مع عدّاد أحرف ذكي لكل منصة. عربي/إنجليزي.">
+<style>
+:root{--bg:#f4f5f9;--card:#fff;--ink:#121a2b;--muted:#5f6b80;--navy:#111c33;--navy2:#1b2c4f;--violet:#6d4aff;--violet-soft:#efecff;--teal:#0f766e;--teal-soft:#e6f4f1;--coral:#c4457c;--coral-soft:#fbeaf1;--gold:#b8892f;--gold-soft:#f8efdb;--bad:#b3372c;--bad-soft:#fbecea;--warn:#8a5a08;--warn-soft:#fdf2dd;--ok:#14684a;--ok-soft:#e8f5ef;--line:#e3e6ef;--radius:16px;--shadow:0 12px 30px rgba(17,28,51,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.93rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+textarea{resize:vertical;line-height:1.65}
+input:focus,select:focus,textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(109,74,255,.1)}
+label>span{display:block;font-size:.77rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(244,245,249,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--violet),var(--coral));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.78rem;letter-spacing:.03em}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:.84rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.primary{background:linear-gradient(135deg,var(--violet),var(--coral))}
+.btn.teal{background:var(--teal)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:.76rem;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+main{max-width:1180px;margin:0 auto;padding:20px 20px 50px;display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.card-head h2{font-size:1.02rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.81rem}
+.fields{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:9px;margin-bottom:9px}
+@media(max-width:820px){.fields{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.fields{grid-template-columns:1fr}.span2{grid-column:auto!important}}
+.source{min-height:170px}
+.span2{grid-column:span 2}
+.composer-foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:9px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.77rem}
+.chip{background:#f1f3f8;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.73rem;font-weight:700;color:var(--muted)}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tabs button{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:99px;padding:7px 13px;font-size:.8rem;font-weight:800;display:inline-flex;align-items:center;gap:7px}
+.tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.tabs .n{background:rgba(0,0,0,.08);border-radius:99px;padding:1px 7px;font-size:.7rem}
+.tabs button.on .n{background:rgba(255,255,255,.2)}
+.panel[hidden]{display:none}
+.empty{padding:30px 14px;text-align:center;color:var(--muted);font-size:.86rem;border:1px dashed var(--line);border-radius:12px}
+.hint{color:var(--muted);font-size:.78rem;margin:8px 0 0}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011;margin-top:10px}
+.msg{font-size:.8rem;color:var(--bad);min-height:1.1em;margin:4px 0 0}
+/* thread */
+.thread-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tweet{border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px;background:#fbfcff}
+.tweet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.tweet-head strong{font-size:.78rem;color:var(--muted)}
+.tweet textarea{min-height:64px;border:0;background:transparent;padding:0;resize:vertical;font-size:.92rem;line-height:1.6}
+.tweet textarea:focus{box-shadow:none}
+.counter{font-size:.72rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;padding:2px 8px;border-radius:99px;background:#eef1f7;color:var(--muted)}
+.counter.ok{background:var(--ok-soft);color:var(--ok)}
+.counter.warn{background:var(--warn-soft);color:var(--warn)}
+.counter.bad{background:var(--bad-soft);color:var(--bad)}
+.cbar{height:4px;border-radius:99px;background:#e9edf4;overflow:hidden;margin-top:6px}
+.cbar i{display:block;height:100%;border-radius:99px;background:var(--violet);transition:width .15s}
+.cbar.warn i{background:var(--gold)}
+.cbar.bad i{background:var(--bad)}
+/* video */
+.scene{border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px;background:#fbfcff}
+.scene-head{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap;margin-bottom:7px}
+.scene-head h4{font-size:.83rem}
+.time{font-size:.7rem;font-weight:800;background:var(--coral-soft);color:var(--coral);border-radius:99px;padding:2px 9px;direction:ltr}
+.scene label{margin-top:6px}
+.scene textarea{min-height:52px;font-size:.88rem}
+.scene input{font-size:.84rem}
+.video-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+.caption-box{border:1px solid var(--line);border-radius:12px;padding:12px;background:#f8f9fd;margin-top:14px}
+.caption-box .head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.caption-box h3{font-size:.88rem}
+.caption-box textarea{min-height:110px;background:#fff}
+.pick{width:auto;min-width:140px;padding:6px 9px;font-size:.8rem}
+/* newsletter */
+.news-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:720px){.news-grid{grid-template-columns:1fr}}
+.news-block{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfcff}
+.news-block .head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.news-block h3{font-size:.82rem}
+.news-block input{font-size:.9rem}
+.news-body{min-height:220px;background:#fff;margin-top:8px;font-size:.9rem}
+.limits{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}
+.limit{border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:.77rem;background:#fbfcff}
+.limit b{display:block;font-size:.84rem}
+.toast{position:fixed;inset-block-end:20px;inset-inline-start:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:99px;font-size:.82rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:80}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:30px}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:0 20px 26px}
+@media print{.top,.composer-foot .actions,.tabs,.no-print,footer,.toast{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}.panel[hidden]{display:block!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">VCR</span>
+      <div><strong data-i18n="brand">مُعيد تدوير المحتوى</strong><small data-i18n="tagline">نص واحد → ثريد + ريلز + نشرة</small></div>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn primary" id="topGenerate" data-i18n="generate">✦ توليد المحتوى</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="input.title">النص الأصلي</h2>
+        <p data-i18n="input.desc">الصق مقالًا أو فكرة طويلة، وسنحوّلها إلى ثلاث صيغ جاهزة للنشر — بلا خادم ولا ذكاء اصطناعي خارجي.</p>
+      </div>
+      <div class="actions no-print">
+        <button type="button" class="btn ghost small" id="sampleBtn" data-i18n="input.sample">نص تجريبي</button>
+        <button type="button" class="btn ghost small" id="clearBtn" data-i18n="input.clear">مسح</button>
+      </div>
+    </div>
+    <div class="fields">
+      <label><span data-i18n="input.headline">العنوان (اختياري)</span><input id="title" type="text" data-i18n-ph="input.headlinePh"></label>
+      <label><span data-i18n="input.tone">النبرة</span><select id="tone">
+        <option value="direct" data-i18n="tone.direct">مباشرة</option>
+        <option value="friendly" data-i18n="tone.friendly">ودّية</option>
+        <option value="pro" data-i18n="tone.pro">احترافية</option>
+      </select></label>
+      <label><span data-i18n="input.brand">اسمك / علامتك</span><input id="brand" type="text" data-i18n-ph="input.brandPh"></label>
+    </div>
+    <div class="fields">
+      <label><span data-i18n="input.duration">مدة الفيديو المستهدفة</span><select id="duration">
+        <option value="30" data-i18n="duration.30">30 ثانية</option>
+        <option value="45" data-i18n="duration.45">45 ثانية</option>
+        <option value="60" data-i18n="duration.60">60 ثانية</option>
+      </select></label>
+      <label class="span2"><span data-i18n="input.cta">دعوة الإجراء (اختياري)</span><input id="cta" type="text" data-i18n-ph="input.ctaPh"></label>
+    </div>
+    <label><span data-i18n="input.source">النص الطويل</span><textarea id="source" class="source" data-i18n-ph="input.sourcePh"></textarea></label>
+    <div class="composer-foot">
+      <div class="meta">
+        <span class="chip" id="srcCount">0</span>
+        <span class="chip" id="srcWords">0</span>
+        <span class="chip" data-i18n="input.offline">يعمل بلا إنترنت</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="generateBtn" data-i18n="generate">✦ توليد المحتوى</button>
+      </div>
+    </div>
+    <p class="msg" id="formMsg"></p>
+  </section>
+
+  <section class="card">
+    <div class="tabs" id="tabs">
+      <button type="button" data-tab="thread" class="on"><span data-i18n="tab.thread">سلسلة تغريدات</span><span class="n" id="threadN">0</span></button>
+      <button type="button" data-tab="video"><span data-i18n="tab.video">ريلز / تيك توك</span><span class="n" id="sceneN">0</span></button>
+      <button type="button" data-tab="news"><span data-i18n="tab.news">نشرة بريدية</span></button>
+    </div>
+
+    <div class="panel" id="panelThread">
+      <div class="card-head no-print" style="margin-bottom:8px">
+        <div class="thread-meta" id="threadMeta"></div>
+        <div class="actions">
+          <button type="button" class="btn ghost small" id="copyThread" data-i18n="copy.all">نسخ السلسلة</button>
+        </div>
+      </div>
+      <div id="threadList"><div class="empty" data-i18n="empty.thread">ولّد المحتوى لترى السلسلة هنا.</div></div>
+      <p class="hint" data-i18n="thread.hint">كل تغريدة ضمن حد المنصة، والتقسيم يحترم حدود الجمل. يمكنك تعديل أي تغريدة والعدّاد يتحدث فورًا.</p>
+    </div>
+
+    <div class="panel" id="panelVideo" hidden>
+      <div class="card-head no-print" style="margin-bottom:8px">
+        <div class="video-meta" id="videoMeta"></div>
+        <div class="actions">
+          <button type="button" class="btn ghost small" id="copyScript" data-i18n="copy.script">نسخ السيناريو</button>
+        </div>
+      </div>
+      <div id="sceneList"><div class="empty" data-i18n="empty.video">ولّد المحتوى لترى السيناريو هنا.</div></div>
+      <div class="caption-box">
+        <div class="head">
+          <h3 data-i18n="caption.title">كابشن الفيديو</h3>
+          <div class="actions">
+            <select id="captionPlatform" class="pick">
+              <option value="instagram">Instagram · 2,200</option>
+              <option value="tiktok">TikTok · 2,200</option>
+              <option value="x">X / Twitter · 280</option>
+            </select>
+            <button type="button" class="btn ghost small" id="copyCaption" data-i18n="copy.caption">نسخ الكابشن</button>
+          </div>
+        </div>
+        <textarea id="caption" data-i18n-ph="caption.ph"></textarea>
+        <div style="display:flex;justify-content:flex-end;margin-top:5px"><span class="counter" id="captionCount">0 / 2200</span></div>
+        <div class="cbar" id="captionBar"><i></i></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panelNews" hidden>
+      <div class="card-head no-print" style="margin-bottom:8px">
+        <div class="video-meta" id="newsMeta"></div>
+        <div class="actions">
+          <button type="button" class="btn ghost small" id="copyNews" data-i18n="copy.news">نسخ النشرة</button>
+        </div>
+      </div>
+      <div class="news-grid">
+        <div class="news-block">
+          <div class="head"><h3 data-i18n="news.subject">عنوان الرسالة</h3><span class="counter" id="subjCount">0 / 60</span></div>
+          <input id="newsSubject" type="text">
+          <div class="cbar" id="subjBar"><i></i></div>
+        </div>
+        <div class="news-block">
+          <div class="head"><h3 data-i18n="news.preview">نص المعاينة</h3><span class="counter" id="previewCount">0 / 90</span></div>
+          <input id="newsPreview" type="text">
+          <div class="cbar" id="previewBar"><i></i></div>
+        </div>
+      </div>
+      <label style="margin-top:12px"><span data-i18n="news.body">نص النشرة</span><textarea id="newsBody" class="news-body"></textarea></label>
+      <p class="hint" id="newsStats"></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 style="font-size:.92rem;margin-bottom:6px" data-i18n="limits.title">حدود المنصات المدعومة</h2>
+    <div class="limits">
+      <div class="limit"><b>X / Twitter</b><span data-i18n="limits.x">280 حرفًا للتغريدة (الحساب المجاني)</span></div>
+      <div class="limit"><b>Instagram Reels</b><span data-i18n="limits.ig">2,200 حرف للكابشن</span></div>
+      <div class="limit"><b>TikTok</b><span data-i18n="limits.tt">2,200 حرف للكابشن</span></div>
+      <div class="limit"><b data-i18n="limits.email">البريد الإلكتروني</b><span data-i18n="limits.emailBody">عنوان ≤ 60 حرفًا · معاينة ≤ 90</span></div>
+    </div>
+    <p class="hint" data-i18n="limits.note">التوليد يعتمد على قواعد لغوية وتقسيم ذكي للجمل — راجع النص قبل النشر، خصوصًا الأرقام والاقتباسات.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">Viral Content Repurposer — أداة كتابة تعمل في المتصفح بلا خادم.</span></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var KEY = "pb_viral_repurposer_v1";
+  var LIMITS = { x: 280, instagram: 2200, tiktok: 2200, subject: 60, preview: 90 };
+  var TWEET_LIMIT = 280;
+  var state = { lang: "ar", activeTab: "thread", output: null };
+
+  var I18N = {
+    ar: {
+      brand: "مُعيد تدوير المحتوى", tagline: "نص واحد → ثريد + ريلز + نشرة", generate: "✦ توليد المحتوى",
+      "input.title": "النص الأصلي", "input.desc": "الصق مقالًا أو فكرة طويلة، وسنحوّلها إلى ثلاث صيغ جاهزة للنشر — بلا خادم ولا ذكاء اصطناعي خارجي.",
+      "input.sample": "نص تجريبي", "input.clear": "مسح", "input.headline": "العنوان (اختياري)",
+      "input.headlinePh": "عنوان المقال أو الفكرة", "input.tone": "النبرة",
+      "tone.direct": "مباشرة", "tone.friendly": "ودّية", "tone.pro": "احترافية",
+      "input.brand": "اسمك / علامتك", "input.brandPh": "مثال: أستوديو نورة",
+      "input.source": "النص الطويل", "input.sourcePh": "الصق هنا المقال أو النص الطويل… (200 حرف على الأقل)",
+      "input.offline": "يعمل بلا إنترنت", "input.duration": "مدة الفيديو المستهدفة",
+      "input.cta": "دعوة الإجراء (اختياري)", "input.ctaPh": "اكتب دعوة قصيرة أو اتركها فارغة للافتراضية",
+      "duration.30": "30 ثانية", "duration.45": "45 ثانية", "duration.60": "60 ثانية",
+      "toast.ready": "تم توليد الصيغ الثلاث.",
+      "tab.thread": "سلسلة تغريدات", "tab.video": "ريلز / تيك توك", "tab.news": "نشرة بريدية",
+      "empty.thread": "ولّد المحتوى لترى السلسلة هنا.", "empty.video": "ولّد المحتوى لترى السيناريو هنا.",
+      "copy.all": "نسخ السلسلة", "copy.one": "نسخ", "copy.script": "نسخ السيناريو", "copy.caption": "نسخ الكابشن", "copy.news": "نسخ النشرة",
+      "thread.hint": "كل تغريدة ضمن حد المنصة، والتقسيم يحترم حدود الجمل. يمكنك تعديل أي تغريدة والعدّاد يتحدث فورًا.",
+      "thread.tweet": "تغريدة {n}", "thread.chars": "{n} / 280", "thread.summary": "{n} تغريدة · أطولها {max} حرفًا",
+      "thread.hook": "خطاف", "thread.cta": "دعوة لاتخاذ إجراء",
+      "caption.title": "كابشن الفيديو", "caption.ph": "كابشن جاهز مع وسوم…",
+      "news.subject": "عنوان الرسالة", "news.preview": "نص المعاينة", "news.body": "نص النشرة",
+      "news.stats": "{words} كلمة · قراءة ≈ {mins} دقيقة · {chars} حرفًا",
+      "limits.title": "حدود المنصات المدعومة", "limits.x": "280 حرفًا للتغريدة (الحساب المجاني)",
+      "limits.ig": "2,200 حرف للكابشن", "limits.tt": "2,200 حرف للكابشن",
+      "limits.email": "البريد الإلكتروني", "limits.emailBody": "عنوان ≤ 60 حرفًا · معاينة ≤ 90",
+      "limits.note": "التوليد يعتمد على قواعد لغوية وتقسيم ذكي للجمل — راجع النص قبل النشر، خصوصًا الأرقام والاقتباسات.",
+      "footer": "Viral Content Repurposer — أداة كتابة تعمل في المتصفح بلا خادم.",
+      "err.empty": "الصق نصًا أطول (200 حرف على الأقل) أولًا.", "err.short": "النص قصير جدًا — أضف جملتين على الأقل.",
+      "toast.copied": "تم النسخ.", "toast.nothing": "لا يوجد نص لنسخه بعد.",
+      "src.chars": "{n} حرفًا", "src.words": "{n} كلمة",
+      "scene.hook": "الخطاف", "scene.problem": "المشكلة", "scene.point": "الفكرة {n}",
+      "scene.cta": "الدعوة للتطبيق", "scene.voice": "التعليق الصوتي", "scene.screen": "النص على الشاشة",
+      "video.summary": "{sec} ثانية · {words} كلمة · ≈ {dur} ثانية قراءة",
+      "video.within": "ضمن المدة المستهدفة.", "video.over": "أطول من المدة — اختصر بعض الجمل.",
+      "cta.default": "احفظ المنشور وشاركه مع من يحتاجه.",
+      "greet.direct": "مرحبًا،", "greet.friendly": "أهلًا بك،", "greet.pro": "تحية طيبة،"
+    },
+    en: {
+      brand: "Viral Content Repurposer", tagline: "One long text → thread + Reels + newsletter", generate: "✦ Generate content",
+      "input.title": "Source text", "input.desc": "Paste a long article or idea and turn it into three publish-ready formats — no server, no external AI.",
+      "input.sample": "Sample text", "input.clear": "Clear", "input.headline": "Headline (optional)",
+      "input.headlinePh": "Article or idea headline", "input.tone": "Tone",
+      "tone.direct": "Direct", "tone.friendly": "Friendly", "tone.pro": "Professional",
+      "input.brand": "Your name / brand", "input.brandPh": "e.g. Nora Studio",
+      "input.source": "Long text", "input.sourcePh": "Paste your article or long text here… (at least 200 characters)",
+      "input.offline": "Works offline", "input.duration": "Target video length",
+      "input.cta": "Call to action (optional)", "input.ctaPh": "Short CTA, or leave empty for the default",
+      "duration.30": "30 seconds", "duration.45": "45 seconds", "duration.60": "60 seconds",
+      "toast.ready": "All three formats generated.",
+      "tab.thread": "X thread", "tab.video": "Reels / TikTok", "tab.news": "Email newsletter",
+      "empty.thread": "Generate content to see your thread here.", "empty.video": "Generate content to see the script here.",
+      "copy.all": "Copy thread", "copy.one": "Copy", "copy.script": "Copy script", "copy.caption": "Copy caption", "copy.news": "Copy newsletter",
+      "thread.hint": "Every tweet stays within the platform limit and splits on sentence boundaries. Edit any tweet and the counter updates live.",
+      "thread.tweet": "Tweet {n}", "thread.chars": "{n} / 280", "thread.summary": "{n} tweets · longest {max} chars",
+      "thread.hook": "Hook", "thread.cta": "Call to action",
+      "caption.title": "Video caption", "caption.ph": "Ready caption with hashtags…",
+      "news.subject": "Subject line", "news.preview": "Preview text", "news.body": "Newsletter body",
+      "news.stats": "{words} words · ≈ {mins} min read · {chars} chars",
+      "limits.title": "Supported platform limits", "limits.x": "280 characters per tweet (free account)",
+      "limits.ig": "2,200 characters per caption", "limits.tt": "2,200 characters per caption",
+      "limits.email": "Email", "limits.emailBody": "Subject ≤ 60 chars · preview ≤ 90",
+      "limits.note": "Generation uses linguistic rules and smart sentence splitting — review before publishing, especially figures and quotes.",
+      "footer": "Viral Content Repurposer — a browser-based writing tool with no server.",
+      "err.empty": "Paste a longer text first (at least 200 characters).", "err.short": "Text is too short — add at least two sentences.",
+      "toast.copied": "Copied.", "toast.nothing": "Nothing to copy yet.",
+      "src.chars": "{n} chars", "src.words": "{n} words",
+      "scene.hook": "Hook", "scene.problem": "Problem", "scene.point": "Point {n}",
+      "scene.cta": "Call to action", "scene.voice": "Voiceover", "scene.screen": "On-screen text",
+      "video.summary": "{sec}s target · {words} words · ≈ {dur}s read",
+      "video.within": "Within the target duration.", "video.over": "Longer than target — trim a few lines.",
+      "cta.default": "Save this and share it with someone who needs it.",
+      "greet.direct": "Hi,", "greet.friendly": "Hey there,", "greet.pro": "Hello,"
+    }
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function len(text) { return Array.from(String(text || "")).length; }
+  function words(text) { return String(text || "").trim().split(/\s+/).filter(Boolean); }
+  function clampWords(text, maxWords) {
+    var list = words(text);
+    if (list.length <= maxWords) return text.trim();
+    return list.slice(0, maxWords).join(" ").replace(/[،,;؛:]$/, "") + "…";
+  }
+  function trimChars(text, max) {
+    var chars = Array.from(String(text || "").trim());
+    if (chars.length <= max) return chars.join("");
+    var cut = chars.slice(0, Math.max(0, max - 1)).join("");
+    var lastSpace = Math.max(cut.lastIndexOf(" "), cut.lastIndexOf("،"));
+    if (lastSpace > max * 0.6) cut = cut.slice(0, lastSpace);
+    return cut.replace(/[،,;؛:.\s]+$/, "") + "…";
+  }
+
+  function splitSentences(text) {
+    var clean = String(text || "").replace(/\r/g, "").replace(/[ \t]+/g, " ").trim();
+    if (!clean) return [];
+    var parts = [];
+    clean.split(/\n+/).forEach(function (line) {
+      var found = line.split(/(?<=[.!?؟…])\s+/);
+      found.forEach(function (s) { if (s.trim()) parts.push(s.trim()); });
+    });
+    return parts;
+  }
+
+  function splitLongSentence(sentence, max) {
+    var list = words(sentence);
+    var chunks = [], current = [];
+    list.forEach(function (word) {
+      var candidate = current.concat([word]).join(" ");
+      if (len(candidate) > max && current.length) { chunks.push(current.join(" ")); current = [word]; }
+      else current.push(word);
+    });
+    if (current.length) chunks.push(current.join(" "));
+    return chunks;
+  }
+
+  function packSentences(sentences, max) {
+    var chunks = [], current = "";
+    sentences.forEach(function (sentence) {
+      if (len(sentence) > max) {
+        if (current) { chunks.push(current); current = ""; }
+        splitLongSentence(sentence, max).forEach(function (piece) { chunks.push(piece); });
+        return;
+      }
+      var candidate = current ? current + " " + sentence : sentence;
+      if (len(candidate) > max) { if (current) chunks.push(current); current = sentence; }
+      else current = candidate;
+    });
+    if (current) chunks.push(current);
+    return chunks;
+  }
+
+  function buildThread(text, title, cta) {
+    var sentences = splitSentences(text);
+    var hook = "";
+    if (title && len(title) <= 220) hook = title.trim();
+    var body = sentences.slice();
+    if (!hook && body.length) hook = body.shift();
+    if (hook && body.length && body[0] === hook) body.shift();
+    var chunks = packSentences(body, TWEET_LIMIT - 12);
+    if (!chunks.length) chunks = [hook];
+    var tweets = [hook].concat(chunks).filter(Boolean);
+    if (!tweets.length) return [];
+    var last = tweets[tweets.length - 1];
+    if (cta && len(last) + len(cta) + 2 <= TWEET_LIMIT) tweets[tweets.length - 1] = last + "\n\n" + cta;
+    else if (cta) tweets.push(cta);
+    var total = tweets.length;
+    return tweets.map(function (tweet, index) {
+      var prefix = (index + 1) + "/" + total + " ";
+      var allowed = TWEET_LIMIT - len(prefix);
+      return prefix + trimChars(tweet, allowed);
+    });
+  }
+
+  function extractHashtags(text, title) {
+    var stop = ["هذا", "هذه", "ذلك", "التي", "الذي", "على", "إلى", "من", "في", "عن", "مع", "أن", "إن", "ما", "لا", "كل", "بعد", "قبل", "بين", "حتى", "هو", "هي", "ثم", "قد", "كان", "يكون", "the", "and", "for", "with", "that", "this", "from", "your", "you", "are", "was", "have", "not", "but", "they", "will", "can", "how", "why", "what"];
+    var counts = {};
+    words((title || "") + " " + (text || "")).forEach(function (raw) {
+      var word = raw.replace(/[^\u0600-\u06FFa-zA-Z0-9]/g, "").replace(/^(ال|وال|بال|فال)/, "");
+      if (len(word) < 4 || stop.indexOf(word) >= 0) return;
+      counts[word] = (counts[word] || 0) + 1;
+    });
+    return Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 3).map(function (word) { return "#" + word; });
+  }
+
+  function buildVideo(text, title, cta, brand, seconds) {
+    var sentences = splitSentences(text);
+    var hookSource = sentences[0] || title || text;
+    var hook = trimChars(title && len(title) <= 150 ? title : hookSource, 140);
+    var points = sentences.slice(1, 6);
+    if (!points.length) points = [trimChars(text, 120)];
+    var problem = sentences[1] ? trimChars(sentences[1], 120) : hook;
+    var scenes = [];
+    scenes.push({ key: "hook", label: t("scene.hook"), start: 0, end: 3, voice: hook, screen: trimChars(hook, 52) });
+    scenes.push({ key: "problem", label: t("scene.problem"), start: 3, end: 10, voice: problem, screen: trimChars(problem, 52) });
+    var pointEnd = Math.max(15, seconds - 6);
+    var span = Math.max(1, pointEnd - 10);
+    var picks = points.slice(0, 3);
+    picks.forEach(function (sentence, index) {
+      var start = Math.round(10 + span * index / picks.length);
+      var end = Math.round(10 + span * (index + 1) / picks.length);
+      scenes.push({ key: "point", pointNo: index + 1, label: t("scene.point", { n: index + 1 }), start: start, end: end, voice: trimChars(sentence, 160), screen: trimChars(sentence, 46) });
+    });
+    scenes.push({ key: "cta", label: t("scene.cta"), start: Math.max(pointEnd, 15), end: seconds, voice: cta || t("cta.default"), screen: trimChars(cta || t("cta.default"), 48) });
+    var tags = extractHashtags(text, title);
+    var captionHook = trimChars(hook, 150);
+    var captionBody = picks[0] ? trimChars(picks[0], 130) : "";
+    var caption = captionHook + "\n\n" + captionBody + "\n\n" + (cta || t("cta.default")) + (tags.length ? "\n\n" + tags.join(" ") : "");
+    return { scenes: scenes, caption: caption, tags: tags, seconds: seconds };
+  }
+
+  function buildNewsletter(text, title, cta, brand, tone) {
+    var sentences = splitSentences(text);
+    var subject = trimChars(title || sentences[0] || text, LIMITS.subject);
+    var preview = trimChars(sentences[0] || text, LIMITS.preview);
+    var intro = sentences.slice(0, 2).join(" ");
+    var bullets = sentences.slice(2, 5);
+    if (bullets.length < 2) bullets = sentences.slice(1, 4);
+    var greeting = t("greet." + (tone || "direct"));
+    var lines = [greeting, "", intro, ""];
+    if (bullets.length) {
+      lines.push(state.lang === "ar" ? "أبرز النقاط:" : "Key points:");
+      bullets.forEach(function (sentence) { lines.push("• " + trimChars(sentence, 160)); });
+      lines.push("");
+    }
+    lines.push(cta || t("cta.default"));
+    if (brand) { lines.push(""); lines.push(state.lang === "ar" ? "— " + brand : "— " + brand); }
+    return { subject: subject, preview: preview, body: lines.join("\n") };
+  }
+
+  function generate() {
+    var text = $("source").value.trim();
+    var title = $("title").value.trim();
+    var cta = $("cta").value.trim() || (state.lang === "ar" ? "احفظ المنشور وشاركه مع من يحتاجه." : "Save this and share it with someone who needs it.");
+    var brand = $("brand").value.trim();
+    var tone = $("tone").value;
+    var seconds = numOf($("duration") ? $("duration").value : 30);
+    var msg = $("formMsg");
+    if (len(text) < 40) { msg.textContent = t("err.short"); return; }
+    var sentences = splitSentences(text);
+    if (sentences.length < 2) { msg.textContent = t("err.short"); return; }
+    msg.textContent = "";
+    var thread = buildThread(text, title, cta);
+    var video = buildVideo(text, title, cta, brand, seconds || 30);
+    var newsletter = buildNewsletter(text, title, cta, brand, tone);
+    state.output = { thread: thread, video: video, newsletter: newsletter, source: text, cta: cta };
+    save();
+    renderThread();
+    renderVideo();
+    renderNewsletter();
+    renderCounts();
+    setTab("thread");
+    toast(t("toast.ready"));
+  }
+
+  function numOf(v) { var n = parseFloat(v); return isFinite(n) ? n : 0; }
+
+  function setTab(tab) {
+    state.activeTab = tab;
+    ["thread", "video", "news"].forEach(function (key) {
+      var panel = $("panel" + key.charAt(0).toUpperCase() + key.slice(1));
+      if (panel) panel.hidden = key !== tab;
+    });
+    Array.prototype.forEach.call($("tabs").querySelectorAll("button"), function (button) {
+      button.classList.toggle("on", button.getAttribute("data-tab") === tab);
+    });
+    save();
+  }
+
+  function counterClass(current, max) {
+    if (current > max) return "bad";
+    if (current > max * 0.85) return "warn";
+    return "ok";
+  }
+  function paintCounter(el, bar, current, max) {
+    el.textContent = current + " / " + max;
+    el.className = "counter " + counterClass(current, max);
+    if (bar) {
+      bar.className = "cbar " + counterClass(current, max);
+      bar.querySelector("i").style.width = Math.min(100, current / max * 100) + "%";
+    }
+  }
+
+  function renderThread() {
+    var thread = state.output && state.output.thread;
+    var list = $("threadList");
+    if (!thread || !thread.length) {
+      list.innerHTML = '<div class="empty">' + esc(t("empty.thread")) + "</div>";
+      $("threadMeta").innerHTML = "";
+      $("threadN").textContent = "0";
+      return;
+    }
+    $("threadN").textContent = String(thread.length);
+    var longest = thread.reduce(function (m, tw) { return Math.max(m, len(tw)); }, 0);
+    $("threadMeta").innerHTML = '<span class="chip">' + esc(t("thread.summary", { n: thread.length, max: longest })) + "</span>";
+    list.innerHTML = thread.map(function (text, index) {
+      return '<div class="tweet">' +
+        '<div class="tweet-head"><strong>' + esc(t("thread.tweet", { n: index + 1 })) + "</strong>" +
+        '<span class="counter ok" data-counter>' + len(text) + " / " + TWEET_LIMIT + "</span></div>" +
+        '<textarea data-tweet="' + index + '" rows="3">' + esc(text) + "</textarea>" +
+        '<div class="cbar"><i style="width:' + Math.min(100, len(text) / TWEET_LIMIT * 100) + '%"></i></div>' +
+        '<div style="display:flex;justify-content:flex-end;margin-top:5px"><button type="button" class="btn ghost small" data-copy-tweet="' + index + '">' + esc(t("copy.one")) + "</button></div>" +
+        "</div>";
+    }).join("");
+    Array.prototype.forEach.call(list.querySelectorAll("textarea"), function (area) {
+      area.addEventListener("input", function () {
+        var value = area.value;
+        var counter = area.closest(".tweet").querySelector("[data-counter]");
+        var current = len(value);
+        counter.textContent = current + " / " + TWEET_LIMIT;
+        counter.className = "counter " + counterClass(current, TWEET_LIMIT);
+        var bar = area.closest(".tweet").querySelector(".cbar");
+        bar.className = "cbar " + counterClass(current, TWEET_LIMIT);
+        bar.querySelector("i").style.width = Math.min(100, current / TWEET_LIMIT * 100) + "%";
+        if (state.output) state.output.thread[Number(area.getAttribute("data-tweet"))] = value;
+        save();
+      });
+    });
+  }
+
+  function renderVideo() {
+    var video = state.output && state.output.video;
+    var list = $("sceneList");
+    if (!video) {
+      list.innerHTML = '<div class="empty">' + esc(t("empty.video")) + "</div>";
+      $("videoMeta").innerHTML = "";
+      $("sceneN").textContent = "0";
+      return;
+    }
+    $("sceneN").textContent = String(video.scenes.length);
+    var pointSeen = 0;
+    list.innerHTML = video.scenes.map(function (scene, index) {
+      if (scene.key === "point") pointSeen += 1;
+      var label = scene.key === "hook" ? t("scene.hook")
+        : scene.key === "problem" ? t("scene.problem")
+        : scene.key === "cta" ? t("scene.cta")
+        : t("scene.point", { n: scene.pointNo || pointSeen });
+      return '<div class="scene" data-scene="' + index + '">' +
+        '<div class="scene-head"><h4>' + esc(label) + '</h4><span class="time">' + scene.start + "–" + scene.end + "s</span></div>" +
+        '<label><span>' + esc(t("scene.voice")) + "</span><textarea data-scene-voice>" + esc(scene.voice) + "</textarea></label>" +
+        '<label><span>' + esc(t("scene.screen")) + '</span><input data-scene-screen value="' + esc(scene.screen) + '"></label>' +
+        "</div>";
+    }).join("");
+    Array.prototype.forEach.call(list.querySelectorAll("[data-scene-voice]"), function (area) {
+      area.addEventListener("input", function () {
+        var index = Number(area.closest(".scene").getAttribute("data-scene"));
+        if (state.output) state.output.video.scenes[index].voice = area.value;
+        updateVideoMeta();
+        save();
+      });
+    });
+    Array.prototype.forEach.call(list.querySelectorAll("[data-scene-screen]"), function (input) {
+      input.addEventListener("input", function () {
+        var index = Number(input.closest(".scene").getAttribute("data-scene"));
+        if (state.output) state.output.video.scenes[index].screen = input.value;
+        save();
+      });
+    });
+    updateVideoMeta();
+    $("caption").value = video.caption || "";
+    updateCaptionCounter();
+  }
+
+  function updateVideoMeta() {
+    var video = state.output && state.output.video;
+    if (!video) return;
+    var totalWords = 0;
+    Array.prototype.forEach.call($("sceneList").querySelectorAll("[data-scene-voice]"), function (area) { totalWords += words(area.value).length; });
+    var readSeconds = Math.round(totalWords / 2.5);
+    $("videoMeta").innerHTML = '<span class="chip">' + esc(t("video.summary", { sec: video.seconds, words: totalWords, dur: readSeconds })) + "</span>" +
+      '<span class="chip">' + esc(readSeconds <= video.seconds ? t("video.within") : t("video.over")) + "</span>";
+  }
+
+  function updateCaptionCounter() {
+    var platform = $("captionPlatform").value;
+    var max = LIMITS[platform] || 2200;
+    paintCounter($("captionCount"), $("captionBar"), len($("caption").value), max);
+  }
+
+  function renderNewsletter() {
+    var news = state.output && state.output.newsletter;
+    if (!news) {
+      $("newsSubject").value = "";
+      $("newsPreview").value = "";
+      $("newsBody").value = "";
+      $("newsMeta").innerHTML = "";
+      updateNewsCounters();
+      return;
+    }
+    $("newsSubject").value = news.subject || "";
+    $("newsPreview").value = news.preview || "";
+    $("newsBody").value = news.body || "";
+    $("newsMeta").innerHTML = "";
+    updateNewsCounters();
+  }
+
+  function updateNewsCounters() {
+    paintCounter($("subjCount"), $("subjBar"), len($("newsSubject").value), LIMITS.subject);
+    paintCounter($("previewCount"), $("previewBar"), len($("newsPreview").value), LIMITS.preview);
+    var body = $("newsBody").value;
+    var count = words(body).length;
+    var chars = len(body);
+    $("newsStats").textContent = t("news.stats", { words: count, mins: Math.max(1, Math.round(count / 200)), chars: chars });
+  }
+
+  function renderCounts() {
+    var source = $("source").value;
+    $("srcCount").textContent = t("src.chars", { n: len(source) });
+    $("srcWords").textContent = t("src.words", { n: words(source).length });
+    updateCaptionCounter();
+    updateNewsCounters();
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1600);
+  }
+
+  function copy(text) {
+    if (!text) { toast(t("toast.nothing")); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast(t("toast.copied")); }).catch(function () { toast(t("toast.copied")); });
+    } else {
+      var area = document.createElement("textarea");
+      area.value = text; document.body.appendChild(area); area.select();
+      try { document.execCommand("copy"); } catch (err) { /* تجاهل */ }
+      document.body.removeChild(area);
+      toast(t("toast.copied"));
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, activeTab: state.activeTab,
+        title: $("title").value, brand: $("brand").value, tone: $("tone").value,
+        duration: $("duration").value, cta: $("cta").value,
+        source: $("source").value, output: state.output,
+        captionPlatform: $("captionPlatform").value
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    if (persist) localStorage.setItem(KEY + "_lang", state.lang);
+    renderCounts();
+    if (state.output) { renderThread(); renderVideo(); renderNewsletter(); }
+    save();
+  }
+
+  $("source").addEventListener("input", function () { renderCounts(); save(); });
+  $("title").addEventListener("input", save);
+  $("brand").addEventListener("input", save);
+  $("tone").addEventListener("change", save);
+  $("cta").addEventListener("input", save);
+  $("duration").addEventListener("change", save);
+  $("captionPlatform").addEventListener("change", function () { updateCaptionCounter(); save(); });
+  $("caption").addEventListener("input", function () {
+    if (state.output) state.output.video.caption = $("caption").value;
+    updateCaptionCounter(); save();
+  });
+  ["newsSubject", "newsPreview", "newsBody"].forEach(function (id) {
+    $(id).addEventListener("input", function () {
+      if (state.output) {
+        if (id === "newsSubject") state.output.newsletter.subject = $(id).value;
+        else if (id === "newsPreview") state.output.newsletter.preview = $(id).value;
+        else state.output.newsletter.body = $(id).value;
+      }
+      updateNewsCounters(); save();
+    });
+  });
+  $("generateBtn").addEventListener("click", generate);
+  $("topGenerate").addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); generate(); });
+  $("sampleBtn").addEventListener("click", function () {
+    var sampleAr = "معظم صنّاع المحتوى ينشرون أكثر مما ينبغي وينتظرون نتيجة لا تأتي. السبب أنهم يبدأون من الفكرة لا من الجمهور. ابدأ بسؤال واحد: ما المشكلة التي يحاول متابعك حلها اليوم؟ اكتب إجابة واحدة واضحة، ثم قدّمها في ثلاث صيغ مختلفة. المحتوى الذي ينجح ليس الأطول بل الأقرب. جرّب أن تنشر فكرة واحدة كل يوم لمدة أسبوع، وقس النتائج قبل أن تزيد الإنتاج.";
+    var sampleEn = "Most creators publish more than they should and wait for results that never come. The reason is that they start from the idea, not from the audience. Start with one question: what problem is your follower trying to solve today? Write one clear answer, then present it in three different formats. Content that works is not the longest, it is the closest. Try publishing one idea every day for a week, and measure the results before increasing output.";
+    $("source").value = state.lang === "ar" ? sampleAr : sampleEn;
+    $("title").value = state.lang === "ar" ? "كيف تنشر أقل وتحصل على نتائج أكثر" : "How to publish less and get better results";
+    renderCounts(); save();
+  });
+  $("clearBtn").addEventListener("click", function () {
+    $("source").value = ""; $("title").value = "";
+    state.output = null;
+    renderThread(); renderVideo(); renderNewsletter(); renderCounts(); save();
+  });
+  $("copyThread").addEventListener("click", function () {
+    var areas = $("threadList").querySelectorAll("textarea");
+    var text = Array.prototype.map.call(areas, function (area) { return area.value; }).join("\n\n");
+    copy(text);
+  });
+  $("copyScript").addEventListener("click", function () {
+    if (!state.output) { copy(""); return; }
+    var lines = [(state.lang === "ar" ? "سيناريو فيديو" : "Video script") + " · " + state.output.video.seconds + "s", ""];
+    Array.prototype.forEach.call($("sceneList").querySelectorAll(".scene"), function (scene) {
+      var label = scene.querySelector("h4").textContent;
+      var time = scene.querySelector(".time").textContent;
+      var voice = scene.querySelector("[data-scene-voice]").value;
+      var screen = scene.querySelector("[data-scene-screen]").value;
+      lines.push("[" + time + "] " + label);
+      lines.push((state.lang === "ar" ? "التعليق: " : "Voiceover: ") + voice);
+      lines.push((state.lang === "ar" ? "على الشاشة: " : "On screen: ") + screen);
+      lines.push("");
+    });
+    copy(lines.join("\n"));
+  });
+  $("copyCaption").addEventListener("click", function () { copy($("caption").value); });
+  $("copyNews").addEventListener("click", function () {
+    copy($("newsSubject").value + "\n\n" + $("newsBody").value);
+  });
+  $("tabs").addEventListener("click", function (event) {
+    var button = event.target.closest("[data-tab]");
+    if (button) setTab(button.getAttribute("data-tab"));
+  });
+  $("threadList").addEventListener("click", function (event) {
+    var button = event.target.closest("[data-copy-tweet]");
+    if (!button) return;
+    var area = button.closest(".tweet").querySelector("textarea");
+    copy(area.value);
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar", true); });
+
+  (function init() {
+    var raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+    if (raw) {
+      $("title").value = raw.title || "";
+      $("brand").value = raw.brand || "";
+      $("tone").value = raw.tone || "direct";
+      $("source").value = raw.source || "";
+      if (raw.duration) $("duration").value = raw.duration;
+      $("cta").value = raw.cta || "";
+      state.output = raw.output || null;
+      state.activeTab = raw.activeTab || "thread";
+      if (raw.captionPlatform) $("captionPlatform").value = raw.captionPlatform;
+      state.lang = raw.lang === "en" ? "en" : "ar";
+    }
+    var storedLang = localStorage.getItem(KEY + "_lang");
+    if (storedLang === "en" || storedLang === "ar") state.lang = storedLang;
+    applyLang(state.lang, false);
+    if (state.output) {
+      renderThread(); renderVideo(); renderNewsletter();
+      setTab(state.activeTab);
+    } else {
+      renderThread(); renderVideo(); renderNewsletter();
+    }
+  })();
+})();
+</script>
+</body>
+</html>

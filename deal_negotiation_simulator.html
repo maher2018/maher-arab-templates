@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محاكي التفاوض التجاري — Deal Negotiation Simulator</title>
+<meta name="description" content="احسب نقطة التعادل وأقصى خصم، واحصل على استراتيجيات تفاوض وردود جاهزة على الاعتراضات — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{--bg:#f3f5f4;--card:#fff;--ink:#12211d;--muted:#5d6d68;--navy:#0d2b33;--navy2:#12414b;--teal:#0f766e;--teal-soft:#e7f3f0;--gold:#b8892f;--gold-soft:#f8efdb;--bad:#a83a2f;--bad-soft:#fbeceb;--warn:#8a5a08;--warn-soft:#fdf2dd;--ok:#14684a;--ok-soft:#e7f5ee;--line:#dfe8e4;--radius:16px;--shadow:0 10px 30px rgba(13,43,51,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.93rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,118,110,.1)}
+label>span{display:block;font-size:.77rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(243,245,244,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.78rem;letter-spacing:.03em}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}
+.controls select{width:auto;min-width:112px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:.84rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.teal{background:var(--teal)}
+.btn.gold{background:var(--gold);color:#2a1f06}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:.76rem;border-radius:8px}
+main{max-width:1180px;margin:0 auto;padding:20px 20px 50px;display:grid;gap:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.74rem;color:var(--muted);margin-bottom:3px}
+.kpi strong{font-size:1.08rem;font-variant-numeric:tabular-nums;display:block}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--teal));border:0;color:#fff}
+.kpi.hero span{color:#cbe3de}.kpi.hero strong{color:#fff}
+.kpi.gold{background:var(--gold-soft);border-color:#eadfc4}
+.kpi.bad{background:var(--bad-soft);border-color:#eccbc6}.kpi.bad strong{color:var(--bad)}
+.kpi small{font-size:.68rem;color:var(--muted);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.card-head h2{font-size:1.03rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.81rem;max-width:720px}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:820px){.fields{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.fields{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.hint{color:var(--muted);font-size:.78rem;margin:8px 0 0}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011;margin-top:10px}
+.result{background:linear-gradient(180deg,#fbfdfc,#f2f8f6);border:1px solid var(--line);border-radius:14px;padding:14px}
+.rowline{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.86rem;border-bottom:1px dashed #e4ece9}
+.rowline:last-of-type{border-bottom:0}
+.rowline b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.status{margin-top:12px;border-radius:11px;padding:11px 12px;font-size:.85rem;font-weight:700}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.warn{background:var(--warn-soft);color:var(--warn)}
+.status.bad{background:var(--bad-soft);color:var(--bad)}
+.zone{margin-top:14px}
+.zone-bar{position:relative;height:18px;border-radius:99px;background:linear-gradient(90deg,#f3c9c4,#f8e3ba,#cfe8dd);margin:26px 0 10px}
+.zone-bar .mark{position:absolute;top:-19px;transform:translateX(-50%);font-size:.68rem;font-weight:800;color:var(--muted);white-space:nowrap}
+.zone-bar .mark::after{content:"";position:absolute;top:17px;left:50%;width:2px;height:22px;background:var(--navy);opacity:.55;transform:translateX(-50%)}
+.zone-bar .mark b{display:block;color:var(--ink)}
+.zone-legend{display:flex;gap:8px;flex-wrap:wrap;font-size:.73rem;color:var(--muted)}
+.zone-legend span{background:#f4f7f6;border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.strategy{border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:10px;background:#fbfdfc}
+.strategy-head{display:flex;justify-content:space-between;gap:9px;align-items:flex-start;flex-wrap:wrap}
+.strategy-head h3{font-size:.92rem;display:flex;gap:7px;align-items:center}
+.num{width:24px;height:24px;border-radius:8px;background:var(--navy);color:#fff;display:inline-grid;place-items:center;font-size:.72rem;flex:none}
+.strategy p{font-size:.82rem;color:var(--muted);margin:6px 0}
+.script{background:var(--teal-soft);border:1px solid #cfe4df;border-radius:10px;padding:10px 12px;font-size:.84rem;margin-top:7px;white-space:pre-line}
+.strategy-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.impact{font-size:.74rem;font-weight:800;color:var(--teal)}
+table.ladder{width:100%;border-collapse:collapse;font-size:.84rem}
+.ladder th{font-size:.71rem;color:var(--muted);text-align:start;padding:7px 6px;border-bottom:1px solid var(--line);background:#fbfdfc;white-space:nowrap;font-weight:700}
+.ladder td{padding:8px 6px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ladder tr.best td{background:var(--ok-soft)}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.71rem;font-weight:800}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.objection-select{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin-bottom:11px}
+.objection-select label{flex:1 1 280px}
+.objection-card{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fbfdfc}
+.objection-card h3{font-size:.9rem;margin-bottom:5px}
+.objection-card .why{font-size:.78rem;color:var(--muted);margin:0 0 8px}
+.reply{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;font-size:.87rem;white-space:pre-line;min-height:90px}
+.toast{position:fixed;inset-block-end:20px;inset-inline-start:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:99px;font-size:.82rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:80}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:30px}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:0 20px 26px}
+@media print{.top,.controls,.no-print,footer,.toast{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">DEAL</span>
+      <div><strong data-i18n="brand">محاكي التفاوض التجاري</strong><small data-i18n="tagline">نقطة التعادل · استراتيجيات · ردود جاهزة</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="deal.title">بيانات الصفقة</h2>
+        <p data-i18n="deal.desc">أدخل أرقامك الحقيقية — تبقى على جهازك — لنحسب حدودك وآلية التفاوض المناسبة.</p>
+      </div>
+    </div>
+    <div class="fields">
+      <label><span data-i18n="f.name">اسم الصفقة / العميل</span><input id="dealName" type="text" data-i18n-ph="f.namePh"></label>
+      <label><span data-i18n="f.price">قيمة عرضك (الإجمالي)</span><input id="price" type="number" min="0" step="100" value="120000"></label>
+      <label><span data-i18n="f.buyer">عرض المشتري الحالي</span><input id="buyer" type="number" min="0" step="100" value="95000"></label>
+      <label><span data-i18n="f.cost">التكلفة الإجمالية للصفقة</span><input id="cost" type="number" min="0" step="100" value="78000"></label>
+      <label><span data-i18n="f.qty">الكمية / عدد الوحدات</span><input id="qty" type="number" min="1" step="1" value="10"></label>
+      <label><span data-i18n="f.target">هامش الربح المستهدف %</span><input id="target" type="number" min="0" max="90" step="1" value="20"></label>
+    </div>
+    <p class="hint" data-i18n="deal.hint">التكلفة تشمل كل ما ستدفعه لتنفيذ الصفقة. «الهامش المستهدف» يحدد أرضية التفاوض، وليس سعر البيع الحالي.</p>
+    <p class="note" data-i18n="deal.note">هذه الأداة خاصة بالبائع: لا تشارك نقطة التعادل أو التكلفة مع المشتري — استخدمها لتحديد حدودك فقط.</p>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="math.title">حساب الصفقة ونقطة التعادل</h2><p data-i18n="math.desc">كل الأرقام تتحدث فورًا مع كل تعديل.</p></div>
+      </div>
+      <div class="result">
+        <div class="rowline"><span data-i18n="r.asking">قيمة عرضك</span><b id="rAsking">—</b></div>
+        <div class="rowline"><span data-i18n="r.buyer">عرض المشتري</span><b id="rBuyer">—</b></div>
+        <div class="rowline"><span data-i18n="r.cost">التكلفة الإجمالية</span><b id="rCost">—</b></div>
+        <div class="rowline"><span data-i18n="r.be">نقطة التعادل (بدون ربح)</span><b id="rBe">—</b></div>
+        <div class="rowline"><span data-i18n="r.beUnit">نقطة التعادل للوحدة</span><b id="rBeUnit">—</b></div>
+        <div class="rowline"><span data-i18n="r.floor">أرضية التفاوض (بهامشك المستهدف)</span><b id="rFloor">—</b></div>
+        <div class="rowline"><span data-i18n="r.maxDisc">أقصى خصم ممكن</span><b id="rMaxDisc">—</b></div>
+        <div class="rowline"><span data-i18n="r.profitBuyer">ربحك عند عرض المشتري</span><b id="rProfitBuyer">—</b></div>
+        <div class="rowline"><span data-i18n="r.marginBuyer">هامشك عند عرض المشتري</span><b id="rMarginBuyer">—</b></div>
+        <div class="rowline"><span data-i18n="r.gap">الفجوة بين العرضين</span><b id="rGap">—</b></div>
+        <div class="status" id="statusBox">—</div>
+      </div>
+      <div class="zone">
+        <div class="zone-bar" id="zoneBar"></div>
+        <div class="zone-legend">
+          <span data-i18n="z.cost">التكلفة</span><span data-i18n="z.floor">الأرضية</span>
+          <span data-i18n="z.buyer">عرض المشتري</span><span data-i18n="z.asking">سعرك</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="ladder.title">سلّم العروض المضادة</h2><p data-i18n="ladder.desc">تنازلات محسوبة: كل صف يوضح ربحك وهامشك قبل أن تتكلم.</p></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="ladder">
+          <thead><tr>
+            <th data-i18n="ladder.step">الخطوة</th>
+            <th data-i18n="ladder.offer">عرضك</th>
+            <th data-i18n="ladder.discount">خصم</th>
+            <th data-i18n="ladder.profit">ربح</th>
+            <th data-i18n="ladder.margin">هامش</th>
+          </tr></thead>
+          <tbody id="ladderBody"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="ladder.hint">ابدأ من الأعلى وتنازل بخطوات صغيرة، ولا تهبط تحت الأرضية دون مقابل (كمية، دفعة مقدمة، مدة أطول).</p>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="strategy.title">استراتيجيات تفاوض مقترحة</h2><p data-i18n="strategy.desc">مبنية على أرقام صفقتك وموقع عرض المشتري من أرضيتك.</p></div>
+      <button type="button" class="btn ghost small no-print" id="copyAll" data-i18n="strategy.copyAll">نسخ كل الاستراتيجيات</button>
+    </div>
+    <div id="strategyList"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="obj.title">ردود جاهزة على الاعتراضات</h2><p data-i18n="obj.desc">اختر الاعتراض، وعدّل الرد قبل إرساله — الأرقام مأخوذة من صفقتك.</p></div>
+    </div>
+    <div class="objection-select no-print">
+      <label><span data-i18n="obj.pick">الاعتراض</span><select id="objection"></select></label>
+      <button type="button" class="btn teal" id="copyReply" data-i18n="obj.copy">نسخ الرد</button>
+    </div>
+    <div class="objection-card">
+      <h3 id="objTitle">—</h3>
+      <p class="why" id="objWhy">—</p>
+      <div class="reply" id="reply">—</div>
+    </div>
+    <p class="hint" data-i18n="obj.note">لا تذكر التكلفة أو نقطة التعادل في ردودك. استخدم الأرقام للتخطيط فقط، وقدّم قيمة ومقابلًا لكل تنازل.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">محاكي التفاوض التجاري — أداة تقديرية تعمل بلا خادم، وليست نصيحة قانونية أو مالية.</span></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", decimals: 3 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", decimals: 3 }
+  };
+
+  var OBJECTIONS = ["price", "competitor", "budget", "discount", "think", "guarantee", "prepay", "trial"];
+
+  var I18N = {
+    ar: {
+      brand: "محاكي التفاوض التجاري", tagline: "نقطة التعادل · استراتيجيات · ردود جاهزة",
+      currency: "العملة", print: "طباعة",
+      "deal.title": "بيانات الصفقة",
+      "deal.desc": "أدخل أرقامك الحقيقية — تبقى على جهازك — لنحسب حدودك وآلية التفاوض المناسبة.",
+      "f.name": "اسم الصفقة / العميل", "f.namePh": "مثال: توريد أنظمة نقاط بيع",
+      "f.price": "قيمة عرضك (الإجمالي)", "f.buyer": "عرض المشتري الحالي",
+      "f.cost": "التكلفة الإجمالية للصفقة", "f.qty": "الكمية / عدد الوحدات",
+      "f.target": "هامش الربح المستهدف %",
+      "deal.hint": "التكلفة تشمل كل ما ستدفعه لتنفيذ الصفقة. «الهامش المستهدف» يحدد أرضية التفاوض، وليس سعر البيع الحالي.",
+      "deal.note": "هذه الأداة خاصة بالبائع: لا تشارك نقطة التعادل أو التكلفة مع المشتري — استخدمها لتحديد حدودك فقط.",
+      "kpi.be": "نقطة التعادل", "kpi.floor": "أرضية التفاوض", "kpi.profit": "ربح عرض المشتري",
+      "kpi.margin": "الهامش عند عرضه", "kpi.gap": "الفجوة", "kpi.maxDisc": "أقصى خصم",
+      "math.title": "حساب الصفقة ونقطة التعادل", "math.desc": "كل الأرقام تتحدث فورًا مع كل تعديل.",
+      "r.asking": "قيمة عرضك", "r.buyer": "عرض المشتري", "r.cost": "التكلفة الإجمالية",
+      "r.be": "نقطة التعادل (بدون ربح)", "r.beUnit": "نقطة التعادل للوحدة",
+      "r.floor": "أرضية التفاوض (بهامشك المستهدف)", "r.maxDisc": "أقصى خصم ممكن",
+      "r.profitBuyer": "ربحك عند عرض المشتري", "r.marginBuyer": "هامشك عند عرض المشتري",
+      "r.gap": "الفجوة بين العرضين",
+      "z.cost": "التكلفة", "z.floor": "الأرضية", "z.buyer": "عرض المشتري", "z.asking": "سعرك",
+      "status.loss": "عرض المشتري أقل من التكلفة — لا تقبل به دون تغيير النطاق أو الشروط.",
+      "status.belowFloor": "العرض داخل منطقة الخطر: فوق التكلفة لكن تحت هامشك المستهدف.",
+      "status.thin": "الهامش مقبول لكنه أقل من هدفك — تفاوض على مقابل لكل تنازل إضافي.",
+      "status.good": "العرض عند أرضيتك أو أعلى — اقترب من الإغلاق بشروط واضحة.",
+      "status.close": "المشتري قريب جدًا من سعرك — أغلق الآن وأضف قيمة بدل خصم.",
+      "ladder.title": "سلّم العروض المضادة", "ladder.desc": "تنازلات محسوبة: كل صف يوضح ربحك وهامشك قبل أن تتكلم.",
+      "ladder.step": "الخطوة", "ladder.offer": "عرضك", "ladder.discount": "خصم", "ladder.profit": "ربح", "ladder.margin": "هامش",
+      "ladder.hint": "ابدأ من الأعلى وتنازل بخطوات صغيرة، ولا تهبط تحت الأرضية دون مقابل (كمية، دفعة مقدمة، مدة أطول).",
+      "ladder.step1": "تمسّك بسعرك", "ladder.step2": "تنازل أول", "ladder.step3": "تنازل متوسط", "ladder.step4": "أرضيتك",
+      "strategy.title": "استراتيجيات تفاوض مقترحة", "strategy.desc": "مبنية على أرقام صفقتك وموقع عرض المشتري من أرضيتك.",
+      "strategy.copyAll": "نسخ كل الاستراتيجيات", "strategy.copy": "نسخ النص",
+      "strat.value.title": "ثبّت القيمة قبل الحديث عن السعر",
+      "strat.value.why": "المشتري يقارن رقمًا برقم؛ أعِد المقارنة إلى النتيجة والضمان وخدمة ما بعد البيع.",
+      "strat.value.script": "أفهم حرصك على الميزانية. السعر يشمل {scope} مع ضمان وتنفيذ خلال المدة المتفق عليها. إذا قارنّا بالتكلفة الإجمالية بدل السعر الأولي، فالفرق الحقيقي هو {diff} فقط مقابل تجنّب مخاطر التأخير وإعادة العمل.",
+      "strat.trade.title": "خصم مشروط بمقابل واضح",
+      "strat.trade.why": "لا تمنح خصمًا مجانيًا. اربط كل نقطة خصم بمقابل: دفعة مقدمة، كمية أكبر، أو مدة عقد أطول.",
+      "strat.trade.script": "أستطيع تحريك السعر إذا ساعدتني في أحد هذه الخيارات: دفعة مقدمة 50%، أو زيادة الكمية، أو توقيع عقد لمدة سنة. اختر ما يناسبك وسأعيد ترتيب العرض.",
+      "strat.scope.title": "قلّص النطاق بدل خفض السعر",
+      "strat.scope.why": "الخصم يخفض ربحك في كل وحدة؛ تقليص النطاق يحفظ هامشك ويبقي السعر منطقيًا.",
+      "strat.scope.script": "للوصول إلى ميزانيتك دون خفض القيمة، يمكننا تأجيل {defer} إلى مرحلة ثانية. تحصل على الأساسيات الآن، ونضيف الباقي عندما تكون جاهزًا.",
+      "strat.pay.title": "استخدم شروط الدفع كأداة تفاوض",
+      "strat.pay.why": "الدفعة المقدمة تحسّن تدفقك النقدي وتخفض مخاطر الصفقة، وهي بديل جيد لخصم نقدي.",
+      "strat.pay.script": "إذا وافقت على دفعة مقدمة 50% والباقي عند التسليم، أستطيع تثبيت السعر الحالي وتقديم أولوية في الجدول. هذا يقلل المخاطر للطرفين.",
+      "strat.walk.title": "اعرف بديلك ولا تتفاوض تحت الأرضية",
+      "strat.walk.why": "أرضيتك هي {floor}. أي رقم أقل منها يستهلك وقتك وربحك؛ البديل هو تعديل النطاق أو الاعتذار باحترام.",
+      "strat.walk.script": "أقدّر اهتمامك، لكن هذا الرقم أقل من الحد الذي يمكنني تنفيذ العمل به بجودة تليق بك. يسعدني أن نجد صيغة أخرى تناسب ميزانيتك، أو نؤجل الصفقة إلى وقت مناسب.",
+      "strat.close.title": "أغلق الآن وابدأ التنفيذ",
+      "strat.close.why": "العرض قريب من سعرك؛ كل جولة إضافية تكلفك وقتًا وقد تفتح بابًا لتنازلات جديدة.",
+      "strat.close.script": "يسعدني أن نعتمد هذا العرض اليوم. سأرسل الملخص والشروط خلال ساعة، ونبدأ التنفيذ فور استلام الدفعة الأولى. هل نعتمد {price}؟",
+      "strat.volume.title": "اربط الخصم بالكمية أو الاستمرارية",
+      "strat.volume.why": "الكمية الكبيرة توزع التكلفة الثابتة؛ يمكنك منح سعر أفضل دون كسر الهامش.",
+      "strat.volume.script": "السعر الحالي محسوب على {qty} وحدة. إذا رفعت الكمية، يمكنني تحسين سعر الوحدة مع الحفاظ على نفس مستوى الخدمة. ما الكمية التي تناسبك؟",
+      "strat.bundle.title": "أضف قيمة بدل خصم إضافي",
+      "strat.bundle.why": "المشتري يريد أن يشعر أنه كسب شيئًا؛ أضف خدمة أو ضمانًا بتكلفة أقل من الخصم المطلوب.",
+      "strat.bundle.script": "بدل خصم إضافي، أستطيع إضافة {bonus} ضمن نفس السعر. قيمتها لك أعلى من فرق الخصم، وتضمن لك نتيجة أفضل من أول يوم.",
+      "strat.timing.title": "استخدم الجدول الزمني كورقة تفاوض",
+      "strat.timing.why": "التسليم العاجل له قيمة؛ لا تمنحه مجانًا، واجعل الموعد المعتاد مقابلًا لسعر أفضل.",
+      "strat.timing.script": "السعر الحالي يشمل تنفيذًا خلال المدة القياسية. إذا احتجت تسليمًا أسرع، نضيف رسوم أولوية؛ وإذا كانت المدة العادية مناسبة، يمكنني تثبيت السعر كما هو.",
+      "fin.impact": "أقصى مرونة سعرية لديك: {amt}",
+      "fin.floorImpact": "عرض أقل من أرضيتك بـ {amt} — لا توقّع دون مقابل.",
+      "obj.title": "ردود جاهزة على الاعتراضات", "obj.desc": "اختر الاعتراض، وعدّل الرد قبل إرساله — الأرقام مأخوذة من صفقتك.",
+      "obj.pick": "الاعتراض", "obj.copy": "نسخ الرد",
+      "obj.note": "لا تذكر التكلفة أو نقطة التعادل في ردودك. استخدم الأرقام للتخطيط فقط، وقدّم قيمة ومقابلًا لكل تنازل.",
+      "obj.price": "السعر مرتفع", "obj.competitor": "منافسك أرخص", "obj.budget": "ميزانيتي محدودة",
+      "obj.discount": "أريد خصمًا أكبر", "obj.think": "أحتاج وقتًا للتفكير", "obj.guarantee": "كيف أضمن الجودة؟",
+      "obj.prepay": "لماذا أدفع مقدمًا؟", "obj.trial": "أريد تجربة مجانية",
+      "obj.why.price": "لا تدافع عن الرقم مباشرة؛ أعِد المقارنة إلى النتيجة والتكلفة الإجمالية والمخاطر.",
+      "obj.why.competitor": "اطلب تفاصيل العرض المنافس وقارن بندًا ببند بدل مطابقة السعر.",
+      "obj.why.budget": "احترم الحد، وقدّم خيارات سداد أو مراحل بدل خصم يضر بالجودة.",
+      "obj.why.discount": "خصم بلا مقابل يعلّم المشتري أن السعر مرن؛ اربطه بالتزام.",
+      "obj.why.think": "التأجيل غالبًا يعني وجود نقطة غير واضحة؛ اسأل عنها وثبّت العرض لمدة محددة.",
+      "obj.why.guarantee": "حوّل «الثقة» إلى معايير قبول ومراحل وضمان مكتوب.",
+      "obj.why.prepay": "اشرح ما تغطيه الدفعة وكيف تحمي الطرفين، واقترح تقسيمًا مقبولًا.",
+      "obj.why.trial": "التجربة المجانية المفتوحة تكلفك وقتًا؛ اجعلها تجربة مدفوعة محدودة تُخصم من العقد.",
+      "reply.price": "أتفهم أن السعر مهم، ولهذا لن أقدّم رقمًا منخفضًا ثم أختصر في التنفيذ. عرضنا يشمل {scope} وضمانًا واضحًا، والفرق بيننا وبين الأرخص غالبًا يظهر لاحقًا في إعادة العمل. يمكنني ترتيب الدفع على مرحلتين ليكون مناسبًا لميزانيتك.",
+      "reply.competitor": "من الجيد أنك تقارن. قبل أن تحسم على السعر، اسأل: هل العرض الآخر يشمل نفس النطاق والضمان ووقت الاستجابة؟ أرسل لي تفاصيل عرضهم وأعطيك مقارنة بندًا ببند. إذا كان الفرق في النطاق، يمكننا تعديله بدل خفض الجودة.",
+      "reply.budget": "أقدّر وضوحك. بدل خفض السعر، يمكننا تقسيم الدفع إلى {split} أو تأجيل جزء من النطاق إلى مرحلة ثانية. بهذا تحافظ على النتيجة الكاملة وتلتزم بميزانيتك. أي الخيارين يناسبك؟",
+      "reply.discount": "أستطيع دراسة خصم إذا كان هناك مقابل: دفعة مقدمة أعلى، كمية أكبر، أو توقيع عقد أطول. أقصى مرونة لدي مرتبطة بهذه الخيارات، لأن السعر الحالي مبني على نطاق واضح وجودة تنفيذ.",
+      "reply.think": "بالتأكيد، القرار يحتاج وقتًا. ما النقطة التي تحتاج توضيحًا: السعر، النطاق، أم الجدول؟ سأرسل ملخصًا مكتوبًا الآن وأثبّت العرض لمدة {hold} أيام حتى تقرر براحة.",
+      "reply.guarantee": "الضمان مبني على مراحل واضحة: تسليم أولي، مراجعة، ثم اعتماد نهائي. نضع معايير القبول في العقد، ولا نسلم إلا بعد اجتيازها. يمكنك أيضًا التحدث مع عميل سابق قبل البدء.",
+      "reply.prepay": "الدفعة المقدمة تغطي بدء العمل وحجز الفريق، وليست دفعة كاملة. يمكننا تقسيمها {split}، مع بنود واضحة لما يُسلَّم في كل مرحلة. هذا يحمي الطرفين من التأخير وسوء الفهم.",
+      "reply.trial": "بدل تجربة مجانية مفتوحة، أقترح تجربة مدفوعة محدودة النطاق تُخصم كاملة من العقد إذا أكملنا. بهذا ترى النتيجة الحقيقية دون أن يتحمل الطرفان مخاطرة كبيرة.",
+      "footer": "محاكي التفاوض التجاري — أداة تقديرية تعمل بلا خادم، وليست نصيحة قانونية أو مالية.",
+      "toast.copied": "تم النسخ.", "toast.ready": "تم تحديث التحليل.", "toast.empty": "لا يوجد نص لنسخه."
+    },
+    en: {
+      brand: "Deal Negotiation Simulator", tagline: "Break-even · Strategies · Ready replies",
+      currency: "Currency", print: "Print",
+      "deal.title": "Deal details",
+      "deal.desc": "Enter your real numbers — they stay on your device — to calculate your limits and the right negotiation approach.",
+      "f.name": "Deal / client name", "f.namePh": "e.g. POS systems supply",
+      "f.price": "Your asking price (total)", "f.buyer": "Buyer's current offer",
+      "f.cost": "Total deal cost", "f.qty": "Quantity / units",
+      "f.target": "Target profit margin %",
+      "deal.hint": "Cost includes everything you will pay to deliver the deal. The target margin sets your negotiation floor, not the current selling price.",
+      "deal.note": "This tool is for the seller: never share your break-even or cost with the buyer — use it to set your limits only.",
+      "kpi.be": "Break-even", "kpi.floor": "Negotiation floor", "kpi.profit": "Profit at buyer offer",
+      "kpi.margin": "Margin at buyer offer", "kpi.gap": "Gap", "kpi.maxDisc": "Max discount",
+      "math.title": "Deal maths and break-even", "math.desc": "Every figure updates instantly as you edit.",
+      "r.asking": "Your asking price", "r.buyer": "Buyer's offer", "r.cost": "Total cost",
+      "r.be": "Break-even (no profit)", "r.beUnit": "Break-even per unit",
+      "r.floor": "Negotiation floor (at target margin)", "r.maxDisc": "Maximum possible discount",
+      "r.profitBuyer": "Your profit at buyer offer", "r.marginBuyer": "Your margin at buyer offer",
+      "r.gap": "Gap between offers",
+      "z.cost": "Cost", "z.floor": "Floor", "z.buyer": "Buyer", "z.asking": "Your price",
+      "status.loss": "Buyer offer is below cost — do not accept without changing scope or terms.",
+      "status.belowFloor": "Danger zone: above cost but below your target margin.",
+      "status.thin": "Margin is acceptable but below target — trade every further concession.",
+      "status.good": "Offer is at or above your floor — move towards closing with clear terms.",
+      "status.close": "Buyer is very close to your price — close now and add value instead of discount.",
+      "ladder.title": "Counter-offer ladder", "ladder.desc": "Calculated concessions: every row shows your profit and margin before you speak.",
+      "ladder.step": "Step", "ladder.offer": "Your offer", "ladder.discount": "Discount", "ladder.profit": "Profit", "ladder.margin": "Margin",
+      "ladder.hint": "Start high and concede in small steps; never drop below the floor without a trade-off (volume, prepayment, longer term).",
+      "ladder.step1": "Hold your price", "ladder.step2": "First concession", "ladder.step3": "Middle concession", "ladder.step4": "Your floor",
+      "strategy.title": "Suggested negotiation strategies", "strategy.desc": "Built from your numbers and where the buyer's offer sits against your floor.",
+      "strategy.copyAll": "Copy all strategies", "strategy.copy": "Copy text",
+      "strat.value.title": "Anchor value before talking price",
+      "strat.value.why": "The buyer is comparing number to number; reframe the comparison around outcome, warranty and support.",
+      "strat.value.script": "I understand the budget concern. The price covers {scope} with a clear warranty and delivery within the agreed timeline. Compared with the total cost of rework or delay, the real difference is only {diff}.",
+      "strat.trade.title": "Trade every discount for something",
+      "strat.trade.why": "Never give a free discount. Tie each point to prepayment, higher volume or a longer contract.",
+      "strat.trade.script": "I can move on price if it helps with one of these: 50% upfront, a larger quantity, or a one-year agreement. Pick what suits you and I will restructure the offer.",
+      "strat.scope.title": "Reduce scope instead of cutting price",
+      "strat.scope.why": "A discount cuts your profit on every unit; trimming scope protects your margin and keeps pricing credible.",
+      "strat.scope.script": "To fit your budget without lowering value, we can move {defer} to a second phase. You get the essentials now and add the rest when ready.",
+      "strat.pay.title": "Use payment terms as a negotiation tool",
+      "strat.pay.why": "An upfront payment improves cash flow and lowers deal risk — a good alternative to a cash discount.",
+      "strat.pay.script": "If you agree to 50% upfront and the balance on delivery, I can hold the current price and prioritise your timeline. That lowers risk for both sides.",
+      "strat.walk.title": "Know your alternative and never go below the floor",
+      "strat.walk.why": "Your floor is {floor}. Any lower number consumes time and profit; the alternative is changing scope or politely walking away.",
+      "strat.walk.script": "I appreciate the interest, but that number is below what I can deliver at the quality you deserve. I am happy to find another structure that fits your budget, or revisit this when the timing is right.",
+      "strat.close.title": "Close now and start delivery",
+      "strat.close.why": "The offer is close to your price; every extra round costs time and may open the door to more concessions.",
+      "strat.close.script": "I am happy to lock this in today. I will send the summary and terms within the hour, and we start as soon as the first payment lands. Shall we confirm {price}?",
+      "strat.volume.title": "Tie the discount to volume or continuity",
+      "strat.volume.why": "Higher volume spreads fixed costs, so you can offer a better price without breaking the margin.",
+      "strat.volume.script": "The current price is based on {qty} units. If you increase the quantity, I can improve the unit price while keeping the same service level. What quantity works for you?",
+      "strat.bundle.title": "Add value instead of another discount",
+      "strat.bundle.why": "The buyer wants to feel they gained something; add a service or warranty that costs you less than the requested discount.",
+      "strat.bundle.script": "Instead of an extra discount, I can include {bonus} at the same price. Its value to you is higher than the discount difference and it protects the result from day one.",
+      "strat.timing.title": "Use the timeline as leverage",
+      "strat.timing.why": "Fast delivery has value; do not give it away, and make the standard timeline the trade-off for a better price.",
+      "strat.timing.script": "The current price includes delivery within the standard timeline. If you need it faster, we add a priority fee; if the standard timeline works, I can hold the price as it is.",
+      "fin.impact": "Your maximum price flexibility: {amt}",
+      "fin.floorImpact": "Offer is {amt} below your floor — do not sign without a trade-off.",
+      "obj.title": "Ready replies to objections", "obj.desc": "Pick an objection and edit the reply before sending — the numbers come from your deal.",
+      "obj.pick": "Objection", "obj.copy": "Copy reply",
+      "obj.note": "Never mention cost or break-even in replies. Use the numbers for planning only, and attach a trade-off to every concession.",
+      "obj.price": "The price is high", "obj.competitor": "Your competitor is cheaper", "obj.budget": "My budget is limited",
+      "obj.discount": "I want a bigger discount", "obj.think": "I need time to think", "obj.guarantee": "How do I know the quality?",
+      "obj.prepay": "Why should I pay upfront?", "obj.trial": "I want a free trial",
+      "obj.why.price": "Do not defend the number directly; reframe around outcome, total cost and risk.",
+      "obj.why.competitor": "Ask for the competing offer and compare line by line instead of matching price.",
+      "obj.why.budget": "Respect the limit and offer payment stages or phases instead of a quality-damaging discount.",
+      "obj.why.discount": "A free discount teaches the buyer that price is soft; tie it to a commitment.",
+      "obj.why.think": "Delay usually hides an unclear point; ask about it and hold the offer for a fixed period.",
+      "obj.why.guarantee": "Turn trust into written acceptance criteria, milestones and a warranty.",
+      "obj.why.prepay": "Explain what the upfront payment covers and how it protects both sides, then offer a split.",
+      "obj.why.trial": "An open free trial costs you time; make it a paid, limited pilot credited against the contract.",
+      "reply.price": "I understand price matters, which is why I will not quote low and then cut corners. Our offer covers {scope} with a clear warranty, and the gap with cheaper options usually shows up later in rework. I can also split payments in two stages to fit your budget.",
+      "reply.competitor": "It is good that you are comparing. Before deciding on price, ask whether their offer covers the same scope, warranty and response time. Send me their details and I will give you a line-by-line comparison. If the difference is scope, we can adjust scope rather than quality.",
+      "reply.budget": "I appreciate you being direct. Instead of cutting the price, we can split the payment {split} or move part of the scope to a second phase. That keeps the full outcome and respects your budget. Which option suits you?",
+      "reply.discount": "I can look at a discount if there is a trade-off: higher upfront payment, larger volume, or a longer contract. My flexibility is tied to those options because the current price is built on a clear scope and delivery quality.",
+      "reply.think": "Of course, this decision deserves time. Which part needs clarity: price, scope, or timeline? I will send a written summary now and hold the offer for {hold} days so you can decide comfortably.",
+      "reply.guarantee": "The guarantee is built on clear stages: initial delivery, review, then final acceptance. We put acceptance criteria in the contract and only deliver once they pass. You can also speak to a previous client before we start.",
+      "reply.prepay": "The upfront payment covers mobilisation and reserves the team; it is not the full amount. We can split it {split}, with clear deliverables at each stage. That protects both sides from delays and misunderstandings.",
+      "reply.trial": "Instead of an open free trial, I suggest a paid, limited-scope pilot that is fully credited against the contract if we proceed. You see the real result without either side carrying large risk.",
+      "footer": "Deal Negotiation Simulator — an indicative, serverless tool, not legal or financial advice.",
+      "toast.copied": "Copied.", "toast.ready": "Analysis updated.", "toast.empty": "Nothing to copy yet."
+    }
+  };
+
+  var KEY = "pb_deal_sim_v1";
+  var LANG_KEY = "pb_deal_sim_lang";
+  var state = { lang: "ar", currency: "SAR", objection: "price", strategies: [] };
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function round(v) { return Math.round((Number(v) + Number.EPSILON) * 100) / 100; }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toLocaleString() + " " + state.currency; }
+  }
+  function pct(value) { return (Math.round((Number(value) || 0) * 10) / 10) + "%"; }
+
+  function calc() {
+    var price = Math.max(0, num("price"));
+    var buyer = Math.max(0, num("buyer"));
+    var cost = Math.max(0, num("cost"));
+    var qty = Math.max(1, Math.round(num("qty")));
+    var target = Math.min(90, Math.max(0, num("target")));
+    var floor = target > 0 ? cost / (1 - target / 100) : cost;
+    var maxDisc = Math.max(0, price - floor);
+    var profitAsking = price - cost;
+    var profitBuyer = buyer - cost;
+    var marginAsking = price > 0 ? profitAsking / price * 100 : 0;
+    var marginBuyer = buyer > 0 ? profitBuyer / buyer * 100 : 0;
+    var gap = Math.max(0, price - buyer);
+    var status = "loss";
+    if (buyer >= price * 0.95 && buyer >= floor) status = "close";
+    else if (buyer < cost) status = "loss";
+    else if (buyer < floor) status = "belowFloor";
+    else if (marginBuyer < target) status = "thin";
+    else status = "good";
+    return { price: price, buyer: buyer, cost: cost, qty: qty, target: target, floor: floor, maxDisc: maxDisc,
+      profitAsking: profitAsking, profitBuyer: profitBuyer, marginAsking: marginAsking, marginBuyer: marginBuyer,
+      gap: gap, gapPct: price > 0 ? gap / price * 100 : 0, status: status };
+  }
+
+  function renderKpis(d) {
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.be")) + "</span><strong>" + esc(money(d.cost)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.floor")) + "</span><strong>" + esc(money(d.floor)) + "</strong></div>",
+      '<div class="kpi ' + (d.profitBuyer < 0 ? "bad" : d.profitBuyer < d.cost * d.target / 100 ? "gold" : "") + '"><span>' + esc(t("kpi.profit")) + "</span><strong>" + esc(money(d.profitBuyer)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.margin")) + "</span><strong>" + esc(pct(d.marginBuyer)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.gap")) + "</span><strong>" + esc(money(d.gap)) + "</strong><small>" + esc(pct(d.gapPct)) + "</small></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.maxDisc")) + "</span><strong>" + esc(money(d.maxDisc)) + "</strong></div>"
+    ].join("");
+  }
+
+  function renderDeal(d) {
+    $("rAsking").textContent = money(d.price);
+    $("rBuyer").textContent = money(d.buyer);
+    $("rCost").textContent = money(d.cost);
+    $("rBe").textContent = money(d.cost);
+    $("rBeUnit").textContent = money(d.cost / d.qty);
+    $("rFloor").textContent = money(d.floor);
+    $("rMaxDisc").textContent = money(d.maxDisc) + " (" + pct(d.price > 0 ? d.maxDisc / d.price * 100 : 0) + ")";
+    $("rProfitBuyer").textContent = money(d.profitBuyer);
+    $("rMarginBuyer").textContent = pct(d.marginBuyer);
+    $("rGap").textContent = money(d.gap) + " (" + pct(d.gapPct) + ")";
+    var box = $("statusBox");
+    box.className = "status " + (d.status === "loss" || d.status === "belowFloor" ? "bad" : d.status === "thin" ? "warn" : "ok");
+    box.textContent = t("status." + d.status);
+    renderZone(d);
+  }
+
+  function renderZone(d) {
+    var max = Math.max(d.price, d.cost, d.floor, d.buyer, 1);
+    var marks = [
+      { key: "z.cost", value: d.cost },
+      { key: "z.floor", value: d.floor },
+      { key: "z.buyer", value: d.buyer },
+      { key: "z.asking", value: d.price }
+    ];
+    $("zoneBar").innerHTML = marks.map(function (m) {
+      var left = Math.min(100, Math.max(0, m.value / max * 100));
+      return '<span class="mark" style="left:' + left + '%"><b>' + esc(t(m.key)) + "</b>" + esc(money(m.value)) + "</span>";
+    }).join("");
+  }
+
+  function ladder(d) {
+    var steps = [
+      { key: "ladder.step1", value: d.price },
+      { key: "ladder.step2", value: d.price - d.gap * 0.25 },
+      { key: "ladder.step3", value: d.price - d.gap * 0.5 },
+      { key: "ladder.step4", value: Math.max(d.floor, d.buyer) }
+    ];
+    return steps.map(function (step) {
+      var profit = step.value - d.cost;
+      var margin = step.value > 0 ? profit / step.value * 100 : 0;
+      var discount = d.price > 0 ? Math.max(0, d.price - step.value) / d.price * 100 : 0;
+      return '<tr class="' + (step.value <= d.floor + 0.5 ? "best" : "") + '">' +
+        "<td>" + esc(t(step.key)) + "</td>" +
+        '<td>' + money(step.value) + "</td>" +
+        "<td>" + pct(discount) + "</td>" +
+        '<td>' + money(profit) + "</td>" +
+        "<td>" + pct(margin) + "</td></tr>";
+    }).join("");
+  }
+
+  function buildStrategies(d) {
+    var list = [];
+    var scope = state.lang === "ar" ? "التنفيذ والضمان والدعم" : "delivery, warranty and support";
+    var split = state.lang === "ar" ? "50% مقدمًا و50% عند التسليم" : "50% upfront and 50% on delivery";
+    list.push({
+      key: "value", title: t("strat.value.title"), why: t("strat.value.why"),
+      script: t("strat.value.script", { scope: scope, diff: money(Math.max(d.gap * 0.35, d.price * 0.05)) })
+    });
+    list.push({
+      key: "trade", title: t("strat.trade.title"), why: t("strat.trade.why"),
+      script: t("strat.trade.script"), impact: t("fin.impact", { amt: money(d.maxDisc) })
+    });
+    list.push({
+      key: "scope", title: t("strat.scope.title"), why: t("strat.scope.why"),
+      script: t("strat.scope.script", { defer: state.lang === "ar" ? "المرحلة الثانية من النطاق" : "phase two of the scope" })
+    });
+    list.push({
+      key: "pay", title: t("strat.pay.title"), why: t("strat.pay.why"), script: t("strat.pay.script")
+    });
+    if (d.buyer < d.floor) {
+      list.push({
+        key: "walk", title: t("strat.walk.title"), why: t("strat.walk.why", { floor: money(d.floor) }),
+        script: t("strat.walk.script"), impact: t("fin.floorImpact", { amt: money(d.floor - d.buyer) })
+      });
+    }
+    if (d.status === "close" || d.buyer >= d.floor) {
+      list.push({
+        key: "close", title: t("strat.close.title"), why: t("strat.close.why"),
+        script: t("strat.close.script", { price: money(d.buyer) })
+      });
+    }
+    list.push({
+      key: "volume", title: t("strat.volume.title"), why: t("strat.volume.why"),
+      script: t("strat.volume.script", { qty: d.qty })
+    });
+    list.push({
+      key: "bundle", title: t("strat.bundle.title"), why: t("strat.bundle.why"),
+      script: t("strat.bundle.script", { bonus: state.lang === "ar" ? "تدريب الفريق وضمان ممتد" : "team training and an extended warranty" })
+    });
+    if (d.gap > 0) {
+      list.push({
+        key: "timing", title: t("strat.timing.title"), why: t("strat.timing.why"), script: t("strat.timing.script")
+      });
+    }
+    return list;
+  }
+
+  function renderStrategies(d) {
+    state.strategies = buildStrategies(d);
+    $("strategyList").innerHTML = state.strategies.map(function (item, index) {
+      return '<article class="strategy">' +
+        '<div class="strategy-head"><h3><span class="num">' + (index + 1) + "</span>" + esc(item.title) + "</h3>" +
+        '<button type="button" class="btn ghost small no-print" data-copy-strategy="' + index + '">' + esc(t("strategy.copy")) + "</button></div>" +
+        "<p>" + esc(item.why) + "</p>" +
+        '<div class="script">' + esc(item.script) + "</div>" +
+        '<div class="strategy-foot"><span class="impact">' + esc(item.impact || "") + "</span></div>" +
+        "</article>";
+    }).join("");
+  }
+
+  function renderObjection(d) {
+    var select = $("objection");
+    select.innerHTML = OBJECTIONS.map(function (key) {
+      return '<option value="' + key + '"' + (state.objection === key ? " selected" : "") + ">" + esc(t("obj." + key)) + "</option>";
+    }).join("");
+    var key = state.objection;
+    $("objTitle").textContent = t("obj." + key);
+    $("objWhy").textContent = t("obj.why." + key);
+    var split = state.lang === "ar" ? "50% مقدمًا و50% عند التسليم" : "50% upfront and 50% on delivery";
+    var scope = state.lang === "ar" ? "التنفيذ والضمان والدعم" : "delivery, warranty and support";
+    $("reply").textContent = t("reply." + key, {
+      split: split, scope: scope,
+      price: money(d.price), floor: money(d.floor),
+      hold: Math.max(3, Math.min(14, Math.round(7 * (d.gap > d.price * 0.15 ? 1.5 : 1))))
+    });
+  }
+
+  function renderAll() {
+    var d = calc();
+    renderKpis(d);
+    renderDeal(d);
+    $("ladderBody").innerHTML = ladder(d);
+    renderStrategies(d);
+    renderObjection(d);
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, currency: state.currency, objection: state.objection,
+        values: {
+          dealName: $("dealName").value, price: $("price").value, buyer: $("buyer").value,
+          cost: $("cost").value, qty: $("qty").value, target: $("target").value
+        }
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    if (persist) localStorage.setItem(LANG_KEY, state.lang);
+    renderAll();
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1600);
+  }
+
+  function copy(text) {
+    if (!text) { toast(t("toast.empty")); return; }
+    var done = function () { toast(t("toast.copied")); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else {
+      var area = document.createElement("textarea");
+      area.value = text; document.body.appendChild(area); area.select();
+      try { document.execCommand("copy"); } catch (err) { /* تجاهل */ }
+      document.body.removeChild(area); done();
+    }
+  }
+
+  document.querySelectorAll("#price, #buyer, #cost, #qty, #target").forEach(function (input) {
+    input.addEventListener("input", renderAll);
+  });
+  $("dealName").addEventListener("input", save);
+  $("objection").addEventListener("change", function (event) {
+    state.objection = event.target.value;
+    renderObjection(calc());
+    save();
+  });
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+    return '<option value="' + code + '">' + code + "</option>";
+  }).join("");
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar", true); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("strategyList").addEventListener("click", function (event) {
+    var button = event.target.closest("[data-copy-strategy]");
+    if (!button) return;
+    var strategy = state.strategies[Number(button.getAttribute("data-copy-strategy"))];
+    if (strategy) copy(strategy.title + "\n" + strategy.script);
+  });
+  $("copyReply").addEventListener("click", function () { copy($("reply").textContent); });
+  $("copyAll").addEventListener("click", function () {
+    copy(state.strategies.map(function (s) { return s.title + "\n" + s.script; }).join("\n\n"));
+  });
+
+  $("currency").value = "SAR";
+  var storedLang = localStorage.getItem(LANG_KEY);
+  state.lang = storedLang === "en" ? "en" : "ar";
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+  if (raw) {
+    if (raw.values) Object.keys(raw.values).forEach(function (id) { if ($(id)) $(id).value = raw.values[id]; });
+    if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+    if (raw.objection && OBJECTIONS.indexOf(raw.objection) >= 0) state.objection = raw.objection;
+    state.lang = raw.lang === "en" ? "en" : "ar";
+  }
+  $("currency").value = state.currency;
+  applyLang(state.lang, false);
+})();
+</script>
+</body>
+</html>

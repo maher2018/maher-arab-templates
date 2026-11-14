@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نظام المكاتب الهندسية والمقاولات — Engineering Studio OS</title>
+<meta name="description" content="إدارة المكاتب الهندسية والمقاولين: مراحل المشروع ونسب الإنجاز، مستخلصات العملاء وجداول الدفعات، وتكاليف المواد في الموقع — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{--bg:#f2f4f6;--card:#fff;--ink:#111f2b;--muted:#5c6b7a;--navy:#0d2b45;--navy2:#143f63;--steel:#456b86;--teal:#0f766e;--teal-soft:#e8f3f1;--gold:#bd8b2f;--gold-soft:#f8efdb;--bad:#a93a2f;--bad-soft:#fbecea;--ok:#14684a;--ok-soft:#e8f5ef;--warn:#86590a;--warn-soft:#fdf2dd;--line:#e1e6ec;--radius:16px;--shadow:0 10px 30px rgba(13,43,69,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.92rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input[type=date]{direction:ltr}
+input:focus,select:focus{border-color:var(--steel);box-shadow:0 0 0 3px rgba(69,107,134,.12)}
+label>span{display:block;font-size:.77rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(242,244,246,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--steel));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.8rem;letter-spacing:.04em}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}
+.controls select{width:auto;min-width:108px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:.84rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.teal{background:var(--teal)}
+.btn.gold{background:var(--gold);color:#2a1f06}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:.77rem;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+main{max-width:1240px;margin:0 auto;padding:18px 20px 50px;display:grid;gap:16px}
+.projectbar{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;box-shadow:var(--shadow)}
+.projectbar .pselect{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.projectbar select{width:auto;min-width:230px;max-width:100%;background:#fff}
+.projectbar .pmeta{font-size:.8rem;color:#c7d8e7}
+.projectbar .pmeta b{color:#fff;font-size:.95rem;display:block;font-weight:700}
+.projectbar .actions{display:flex;gap:7px;flex-wrap:wrap}
+.projectbar .btn.ghost{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.74rem;color:var(--muted);margin-bottom:3px}
+.kpi strong{font-size:1.05rem;font-variant-numeric:tabular-nums;display:block}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--teal));border:0;color:#fff}
+.kpi.hero span{color:#cbe3de}.kpi.hero strong{color:#fff}
+.kpi.gold{background:var(--gold-soft);border-color:#eadfc4}
+.kpi small{font-size:.68rem;color:var(--muted);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.card-head h2{font-size:1rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.8rem}
+.card-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.two{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+@media(max-width:1000px){.two{grid-template-columns:1fr}}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:.71rem;color:var(--muted);text-align:start;font-weight:700;padding:7px 6px;border-bottom:1px solid var(--line);background:#fbfcfd;white-space:nowrap}
+td{padding:7px 6px;border-bottom:1px solid var(--line);font-size:.83rem;vertical-align:middle}
+td input,td select{padding:6px 8px;font-size:.82rem}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{border-top:2px solid var(--line);border-bottom:0;font-weight:800;background:#fbfcfd}
+.badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:.71rem;font-weight:800;white-space:nowrap}
+.badge.not{background:#eef2f6;color:var(--muted)}
+.badge.prog{background:var(--warn-soft);color:var(--warn)}
+.badge.done{background:var(--ok-soft);color:var(--ok)}
+.badge.draft{background:#eef2f6;color:var(--muted)}
+.badge.submitted{background:var(--warn-soft);color:var(--warn)}
+.badge.approved{background:#e8effa;color:#20528c}
+.badge.paid{background:var(--ok-soft);color:var(--ok)}
+.badge.warn{background:var(--bad-soft);color:var(--bad)}
+.bar{height:8px;border-radius:99px;background:#e8edf2;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--navy2))}
+.icon{background:none;border:0;color:var(--muted);font-size:.95rem;padding:2px 4px}
+.icon:hover{color:var(--bad)}
+.summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.sum{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:.73rem;color:var(--muted)}
+.sum b{display:block;font-size:.92rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.sum.ok b{color:var(--ok)}
+.sum.bad b{color:var(--bad)}
+.hint{color:var(--muted);font-size:.77rem;margin:8px 0 0}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011;margin-top:10px}
+.empty{padding:16px;text-align:center;color:var(--muted);font-size:.83rem;border:1px dashed var(--line);border-radius:10px}
+.modal-bg{position:fixed;inset:0;background:rgba(8,24,38,.5);display:grid;place-items:center;padding:18px;z-index:60;overflow:auto}
+.modal-bg[hidden]{display:none}
+.modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:520px;box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:92vh;overflow:auto}
+.modal h2{font-size:1.02rem;margin-bottom:12px}
+.form{display:grid;gap:10px}
+.form .row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:520px){.form .row{grid-template-columns:1fr}}
+.modal .row.end{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.msg{font-size:.8rem;color:var(--bad);min-height:1.1em;margin:4px 0 0}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:0 20px 26px}
+@media print{.top,.projectbar .actions,.card-actions,.no-print,footer,.bar{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}.kpis{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">ENG</span>
+      <div><strong data-i18n="brand">نظام المكاتب الهندسية والمقاولات</strong><small data-i18n="tagline">مراحل · مستخلصات · مواد الموقع</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة / PDF</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="projectbar">
+    <div class="pselect">
+      <label style="margin:0"><span data-i18n="project.label" style="color:#c7d8e7">المشروع الحالي</span><select id="projectSelect"></select></label>
+      <div class="pmeta" id="projectMeta"></div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn ghost small" id="editProject" data-i18n="project.edit">تعديل المشروع</button>
+      <button type="button" class="btn ghost small" id="deleteProject" data-i18n="project.delete">حذف</button>
+      <button type="button" class="btn gold small" id="addProject" data-i18n="project.add">+ مشروع جديد</button>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="phases.title">مراحل المشروع ونسب الإنجاز</h2>
+        <p data-i18n="phases.desc">وزّع أوزان المراحل ليُحسب الإنجاز الكلي والقيمة المكتسبة تلقائيًا.</p>
+      </div>
+      <div class="card-actions no-print">
+        <span class="badge" id="weightBadge">—</span>
+        <button type="button" class="btn ghost small" id="normalizeBtn" data-i18n="phases.normalize">تطبيع الأوزان إلى 100%</button>
+        <button type="button" class="btn teal small" id="addPhase" data-i18n="phases.add">+ مرحلة</button>
+      </div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr>
+          <th style="min-width:210px" data-i18n="phases.name">المرحلة</th>
+          <th style="width:100px" data-i18n="phases.weight">الوزن %</th>
+          <th style="width:130px" data-i18n="phases.progress">الإنجاز %</th>
+          <th data-i18n="phases.value">قيمة المرحلة</th>
+          <th data-i18n="phases.earned">المكتسب</th>
+          <th data-i18n="phases.status">الحالة</th>
+          <th class="no-print"></th>
+        </tr></thead>
+        <tbody id="phaseRows"></tbody>
+      </table>
+    </div>
+    <p class="hint" data-i18n="phases.note">قيمة المرحلة = قيمة العقد × الوزن. المكتسب = قيمة المرحلة × نسبة الإنجاز. مجموع الأوزان المثالي 100%.</p>
+  </section>
+
+  <div class="two">
+    <section class="card" id="claimsCard">
+      <div class="card-head">
+        <div>
+          <h2 data-i18n="claims.title">مستخلصات العملاء وجدول الدفعات</h2>
+          <p data-i18n="claims.desc">سجّل المستخلصات واحتجاز الضمان، وتابع المعتمد والمدفوع والمتبقي.</p>
+        </div>
+        <div class="card-actions no-print">
+          <button type="button" class="btn ghost small" id="genClaim" data-i18n="claims.generate">مستخلص من الإنجاز</button>
+          <button type="button" class="btn teal small" id="addClaim" data-i18n="claims.add">+ مستخلص</button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th style="width:120px" data-i18n="claims.date">التاريخ</th>
+            <th style="min-width:150px" data-i18n="claims.descCol">البيان</th>
+            <th data-i18n="claims.amount">القيمة</th>
+            <th style="width:76px" data-i18n="claims.retention">احتجاز %</th>
+            <th data-i18n="claims.net">الصافي</th>
+            <th data-i18n="claims.status">الحالة</th>
+            <th class="no-print"></th>
+          </tr></thead>
+          <tbody id="claimRows"></tbody>
+        </table>
+      </div>
+      <div class="summary" id="claimSummary"></div>
+      <p class="hint" id="claimMsg"></p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 data-i18n="mat.title">تكاليف المواد في الموقع</h2>
+          <p data-i18n="mat.desc">أمر شراء أم استلام؟ احسب قيمة كل بند وتابع المستخدم والمطلوب.</p>
+        </div>
+        <div class="card-actions no-print">
+          <button type="button" class="btn teal small" id="addMat" data-i18n="mat.add">+ مادة</button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th style="min-width:120px" data-i18n="mat.name">المادة</th>
+            <th style="min-width:100px" data-i18n="mat.supplier">المورد</th>
+            <th style="width:76px" data-i18n="mat.qty">الكمية</th>
+            <th style="width:76px" data-i18n="mat.unit">الوحدة</th>
+            <th data-i18n="mat.unitCost">سعر الوحدة</th>
+            <th data-i18n="mat.total">الإجمالي</th>
+            <th data-i18n="mat.status">الحالة</th>
+            <th class="no-print"></th>
+          </tr></thead>
+          <tbody id="matRows"></tbody>
+        </table>
+      </div>
+      <div class="summary" id="matSummary"></div>
+    </section>
+  </div>
+
+  <p class="hint" data-i18n="footerNote">كل البيانات تُحفظ محليًا في متصفحك. المستخلص المحسوب من الإنجاز تقديري ويحتاج اعتماد المهندس والعميل قبل الفوترة.</p>
+</main>
+
+<footer><span data-i18n="footer">Engineering Studio OS — أداة إدارة مشاريع تعمل بلا خادم.</span></footer>
+
+<div class="modal-bg" id="modal" hidden>
+  <div class="modal">
+    <h2 id="modalTitle">—</h2>
+    <form class="form" id="projectForm">
+      <label><span data-i18n="project.name">اسم المشروع</span><input id="pName" type="text" required></label>
+      <label><span data-i18n="project.client">العميل</span><input id="pClient" type="text"></label>
+      <div class="row">
+        <label><span data-i18n="project.contract">قيمة العقد</span><input id="pContract" type="number" min="0" step="100" value="0"></label>
+        <label><span data-i18n="project.retention">نسبة احتجاز الضمان %</span><input id="pRetention" type="number" min="0" max="100" step="0.5" value="5"></label>
+      </div>
+      <p class="msg" id="formMsg"></p>
+      <div class="row end">
+        <button type="button" class="btn ghost" id="cancelProject" data-i18n="project.cancel">إلغاء</button>
+        <button type="submit" class="btn teal" data-i18n="project.save">حفظ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", decimals: 3 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", decimals: 3 },
+    USD: { ar: "دولار أمريكي", en: "US dollar", decimals: 2 }
+  };
+
+  var I18N = {
+    ar: {
+      brand: "نظام المكاتب الهندسية والمقاولات", tagline: "مراحل · مستخلصات · مواد الموقع",
+      currency: "العملة", print: "طباعة / PDF",
+      "project.label": "المشروع الحالي", "project.add": "+ مشروع جديد", "project.edit": "تعديل المشروع",
+      "project.delete": "حذف", "project.name": "اسم المشروع", "project.client": "العميل",
+      "project.contract": "قيمة العقد", "project.retention": "نسبة احتجاز الضمان %",
+      "project.modalAdd": "مشروع جديد", "project.modalEdit": "تعديل المشروع",
+      "project.save": "حفظ", "project.cancel": "إلغاء",
+      "project.errName": "اكتب اسم المشروع.", "project.confirmDelete": "حذف هذا المشروع وكل بياناته؟",
+      "project.meta": "{client} · قيمة العقد {contract} · احتجاز {retention}%",
+      "project.noClient": "بدون عميل", "project.lastDelete": "لا يمكن حذف المشروع الأخير.",
+      "kpi.progress": "الإنجاز الكلي", "kpi.contract": "قيمة العقد", "kpi.earned": "القيمة المكتسبة",
+      "kpi.paid": "المحصّل من العميل", "kpi.outstanding": "صافي المستحق", "kpi.materials": "تكاليف المواد",
+      "kpi.materialsOf": "من قيمة العقد",
+      "phases.title": "مراحل المشروع ونسب الإنجاز", "phases.desc": "وزّع أوزان المراحل ليُحسب الإنجاز الكلي والقيمة المكتسبة تلقائيًا.",
+      "phases.add": "+ مرحلة", "phases.normalize": "تطبيع الأوزان إلى 100%",
+      "phases.name": "المرحلة", "phases.weight": "الوزن %", "phases.progress": "الإنجاز %",
+      "phases.value": "قيمة المرحلة", "phases.earned": "المكتسب", "phases.status": "الحالة",
+      "phases.note": "قيمة المرحلة = قيمة العقد × الوزن. المكتسب = قيمة المرحلة × نسبة الإنجاز. مجموع الأوزان المثالي 100%.",
+      "phases.empty": "لا مراحل بعد — أضف أول مرحلة.", "phases.weightWarn": "مجموع الأوزان {sum}% — اضبطه إلى 100% لدقة الحساب.",
+      "st.not": "لم تبدأ", "st.prog": "قيد التنفيذ", "st.done": "مكتملة",
+      "claims.title": "مستخلصات العملاء وجدول الدفعات", "claims.desc": "سجّل المستخلصات واحتجاز الضمان، وتابع المعتمد والمدفوع والمتبقي.",
+      "claims.add": "+ مستخلص", "claims.generate": "مستخلص من الإنجاز", "claims.date": "التاريخ",
+      "claims.descCol": "البيان", "claims.amount": "القيمة", "claims.retention": "احتجاز %",
+      "claims.net": "الصافي", "claims.status": "الحالة",
+      "claims.claimed": "المقدم", "claims.approved": "المعتمد", "claims.paid": "المدفوع",
+      "claims.remaining": "المتبقي", "claims.held": "المحتجز", "claims.empty": "لا مستخلصات بعد.",
+      "claims.generated": "أُنشئ مستخلص بقيمة {amt} من الإنجاز.", "claims.noneLeft": "لا يوجد إنجاز غير مفوتر — كل المكتسب سبق تقديمه.",
+      "claims.defaultDesc": "مستخلص رقم {n}",
+      "cl.draft": "مسودة", "cl.submitted": "مقدم", "cl.approved": "معتمد", "cl.paid": "مدفوع",
+      "mat.title": "تكاليف المواد في الموقع", "mat.desc": "أمر شراء أم استلام؟ احسب قيمة كل بند وتابع المستخدم والمطلوب.",
+      "mat.add": "+ مادة", "mat.name": "المادة", "mat.supplier": "المورد", "mat.qty": "الكمية",
+      "mat.unit": "الوحدة", "mat.unitCost": "سعر الوحدة", "mat.total": "الإجمالي", "mat.status": "الحالة",
+      "mat.empty": "لا مواد مسجلة بعد.", "mat.all": "إجمالي المواد", "mat.delivered": "مستلم",
+      "mat.used": "مستخدم", "mat.ordered": "مطلوب",
+      "ms.ordered": "مطلوب", "ms.delivered": "مستلم", "ms.used": "مستخدم",
+      "footer": "Engineering Studio OS — أداة إدارة مشاريع تعمل بلا خادم.",
+      "footerNote": "كل البيانات تُحفظ محليًا في متصفحك. المستخلص المحسوب من الإنجاز تقديري ويحتاج اعتماد المهندس والعميل قبل الفوترة."
+    },
+    en: {
+      brand: "Engineering Studio & Contracting OS", tagline: "Phases · Progress claims · Site materials",
+      currency: "Currency", print: "Print / PDF",
+      "project.label": "Current project", "project.add": "+ New project", "project.edit": "Edit project",
+      "project.delete": "Delete", "project.name": "Project name", "project.client": "Client",
+      "project.contract": "Contract value", "project.retention": "Retention %",
+      "project.modalAdd": "New project", "project.modalEdit": "Edit project",
+      "project.save": "Save", "project.cancel": "Cancel",
+      "project.errName": "Enter the project name.", "project.confirmDelete": "Delete this project and all its data?",
+      "project.meta": "{client} · contract {contract} · {retention}% retention",
+      "project.noClient": "No client", "project.lastDelete": "The last project cannot be deleted.",
+      "kpi.progress": "Overall progress", "kpi.contract": "Contract value", "kpi.earned": "Earned value",
+      "kpi.paid": "Collected from client", "kpi.outstanding": "Net receivable", "kpi.materials": "Material costs",
+      "kpi.materialsOf": "of contract value",
+      "phases.title": "Project phases and completion", "phases.desc": "Weight the phases so overall progress and earned value calculate automatically.",
+      "phases.add": "+ Phase", "phases.normalize": "Normalise weights to 100%",
+      "phases.name": "Phase", "phases.weight": "Weight %", "phases.progress": "Progress %",
+      "phases.value": "Phase value", "phases.earned": "Earned", "phases.status": "Status",
+      "phases.note": "Phase value = contract value × weight. Earned = phase value × progress. Weights should total 100%.",
+      "phases.empty": "No phases yet — add the first one.", "phases.weightWarn": "Weights total {sum}% — set them to 100% for accurate figures.",
+      "st.not": "Not started", "st.prog": "In progress", "st.done": "Complete",
+      "claims.title": "Client progress claims and payment schedule", "claims.desc": "Record claims and retention, then track submitted, approved, paid and outstanding.",
+      "claims.add": "+ Claim", "claims.generate": "Claim from progress", "claims.date": "Date",
+      "claims.descCol": "Description", "claims.amount": "Amount", "claims.retention": "Retention %",
+      "claims.net": "Net", "claims.status": "Status",
+      "claims.claimed": "Submitted", "claims.approved": "Approved", "claims.paid": "Paid",
+      "claims.remaining": "Outstanding", "claims.held": "Retention held", "claims.empty": "No claims yet.",
+      "claims.generated": "Created a claim of {amt} from progress.", "claims.noneLeft": "No unclaimed progress — all earned value is already claimed.",
+      "claims.defaultDesc": "Claim No. {n}",
+      "cl.draft": "Draft", "cl.submitted": "Submitted", "cl.approved": "Approved", "cl.paid": "Paid",
+      "mat.title": "Site material costs", "mat.desc": "Purchase order or delivered? Cost each line and track used and ordered quantities.",
+      "mat.add": "+ Material", "mat.name": "Material", "mat.supplier": "Supplier", "mat.qty": "Qty",
+      "mat.unit": "Unit", "mat.unitCost": "Unit cost", "mat.total": "Total", "mat.status": "Status",
+      "mat.empty": "No materials recorded yet.", "mat.all": "Total materials", "mat.delivered": "Delivered",
+      "mat.used": "Used", "mat.ordered": "Ordered",
+      "ms.ordered": "Ordered", "ms.delivered": "Delivered", "ms.used": "Used",
+      "footer": "Engineering Studio OS — a serverless project management tool.",
+      "footerNote": "All data is saved locally in your browser. A claim generated from progress is an estimate and needs engineer and client approval before invoicing."
+    }
+  };
+
+  var KEY = "pb_eng_os_v1";
+  var LANG_KEY = "pb_eng_os_lang";
+  var CLAIM_STATUSES = ["draft", "submitted", "approved", "paid"];
+  var MATERIAL_STATUSES = ["ordered", "delivered", "used"];
+  var state = { lang: "ar", currency: "SAR", active: null, projects: [] };
+
+  function $(id) { return document.getElementById(id); }
+  function num(v) { var n = parseFloat(v); return isFinite(n) ? n : 0; }
+  function round(v) { return Math.round((Number(v) + Number.EPSILON) * 100) / 100; }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toLocaleString() + " " + state.currency; }
+  }
+  function pct(value) { return (Math.round((Number(value) || 0) * 10) / 10) + "%"; }
+  function today() { return new Date().toISOString().slice(0, 10); }
+  function uid(prefix) { return prefix + Date.now() + Math.floor(Math.random() * 1000); }
+
+  function current() {
+    for (var i = 0; i < state.projects.length; i += 1) if (state.projects[i].id === state.active) return state.projects[i];
+    return state.projects[0] || null;
+  }
+
+  function overallProgress(project) {
+    var sumW = 0, earned = 0;
+    project.phases.forEach(function (p) { sumW += num(p.weight); earned += num(p.weight) * num(p.progress); });
+    return sumW > 0 ? earned / sumW : 0;
+  }
+  function contractValue(project) { return num(project.contract); }
+  function phaseValue(project, phase) { return contractValue(project) * num(phase.weight) / 100; }
+  function phaseEarned(project, phase) { return phaseValue(project, phase) * num(phase.progress) / 100; }
+
+  function claimStats(project) {
+    var claimed = 0, approved = 0, paid = 0, held = 0, netApproved = 0, netPaid = 0;
+    project.claims.forEach(function (c) {
+      var amount = num(c.amount), ret = num(c.retention), net = amount * (1 - ret / 100);
+      if (c.status !== "draft") claimed += amount;
+      if (c.status === "approved" || c.status === "paid") { approved += amount; held += amount * ret / 100; netApproved += net; }
+      if (c.status === "paid") { paid += amount; netPaid += net; }
+    });
+    return { claimed: claimed, approved: approved, paid: paid, held: held, outstanding: netApproved - netPaid };
+  }
+  function materialStats(project) {
+    var all = 0, delivered = 0, used = 0, ordered = 0;
+    project.materials.forEach(function (m) {
+      var total = num(m.qty) * num(m.unitCost);
+      all += total;
+      if (m.status === "delivered") delivered += total;
+      else if (m.status === "used") used += total;
+      else ordered += total;
+    });
+    return { all: all, delivered: delivered, used: used, ordered: ordered };
+  }
+
+  function renderKpis() {
+    var p = current();
+    if (!p) { $("kpis").innerHTML = ""; return; }
+    var progress = overallProgress(p);
+    var cv = contractValue(p);
+    var earned = cv * progress / 100;
+    var st = claimStats(p);
+    var mats = materialStats(p);
+    var matShare = cv > 0 ? Math.round(mats.all / cv * 1000) / 10 : 0;
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.progress")) + "</span><strong>" + esc(pct(progress)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.contract")) + "</span><strong>" + esc(money(cv)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.earned")) + "</span><strong>" + esc(money(earned)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.paid")) + "</span><strong>" + esc(money(st.paid)) + "</strong></div>",
+      '<div class="kpi ' + (st.outstanding > 0 ? "gold" : "") + '"><span>' + esc(t("kpi.outstanding")) + "</span><strong>" + esc(money(st.outstanding)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.materials")) + "</span><strong>" + esc(money(mats.all)) + "</strong><small>" + esc(pct(matShare)) + " " + esc(t("kpi.materialsOf")) + "</small></div>"
+    ].join("");
+  }
+
+  function renderProjectBar() {
+    var p = current();
+    $("projectSelect").innerHTML = state.projects.map(function (item) {
+      return '<option value="' + esc(item.id) + '"' + (p && item.id === p.id ? " selected" : "") + ">" + esc(item.name) + "</option>";
+    }).join("");
+    if (!p) { $("projectMeta").textContent = ""; return; }
+    $("projectMeta").innerHTML = "<b>" + esc(p.name) + "</b>" + esc(t("project.meta", {
+      client: p.client || t("project.noClient"),
+      contract: money(num(p.contract)),
+      retention: p.retention
+    }));
+  }
+
+  function phaseStatus(progress) {
+    if (num(progress) >= 100) return { key: "done", cls: "done", label: t("st.done") };
+    if (num(progress) > 0) return { key: "prog", cls: "prog", label: t("st.prog") };
+    return { key: "not", cls: "not", label: t("st.not") };
+  }
+
+  function renderPhases() {
+    var p = current();
+    if (!p) { $("phaseRows").innerHTML = ""; return; }
+    if (!p.phases.length) {
+      $("phaseRows").innerHTML = '<tr><td colspan="7"><div class="empty">' + esc(t("phases.empty")) + "</div></td></tr>";
+    } else {
+      $("phaseRows").innerHTML = p.phases.map(function (phase) {
+        var status = phaseStatus(phase.progress);
+        var value = phaseValue(p, phase);
+        var earned = phaseEarned(p, phase);
+        return '<tr data-id="' + esc(phase.id) + '">' +
+          '<td><input data-field="name" value="' + esc(phase.name) + '" aria-label="' + esc(t("phases.name")) + '"></td>' +
+          '<td><input data-field="weight" type="number" min="0" max="100" step="1" value="' + esc(phase.weight) + '"></td>' +
+          '<td><input data-field="progress" type="number" min="0" max="100" step="1" value="' + esc(phase.progress) + '"><div class="bar" style="margin-top:5px"><i style="width:' + Math.max(0, Math.min(100, num(phase.progress))) + '%"></i></div></td>' +
+          '<td class="num phase-value">' + money(value) + "</td>" +
+          '<td class="num phase-earned">' + money(earned) + "</td>" +
+          '<td><span class="badge ' + status.cls + ' phase-status">' + esc(status.label) + "</span></td>" +
+          '<td class="no-print"><button type="button" class="icon" data-act="del-phase" title="' + esc(t("project.delete")) + '">✕</button></td></tr>';
+      }).join("");
+    }
+    var sum = p.phases.reduce(function (a, phase) { return a + num(phase.weight); }, 0);
+    var badge = $("weightBadge");
+    badge.className = "badge " + (Math.abs(sum - 100) < 0.01 ? "done" : "warn");
+    badge.textContent = (Math.round(sum * 100) / 100) + "%";
+    badge.title = Math.abs(sum - 100) < 0.01 ? "" : t("phases.weightWarn", { sum: Math.round(sum * 100) / 100 });
+  }
+
+  function refreshPhaseRow(project, phase, row) {
+    row.querySelector(".phase-value").textContent = money(phaseValue(project, phase));
+    row.querySelector(".phase-earned").textContent = money(phaseEarned(project, phase));
+    var status = phaseStatus(phase.progress);
+    var badge = row.querySelector(".phase-status");
+    badge.className = "badge " + status.cls + " phase-status";
+    badge.textContent = status.label;
+    row.querySelector(".bar i").style.width = Math.max(0, Math.min(100, num(phase.progress))) + "%";
+    var sum = project.phases.reduce(function (a, item) { return a + num(item.weight); }, 0);
+    var wb = $("weightBadge");
+    wb.className = "badge " + (Math.abs(sum - 100) < 0.01 ? "done" : "warn");
+    wb.textContent = (Math.round(sum * 100) / 100) + "%";
+    renderKpis();
+    save();
+  }
+
+  function renderClaims() {
+    var p = current();
+    if (!p) return;
+    if (!p.claims.length) {
+      $("claimRows").innerHTML = '<tr><td colspan="7"><div class="empty">' + esc(t("claims.empty")) + "</div></td></tr>";
+    } else {
+      $("claimRows").innerHTML = p.claims.map(function (c) {
+        var net = num(c.amount) * (1 - num(c.retention) / 100);
+        var options = CLAIM_STATUSES.map(function (key) {
+          return '<option value="' + key + '"' + (c.status === key ? " selected" : "") + ">" + esc(t("cl." + key)) + "</option>";
+        }).join("");
+        return '<tr data-id="' + esc(c.id) + '">' +
+          '<td><input data-field="date" type="date" value="' + esc(c.date) + '"></td>' +
+          '<td><input data-field="desc" value="' + esc(c.desc) + '"></td>' +
+          '<td><input data-field="amount" type="number" min="0" step="100" value="' + esc(c.amount) + '" style="min-width:96px"></td>' +
+          '<td><input data-field="retention" type="number" min="0" max="100" step="0.5" value="' + esc(c.retention) + '"></td>' +
+          '<td class="num claim-net">' + money(net) + "</td>" +
+          '<td><select data-field="status" class="claim-status">' + options + "</select></td>" +
+          '<td class="no-print"><button type="button" class="icon" data-act="del-claim" title="' + esc(t("project.delete")) + '">✕</button></td></tr>';
+      }).join("");
+    }
+    renderClaimSummary();
+  }
+
+  function renderClaimSummary() {
+    var p = current();
+    if (!p) return;
+    var s = claimStats(p);
+    $("claimSummary").innerHTML = [
+      '<div class="sum"><span>' + esc(t("claims.claimed")) + "</span><b>" + esc(money(s.claimed)) + "</b></div>",
+      '<div class="sum"><span>' + esc(t("claims.approved")) + "</span><b>" + esc(money(s.approved)) + "</b></div>",
+      '<div class="sum ok"><span>' + esc(t("claims.paid")) + "</span><b>" + esc(money(s.paid)) + "</b></div>",
+      '<div class="sum bad"><span>' + esc(t("claims.remaining")) + "</span><b>" + esc(money(s.outstanding)) + "</b></div>",
+      '<div class="sum"><span>' + esc(t("claims.held")) + "</span><b>" + esc(money(s.held)) + "</b></div>"
+    ].join("");
+  }
+
+  function refreshClaimRow(project, claim, row) {
+    var net = num(claim.amount) * (1 - num(claim.retention) / 100);
+    row.querySelector(".claim-net").textContent = money(net);
+    renderClaimSummary();
+    renderKpis();
+    save();
+  }
+
+  function renderMaterials() {
+    var p = current();
+    if (!p) return;
+    if (!p.materials.length) {
+      $("matRows").innerHTML = '<tr><td colspan="8"><div class="empty">' + esc(t("mat.empty")) + "</div></td></tr>";
+    } else {
+      $("matRows").innerHTML = p.materials.map(function (m) {
+        var total = num(m.qty) * num(m.unitCost);
+        var options = MATERIAL_STATUSES.map(function (key) {
+          return '<option value="' + key + '"' + (m.status === key ? " selected" : "") + ">" + esc(t("ms." + key)) + "</option>";
+        }).join("");
+        return '<tr data-id="' + esc(m.id) + '">' +
+          '<td><input data-field="name" value="' + esc(m.name) + '"></td>' +
+          '<td><input data-field="supplier" value="' + esc(m.supplier) + '"></td>' +
+          '<td><input data-field="qty" type="number" min="0" step="0.01" value="' + esc(m.qty) + '"></td>' +
+          '<td><input data-field="unit" value="' + esc(m.unit) + '"></td>' +
+          '<td><input data-field="unitCost" type="number" min="0" step="0.01" value="' + esc(m.unitCost) + '" style="min-width:86px"></td>' +
+          '<td class="num mat-total">' + money(total) + "</td>" +
+          '<td><select data-field="status" class="mat-status">' + options + "</select></td>" +
+          '<td class="no-print"><button type="button" class="icon" data-act="del-mat" title="' + esc(t("project.delete")) + '">✕</button></td></tr>';
+      }).join("");
+    }
+    renderMaterialSummary();
+  }
+
+  function renderMaterialSummary() {
+    var p = current();
+    if (!p) return;
+    var s = materialStats(p);
+    $("matSummary").innerHTML = [
+      '<div class="sum"><span>' + esc(t("mat.all")) + "</span><b>" + esc(money(s.all)) + "</b></div>",
+      '<div class="sum"><span>' + esc(t("mat.delivered")) + "</span><b>" + esc(money(s.delivered)) + "</b></div>",
+      '<div class="sum"><span>' + esc(t("mat.used")) + "</span><b>" + esc(money(s.used)) + "</b></div>",
+      '<div class="sum"><span>' + esc(t("mat.ordered")) + "</span><b>" + esc(money(s.ordered)) + "</b></div>"
+    ].join("");
+  }
+
+  function renderAll() {
+    renderProjectBar();
+    renderKpis();
+    renderPhases();
+    renderClaims();
+    renderMaterials();
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        currency: state.currency, active: state.active, projects: state.projects, lang: state.lang
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    if (persist) localStorage.setItem(LANG_KEY, state.lang);
+    renderAll();
+  }
+
+  function setActive(id) {
+    state.active = id;
+    renderAll();
+  }
+
+  function normalizeWeights() {
+    var p = current();
+    if (!p || !p.phases.length) return;
+    var sum = p.phases.reduce(function (a, phase) { return a + num(phase.weight); }, 0);
+    if (sum <= 0) {
+      var each = Math.floor(10000 / p.phases.length) / 100;
+      p.phases.forEach(function (phase) { phase.weight = each; });
+    } else {
+      var running = 0;
+      p.phases.forEach(function (phase, index) {
+        if (index === p.phases.length - 1) phase.weight = Math.round((100 - running) * 100) / 100;
+        else { phase.weight = Math.round(num(phase.weight) / sum * 10000) / 100; running += phase.weight; }
+      });
+    }
+    renderPhases();
+    renderKpis();
+    save();
+  }
+
+  function generateClaim() {
+    var p = current();
+    if (!p) return;
+    var progress = overallProgress(p);
+    var earned = contractValue(p) * progress / 100;
+    var claimed = p.claims.reduce(function (a, c) { return a + num(c.amount); }, 0);
+    var amount = round(earned - claimed);
+    var el = $("claimMsg");
+    if (amount <= 0.5) {
+      el.textContent = t("claims.noneLeft");
+      el.style.color = "var(--warn)";
+      return;
+    }
+    p.claims.push({
+      id: uid("C"), date: today(),
+      desc: t("claims.defaultDesc", { n: p.claims.length + 1 }),
+      amount: amount, retention: num(p.retention), status: "draft"
+    });
+    renderClaims();
+    el.textContent = t("claims.generated", { amt: money(amount) });
+    el.style.color = "var(--ok)";
+    save();
+  }
+
+  function addPhase() {
+    var p = current();
+    if (!p) return;
+    p.phases.push({ id: uid("P"), name: state.lang === "ar" ? "مرحلة جديدة" : "New phase", weight: 0, progress: 0 });
+    renderPhases();
+    renderKpis();
+    save();
+  }
+  function addClaim() {
+    var p = current();
+    if (!p) return;
+    p.claims.push({ id: uid("C"), date: today(), desc: t("claims.defaultDesc", { n: p.claims.length + 1 }), amount: 0, retention: num(p.retention), status: "draft" });
+    renderClaims();
+    save();
+  }
+  function addMaterial() {
+    var p = current();
+    if (!p) return;
+    p.materials.push({ id: uid("M"), name: state.lang === "ar" ? "مادة جديدة" : "New material", supplier: "", qty: 1, unit: "", unitCost: 0, status: "ordered" });
+    renderMaterials();
+    save();
+  }
+
+  function openProjectModal(project) {
+    $("formMsg").textContent = "";
+    $("modalTitle").textContent = project ? t("project.modalEdit") : t("project.modalAdd");
+    $("projectForm").dataset.id = project ? project.id : "";
+    $("pName").value = project ? project.name : "";
+    $("pClient").value = project ? project.client : "";
+    $("pContract").value = project ? project.contract : 0;
+    $("pRetention").value = project ? project.retention : 5;
+    $("modal").hidden = false;
+    setTimeout(function () { $("pName").focus(); }, 40);
+  }
+  function closeModal() { $("modal").hidden = true; }
+
+  $("projectForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var name = $("pName").value.trim();
+    if (!name) { $("formMsg").textContent = t("project.errName"); return; }
+    var id = $("projectForm").dataset.id;
+    if (id) {
+      var p = current();
+      if (p) { p.name = name; p.client = $("pClient").value.trim(); p.contract = Math.max(0, num($("pContract").value)); p.retention = Math.max(0, Math.min(100, num($("pRetention").value))); }
+    } else {
+      var project = {
+        id: uid("PRJ"), name: name, client: $("pClient").value.trim(),
+        contract: Math.max(0, num($("pContract").value)), retention: Math.max(0, Math.min(100, num($("pRetention").value))),
+        phases: [], claims: [], materials: []
+      };
+      state.projects.push(project);
+      state.active = project.id;
+    }
+    closeModal();
+    renderAll();
+  });
+
+  $("phaseRows").addEventListener("input", function (event) {
+    var input = event.target.closest("input[data-field]");
+    if (!input) return;
+    var p = current();
+    var row = input.closest("tr");
+    var phase = p.phases.filter(function (item) { return item.id === row.getAttribute("data-id"); })[0];
+    if (!phase) return;
+    var field = input.getAttribute("data-field");
+    if (field === "name") phase.name = input.value;
+    else if (field === "weight") phase.weight = Math.max(0, Math.min(100, num(input.value)));
+    else if (field === "progress") phase.progress = Math.max(0, Math.min(100, num(input.value)));
+    refreshPhaseRow(p, phase, row);
+  });
+
+  $("claimRows").addEventListener("input", function (event) {
+    var input = event.target.closest("[data-field]");
+    if (!input) return;
+    var p = current();
+    var row = input.closest("tr");
+    var claim = p.claims.filter(function (item) { return item.id === row.getAttribute("data-id"); })[0];
+    if (!claim) return;
+    var field = input.getAttribute("data-field");
+    if (field === "date") claim.date = input.value;
+    else if (field === "desc") claim.desc = input.value;
+    else if (field === "amount") claim.amount = Math.max(0, num(input.value));
+    else if (field === "retention") claim.retention = Math.max(0, Math.min(100, num(input.value)));
+    else if (field === "status") claim.status = input.value;
+    refreshClaimRow(p, claim, row);
+  });
+
+  $("matRows").addEventListener("input", function (event) {
+    var input = event.target.closest("[data-field]");
+    if (!input) return;
+    var p = current();
+    var row = input.closest("tr");
+    var material = p.materials.filter(function (item) { return item.id === row.getAttribute("data-id"); })[0];
+    if (!material) return;
+    var field = input.getAttribute("data-field");
+    if (field === "name") material.name = input.value;
+    else if (field === "supplier") material.supplier = input.value;
+    else if (field === "qty") material.qty = Math.max(0, num(input.value));
+    else if (field === "unit") material.unit = input.value;
+    else if (field === "unitCost") material.unitCost = Math.max(0, num(input.value));
+    else if (field === "status") material.status = input.value;
+    row.querySelector(".mat-total").textContent = money(num(material.qty) * num(material.unitCost));
+    renderMaterialSummary();
+    renderKpis();
+    save();
+  });
+
+  document.addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-act]");
+    if (!btn) return;
+    var p = current();
+    if (!p) return;
+    var act = btn.getAttribute("data-act");
+    var row = btn.closest("tr");
+    var id = row.getAttribute("data-id");
+    if (act === "del-phase") {
+      p.phases = p.phases.filter(function (item) { return item.id !== id; });
+      renderPhases(); renderKpis(); save();
+    } else if (act === "del-claim") {
+      p.claims = p.claims.filter(function (item) { return item.id !== id; });
+      renderClaims(); renderKpis(); save();
+    } else if (act === "del-mat") {
+      p.materials = p.materials.filter(function (item) { return item.id !== id; });
+      renderMaterials(); renderKpis(); save();
+    }
+  });
+
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+    return '<option value="' + code + '">' + code + "</option>";
+  }).join("");
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar", true); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("projectSelect").addEventListener("change", function (event) { setActive(event.target.value); });
+  $("addProject").addEventListener("click", function () { openProjectModal(null); });
+  $("editProject").addEventListener("click", function () { if (current()) openProjectModal(current()); });
+  $("deleteProject").addEventListener("click", function () {
+    if (state.projects.length <= 1) { alert(t("project.lastDelete")); return; }
+    if (!window.confirm(t("project.confirmDelete"))) return;
+    state.projects = state.projects.filter(function (item) { return item.id !== state.active; });
+    state.active = state.projects[0].id;
+    renderAll();
+  });
+  $("cancelProject").addEventListener("click", closeModal);
+  $("modal").addEventListener("click", function (event) { if (event.target === $("modal")) closeModal(); });
+  $("addPhase").addEventListener("click", addPhase);
+  $("normalizeBtn").addEventListener("click", normalizeWeights);
+  $("addClaim").addEventListener("click", addClaim);
+  $("genClaim").addEventListener("click", generateClaim);
+  $("addMat").addEventListener("click", addMaterial);
+  document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !$("modal").hidden) closeModal(); });
+
+  function seed() {
+    return [
+      {
+        id: "PRJ1", name: "فيلا سكنية — حي الياسمين", client: "شركة أفق للتطوير", contract: 1850000, retention: 5,
+        phases: [
+          { id: "P1", name: "الأعمال الترابية والأساسات", weight: 15, progress: 100 },
+          { id: "P2", name: "الهيكل الخرساني", weight: 30, progress: 75 },
+          { id: "P3", name: "الأعمال الكهربائية والميكانيكية", weight: 20, progress: 40 },
+          { id: "P4", name: "التشطيبات الداخلية", weight: 25, progress: 20 },
+          { id: "P5", name: "التنسيق الخارجي والتسليم", weight: 10, progress: 0 }
+        ],
+        claims: [
+          { id: "C1", date: "2026-08-15", desc: "مستخلص أول — الأساسات", amount: 280000, retention: 5, status: "approved" },
+          { id: "C2", date: "2026-10-01", desc: "مستخلص ثانٍ — الهيكل", amount: 420000, retention: 5, status: "paid" },
+          { id: "C3", date: "2026-11-01", desc: "مستخلص ثالث — أعمال جارية", amount: 300000, retention: 5, status: "submitted" }
+        ],
+        materials: [
+          { id: "M1", name: "حديد تسليح", supplier: "مصنع الرياض", qty: 18, unit: "طن", unitCost: 2900, status: "delivered" },
+          { id: "M2", name: "خرسانة جاهزة", supplier: "شركة البناء", qty: 120, unit: "م³", unitCost: 320, status: "used" },
+          { id: "M3", name: "كابلات كهربائية", supplier: "النور للتوريدات", qty: 40, unit: "لفة", unitCost: 450, status: "ordered" },
+          { id: "M4", name: "سيراميك أرضيات", supplier: "دار السيراميك", qty: 300, unit: "م²", unitCost: 55, status: "delivered" }
+        ]
+      },
+      {
+        id: "PRJ2", name: "مكتب إداري — حي العليا", client: "مجموعة نجد", contract: 950000, retention: 10,
+        phases: [
+          { id: "P6", name: "التصميم والتراخيص", weight: 20, progress: 100 },
+          { id: "P7", name: "التنفيذ والتشطيبات", weight: 60, progress: 35 },
+          { id: "P8", name: "التسليم والتجهيز", weight: 20, progress: 0 }
+        ],
+        claims: [],
+        materials: []
+      }
+    ];
+  }
+
+  (function init() {
+    var raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+    if (raw && Array.isArray(raw.projects) && raw.projects.length) {
+      state.projects = raw.projects;
+      state.active = raw.active;
+      if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+      state.lang = raw.lang === "en" ? "en" : "ar";
+    } else {
+      state.projects = seed();
+      state.active = state.projects[0].id;
+    }
+    var storedLang = localStorage.getItem(LANG_KEY);
+    if (storedLang === "en" || storedLang === "ar") state.lang = storedLang;
+    $("currency").value = state.currency;
+    applyLang(state.lang, false);
+  })();
+})();
+</script>
+</body>
+</html>

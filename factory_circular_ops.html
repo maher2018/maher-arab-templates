@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة الأتمتة الدائرية للمصانع — Premium Bilingual Templates</title>
+<meta name="description" content="لوحة لإدارة خطوط الإنتاج وحساب المخلفات الصناعية ونسب تحويلها إلى منتجات ذات قيمة مضافة، مع تقارير كفاءة يومية للمديرين والمشرفين. ثنائية اللغة.">
+<style>
+:root{--bg:#f2f5f4;--card:#fff;--ink:#0d1f21;--muted:#5a6b6c;--deep:#0b3b3c;--deep2:#12595a;--teal:#0f766e;--mint:#dff3ec;--gold:#c1912f;--bad:#b3372c;--line:#e0e8e6;--radius:16px;--shadow:0 10px 30px rgba(11,59,60,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+h1,h2,h3{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:.95rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--deep2);box-shadow:0 0 0 3px rgba(18,89,90,.12)}
+input[type=number]{direction:ltr;text-align:start}
+label>span{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(242,245,244,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--deep),var(--teal));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.05rem}
+.brand strong{display:block;font-size:1.02rem}
+.brand small{color:var(--muted);font-size:.76rem}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls select{width:auto;min-width:150px}
+.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:700;font-size:.87rem;background:var(--deep);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{filter:brightness(1.1)}
+.btn.gold{background:var(--gold);color:#241b05}
+.btn.ghost{background:#fff;color:var(--deep);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--deep2)}
+.btn.small{padding:6px 11px;font-size:.79rem;border-radius:9px}
+main{max-width:1240px;margin:0 auto;padding:26px 20px 46px;display:grid;gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card h2{font-size:1.02rem}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.kpi{background:linear-gradient(180deg,#fbfdfd,#f3f8f7);border:1px solid var(--line);border-radius:13px;padding:13px}
+.kpi span{display:block;font-size:.76rem;color:var(--muted);margin-bottom:3px}
+.kpi strong{font-size:1.12rem;font-variant-numeric:tabular-nums}
+.kpi.hero{background:linear-gradient(135deg,var(--deep),var(--teal));border:0;color:#fff}
+.kpi.hero span{color:#c6e6e2}
+.kpi.hero strong{color:#fff;font-size:1.3rem}
+.kpi small{display:block;font-size:.72rem;color:var(--muted);margin-top:2px}
+.kpi.hero small{color:#b9dedb}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table.lines{width:100%;border-collapse:collapse;min-width:1080px}
+table.lines th{font-size:.72rem;color:var(--muted);text-align:start;font-weight:700;padding:9px 8px;background:#f7faf9;border-bottom:1px solid var(--line);white-space:nowrap}
+table.lines td{padding:6px 6px;border-bottom:1px solid #eef3f2;vertical-align:middle}
+table.lines input{padding:7px 8px;font-size:.84rem;border-radius:8px}
+table.lines td.calc{font-variant-numeric:tabular-nums;font-size:.84rem;white-space:nowrap;font-weight:600}
+table.lines td.ok{color:var(--teal)}
+table.lines td.low{color:var(--bad)}
+table.lines tr.invalid input{border-color:var(--bad);background:#fdf3f1}
+.del{border:1px solid var(--line);background:#fff;color:var(--bad);border-radius:8px;width:28px;height:28px;line-height:1;font-size:.85rem}
+.del:hover{background:#fdf3f1;border-color:var(--bad)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:stretch;margin-top:6px}
+@media(max-width:820px){.flow{grid-template-columns:1fr 1fr}}
+.node{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fbfdfd;position:relative}
+.node .step{font-size:.7rem;font-weight:800;color:var(--teal);letter-spacing:.04em}
+.node strong{display:block;font-size:1.02rem;margin-top:3px;font-variant-numeric:tabular-nums}
+.node span{font-size:.78rem;color:var(--muted)}
+.node::after{content:"←";position:absolute;inset-inline-start:-14px;top:50%;transform:translateY(-50%);color:var(--teal);font-weight:900}
+html[dir=ltr] .node::after{content:"→"}
+.node:first-child::after{content:""}
+.node.waste{border-color:#e9c9a5;background:#fff9f1}
+.node.recovered{border-color:#a9d9cd;background:var(--mint)}
+.bars{display:grid;gap:9px;margin-top:4px}
+.bar{display:grid;grid-template-columns:minmax(90px,150px) 1fr 96px;align-items:center;gap:10px;font-size:.82rem;color:var(--muted)}
+.bar .track{height:10px;background:#eaf0ef;border-radius:99px;overflow:hidden;position:relative}
+.bar .fill{height:100%;border-radius:99px;background:var(--teal)}
+.bar .fill.low{background:#c9713f}
+.bar .val{text-align:end;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.targetLine{font-size:.78rem;color:var(--muted);margin:2px 0 0}
+.report{background:#fbfdfd;border:1px dashed var(--deep2);border-radius:12px;padding:16px;white-space:pre-wrap;font-family:Consolas,"Courier New",monospace;font-size:.82rem;line-height:2;max-height:360px;overflow:auto}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.hint{color:var(--muted);font-size:.79rem;margin:8px 0 0}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.74rem;font-weight:800;background:var(--mint);color:#0b5f57}
+.badge.bad{background:#fdeceb;color:var(--bad)}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 26px}
+@media print{
+  body{background:#fff}
+  .top,main>.card:not(#reportCard),.actions,footer,#reportCard .card-head,.no-print{display:none !important}
+  main{padding:0;display:block}
+  #reportCard{border:0;box-shadow:none;padding:0}
+  .report{border:0;max-height:none;font-size:11pt}
+  @page{margin:16mm}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">↻</span>
+      <div><strong data-i18n="brand">لوحة الأتمتة الدائرية للمصانع</strong><small data-i18n="tagline">خطوط إنتاج · مخلفات · قيمة مضافة</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn gold" id="printBtn" data-i18n="print">طباعة التقرير</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head"><h2 data-i18n="meta.title">بيانات التشغيل اليومي</h2></div>
+    <div class="grid4">
+      <label><span data-i18n="meta.factory">اسم المصنع</span><input id="factory" type="text" data-store="factory"></label>
+      <label><span data-i18n="meta.date">تاريخ التقرير</span><input id="date" type="date" data-store="date"></label>
+      <label><span data-i18n="meta.shift">الوردية</span>
+        <select id="shift" data-store="shift">
+          <option value="morning" data-i18n="shift.morning">صباحية</option>
+          <option value="evening" data-i18n="shift.evening">مسائية</option>
+          <option value="night" data-i18n="shift.night">ليلية</option>
+        </select>
+      </label>
+      <label><span data-i18n="meta.supervisor">المشرف المسؤول</span><input id="supervisor" type="text" data-store="supervisor"></label>
+      <label><span data-i18n="meta.target">هدف الاسترجاع %</span><input id="target" type="number" min="0" max="100" step="1" value="65"></label>
+    </div>
+    <p class="hint" data-i18n="meta.hint">أدخل بيانات كل خط: الإنتاج اليومي، وزن الوحدة، نسبة الهدر، ونسبة ما يمكن استرجاعه وتحويله إلى منتج قابل للبيع.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 data-i18n="lines.title">خطوط الإنتاج والمخلفات</h2>
+      <button type="button" class="btn ghost small" id="addLine" data-i18n="addRow">+ إضافة خط</button>
+    </div>
+    <div class="table-scroll">
+      <table class="lines">
+        <thead><tr>
+          <th data-i18n="th.line">الخط / المنتج</th>
+          <th data-i18n="th.units">الوحدات/يوم</th>
+          <th data-i18n="th.weight">وزن الوحدة (كجم)</th>
+          <th data-i18n="th.scrap">الهدر %</th>
+          <th data-i18n="th.recyclable">قابل للتدوير %</th>
+          <th data-i18n="th.conversion">كفاءة التحويل %</th>
+          <th data-i18n="th.price">سعر المنتج المعاد (كجم)</th>
+          <th data-i18n="th.disposal">تكلفة التخلص (كجم)</th>
+          <th data-i18n="th.waste">مخلفات (كجم)</th>
+          <th data-i18n="th.recovered">مسترجَع (كجم)</th>
+          <th data-i18n="th.landfill">مفقود (كجم)</th>
+          <th data-i18n="th.value">قيمة مضافة</th>
+          <th data-i18n="th.eff">الكفاءة</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="linesBody"></tbody>
+      </table>
+    </div>
+    <p class="hint" id="warn" hidden></p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2 data-i18n="kpi.title">مؤشرات اليوم</h2><span class="badge" id="shiftBadge">—</span></div>
+    <div class="kpis">
+      <div class="kpi"><span data-i18n="kpi.waste">إجمالي المخلفات (كجم)</span><strong id="kWaste">—</strong><small id="kWasteNote"></small></div>
+      <div class="kpi"><span data-i18n="kpi.recovered">المسترجَع (كجم)</span><strong id="kRecovered">—</strong><small id="kRecoveredNote"></small></div>
+      <div class="kpi"><span data-i18n="kpi.landfill">المفقود إلى التخلص (كجم)</span><strong id="kLandfill">—</strong><small id="kLandfillNote"></small></div>
+      <div class="kpi hero"><span data-i18n="kpi.value">القيمة المضافة اليومية</span><strong id="kValue">—</strong><small id="kValueNote"></small></div>
+    </div>
+    <div class="bars" id="bars" style="margin-top:16px"></div>
+    <p class="targetLine" id="targetLine"></p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2 data-i18n="flow.title">الدورة الدائرية لليوم</h2></div>
+    <div class="flow">
+      <div class="node"><span class="step" data-i18n="flow.inputs">مدخلات</span><strong id="fInputs">—</strong><span data-i18n="flow.inputsNote">وحدات إنتاج</span></div>
+      <div class="node"><span class="step" data-i18n="flow.production">إنتاج</span><strong id="fProduct">—</strong><span data-i18n="flow.productNote">وحدات صالحة</span></div>
+      <div class="node waste"><span class="step" data-i18n="flow.waste">مخلفات</span><strong id="fWaste">—</strong><span data-i18n="flow.wasteNote">كجم هدر</span></div>
+      <div class="node recovered"><span class="step" data-i18n="flow.recovered">منتج معاد</span><strong id="fRecovered">—</strong><span data-i18n="flow.recoveredNote">كجم قابلة للبيع</span></div>
+    </div>
+  </section>
+
+  <section class="card" id="reportCard">
+    <div class="card-head">
+      <h2 data-i18n="report.title">تقرير الكفاءة اليومي</h2>
+      <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="btn ghost small" id="copyBtn" data-i18n="report.copy">نسخ التقرير</button>
+        <button type="button" class="btn small" id="printReport" data-i18n="report.print">طباعة</button>
+      </div>
+    </div>
+    <div class="report" id="report">—</div>
+    <p class="hint no-print" id="copyMsg" hidden data-i18n="report.copied">تم نسخ التقرير إلى الحافظة.</p>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn ghost" id="sampleBtn" data-i18n="sample">تحميل مثال</button>
+    <button type="button" class="btn ghost" id="resetBtn" data-i18n="reset">تفريغ الكل</button>
+  </div>
+</main>
+
+<footer>Premium Bilingual Templates — <span data-i18n="footer">قالب جاهز للتخصيص · عربي/إنجليزي · عملات خليجية</span></footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal" },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham" },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar" },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal" },
+    OMR: { ar: "ريال عماني", en: "Omani rial" },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar" },
+    USD: { ar: "دولار أمريكي", en: "US dollar" }
+  };
+
+  const I18N = {
+    ar: {
+      brand: "لوحة الأتمتة الدائرية للمصانع",
+      tagline: "خطوط إنتاج · مخلفات · قيمة مضافة",
+      currency: "العملة", print: "طباعة التقرير",
+      "meta.title": "بيانات التشغيل اليومي",
+      "meta.factory": "اسم المصنع", "meta.date": "تاريخ التقرير", "meta.shift": "الوردية",
+      "meta.supervisor": "المشرف المسؤول", "meta.target": "هدف الاسترجاع %",
+      "meta.hint": "أدخل بيانات كل خط: الإنتاج اليومي، وزن الوحدة، نسبة الهدر، ونسبة ما يمكن استرجاعه وتحويله إلى منتج قابل للبيع.",
+      "shift.morning": "صباحية", "shift.evening": "مسائية", "shift.night": "ليلية",
+      "lines.title": "خطوط الإنتاج والمخلفات", addRow: "+ إضافة خط",
+      "th.line": "الخط / المنتج", "th.units": "الوحدات/يوم", "th.weight": "وزن الوحدة (كجم)",
+      "th.scrap": "الهدر %", "th.recyclable": "قابل للتدوير %", "th.conversion": "كفاءة التحويل %",
+      "th.price": "سعر المنتج المعاد/كجم", "th.disposal": "تكلفة التخلص/كجم",
+      "th.waste": "مخلفات (كجم)", "th.recovered": "مسترجَع (كجم)", "th.landfill": "مفقود (كجم)",
+      "th.value": "قيمة مضافة", "th.eff": "الكفاءة",
+      "ph.line": "خط البلاستيك PET", "ph.factory": "مصنع الخليج للبلاستيك", "ph.supervisor": "اسم المشرف",
+      "kpi.title": "مؤشرات اليوم", "kpi.waste": "إجمالي المخلفات (كجم)",
+      "kpi.recovered": "المسترجَع (كجم)", "kpi.landfill": "المفقود إلى التخلص (كجم)",
+      "kpi.value": "القيمة المضافة اليومية",
+      "kpi.wasteNote": "من {lines} خطوط إنتاج", "kpi.recoveredNote": "نسبة استرجاع {p}%",
+      "kpi.landfillNote": "{p}% من المخلفات", "kpi.valueNote": "منتج معاد + توفير تخلص",
+      "targetLine": "الهدف اليومي {target}% — {state}",
+      "target.good": "تحقق الهدف بهامش {gap} نقطة",
+      "target.ok": "قريب من الهدف ({gap} نقطة)",
+      "target.bad": "أقل من الهدف بـ{gap} نقطة — يحتاج تدخل المشرف",
+      "flow.title": "الدورة الدائرية لليوم",
+      "flow.inputs": "مدخلات", "flow.inputsNote": "وحدات إنتاج",
+      "flow.production": "إنتاج", "flow.productNote": "وحدات صالحة",
+      "flow.waste": "مخلفات", "flow.wasteNote": "كجم هدر",
+      "flow.recovered": "منتج معاد", "flow.recoveredNote": "كجم قابلة للبيع",
+      "report.title": "تقرير الكفاءة اليومي",
+      "report.copy": "نسخ التقرير", "report.print": "طباعة",
+      "report.copied": "تم نسخ التقرير إلى الحافظة.",
+      "report.header": "تقرير الكفاءة اليومي — الأتمتة الدائرية",
+      "report.factory": "المصنع", "report.date": "التاريخ", "report.shift": "الوردية",
+      "report.supervisor": "المشرف", "report.kpis": "المؤشرات:",
+      "report.lines": "أداء الخطوط:",
+      "report.reco": "توصيات للمشرف:",
+      "report.noLines": "لا توجد خطوط مسجلة اليوم.", "report.validLines": "خطوط تحت الهدف",
+      "report.allGood": "كل الخطوط عند الهدف أو أعلى — استمر على نفس الإعداد.",
+      "report.fixLow": "راجع نسب الهدر في الخطوط المعلّمة وافصل المخلفات القابلة للتدوير قبل التخلص.",
+      "report.below": "{n} خطًا تحت الهدف ({names}).",
+      "report.shiftSummary": "إجمالي المخلفات {w} كجم، المسترجَع {r} كجم ({p}%)، القيمة المضافة {v}.",
+      footer: "قالب جاهز للتخصيص · عربي/إنجليزي · عملات خليجية",
+      sample: "تحميل مثال", reset: "تفريغ الكل",
+      "sample.line1": "خط البلاستيك PET", "sample.line2": "خط الكرتون والتغليف", "sample.line3": "خط الألمنيوم",
+      "sample.line4": "خط مخلفات الطعام",
+      warn: "توجد نسب خارج النطاق (0–100) أو أرقام سالبة — صحّحها قبل الطباعة.",
+      "badge.shift": "وردية {name}", "badge.default": "جاهز للتعبئة",
+      "empty.line": "لا توجد خطوط — أضف خطًا أو حمّل المثال."
+    },
+    en: {
+      brand: "Factory Circular Operations Board",
+      tagline: "Production lines · Waste · Value added",
+      currency: "Currency", print: "Print report",
+      "meta.title": "Daily operations details",
+      "meta.factory": "Factory", "meta.date": "Report date", "meta.shift": "Shift",
+      "meta.supervisor": "Supervisor", "meta.target": "Recovery target %",
+      "meta.hint": "Enter each line: daily output, unit weight, scrap rate, and how much of that scrap can be recovered into a sellable product.",
+      "shift.morning": "Morning", "shift.evening": "Evening", "shift.night": "Night",
+      "lines.title": "Production lines and waste", addRow: "+ Add line",
+      "th.line": "Line / product", "th.units": "Units/day", "th.weight": "Unit weight (kg)",
+      "th.scrap": "Scrap %", "th.recyclable": "Recyclable %", "th.conversion": "Conversion %",
+      "th.price": "Recycled price/kg", "th.disposal": "Disposal cost/kg",
+      "th.waste": "Waste (kg)", "th.recovered": "Recovered (kg)", "th.landfill": "Lost (kg)",
+      "th.value": "Value added", "th.eff": "Efficiency",
+      "ph.line": "PET line", "ph.factory": "Gulf Plastics Factory", "ph.supervisor": "Supervisor name",
+      "kpi.title": "Today at a glance", "kpi.waste": "Total waste (kg)",
+      "kpi.recovered": "Recovered (kg)", "kpi.landfill": "Lost to disposal (kg)",
+      "kpi.value": "Daily value added",
+      "kpi.wasteNote": "across {lines} lines", "kpi.recoveredNote": "{p}% recovery rate",
+      "kpi.landfillNote": "{p}% of waste", "kpi.valueNote": "recycled product + disposal savings",
+      "targetLine": "Daily target {target}% — {state}",
+      "target.good": "target met with {gap} pts headroom",
+      "target.ok": "close to target ({gap} pts)",
+      "target.bad": "{gap} pts below target — supervisor action needed",
+      "flow.title": "Today's circular flow",
+      "flow.inputs": "Inputs", "flow.inputsNote": "production units",
+      "flow.production": "Production", "flow.productNote": "good units",
+      "flow.waste": "Waste", "flow.wasteNote": "kg scrap",
+      "flow.recovered": "Recycled product", "flow.recoveredNote": "sellable kg",
+      "report.title": "Daily efficiency report",
+      "report.copy": "Copy report", "report.print": "Print",
+      "report.copied": "Report copied to clipboard.",
+      "report.header": "Daily efficiency report — circular operations",
+      "report.factory": "Factory", "report.date": "Date", "report.shift": "Shift",
+      "report.supervisor": "Supervisor", "report.kpis": "KPIs:",
+      "report.lines": "Line performance:",
+      "report.reco": "Supervisor actions:",
+      "report.noLines": "No lines recorded today.", "report.validLines": "Lines below target",
+      "report.allGood": "All lines at or above target — keep the current setup.",
+      "report.fixLow": "Review scrap rates on flagged lines and segregate recyclable waste before disposal.",
+      "report.below": "{n} line(s) below target ({names}).",
+      "report.shiftSummary": "Total waste {w} kg, recovered {r} kg ({p}%), value added {v}.",
+      footer: "Customisable template · Arabic/English · Gulf currencies",
+      sample: "Load sample", reset: "Clear all",
+      "sample.line1": "PET line", "sample.line2": "Cardboard & packaging line", "sample.line3": "Aluminium line",
+      "sample.line4": "Food waste line",
+      warn: "Some rates are outside 0–100 or negative — fix them before printing.",
+      "badge.shift": "{name} shift", "badge.default": "Ready to fill",
+      "empty.line": "No lines yet — add one or load the sample."
+    }
+  };
+
+  const state = {
+    lang: "ar",
+    currency: "SAR",
+    target: 65,
+    lines: [],
+    meta: { factory: "", date: "", shift: "morning", supervisor: "" }
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const t = (key, vars) => {
+    const table = I18N[state.lang] || I18N.ar;
+    let text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    if (vars) Object.keys(vars).forEach((name) => { text = text.replace(new RegExp("\\{" + name + "\\}", "g"), vars[name]); });
+    return text;
+  };
+  const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (ch) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  const num = (value) => { const n = parseFloat(value); return Number.isFinite(n) ? n : 0; };
+  const decimals = () => (state.currency === "KWD" || state.currency === "OMR" || state.currency === "BHD" ? 3 : 2);
+  const fmt = (value) => {
+    const locale = state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US";
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: "currency", currency: state.currency, currencyDisplay: "code",
+        minimumFractionDigits: decimals(), maximumFractionDigits: decimals()
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toFixed(decimals()) + " " + state.currency; }
+  };
+  const fmtKg = (value) => new Intl.NumberFormat(state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US",
+    { maximumFractionDigits: 1 }).format(Number(value) || 0) + (state.lang === "ar" ? " كجم" : " kg");
+  const fmtPct = (value, digits) => new Intl.NumberFormat(state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US",
+    { maximumFractionDigits: digits == null ? 1 : digits, minimumFractionDigits: 0 }).format(Number(value) || 0) + "%";
+
+  function shiftName() {
+    return t("shift." + (["morning", "evening", "night"].indexOf(state.meta.shift) >= 0 ? state.meta.shift : "morning"));
+  }
+
+  /* ---------- عملة ولغة ---------- */
+  function renderCurrencies() {
+    const select = $("currency");
+    select.innerHTML = Object.keys(CURRENCIES).map((code) =>
+      '<option value="' + code + '">' + code + " — " + esc(CURRENCIES[code][state.lang]) + "</option>").join("");
+    select.value = state.currency;
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    const ar = state.lang === "ar";
+    document.documentElement.lang = ar ? "ar" : "en";
+    document.documentElement.dir = ar ? "rtl" : "ltr";
+    document.title = ar ? "لوحة الأتمتة الدائرية للمصانع — Premium Bilingual Templates"
+      : "Factory Circular Operations Board — Premium Bilingual Templates";
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll('#linesBody input[data-k="name"]').forEach((input) => input.setAttribute("placeholder", t("ph.line")));
+    $("factory").setAttribute("placeholder", t("ph.factory"));
+    $("supervisor").setAttribute("placeholder", t("ph.supervisor"));
+    $("langBtn").textContent = ar ? "English" : "العربية";
+    renderCurrencies();
+    if (persist) localStorage.setItem("pb_factory_lang", state.lang);
+    recalc();
+  }
+
+  /* ---------- الصفوف ---------- */
+  function makeRow(line) {
+    const item = line || {};
+    const tr = document.createElement("tr");
+    const fields = [
+      ["name", "text", item.name, t("ph.line")],
+      ["units", "number", item.units, ""],
+      ["weight", "number", item.weight, ""],
+      ["scrap", "number", item.scrap, ""],
+      ["recyclable", "number", item.recyclable, ""],
+      ["conversion", "number", item.conversion, ""],
+      ["price", "number", item.price, ""],
+      ["disposal", "number", item.disposal, ""]
+    ];
+    tr.innerHTML = fields.map(([key, type, value, placeholder]) =>
+      '<td><input data-k="' + key + '" type="' + type + '"' + (type === "number" ? ' min="0" step="any"' : "") +
+      ' value="' + esc(value) + '" placeholder="' + esc(placeholder) + '"></td>').join("") +
+      '<td class="calc" data-waste>—</td><td class="calc" data-recovered>—</td>' +
+      '<td class="calc" data-landfill>—</td><td class="calc" data-value>—</td>' +
+      '<td class="calc" data-eff>—</td>' +
+      '<td><button type="button" class="del" aria-label="' + (state.lang === "en" ? "Delete line" : "حذف الخط") + '">✕</button></td>';
+    return tr;
+  }
+
+  function renderRows() {
+    const body = $("linesBody");
+    body.innerHTML = "";
+    state.lines.forEach((line) => body.appendChild(makeRow(line)));
+    if (!state.lines.length) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = '<td colspan="14" class="hint" style="padding:14px 8px">' + esc(t("empty.line")) + "</td>";
+      body.appendChild(tr);
+    }
+  }
+
+  function bindRowEvents() {
+    const body = $("linesBody");
+    body.addEventListener("input", (event) => {
+      const input = event.target.closest("input");
+      if (!input) return;
+      const index = [...body.querySelectorAll("tr")].indexOf(input.closest("tr"));
+      const line = state.lines[index];
+      if (!line) return;
+      const key = input.getAttribute("data-k");
+      line[key] = input.type === "number" ? (input.value === "" ? "" : num(input.value)) : input.value;
+      recalc();
+      save();
+    });
+    body.addEventListener("click", (event) => {
+      const button = event.target.closest(".del");
+      if (!button) return;
+      const index = [...body.querySelectorAll("tr")].indexOf(button.closest("tr"));
+      if (index < 0) return;
+      state.lines.splice(index, 1);
+      renderRows(); recalc(); save();
+    });
+  }
+
+  /* ---------- الحسابات ---------- */
+  function computeLine(line) {
+    const units = Math.max(0, num(line.units));
+    const weight = Math.max(0, num(line.weight));
+    const scrap = Math.min(100, Math.max(0, num(line.scrap)));
+    const recyclable = Math.min(100, Math.max(0, num(line.recyclable)));
+    const conversion = Math.min(100, Math.max(0, num(line.conversion)));
+    const waste = units * weight * scrap / 100;
+    const recyclableKg = waste * recyclable / 100;
+    const recovered = recyclableKg * conversion / 100;
+    const landfill = Math.max(0, waste - recovered);
+    const value = recovered * Math.max(0, num(line.price)) + recovered * Math.max(0, num(line.disposal));
+    const efficiency = waste > 0 ? (recovered / waste) * 100 : 100;
+    return { waste, recovered, landfill, value, efficiency, units, weight, scrap };
+  }
+
+  function recalc() {
+    const computed = state.lines.map(computeLine);
+    const body = $("linesBody");
+    const rows = [...body.querySelectorAll("tr")];
+    let invalid = false;
+    state.lines.forEach((line, index) => {
+      const result = computed[index];
+      const tr = rows[index];
+      if (!tr) return;
+      const set = (selector, text) => { const cell = tr.querySelector(selector); if (cell) cell.textContent = text; };
+      set("[data-waste]", fmtKg(result.waste));
+      set("[data-recovered]", fmtKg(result.recovered));
+      set("[data-landfill]", fmtKg(result.landfill));
+      set("[data-value]", fmt(result.value));
+      const effCell = tr.querySelector("[data-eff]");
+      if (effCell) {
+        effCell.textContent = fmtPct(result.efficiency, 0);
+        effCell.classList.toggle("ok", result.efficiency >= num(state.target));
+        effCell.classList.toggle("low", result.efficiency < num(state.target));
+      }
+      const outOfRange = ["scrap", "recyclable", "conversion"].some((key) => num(line[key]) > 100) ||
+        ["units", "weight", "price", "disposal"].some((key) => num(line[key]) < 0);
+      tr.classList.toggle("invalid", outOfRange);
+      if (outOfRange) invalid = true;
+    });
+
+    const totalsData = computed.reduce((acc, item) => ({
+      waste: acc.waste + item.waste,
+      recovered: acc.recovered + item.recovered,
+      landfill: acc.landfill + item.landfill,
+      value: acc.value + item.value,
+      units: acc.units + item.units,
+      product: acc.product + item.units * (1 - item.scrap / 100)
+    }), { waste: 0, recovered: 0, landfill: 0, value: 0, units: 0, product: 0 });
+    const recoveryRate = totalsData.waste > 0 ? (totalsData.recovered / totalsData.waste) * 100 : 0;
+    const target = num(state.target);
+    const gap = recoveryRate - target;
+
+    $("kWaste").textContent = fmtKg(totalsData.waste);
+    $("kWasteNote").textContent = t("kpi.wasteNote", { lines: state.lines.length });
+    $("kRecovered").textContent = fmtKg(totalsData.recovered);
+    $("kRecoveredNote").textContent = t("kpi.recoveredNote", { p: recoveryRate.toFixed(1) });
+    $("kLandfill").textContent = fmtKg(totalsData.landfill);
+    $("kLandfillNote").textContent = t("kpi.landfillNote", { p: (totalsData.waste > 0 ? (totalsData.landfill / totalsData.waste) * 100 : 0).toFixed(1) });
+    $("kValue").textContent = fmt(totalsData.value);
+    $("kValueNote").textContent = t("kpi.valueNote");
+    $("shiftBadge").textContent = state.lines.length
+      ? t("badge.shift", { name: shiftName() })
+      : t("badge.default");
+
+    const stateKey = gap >= 0 ? "target.good" : gap > -10 ? "target.ok" : "target.bad";
+    $("targetLine").textContent = t("targetLine", { target: target.toFixed(0), state: t(stateKey, { gap: Math.abs(gap).toFixed(1) }) });
+
+    const base = Math.max(target, recoveryRate, 10);
+    $("bars").innerHTML = state.lines.map((line, index) => {
+      const result = computed[index];
+      const low = result.efficiency < target;
+      return '<div class="bar"><span>' + esc(line.name || (state.lang === "ar" ? "خط " + (index + 1) : "Line " + (index + 1))) +
+        '</span><div class="track"><div class="fill ' + (low ? "low" : "") + '" style="width:' +
+        Math.max(0, Math.min(100, (result.efficiency / base) * 100)).toFixed(1) + '%"></div></div>' +
+        '<span class="val">' + fmtPct(result.efficiency, 0) + "</span></div>";
+    }).join("") || '<p class="hint">' + esc(t("empty.line")) + "</p>";
+
+    $("fInputs").textContent = totalsData.units > 0
+      ? new Intl.NumberFormat(state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US").format(totalsData.units) + " " + (state.lang === "ar" ? "وحدة" : "units")
+      : "—";
+    $("fProduct").textContent = new Intl.NumberFormat(state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US",
+      { maximumFractionDigits: 0 }).format(Math.max(0, totalsData.product)) + " " + (state.lang === "ar" ? "وحدة" : "units");
+    $("fWaste").textContent = fmtKg(totalsData.waste);
+    $("fRecovered").textContent = fmtKg(totalsData.recovered);
+
+    const warn = $("warn");
+    warn.hidden = !invalid;
+    if (invalid) { warn.textContent = t("warn"); warn.style.color = "var(--bad)"; }
+
+    renderReport(computed, totalsData, recoveryRate, target);
+  }
+
+  /* ---------- التقرير ---------- */
+  function renderReport(computed, totalsData, recoveryRate, target) {
+    const meta = state.meta;
+    const date = meta.date || new Date().toISOString().slice(0, 10);
+    const lowLines = state.lines
+      .map((line, index) => ({ name: line.name || (state.lang === "ar" ? "خط " + (index + 1) : "Line " + (index + 1)), efficiency: computed[index].efficiency }))
+      .filter((item) => item.efficiency < target);
+
+    const lines = [];
+    lines.push(t("report.header"));
+    lines.push("────────────────────────────");
+    lines.push(t("report.factory") + ": " + (meta.factory || "—"));
+    lines.push(t("report.date") + ": " + date + " · " + t("report.shift") + ": " + shiftName());
+    lines.push(t("report.supervisor") + ": " + (meta.supervisor || "—"));
+    lines.push("");
+    lines.push(t("report.kpis"));
+    lines.push("• " + t("kpi.waste") + ": " + fmtKg(totalsData.waste));
+    lines.push("• " + t("kpi.recovered") + ": " + fmtKg(totalsData.recovered) + " (" + fmtPct(recoveryRate, 1) + ")");
+    lines.push("• " + t("kpi.landfill") + ": " + fmtKg(totalsData.landfill));
+    lines.push("• " + t("kpi.value") + ": " + fmt(totalsData.value));
+    lines.push("• " + t("targetLine", { target: target.toFixed(0), state: recoveryRate >= target ? t("target.good", { gap: (recoveryRate - target).toFixed(1) }) : t("target.bad", { gap: (target - recoveryRate).toFixed(1) }) }));
+    lines.push("");
+    lines.push(t("report.lines"));
+    if (!state.lines.length) {
+      lines.push(t("report.noLines"));
+    } else {
+      state.lines.forEach((line, index) => {
+        const result = computed[index];
+        lines.push((index + 1) + ". " + (line.name || "—") + " | " + t("th.waste") + ": " + fmtKg(result.waste) +
+          " | " + t("th.recovered") + ": " + fmtKg(result.recovered) +
+          " | " + t("th.value") + ": " + fmt(result.value) +
+          " | " + t("th.eff") + ": " + fmtPct(result.efficiency, 0));
+      });
+    }
+    lines.push("");
+    lines.push(t("report.reco"));
+    if (!state.lines.length) lines.push("• " + t("report.noLines"));
+    else if (!lowLines.length) lines.push("• " + t("report.allGood"));
+    else {
+      lines.push("• " + t("report.below", { n: lowLines.length, names: lowLines.map((item) => item.name).join("، ") }));
+      lines.push("• " + t("report.fixLow"));
+    }
+    lines.push("");
+    lines.push(t("report.shiftSummary", {
+      w: fmtKg(totalsData.waste), r: fmtKg(totalsData.recovered),
+      p: recoveryRate.toFixed(1), v: fmt(totalsData.value)
+    }));
+    $("report").textContent = lines.join("\n");
+  }
+
+  /* ---------- الحفظ ---------- */
+  let saveTimer = null;
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      try {
+        localStorage.setItem("pb_factory_state", JSON.stringify({
+          currency: state.currency, target: state.target, lines: state.lines, meta: state.meta
+        }));
+      } catch (err) { /* التخزين محجوب */ }
+    }, 250);
+  }
+
+  function load() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem("pb_factory_state") || "null"); } catch (err) { saved = null; }
+    if (saved && typeof saved === "object") {
+      state.currency = CURRENCIES[saved.currency] ? saved.currency : state.currency;
+      state.target = Number.isFinite(saved.target) ? saved.target : state.target;
+      state.lines = Array.isArray(saved.lines) ? saved.lines : [];
+      Object.assign(state.meta, saved.meta || {});
+      return true;
+    }
+    return false;
+  }
+
+  function fillMeta() {
+    $("factory").value = state.meta.factory || "";
+    $("date").value = state.meta.date || "";
+    $("shift").value = state.meta.shift || "morning";
+    $("supervisor").value = state.meta.supervisor || "";
+    $("target").value = state.target;
+  }
+
+  function sample() {
+    state.meta = {
+      factory: state.lang === "ar" ? "مصنع الخليج للبلاستيك" : "Gulf Plastics Factory",
+      date: new Date().toISOString().slice(0, 10),
+      shift: "morning",
+      supervisor: state.lang === "ar" ? "سعد الحربي" : "Saad Alharbi"
+    };
+    state.target = 65;
+    state.lines = [
+      { name: t("sample.line1"), units: 4200, weight: 0.9, scrap: 6, recyclable: 85, conversion: 70, price: 3.4, disposal: 0.35 },
+      { name: t("sample.line2"), units: 1800, weight: 2.4, scrap: 9, recyclable: 92, conversion: 82, price: 1.1, disposal: 0.2 },
+      { name: t("sample.line3"), units: 900, weight: 3.1, scrap: 4, recyclable: 96, conversion: 88, price: 7.5, disposal: 0.6 },
+      { name: t("sample.line4"), units: 2600, weight: 1.2, scrap: 12, recyclable: 40, conversion: 55, price: 0.4, disposal: 0.5 }
+    ];
+    fillMeta(); renderRows(); recalc(); save();
+  }
+
+  function resetAll() {
+    state.lines = [];
+    state.meta = { factory: "", date: "", shift: "morning", supervisor: "" };
+    state.target = 65;
+    localStorage.removeItem("pb_factory_state");
+    fillMeta(); renderRows(); recalc();
+  }
+
+  /* ---------- الأحداث ---------- */
+  function copyReport() {
+    const text = $("report").textContent;
+    const done = () => { const msg = $("copyMsg"); msg.hidden = false; setTimeout(() => { msg.hidden = true; }, 2500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else fallbackCopy(text, done);
+  }
+  function fallbackCopy(text, done) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand("copy"); done(); } catch (err) { /* ignore */ }
+    document.body.removeChild(area);
+  }
+
+  function bindStatic() {
+    $("addLine").addEventListener("click", () => {
+      state.lines.push({ name: "", units: "", weight: "", scrap: "", recyclable: "", conversion: "", price: "", disposal: "" });
+      renderRows(); recalc(); save();
+    });
+    $("currency").addEventListener("change", (event) => { state.currency = event.target.value; recalc(); save(); });
+    $("langBtn").addEventListener("click", () => applyLang(state.lang === "ar" ? "en" : "ar", true));
+    $("printBtn").addEventListener("click", () => window.print());
+    $("printReport").addEventListener("click", () => window.print());
+    $("copyBtn").addEventListener("click", copyReport);
+    $("sampleBtn").addEventListener("click", sample);
+    $("resetBtn").addEventListener("click", resetAll);
+    $("target").addEventListener("input", () => { state.target = num($("target").value); recalc(); save(); });
+    document.querySelectorAll("[data-store]").forEach((input) => {
+      const key = input.getAttribute("data-store");
+      const handler = () => { state.meta[key] = input.value; recalc(); save(); };
+      input.addEventListener("input", handler);
+      input.addEventListener("change", handler);
+    });
+    bindRowEvents();
+  }
+
+  /* ---------- التشغيل ---------- */
+  const storedLang = localStorage.getItem("pb_factory_lang");
+  const hadState = load();
+  bindStatic();
+  if (!hadState) {
+    state.meta.date = new Date().toISOString().slice(0, 10);
+    state.lines = [{ name: "", units: "", weight: "", scrap: "", recyclable: "", conversion: "", price: "", disposal: "" }];
+  }
+  fillMeta();
+  renderRows();
+  applyLang(storedLang === "en" ? "en" : "ar", false);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نظام الزكاة والتمويل الإسلامي — Islamic Finance & Zakat OS</title>
+<meta name="description" content="حاسبة زكاة الشركات والأفراد، مقارنة المرابحة بالتمويل التجاري، وتوزيع ميزانيات المشاريع — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{--bg:#f1f5f3;--card:#fff;--ink:#10241f;--muted:#5b6f68;--navy:#0c2f3a;--navy2:#124653;--teal:#0f766e;--teal-soft:#e6f3ef;--gold:#b8892f;--gold-soft:#f7eeda;--bad:#a83a2f;--bad-soft:#fbeceb;--warn:#8a5a08;--warn-soft:#fdf2dd;--ok:#14684a;--ok-soft:#e7f5ee;--line:#dfe7e4;--radius:16px;--shadow:0 10px 30px rgba(12,47,58,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.94rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,118,110,.1)}
+label>span{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.top{position:sticky;top:0;z-index:20;background:rgba(241,245,243,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.85rem}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}
+.controls select{width:auto;min-width:118px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:.85rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.teal{background:var(--teal)}
+.btn.gold{background:var(--gold);color:#2a1f06}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:.77rem;border-radius:8px}
+.nav{max-width:1180px;margin:0 auto;padding:0 20px 10px;display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:.8rem;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:99px;border:1px solid transparent}
+.nav a:hover{background:#fff;border-color:var(--line);color:var(--navy)}
+main{max-width:1180px;margin:0 auto;padding:20px 20px 50px;display:grid;gap:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 15px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.75rem;color:var(--muted);margin-bottom:3px}
+.kpi strong{font-size:1.12rem;font-variant-numeric:tabular-nums}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--teal));border:0;color:#fff}
+.kpi.hero span{color:#cbe3de}.kpi.hero strong{color:#fff}
+.kpi.gold{background:var(--gold-soft);border-color:#eadfc4}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);scroll-margin-top:118px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.card-head h2{font-size:1.08rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.84rem;max-width:680px}
+.mode{display:inline-flex;background:#eef3f1;border:1px solid var(--line);border-radius:99px;padding:3px;gap:2px}
+.mode button{border:0;background:none;color:var(--muted);font-size:.8rem;font-weight:800;padding:6px 15px;border-radius:99px}
+.mode button.on{background:var(--navy);color:#fff}
+.grid{display:grid;grid-template-columns:1.3fr .9fr;gap:18px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:560px){.fields{grid-template-columns:1fr}}
+.fields.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:720px){.fields.three{grid-template-columns:1fr}}
+.sub{background:#f8fbfa;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+.sub h3{font-size:.82rem;color:var(--teal);margin-bottom:9px}
+.section-label{font-size:.74rem;font-weight:800;letter-spacing:.06em;color:var(--gold);text-transform:uppercase;margin:14px 0 7px}
+.result{background:linear-gradient(180deg,#fbfdfc,#f2f8f6);border:1px solid var(--line);border-radius:14px;padding:14px}
+.result .row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.86rem;border-bottom:1px dashed #e4ece9}
+.result .row:last-of-type{border-bottom:0}
+.result .row b{font-variant-numeric:tabular-nums}
+.due-box{margin-top:10px;background:var(--navy);color:#fff;border-radius:12px;padding:14px}
+.due-box span{font-size:.78rem;color:#c8e0db;display:block}
+.due-box strong{font-size:1.5rem;font-variant-numeric:tabular-nums;display:block;margin-top:2px}
+.due-box .rate{font-size:.75rem;color:#a9cfc8;margin-top:4px}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:800}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.no{background:#eef2f0;color:var(--muted)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.hint{color:var(--muted);font-size:.78rem;margin:9px 0 0}
+.report{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.report-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:10px}
+.report-head h3{font-size:1.02rem;margin-top:2px}
+.report-kicker{font-size:.7rem;letter-spacing:.08em;font-weight:800;color:var(--gold);text-transform:uppercase}
+.report-date{font-size:.78rem;color:var(--muted)}
+.rep-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.rep-table td{padding:6px 4px;border-bottom:1px dashed #e4ebe9}
+.rep-table td:last-child{text-align:end;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.rep-table tr.total td{border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-weight:800;background:#f8fbfa}
+.rep-table tr.due td{background:var(--navy);color:#fff;font-weight:800;border:0}
+.rep-table tr.due td:first-child{border-start-start-radius:8px;border-end-start-radius:8px}
+.rep-table tr.due td:last-child{border-start-end-radius:8px;border-end-end-radius:8px}
+.report .sign{display:flex;justify-content:space-between;gap:20px;margin-top:22px;font-size:.78rem;color:var(--muted)}
+.report .sign i{display:block;border-bottom:1px solid var(--line);width:180px;height:26px}
+.note{background:var(--warn-soft);border:1px solid #eeddb9;border-radius:11px;padding:10px 12px;font-size:.78rem;color:#6d4a0b;margin-top:12px}
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:760px){.fin-grid{grid-template-columns:1fr}}
+.fin-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}
+.fin-card.murabaha{background:var(--teal-soft);border-color:#cbe3dc}
+.fin-card h3{font-size:.9rem;margin-bottom:2px}
+.fin-card .tag{font-size:.7rem;color:var(--muted);display:block;margin-bottom:8px}
+.offer-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:3px}
+.pick{width:auto;min-width:120px;padding:6px 9px;font-size:.8rem}
+.fin-card .big{font-size:1.22rem;font-weight:800;font-variant-numeric:tabular-nums}
+.fin-card dl{display:grid;grid-template-columns:1fr auto;gap:4px 10px;margin:10px 0 0;font-size:.82rem}
+.fin-card dt{color:var(--muted)}.fin-card dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.compare{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+.bars{display:grid;gap:7px;margin-top:8px}
+.bar-row{display:grid;grid-template-columns:110px 1fr auto;gap:9px;align-items:center;font-size:.79rem}
+.bar{height:10px;border-radius:99px;background:#e8efec;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--teal)}
+.bar-row.conv .bar i{background:var(--gold)}
+.verdict{font-size:.86rem;font-weight:700;margin-top:10px}
+.budget-top{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin-bottom:12px}
+.budget-top label{flex:0 1 230px}
+.budget-top .btn{align-self:end}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:.73rem;color:var(--muted);text-align:start;font-weight:700;padding:8px 7px;border-bottom:1px solid var(--line);background:#fbfdfc;white-space:nowrap}
+td{padding:8px 7px;border-bottom:1px solid var(--line);font-size:.85rem;vertical-align:middle}
+td input{padding:6px 9px}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.proj-bar{height:7px;border-radius:99px;background:#e8efec;overflow:hidden;min-width:70px}
+.proj-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--navy2));border-radius:99px}
+.icon{background:none;border:0;color:var(--muted);font-size:1rem;padding:2px 5px}
+.icon:hover{color:var(--bad)}
+.summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.sum-item{background:#f8fbfa;border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:.8rem}
+.sum-item b{display:block;font-size:1rem;font-variant-numeric:tabular-nums}
+.sum-item.bad{border-color:#eccbc6;background:var(--bad-soft)}
+.sum-item.bad b{color:var(--bad)}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:0 20px 28px;max-width:900px;margin:0 auto}
+@media print{.top,.nav,.no-print,.mode,.btn,footer{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}.kpis{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}body.print-zakat #financeCard,body.print-zakat #budgetCard,body.print-zakat .kpis,body.print-zakat .sub,body.print-zakat .grid,body.print-zakat .card-head,body.print-zakat footer{display:none!important}body.print-zakat #zakatCard{border:0;padding:0}body.print-zakat #zakatCard .report{margin:0;border:0;padding:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">ZKT</span>
+      <div><strong data-i18n="brand">نظام الزكاة والتمويل الإسلامي</strong><small data-i18n="tagline">زكاة دقيقة · مرابحة · ميزانيات مشاريع</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة / PDF</button>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#zakatCard" data-i18n="nav.zakat">حاسبة الزكاة</a>
+    <a href="#financeCard" data-i18n="nav.finance">المرابحة والتمويل</a>
+    <a href="#budgetCard" data-i18n="nav.budget">توزيع الميزانيات</a>
+  </nav>
+</header>
+
+<main>
+  <section class="kpis">
+    <div class="kpi hero"><span data-i18n="kpi.zakat">الزكاة المستحقة</span><strong id="kpiZakat">—</strong></div>
+    <div class="kpi"><span data-i18n="kpi.base">الوعاء الزكوي</span><strong id="kpiBase">—</strong></div>
+    <div class="kpi gold"><span data-i18n="kpi.diff">فرق تكلفة التمويل</span><strong id="kpiDiff">—</strong></div>
+    <div class="kpi"><span data-i18n="kpi.budget">المتبقي من الميزانية</span><strong id="kpiBudget">—</strong></div>
+  </section>
+
+  <section class="card" id="zakatCard">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="zakat.title">حاسبة زكاة الشركات والأفراد</h2>
+        <p data-i18n="zakat.desc">زكاة 2.5% من الوعاء الزكوي بعد خصم الالتزامات، بشرط بلوغ النصاب وحولان الحول الهجري.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <div class="mode" role="group">
+          <button type="button" id="modeInd" class="on" data-i18n="mode.individual">فرد</button>
+          <button type="button" id="modeCorp" data-i18n="mode.corporate">شركة</button>
+        </div>
+        <button type="button" class="btn ghost small no-print" id="printZakat" data-i18n="report.print">طباعة تقرير الزكاة</button>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3 data-i18n="nisab.title">النصاب وأسعار المعادن</h3>
+      <div class="fields three">
+        <label><span data-i18n="nisab.basis">أساس النصاب</span><select id="basis"><option value="gold" data-i18n="basis.gold">ذهب (85 جرامًا)</option><option value="silver" data-i18n="basis.silver">فضة (595 جرامًا)</option></select></label>
+        <label><span data-i18n="gold.price">سعر جرام الذهب</span><input id="goldPrice" type="number" min="0" step="0.01" value="350"></label>
+        <label><span data-i18n="silver.price">سعر جرام الفضة</span><input id="silverPrice" type="number" min="0" step="0.01" value="4.2"></label>
+      </div>
+      <p class="hint" id="nisabHint">—</p>
+      <label style="margin-top:9px"><span data-i18n="report.org">اسم الشركة / التاجر</span><input id="orgName" type="text" data-i18n-ph="report.orgPh"></label>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="section-label" id="modeLabel" data-i18n="ind.title">أصول الفرد</div>
+        <div id="indFields">
+          <div class="fields">
+            <label><span data-i18n="f.cash">نقد وحسابات بنكية</span><input id="iCash" type="number" min="0" step="0.01" value="50000"></label>
+            <label><span data-i18n="f.debts">ديون مستحقة عليك الآن</span><input id="iDebts" type="number" min="0" step="0.01" value="15000"></label>
+            <label><span data-i18n="f.goldGrams">وزن الذهب (جرام)</span><input id="iGoldGrams" type="number" min="0" step="0.01" value="100"></label>
+            <label><span data-i18n="f.silverGrams">وزن الفضة (جرام)</span><input id="iSilverGrams" type="number" min="0" step="0.01" value="0"></label>
+            <label><span data-i18n="f.investments">أسهم وصناديق واستثمارات</span><input id="iInvest" type="number" min="0" step="0.01" value="30000"></label>
+            <label><span data-i18n="f.inventory">بضاعة وأصول للتجارة</span><input id="iInventory" type="number" min="0" step="0.01" value="0"></label>
+            <label><span data-i18n="f.receivables">مستحقات مرجوة التحصيل</span><input id="iReceivables" type="number" min="0" step="0.01" value="0"></label>
+          </div>
+          <p class="hint" data-i18n="ind.note">تُقوَّم الأسهم والصناديق بقيمتها السوقية، والبضاعة بسعر بيعها الحالي. الديون التي عليك تُخصم إن كانت مستحقة فورًا.</p>
+        </div>
+        <div id="corpFields" hidden>
+          <div class="fields">
+            <label><span data-i18n="f.cash">نقد وحسابات بنكية</span><input id="cCash" type="number" min="0" step="0.01" value="250000"></label>
+            <label><span data-i18n="f.inventory">مخزون وبضاعة</span><input id="cInventory" type="number" min="0" step="0.01" value="180000"></label>
+            <label><span data-i18n="f.receivables">ذمم مدينة قابلة للتحصيل</span><input id="cReceivables" type="number" min="0" step="0.01" value="120000"></label>
+            <label><span data-i18n="f.investments">استثمارات متداولة</span><input id="cInvest" type="number" min="0" step="0.01" value="50000"></label>
+            <label><span data-i18n="f.currentLiab">التزامات متداولة (دائنة)</span><input id="cCurrentLiab" type="number" min="0" step="0.01" value="90000"></label>
+            <label><span data-i18n="f.ltDebt">جزء الديون طويلة الأجل المستحق خلال سنة</span><input id="cLtDebt" type="number" min="0" step="0.01" value="40000"></label>
+            <label><span data-i18n="f.fixedAssets">أصول ثابتة (غير زكوية)</span><input id="cFixed" type="number" min="0" step="0.01" value="600000"></label>
+          </div>
+          <p class="hint" data-i18n="corp.note">الأصول الثابتة (مبانٍ، آلات، سيارات تشغيل) لا تدخل في الوعاء الزكوي، وتُعرض للعلم فقط. تُخصم الالتزامات قصيرة الأجل والجزء المستحق من الديون طويلة الأجل.</p>
+        </div>
+        <p class="note" data-i18n="zakat.note">النتيجة إرشادية تعتمد على تصنيفك للأصول والالتزامات. الزكاة واجبة بعد حولان الحول الهجري على المال البالغ النصاب، ويُنصح بمراجعة محاسب مختص للحالات المعقدة.</p>
+      </div>
+
+      <div class="result">
+        <div class="row"><span data-i18n="r.assets">إجمالي الأصول الزكوية</span><b id="rAssets">—</b></div>
+        <div class="row"><span data-i18n="r.liab">الالتزامات المخصومة</span><b id="rLiab">—</b></div>
+        <div class="row"><span data-i18n="r.base">الوعاء الزكوي</span><b id="rBase">—</b></div>
+        <div class="row"><span data-i18n="r.nisab">النصاب الحالي</span><b id="rNisab">—</b></div>
+        <div class="row"><span data-i18n="r.status">حالة الوجوب</span><b><span class="badge" id="rStatus">—</span></b></div>
+        <div class="due-box">
+          <span data-i18n="r.due">الزكاة المستحقة (2.5%)</span>
+          <strong id="rDue">—</strong>
+          <div class="rate" id="rRate">—</div>
+        </div>
+        <p class="hint" id="rHawl" data-i18n="r.hawl">تُحتسب بعد مرور سنة هجرية كاملة على بلوغ النصاب.</p>
+      </div>
+    </div>
+
+    <div class="report" id="zakatReport">
+      <div class="report-head">
+        <div><span class="report-kicker" data-i18n="report.kicker">تقرير الزكاة</span><h3 id="repOrg">—</h3></div>
+        <div class="report-date" id="repDate">—</div>
+      </div>
+      <table class="rep-table"><tbody id="reportBody"></tbody></table>
+      <p class="note" data-i18n="report.note">تقرير إرشادي أُعدّ من بيانات المستخدم، ويُراجع مع المحاسب المختص قبل السداد.</p>
+      <div class="sign"><span data-i18n="report.sign">توقيع المسؤول</span><i></i></div>
+    </div>
+  </section>
+
+  <section class="card" id="financeCard">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="fin.title">مقارن عقود التمويل الإسلامي: المرابحة والإجارة</h2>
+        <p data-i18n="fin.desc">احسب القسط الشهري والتكلفة الإجمالية لكل عرض، وقارنها بشفافية مع كشف التكلفة السنوية الفعلية.</p>
+      </div>
+    </div>
+    <div class="fields three">
+      <label><span data-i18n="fin.price">سعر الأصل / العقار</span><input id="fPrice" type="number" min="0" step="100" value="500000"></label>
+      <label><span data-i18n="fin.down">الدفعة الأولى</span><input id="fDown" type="number" min="0" step="100" value="50000"></label>
+      <label><span data-i18n="fin.months">المدة (شهر)</span><input id="fMonths" type="number" min="1" step="1" value="60"></label>
+    </div>
+    <div class="fin-grid">
+      <div class="fin-card murabaha">
+        <div class="offer-head"><h3 data-i18n="fin.offerA">العرض أ</h3>
+          <select id="aType" class="pick"><option value="murabaha" data-i18n="fin.type.murabaha">مرابحة</option><option value="ijara" data-i18n="fin.type.ijara">إجارة</option></select>
+        </div>
+        <span class="tag" id="aTag">—</span>
+        <div class="big" id="aMonthly">—</div>
+        <dl>
+          <dt data-i18n="fin.total">إجمالي المدفوع</dt><dd id="aTotal">—</dd>
+          <dt data-i18n="fin.cost">تكلفة التمويل</dt><dd id="aCost">—</dd>
+          <dt data-i18n="fin.apr">التكلفة السنوية الفعلية (APR)</dt><dd id="aApr">—</dd>
+        </dl>
+        <div class="fields" style="margin-top:10px">
+          <label><span data-i18n="fin.rate">النسبة السنوية %</span><input id="aRate" type="number" min="0" step="0.01" value="6"></label>
+          <label><span data-i18n="fin.fees">رسوم إدارية</span><input id="aFees" type="number" min="0" step="10" value="2500"></label>
+        </div>
+        <label style="margin-top:8px"><span data-i18n="fin.balloon">دفعة التملك النهائي (للإجارة)</span><input id="aBalloon" type="number" min="0" step="100" value="0"></label>
+      </div>
+      <div class="fin-card">
+        <div class="offer-head"><h3 data-i18n="fin.offerB">العرض ب</h3>
+          <select id="bType" class="pick"><option value="murabaha" data-i18n="fin.type.murabaha">مرابحة</option><option value="ijara" selected data-i18n="fin.type.ijara">إجارة</option></select>
+        </div>
+        <span class="tag" id="bTag">—</span>
+        <div class="big" id="bMonthly">—</div>
+        <dl>
+          <dt data-i18n="fin.total">إجمالي المدفوع</dt><dd id="bTotal">—</dd>
+          <dt data-i18n="fin.cost">تكلفة التمويل</dt><dd id="bCost">—</dd>
+          <dt data-i18n="fin.apr">التكلفة السنوية الفعلية (APR)</dt><dd id="bApr">—</dd>
+        </dl>
+        <div class="fields" style="margin-top:10px">
+          <label><span data-i18n="fin.rate">النسبة السنوية %</span><input id="bRate" type="number" min="0" step="0.01" value="5.5"></label>
+          <label><span data-i18n="fin.fees">رسوم إدارية</span><input id="bFees" type="number" min="0" step="10" value="2500"></label>
+        </div>
+        <label style="margin-top:8px"><span data-i18n="fin.balloon">دفعة التملك النهائي (للإجارة)</span><input id="bBalloon" type="number" min="0" step="100" value="0"></label>
+      </div>
+    </div>
+    <div class="compare">
+      <div class="bars">
+        <div class="bar-row"><span data-i18n="fin.offerA">العرض أ</span><div class="bar"><i id="barA"></i></div><b id="barATxt">—</b></div>
+        <div class="bar-row conv"><span data-i18n="fin.offerB">العرض ب</span><div class="bar"><i id="barB"></i></div><b id="barBTxt">—</b></div>
+      </div>
+      <p class="verdict" id="finVerdict">—</p>
+      <p class="note" data-i18n="fin.note">المقارنة تقديرية وليست فتوى أو عرضًا ملزمًا من بنك. تختلف شروط المرابحة (ربح ثابت على الممول) والإجارة (أجرة سنوية على الأصل مع تملك نهائي) بحسب العقد والتأمين والرسوم، فراجع العقد قبل التوقيع.</p>
+    </div>
+  </section>
+
+  <section class="card" id="budgetCard">
+    <div class="card-head">
+      <div>
+        <h2 data-i18n="budget.title">توزيع ميزانيات المشاريع</h2>
+        <p data-i18n="budget.desc">وزّع ميزانية إجمالية على مشاريعك بالأوزان، أو املأ الإجمالي بالزكاة المستحقة ووزّعها على أوجه الصرف.</p>
+      </div>
+    </div>
+    <div class="budget-top no-print">
+      <label><span data-i18n="budget.total">إجمالي الميزانية</span><input id="bTotal" type="number" min="0" step="100" value="100000"></label>
+      <button type="button" class="btn teal" id="useZakat" data-i18n="budget.useZakat">استخدم الزكاة المستحقة</button>
+      <button type="button" class="btn ghost" id="equalBtn" data-i18n="budget.equal">توزيع متساوٍ</button>
+      <button type="button" class="btn ghost" id="normBtn" data-i18n="budget.normalize">تطبيع إلى 100%</button>
+      <button type="button" class="btn gold" id="addProj" data-i18n="budget.add">+ مشروع</button>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr>
+          <th data-i18n="budget.project">المشروع / وجه الصرف</th>
+          <th data-i18n="budget.weight">الوزن %</th>
+          <th data-i18n="budget.amount">المبلغ</th>
+          <th data-i18n="budget.share">الحصة</th>
+          <th class="no-print"></th>
+        </tr></thead>
+        <tbody id="projRows"></tbody>
+      </table>
+    </div>
+    <div class="summary">
+      <div class="sum-item"><span data-i18n="budget.allocated">الموزَّع</span><b id="sAlloc">—</b></div>
+      <div class="sum-item" id="sRemainBox"><span data-i18n="budget.remaining">المتبقي</span><b id="sRemain">—</b></div>
+      <div class="sum-item" id="sWeightBox"><span data-i18n="budget.weightSum">مجموع الأوزان</span><b id="sWeight">—</b></div>
+    </div>
+    <p class="note" id="budgetWarn" hidden data-i18n="budget.warn">مجموع الأوزان لا يساوي 100% — المتبقي يظهر كمبلغ غير موزع. استخدم «تطبيع إلى 100%».</p>
+    <p class="hint" data-i18n="budget.note">يمكنك تعديل اسم المشروع ووزنه مباشرة. المبالغ تُحسب فورًا من إجمالي الميزانية، وكل شيء يُحفظ محليًا في المتصفح.</p>
+  </section>
+</main>
+
+<footer>
+  <span data-i18n="footer">نظام الزكاة والتمويل الإسلامي — أداة تقديرية تعمل بلا خادم · ليست بديلًا عن استشارة شرعية أو محاسبية.</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", decimals: 3 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", decimals: 3 }
+  };
+
+  var I18N = {
+    ar: {
+      brand: "نظام الزكاة والتمويل الإسلامي", tagline: "زكاة دقيقة · مرابحة · ميزانيات مشاريع",
+      currency: "العملة", print: "طباعة / PDF",
+      "nav.zakat": "حاسبة الزكاة", "nav.finance": "التمويل الإسلامي", "nav.budget": "توزيع الميزانيات",
+      "kpi.zakat": "الزكاة المستحقة", "kpi.base": "الوعاء الزكوي", "kpi.diff": "فرق تكلفة التمويل", "kpi.budget": "المتبقي من الميزانية",
+      "zakat.title": "حاسبة زكاة الشركات والأفراد",
+      "zakat.desc": "زكاة 2.5% من الوعاء الزكوي بعد خصم الالتزامات، بشرط بلوغ النصاب وحولان الحول الهجري.",
+      "mode.individual": "فرد", "mode.corporate": "شركة",
+      "nisab.title": "النصاب وأسعار المعادن", "nisab.basis": "أساس النصاب",
+      "basis.gold": "ذهب (85 جرامًا)", "basis.silver": "فضة (595 جرامًا)",
+      "gold.price": "سعر جرام الذهب", "silver.price": "سعر جرام الفضة",
+      "ind.title": "أصول الفرد", "corp.title": "أصول الشركة والتزاماتها",
+      "f.cash": "نقد وحسابات بنكية", "f.debts": "ديون مستحقة عليك الآن",
+      "f.goldGrams": "وزن الذهب (جرام)", "f.silverGrams": "وزن الفضة (جرام)",
+      "f.investments": "أسهم وصناديق واستثمارات", "f.inventory": "بضاعة وأصول للتجارة",
+      "f.receivables": "مستحقات مرجوة التحصيل", "f.currentLiab": "التزامات متداولة (دائنة)",
+      "f.ltDebt": "جزء الديون طويلة الأجل المستحق خلال سنة", "f.fixedAssets": "أصول ثابتة (غير زكوية)",
+      "ind.note": "تُقوَّم الأسهم والصناديق بقيمتها السوقية، والبضاعة بسعر بيعها الحالي. الديون التي عليك تُخصم إن كانت مستحقة فورًا.",
+      "corp.note": "الأصول الثابتة (مبانٍ، آلات، سيارات تشغيل) لا تدخل في الوعاء الزكوي، وتُعرض للعلم فقط. تُخصم الالتزامات قصيرة الأجل والجزء المستحق من الديون طويلة الأجل.",
+      "zakat.note": "النتيجة إرشادية تعتمد على تصنيفك للأصول والالتزامات. الزكاة واجبة بعد حولان الحول الهجري على المال البالغ النصاب، ويُنصح بمراجعة محاسب مختص للحالات المعقدة.",
+      "r.assets": "إجمالي الأصول الزكوية", "r.liab": "الالتزامات المخصومة", "r.base": "الوعاء الزكوي",
+      "r.nisab": "النصاب الحالي", "r.status": "حالة الوجوب", "r.due": "الزكاة المستحقة (2.5%)",
+      "r.dueYes": "بلغ النصاب — الزكاة واجبة", "r.dueNo": "دون النصاب — لا زكاة", "r.hawl": "تُحتسب بعد مرور سنة هجرية كاملة على بلوغ النصاب.",
+      "r.nisabLine": "نصاب الذهب: {g} · نصاب الفضة: {s} · المعتمد: {b}",
+      "r.rateLine": "بنسبة 2.5% من وعاء {base} بعد استيفاء النصاب.",
+      "fin.title": "مقارن عقود التمويل الإسلامي: المرابحة والإجارة",
+      "fin.desc": "احسب القسط الشهري والتكلفة الإجمالية لكل عرض، وقارنها بشفافية مع كشف التكلفة السنوية الفعلية.",
+      "fin.price": "سعر الأصل / العقار", "fin.down": "الدفعة الأولى", "fin.months": "المدة (شهر)",
+      "fin.murabahaRate": "هامش ربح المرابحة السنوي %", "fin.convRate": "فائدة التمويل التجاري السنوية %",
+      "fin.fees": "رسوم إدارية (تُضاف للطرفين)",
+      "fin.murabaha": "المرابحة", "fin.conv": "التمويل التجاري",
+      "fin.murabahaTag": "ربح ثابت لا يتغير خلال المدة", "fin.convTag": "فائدة متناقصة على الرصيد المتبقي",
+      "fin.total": "إجمالي المدفوع", "fin.cost": "تكلفة التمويل", "fin.apr": "التكلفة السنوية الفعلية (APR)",
+      "fin.cheaperM": "المرابحة أقل تكلفة بفارق {amt}.",
+      "fin.cheaperC": "التمويل التجاري أقل تكلفة بفارق {amt}.",
+      "fin.equal": "التكلفتان متقاربتان (فرق أقل من 1%).",
+      "fin.note": "المقارنة تقديرية وليست فتوى أو عرضًا ملزمًا من بنك. تختلف شروط المرابحة (ربح ثابت على الممول) والإجارة (أجرة سنوية على الأصل مع تملك نهائي) بحسب العقد والتأمين والرسوم، فراجع العقد قبل التوقيع.",
+      "fin.offerA": "العرض أ", "fin.offerB": "العرض ب", "fin.rate": "النسبة السنوية %",
+      "fin.balloon": "دفعة التملك النهائي (للإجارة)", "fin.type.murabaha": "مرابحة", "fin.type.ijara": "إجارة",
+      "fin.tag.murabaha": "ربح ثابت على المبلغ الممول", "fin.tag.ijara": "إيجار شهري يشمل قيمة الأصل والربح مع تملك نهائي",
+      "fin.cheaperA": "العرض أ أقل تكلفة بفارق {amt}.", "fin.cheaperB": "العرض ب أقل تكلفة بفارق {amt}.",
+      "report.kicker": "تقرير الزكاة", "report.org": "اسم الشركة / التاجر", "report.orgPh": "مثال: شركة أفق للتجارة",
+      "report.date": "تاريخ التقرير:", "report.note": "تقرير إرشادي أُعدّ من بيانات المستخدم، ويُراجع مع المحاسب المختص قبل السداد.",
+      "report.sign": "توقيع المسؤول", "report.print": "طباعة تقرير الزكاة",
+      "report.noOrgCorp": "شركة (بدون اسم)", "report.noOrgInd": "تاجر فرد",
+      "rep.cash": "النقدية والحسابات البنكية", "rep.inventory": "بضاعة معدة للبيع", "rep.receivables": "ديون مرجوة التحصيل",
+      "rep.invest": "استثمارات متداولة", "rep.gold": "قيمة الذهب", "rep.silver": "قيمة الفضة",
+      "rep.assets": "إجمالي الأصول الزكوية", "rep.currentLiab": "التزامات متداولة",
+      "rep.ltDebt": "الجزء المستحق من الديون طويلة الأجل", "rep.liab": "إجمالي الالتزامات المخصومة",
+      "rep.debts": "ديون مستحقة", "rep.base": "الوعاء الزكوي", "rep.nisab": "النصاب الشرعي", "rep.due": "الزكاة المستحقة (2.5%)",
+      "budget.title": "توزيع ميزانيات المشاريع",
+      "budget.desc": "وزّع ميزانية إجمالية على مشاريعك بالأوزان، أو املأ الإجمالي بالزكاة المستحقة ووزّعها على أوجه الصرف.",
+      "budget.total": "إجمالي الميزانية", "budget.useZakat": "استخدم الزكاة المستحقة",
+      "budget.equal": "توزيع متساوٍ", "budget.normalize": "تطبيع إلى 100%", "budget.add": "+ مشروع",
+      "budget.project": "المشروع / وجه الصرف", "budget.weight": "الوزن %", "budget.amount": "المبلغ",
+      "budget.share": "الحصة", "budget.allocated": "الموزَّع", "budget.remaining": "المتبقي",
+      "budget.weightSum": "مجموع الأوزان",
+      "budget.warn": "مجموع الأوزان لا يساوي 100% — المتبقي يظهر كمبلغ غير موزع. استخدم «تطبيع إلى 100%».",
+      "budget.note": "يمكنك تعديل اسم المشروع ووزنه مباشرة. المبالغ تُحسب فورًا من إجمالي الميزانية، وكل شيء يُحفظ محليًا في المتصفح.",
+      "budget.default1": "توسعة العيادة", "budget.default2": "حملة تسويق", "budget.default3": "تدريب الفريق", "budget.default4": "احتياطي تشغيلي",
+      "footer": "نظام الزكاة والتمويل الإسلامي — أداة تقديرية تعمل بلا خادم · ليست بديلًا عن استشارة شرعية أو محاسبية."
+    },
+    en: {
+      brand: "Islamic Finance & Zakat OS", tagline: "Accurate zakat · Murabaha · Project budgets",
+      currency: "Currency", print: "Print / PDF",
+      "nav.zakat": "Zakat calculator", "nav.finance": "Islamic financing", "nav.budget": "Budget allocation",
+      "kpi.zakat": "Zakat due", "kpi.base": "Zakat base", "kpi.diff": "Financing cost gap", "kpi.budget": "Budget remaining",
+      "zakat.title": "Corporate & individual zakat calculator",
+      "zakat.desc": "2.5% of the zakat base after deducting liabilities, subject to reaching nisab and the passing of one Hijri year.",
+      "mode.individual": "Individual", "mode.corporate": "Company",
+      "nisab.title": "Nisab and metal prices", "nisab.basis": "Nisab basis",
+      "basis.gold": "Gold (85 grams)", "basis.silver": "Silver (595 grams)",
+      "gold.price": "Gold price per gram", "silver.price": "Silver price per gram",
+      "ind.title": "Individual assets", "corp.title": "Company assets and liabilities",
+      "f.cash": "Cash and bank balances", "f.debts": "Debts due now",
+      "f.goldGrams": "Gold weight (grams)", "f.silverGrams": "Silver weight (grams)",
+      "f.investments": "Shares, funds and investments", "f.inventory": "Inventory and trading assets",
+      "f.receivables": "Collectible receivables", "f.currentLiab": "Current liabilities (payables)",
+      "f.ltDebt": "Current portion of long-term debt", "f.fixedAssets": "Fixed assets (not zakatable)",
+      "ind.note": "Shares and funds are valued at market value, and inventory at its current selling price. Debts you owe are deducted when due immediately.",
+      "corp.note": "Fixed assets (buildings, machinery, operating vehicles) are not part of the zakat base and are shown for reference only. Short-term liabilities and the current portion of long-term debt are deducted.",
+      "zakat.note": "This is an indicative result based on how you classify assets and liabilities. Zakat is due after one Hijri year passes on wealth that reached nisab; consult a qualified accountant for complex cases.",
+      "r.assets": "Total zakatable assets", "r.liab": "Deductible liabilities", "r.base": "Zakat base",
+      "r.nisab": "Current nisab", "r.status": "Obligation status", "r.due": "Zakat due (2.5%)",
+      "r.dueYes": "Nisab reached — zakat is due", "r.dueNo": "Below nisab — no zakat", "r.hawl": "Calculated after one full Hijri year passes from reaching nisab.",
+      "r.nisabLine": "Gold nisab: {g} · Silver nisab: {s} · Applied: {b}",
+      "r.rateLine": "2.5% of a base of {base} after meeting nisab.",
+      "fin.title": "Islamic financing comparator: murabaha vs ijara",
+      "fin.desc": "Calculate the monthly installment and total cost of each offer, and compare them transparently with the effective annual cost.",
+      "fin.price": "Asset / property price", "fin.down": "Down payment", "fin.months": "Term (months)",
+      "fin.murabahaRate": "Murabaha annual profit margin %", "fin.convRate": "Commercial finance annual interest %",
+      "fin.fees": "Administrative fees (added to both)",
+      "fin.murabaha": "Murabaha", "fin.conv": "Commercial financing",
+      "fin.murabahaTag": "Fixed profit that does not change over the term", "fin.convTag": "Declining interest on the remaining balance",
+      "fin.total": "Total paid", "fin.cost": "Cost of financing", "fin.apr": "Effective annual cost (APR)",
+      "fin.cheaperM": "Murabaha costs less by {amt}.",
+      "fin.cheaperC": "Commercial financing costs less by {amt}.",
+      "fin.equal": "The two costs are close (difference under 1%).",
+      "fin.note": "This is an indicative comparison, not a fatwa or a binding bank offer. Murabaha terms (fixed profit on the financed amount) and ijara terms (annual rent on the asset with final ownership) vary with the contract, insurance and fees, so review the contract before signing.",
+      "fin.offerA": "Offer A", "fin.offerB": "Offer B", "fin.rate": "Annual rate %",
+      "fin.balloon": "Final ownership payment (ijara)", "fin.type.murabaha": "Murabaha", "fin.type.ijara": "Ijara",
+      "fin.tag.murabaha": "Fixed profit on the financed amount", "fin.tag.ijara": "Monthly rent covering the asset cost and profit, with final ownership",
+      "fin.cheaperA": "Offer A costs less by {amt}.", "fin.cheaperB": "Offer B costs less by {amt}.",
+      "report.kicker": "Zakat report", "report.org": "Company / trader name", "report.orgPh": "e.g. Horizon Trading Co.",
+      "report.date": "Report date:", "report.note": "Indicative report built from your inputs; review it with a qualified accountant before payment.",
+      "report.sign": "Authorised signature", "report.print": "Print zakat report",
+      "report.noOrgCorp": "Company (unnamed)", "report.noOrgInd": "Individual trader",
+      "rep.cash": "Cash and bank balances", "rep.inventory": "Inventory held for sale", "rep.receivables": "Collectible receivables",
+      "rep.invest": "Trading investments", "rep.gold": "Gold value", "rep.silver": "Silver value",
+      "rep.assets": "Total zakatable assets", "rep.currentLiab": "Current liabilities",
+      "rep.ltDebt": "Current portion of long-term debt", "rep.liab": "Total deductible liabilities",
+      "rep.debts": "Debts due", "rep.base": "Zakat base", "rep.nisab": "Nisab", "rep.due": "Zakat due (2.5%)",
+      "budget.title": "Project budget allocation",
+      "budget.desc": "Split a total budget across projects by weight, or fill the total with the zakat due and allocate it across spending categories.",
+      "budget.total": "Total budget", "budget.useZakat": "Use zakat due",
+      "budget.equal": "Split equally", "budget.normalize": "Normalise to 100%", "budget.add": "+ Project",
+      "budget.project": "Project / spending category", "budget.weight": "Weight %", "budget.amount": "Amount",
+      "budget.share": "Share", "budget.allocated": "Allocated", "budget.remaining": "Remaining",
+      "budget.weightSum": "Total weights",
+      "budget.warn": "Weights do not add up to 100% — the remainder is shown as unallocated. Use “Normalise to 100%”.",
+      "budget.note": "Edit any project name or weight inline. Amounts recalculate instantly from the total budget, and everything is saved locally in the browser.",
+      "budget.default1": "Clinic expansion", "budget.default2": "Marketing campaign", "budget.default3": "Team training", "budget.default4": "Operating reserve",
+      "footer": "Islamic Finance & Zakat OS — an indicative, serverless tool · not a substitute for religious or accounting advice."
+    }
+  };
+
+  var KEY = "pb_zakat_os_v1";
+  var LANG_KEY = "pb_zakat_os_lang";
+  var state = { lang: "ar", currency: "SAR", mode: "individual", basis: "gold", projects: [] };
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toLocaleString() + " " + state.currency; }
+  }
+  function pct(value) { return (Number(value) || 0).toFixed(2) + "%"; }
+  function esc(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  function nisabValues() {
+    var goldPrice = num("goldPrice");
+    var silverPrice = num("silverPrice");
+    return { gold: 85 * goldPrice, silver: 595 * silverPrice, basisValue: state.basis === "silver" ? 595 * silverPrice : 85 * goldPrice };
+  }
+
+  function calcZakat() {
+    var assets, liab;
+    if (state.mode === "corporate") {
+      assets = num("cCash") + num("cInventory") + num("cReceivables") + num("cInvest");
+      liab = num("cCurrentLiab") + num("cLtDebt");
+    } else {
+      var goldPrice = num("goldPrice"), silverPrice = num("silverPrice");
+      assets = num("iCash") + num("iGoldGrams") * goldPrice + num("iSilverGrams") * silverPrice +
+        num("iInvest") + num("iInventory") + num("iReceivables");
+      liab = num("iDebts");
+    }
+    var base = Math.max(0, assets - liab);
+    var nisab = nisabValues().basisValue;
+    var due = nisab > 0 && base >= nisab ? base * 0.025 : 0;
+    return { assets: assets, liab: liab, base: base, nisab: nisab, due: due, above: nisab > 0 && base >= nisab };
+  }
+
+  function renderZakat() {
+    var z = calcZakat();
+    var n = nisabValues();
+    $("rAssets").textContent = money(z.assets);
+    $("rLiab").textContent = money(z.liab);
+    $("rBase").textContent = money(z.base);
+    $("rNisab").textContent = money(z.nisab);
+    var badge = $("rStatus");
+    badge.className = "badge " + (z.above ? "ok" : "no");
+    badge.textContent = z.above ? t("r.dueYes") : t("r.dueNo");
+    $("rDue").textContent = money(z.due);
+    $("rRate").textContent = t("r.rateLine", { base: money(z.base) });
+    $("nisabHint").textContent = t("r.nisabLine", {
+      g: money(n.gold), s: money(n.silver),
+      b: state.basis === "silver" ? t("basis.silver") : t("basis.gold")
+    });
+    $("kpiZakat").textContent = money(z.due);
+    $("kpiBase").textContent = money(z.base);
+    renderReport(z, n);
+    save();
+  }
+
+  function renderReport(z, n) {
+    var corp = state.mode === "corporate";
+    var org = $("orgName").value.trim() || t(corp ? "report.noOrgCorp" : "report.noOrgInd");
+    $("repOrg").textContent = org;
+    $("repDate").textContent = t("report.date") + " " + new Intl.DateTimeFormat(state.lang === "ar" ? "ar-SA-u-ca-gregory" : "en-US", {
+      year: "numeric", month: "long", day: "numeric"
+    }).format(new Date());
+    var rows = [];
+    function row(label, value, cls) {
+      rows.push('<tr class="' + (cls || "") + '"><td>' + esc(label) + "</td><td>" + money(value) + "</td></tr>");
+    }
+    if (corp) {
+      row(t("rep.cash"), num("cCash"));
+      row(t("rep.inventory"), num("cInventory"));
+      row(t("rep.receivables"), num("cReceivables"));
+      row(t("rep.invest"), num("cInvest"));
+      row(t("rep.assets"), z.assets, "total");
+      row(t("rep.currentLiab"), num("cCurrentLiab"));
+      row(t("rep.ltDebt"), num("cLtDebt"));
+      row(t("rep.liab"), z.liab);
+    } else {
+      row(t("rep.cash"), num("iCash"));
+      row(t("rep.gold"), num("iGoldGrams") * num("goldPrice"));
+      row(t("rep.silver"), num("iSilverGrams") * num("silverPrice"));
+      row(t("rep.invest"), num("iInvest"));
+      row(t("rep.inventory"), num("iInventory"));
+      row(t("rep.receivables"), num("iReceivables"));
+      row(t("rep.assets"), z.assets, "total");
+      row(t("rep.debts"), num("iDebts"));
+      row(t("rep.liab"), z.liab);
+    }
+    row(t("rep.base"), z.base, "total");
+    row(t("rep.nisab"), z.nisab);
+    row(t("rep.due"), z.due, "due");
+    $("reportBody").innerHTML = rows.join("");
+  }
+
+  function irrMonthly(financed, payment, months, balloon) {
+    if (!financed || !months) return 0;
+    if (!payment && !balloon) return 0;
+    var low = 0, high = 1;
+    for (var i = 0; i < 200; i += 1) {
+      var mid = (low + high) / 2;
+      var pv = 0;
+      for (var k = 1; k <= months; k += 1) pv += payment / Math.pow(1 + mid, k);
+      if (balloon) pv += balloon / Math.pow(1 + mid, months);
+      if (pv > financed) low = mid; else high = mid;
+    }
+    return (low + high) / 2;
+  }
+
+  function offerCalc(prefix) {
+    var price = Math.max(0, num("fPrice"));
+    var down = Math.min(Math.max(0, num("fDown")), price);
+    var months = Math.max(1, Math.round(num("fMonths")));
+    var financed = Math.max(0, price - down);
+    var type = $(prefix + "Type").value === "ijara" ? "ijara" : "murabaha";
+    var rate = Math.max(0, num(prefix + "Rate")) / 100;
+    var fees = Math.max(0, num(prefix + "Fees"));
+    var balloon = type === "ijara" ? Math.max(0, num(prefix + "Balloon")) : 0;
+    var monthly, total, profit = 0;
+    if (type === "ijara") {
+      var r = rate / 12;
+      var pvBalloon = balloon / Math.pow(1 + r, months);
+      monthly = r > 0 ? (financed - pvBalloon) * r / (1 - Math.pow(1 + r, -months)) : (financed - balloon) / months;
+      monthly = Math.max(0, monthly);
+      total = down + monthly * months + fees + balloon;
+    } else {
+      profit = financed * rate * (months / 12);
+      monthly = (financed + profit) / months;
+      total = down + financed + profit + fees;
+    }
+    var i = irrMonthly(financed, monthly, months, balloon);
+    var apr = financed > 0 ? (Math.pow(1 + i, 12) - 1) * 100 : 0;
+    return { type: type, price: price, down: down, months: months, financed: financed, rate: rate, fees: fees, balloon: balloon,
+      monthly: monthly, total: total, cost: total - price, apr: apr, profit: profit };
+  }
+
+  function renderFinance() {
+    var a = offerCalc("a");
+    var b = offerCalc("b");
+    ["a", "b"].forEach(function (key) {
+      var offer = key === "a" ? a : b;
+      $(key + "Monthly").textContent = money(offer.monthly) + (state.lang === "ar" ? " / شهر" : " / mo");
+      $(key + "Total").textContent = money(offer.total);
+      $(key + "Cost").textContent = money(offer.cost);
+      $(key + "Apr").textContent = pct(offer.apr);
+      $(key + "Tag").textContent = t("fin.tag." + offer.type);
+    });
+    var max = Math.max(a.total, b.total) || 1;
+    $("barA").style.width = (a.total / max * 100) + "%";
+    $("barB").style.width = (b.total / max * 100) + "%";
+    $("barATxt").textContent = money(a.total);
+    $("barBTxt").textContent = money(b.total);
+    var diff = b.total - a.total;
+    var verdict;
+    if (Math.abs(diff) / Math.max(a.total, 1) < 0.01) verdict = t("fin.equal");
+    else if (diff > 0) verdict = t("fin.cheaperA", { amt: money(diff) });
+    else verdict = t("fin.cheaperB", { amt: money(Math.abs(diff)) });
+    $("finVerdict").textContent = verdict + (state.lang === "ar" ? " (فرق الأقساط الشهرية: " : " (monthly installment gap: ") + money(Math.abs(a.monthly - b.monthly)) + ")";
+    $("kpiDiff").textContent = money(Math.abs(diff));
+    save();
+  }
+
+  function projSum() {
+    var total = num("bTotal");
+    var sumW = 0, alloc = 0;
+    state.projects.forEach(function (p) { sumW += Number(p.weight) || 0; alloc += total * (Number(p.weight) || 0) / 100; });
+    return { total: total, sumW: sumW, alloc: alloc, remaining: total - alloc };
+  }
+
+  function renderBudget() {
+    var total = num("bTotal");
+    var maxWeight = state.projects.reduce(function (m, p) { return Math.max(m, Number(p.weight) || 0); }, 1);
+    $("projRows").innerHTML = state.projects.map(function (p) {
+      var amount = total * (Number(p.weight) || 0) / 100;
+      var width = Math.max(0, Math.min(100, (Number(p.weight) || 0) / maxWeight * 100));
+      return '<tr data-id="' + p.id + '">' +
+        '<td><input data-field="name" value="' + esc(p.name) + '" aria-label="' + esc(t("budget.project")) + '"></td>' +
+        '<td style="width:110px"><input data-field="weight" type="number" min="0" max="100" step="1" value="' + (Number(p.weight) || 0) + '" aria-label="' + t("budget.weight") + '"></td>' +
+        '<td class="num">' + money(amount) + "</td>" +
+        '<td><div class="proj-bar"><i style="width:' + width + '%"></i></div></td>' +
+        '<td class="no-print"><button type="button" class="icon" data-act="del" title="' + (state.lang === "ar" ? "حذف" : "Delete") + '">✕</button></td></tr>';
+    }).join("");
+    updateBudgetSummary();
+  }
+
+  function updateBudgetSummary() {
+    var s = projSum();
+    $("sAlloc").textContent = money(s.alloc);
+    $("sRemain").textContent = money(s.remaining);
+    $("sWeight").textContent = (Math.round(s.sumW * 100) / 100) + "%";
+    $("sRemainBox").classList.toggle("bad", s.remaining < -0.5);
+    $("sWeightBox").classList.toggle("bad", Math.abs(s.sumW - 100) > 0.01);
+    $("budgetWarn").hidden = Math.abs(s.sumW - 100) <= 0.01;
+    $("kpiBudget").textContent = money(s.remaining);
+    save();
+  }
+
+  function refreshBudgetNumbers() {
+    var total = num("bTotal");
+    var maxWeight = state.projects.reduce(function (m, p) { return Math.max(m, Number(p.weight) || 0); }, 1);
+    state.projects.forEach(function (p) {
+      var row = document.querySelector('#projRows tr[data-id="' + p.id + '"]');
+      if (!row) return;
+      var amount = total * (Number(p.weight) || 0) / 100;
+      row.querySelector("td.num").textContent = money(amount);
+      row.querySelector(".proj-bar i").style.width = Math.max(0, Math.min(100, (Number(p.weight) || 0) / maxWeight * 100)) + "%";
+    });
+    updateBudgetSummary();
+  }
+
+  function renderAll() { renderZakat(); renderFinance(); renderBudget(); }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        currency: state.currency, mode: state.mode, basis: state.basis,
+        projects: state.projects,
+        values: collectValues()
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+  var VALUE_IDS = ["goldPrice", "silverPrice", "iCash", "iDebts", "iGoldGrams", "iSilverGrams", "iInvest", "iInventory", "iReceivables",
+    "cCash", "cInventory", "cReceivables", "cInvest", "cCurrentLiab", "cLtDebt", "cFixed", "orgName",
+    "fPrice", "fDown", "fMonths", "aType", "aRate", "aFees", "aBalloon", "bType", "bRate", "bFees", "bBalloon", "bTotal"];
+  function collectValues() {
+    var out = {};
+    VALUE_IDS.forEach(function (id) { out[id] = $(id).value; });
+    return out;
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    $("modeLabel").textContent = t(state.mode === "corporate" ? "corp.title" : "ind.title");
+    var basis = $("basis");
+    basis.options[0].textContent = t("basis.gold");
+    basis.options[1].textContent = t("basis.silver");
+    if (persist) localStorage.setItem(LANG_KEY, state.lang);
+    renderAll();
+  }
+
+  function setMode(mode) {
+    state.mode = mode === "corporate" ? "corporate" : "individual";
+    $("indFields").hidden = state.mode !== "individual";
+    $("corpFields").hidden = state.mode !== "corporate";
+    $("modeInd").classList.toggle("on", state.mode === "individual");
+    $("modeCorp").classList.toggle("on", state.mode === "corporate");
+    $("modeLabel").textContent = t(state.mode === "corporate" ? "corp.title" : "ind.title");
+    renderZakat();
+  }
+
+  function addProject(name, weight) {
+    state.projects.push({ id: "P" + Date.now() + Math.floor(Math.random() * 1000), name: name || (state.lang === "ar" ? "مشروع جديد" : "New project"), weight: weight == null ? 0 : weight });
+  }
+
+  $("projRows").addEventListener("input", function (event) {
+    var input = event.target.closest("input[data-field]");
+    if (!input) return;
+    var row = input.closest("tr");
+    var project = state.projects.filter(function (p) { return p.id === row.getAttribute("data-id"); })[0];
+    if (!project) return;
+    if (input.getAttribute("data-field") === "name") project.name = input.value;
+    else project.weight = Math.max(0, Math.min(100, parseFloat(input.value) || 0));
+    refreshBudgetNumbers();
+  });
+  $("projRows").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-act=del]");
+    if (!btn) return;
+    var row = btn.closest("tr");
+    state.projects = state.projects.filter(function (p) { return p.id !== row.getAttribute("data-id"); });
+    renderBudget();
+  });
+
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar", true); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("modeInd").addEventListener("click", function () { setMode("individual"); save(); });
+  $("modeCorp").addEventListener("click", function () { setMode("corporate"); save(); });
+  $("basis").addEventListener("change", function (event) { state.basis = event.target.value; renderZakat(); });
+  VALUE_IDS.forEach(function (id) { $(id).addEventListener("input", function () { renderAll(); }); });
+  ["aType", "bType"].forEach(function (id) { $(id).addEventListener("change", renderAll); });
+
+  $("equalBtn").addEventListener("click", function () {
+    if (!state.projects.length) return;
+    var each = Math.round(10000 / state.projects.length) / 100;
+    state.projects.forEach(function (p) { p.weight = each; });
+    renderBudget();
+  });
+  $("normBtn").addEventListener("click", function () {
+    var sum = state.projects.reduce(function (a, p) { return a + (Number(p.weight) || 0); }, 0);
+    if (sum <= 0) { $("equalBtn").click(); return; }
+    var running = 0;
+    state.projects.forEach(function (p, index) {
+      if (index === state.projects.length - 1) p.weight = Math.round((100 - running) * 100) / 100;
+      else { p.weight = Math.round((Number(p.weight) || 0) / sum * 10000) / 100; running += p.weight; }
+    });
+    renderBudget();
+  });
+  $("addProj").addEventListener("click", function () { addProject(); renderBudget(); });
+  $("printZakat").addEventListener("click", function () {
+    document.body.classList.add("print-zakat");
+    window.print();
+  });
+  window.addEventListener("afterprint", function () { document.body.classList.remove("print-zakat"); });
+
+  $("useZakat").addEventListener("click", function () {
+    var due = calcZakat().due;
+    $("bTotal").value = Math.round(due * 100) / 100;
+    renderBudget();
+  });
+
+  function load() {
+    var storedLang = localStorage.getItem(LANG_KEY);
+    state.lang = storedLang === "en" ? "en" : "ar";
+    var raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+    if (raw) {
+      if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+      state.mode = raw.mode === "corporate" ? "corporate" : "individual";
+      state.basis = raw.basis === "silver" ? "silver" : "gold";
+      if (Array.isArray(raw.projects) && raw.projects.length) state.projects = raw.projects;
+      if (raw.values) Object.keys(raw.values).forEach(function (id) { if ($(id)) $(id).value = raw.values[id]; });
+      if (raw.lang) storedLang = raw.lang;
+      state.lang = storedLang === "en" ? "en" : "ar";
+    }
+    if (!state.projects.length) {
+      state.projects = [
+        { id: "P1", name: t("budget.default1"), weight: 40 },
+        { id: "P2", name: t("budget.default2"), weight: 25 },
+        { id: "P3", name: t("budget.default3"), weight: 15 },
+        { id: "P4", name: t("budget.default4"), weight: 20 }
+      ];
+    }
+    $("currency").value = state.currency;
+    $("basis").value = state.basis;
+    $("indFields").hidden = state.mode !== "individual";
+    $("corpFields").hidden = state.mode !== "corporate";
+    $("modeInd").classList.toggle("on", state.mode === "individual");
+    $("modeCorp").classList.toggle("on", state.mode === "corporate");
+    $("modeLabel").textContent = t(state.mode === "corporate" ? "corp.title" : "ind.title");
+    applyLang(state.lang, false);
+  }
+
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+    return '<option value="' + code + '">' + code + "</option>";
+  }).join("");
+  load();
+  applyLang(state.lang, false);
+})();
+</script>
+</body>
+</html>

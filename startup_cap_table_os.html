@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جدول الملكية وجولات الاستثمار — Startup Cap Table OS</title>
+<meta name="description" content="وزّع الحصص بين المؤسسين بعدالة، واحسب التقييم والتخفيف في جولات الاستثمار، مع رسوم بيانية تفاعلية — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{
+  --bg:#f3f5f8;--card:#fff;--ink:#101b2d;--muted:#5d6a7c;
+  --navy:#0e1f3d;--navy2:#17325c;--indigo:#3b5bdb;--indigo-soft:#eaeefb;
+  --teal:#0f766e;--teal-soft:#e6f3f1;--violet:#7048b6;--violet-soft:#f0eafa;
+  --gold:#b0822f;--gold-soft:#f9f0dc;--bad:#a83a2f;--bad-soft:#fbeceb;
+  --ok:#216b4c;--ok-soft:#e7f4ed;--line:#e2e8f0;--radius:16px;
+  --shadow:0 10px 30px rgba(14,31,61,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:.9rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input:focus,select:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(59,91,219,.12)}
+label>span{display:block;font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:650}
+.top{position:sticky;top:0;z-index:20;background:rgba(243,245,248,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1220px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--navy),var(--indigo));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.72rem;letter-spacing:.04em}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}.controls select{width:auto;min-width:110px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:750;font-size:.83rem;background:var(--navy);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.12)}
+.btn.indigo{background:var(--indigo)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.small{padding:5px 9px;font-size:.74rem;border-radius:8px}
+.btn.danger{background:var(--bad-soft);color:var(--bad);border:1px solid #eccbc6}
+main{max-width:1220px;margin:0 auto;padding:18px 20px 50px;display:grid;gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.card-head h2{font-size:1.02rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.8rem;max-width:800px}
+.hint{color:var(--muted);font-size:.76rem;margin:8px 0 0}
+.grid2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:15px;align-items:start}
+@media(max-width:960px){.grid2{grid-template-columns:1fr}}
+.weights{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:700px){.weights{grid-template-columns:1fr 1fr}}
+.weights label{position:relative}
+.sum-pill{display:inline-block;margin-top:8px;font-size:.73rem;font-weight:800;background:var(--indigo-soft);color:var(--indigo);border-radius:99px;padding:2px 10px}
+.sum-pill.bad{background:var(--bad-soft);color:var(--bad)}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+.table-wrap>table{min-width:700px}
+th{font-size:.68rem;color:var(--muted);text-align:start;padding:8px 7px;background:#f8fafc;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:750}
+td{padding:7px;border-bottom:1px solid #eef2f7;vertical-align:middle;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:0}
+.f-name{font-size:.8rem;padding:5px 7px;margin-bottom:3px}
+.f-nameEn{font-size:.72rem;padding:4px 7px;color:var(--muted)}
+.f-cap,.f-hours,.f-exp,.f-role{font-size:.78rem;padding:5px 6px}
+.share-cell{font-weight:800;color:var(--navy);white-space:nowrap}
+.icon-btn{border:0;background:transparent;color:var(--bad);font-size:1.05rem;line-height:1;padding:4px;border-radius:6px}
+.icon-btn:hover{background:var(--bad-soft)}
+.founder-results{display:grid;gap:8px}
+.founder-line{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.founder-line b{font-size:.85rem}
+.founder-line span{font-size:.85rem;font-weight:800;font-variant-numeric:tabular-nums}
+.mini-bar{grid-column:1/-1;height:8px;border-radius:99px;background:#eef2f7;overflow:hidden}
+.mini-bar i{display:block;height:100%;border-radius:99px}
+.fair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.fair-score{font-size:.75rem;font-weight:800;background:var(--ok-soft);color:var(--ok);border-radius:99px;padding:3px 10px}
+.fair-score.warn{background:var(--gold-soft);color:#7a560f}
+.warn-box{margin-top:10px;font-size:.78rem;background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;color:#6d5011}
+.warn-box ul{margin:4px 0 0;padding-inline-start:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:2px}
+.kpi strong{font-size:1.03rem;font-variant-numeric:tabular-nums;display:block}
+.kpi small{font-size:.67rem;color:var(--muted);font-weight:600}
+.kpi.hero{background:linear-gradient(135deg,var(--navy),var(--indigo));border:0;color:#fff}
+.kpi.hero span,.kpi.hero small{color:#d3ddf3}.kpi.hero strong{color:#fff}
+.kpi.gold{background:var(--gold-soft);border-color:#ecdfc2}
+.kpi.teal{background:var(--teal-soft);border-color:#d5e7e3}
+.rounds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:900px){.rounds{grid-template-columns:1fr}}
+.round{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcfe}
+.round h3{font-size:.86rem;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.round .fields{display:grid;gap:7px}
+.round .fields label>span{font-size:.69rem}
+.round .fields input{padding:6px 8px;font-size:.8rem}
+.round-out{margin-top:8px;font-size:.75rem;color:var(--muted);display:grid;gap:2px}
+.round-out b{color:var(--ink);font-variant-numeric:tabular-nums}
+.chip{display:inline-block;background:var(--indigo-soft);color:var(--indigo);border-radius:99px;padding:1px 8px;font-size:.7rem;font-weight:800}
+.chart-box{margin-top:6px}
+.donut-wrap{display:grid;grid-template-columns:160px 1fr;gap:10px;align-items:center}
+@media(max-width:480px){.donut-wrap{grid-template-columns:1fr}}
+.donut{width:160px;height:160px;display:block;margin:auto}
+.donut-seg{transition:opacity .15s}
+.donut-seg:hover{opacity:.75}
+.legend{display:grid;gap:5px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:.78rem}
+.dot{width:10px;height:10px;border-radius:3px;flex:none}
+.legend-item b{margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.stack-row{display:grid;grid-template-columns:64px 1fr 52px;gap:8px;align-items:center;margin-bottom:7px;font-size:.75rem}
+.stack-label{color:var(--muted);white-space:nowrap}
+.stack-bar{display:flex;height:20px;border-radius:6px;overflow:hidden;background:#eef2f7}
+.stack-bar span{display:block;height:100%}
+.stack-total{text-align:end;font-weight:800;color:var(--muted)}
+.stack-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.stack-legend .legend-item{font-size:.72rem;background:#f8fafc;border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.line-chart{width:100%;height:auto;display:block}
+.line-chart text{font-family:inherit}
+.line-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:.76rem}
+.line-legend .legend-item{font-size:.76rem}
+.chart-note{color:var(--muted);font-size:.72rem;margin-top:4px}
+.chart-tip{position:fixed;z-index:90;background:var(--navy);color:#fff;padding:5px 9px;border-radius:7px;font-size:.72rem;font-weight:700;pointer-events:none;opacity:0;transition:opacity .1s;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.chart-tip.show{opacity:1}
+.toast{position:fixed;inset-block-end:22px;inset-inline-start:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:8px 15px;border-radius:99px;font-size:.8rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:95}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:32px}
+.note{background:var(--indigo-soft);border:1px solid #dbe2f7;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#2d3f7a}
+footer{text-align:center;color:var(--muted);font-size:.77rem;padding:0 20px 26px}
+@media print{
+  .top,.no-print,footer,.chart-tip,.toast{display:none!important}
+  body{background:#fff}
+  main{max-width:none;padding:0}
+  .card{box-shadow:none;break-inside:avoid;border-color:#ddd}
+  .grid2{grid-template-columns:1fr}
+  .donut-wrap{grid-template-columns:160px 1fr}
+  .rounds{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">CAP</span>
+      <div><strong data-i18n="brand">جدول الملكية وجولات الاستثمار</strong><small data-i18n="tagline">حصص المؤسسين · التقييم · التخفيف</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة</button>
+      <button type="button" class="btn ghost no-print" id="resetBtn" data-i18n="reset">استعادة المثال</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="fair.title">توزيع الحصص العادل بين المؤسسين</h2><p data-i18n="fair.desc">وزّن عوامل المساهمة، ثم قيّم كل مؤسس — تُحسب الحصة النهائية من نسبته في كل عامل.</p></div>
+    </div>
+    <div class="weights">
+      <label><span data-i18n="w.cap">وزن رأس المال</span><input id="wCap" type="number" min="0" max="100" step="5" value="25"></label>
+      <label><span data-i18n="w.time">وزن الوقت والالتزام</span><input id="wTime" type="number" min="0" max="100" step="5" value="30"></label>
+      <label><span data-i18n="w.exp">وزن الخبرة والمهارة</span><input id="wExp" type="number" min="0" max="100" step="5" value="25"></label>
+      <label><span data-i18n="w.role">وزن الدور والمسؤولية</span><input id="wRole" type="number" min="0" max="100" step="5" value="20"></label>
+    </div>
+    <span class="sum-pill" id="weightSum">—</span>
+    <p class="hint" data-i18n="fair.hint">تُطبَّع الأوزان تلقائيًا إلى 100%. الخبرة والدور تُقيَّمان من 1 إلى 10، والوقت بالساعات الأسبوعية، ورأس المال بالمبلغ المدفوع فعليًا.</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="founders.title">المؤسسون ومساهماتهم</h2><p data-i18n="founders.desc">أضف كل مؤسس وقيّم مساهمته؛ الحصة تتحدث فورًا.</p></div>
+        <button type="button" class="btn indigo small no-print" id="addFounder" data-i18n="founders.add">+ مؤسس</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th data-i18n="th.founder">المؤسس</th>
+            <th data-i18n="th.capital">رأس المال</th>
+            <th data-i18n="th.hours">ساعات/أسبوع</th>
+            <th data-i18n="th.exp">الخبرة /10</th>
+            <th data-i18n="th.role">الدور /10</th>
+            <th data-i18n="th.share">الحصة</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="foundersBody"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="founders.hint">الحصص الناتجة مؤشر للتفاوض وليست بديلًا عن اتفاقية مؤسسين مكتوبة. يُنصح باستحقاق على 4 سنوات مع سنة انتظار (Cliff).</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="split.title">الحصص الناتجة</h2><p data-i18n="split.desc">توزيع نسبي بناءً على الأوزان والمساهمات.</p></div>
+      </div>
+      <div class="donut-wrap">
+        <svg class="donut" id="founderDonut" viewBox="0 0 200 200" role="img" aria-label="Founder equity split"></svg>
+        <div class="legend" id="founderLegend"></div>
+      </div>
+      <div class="fair-head" style="margin-top:12px">
+        <span class="hint" style="margin:0" data-i18n="split.balance">توازن الحصص مع الوقت</span>
+        <span class="fair-score" id="fairScore">—</span>
+      </div>
+      <div class="founder-results" id="founderResults"></div>
+      <div id="fairWarn"></div>
+    </section>
+  </div>
+
+  <section class="kpis" id="capKpis"></section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="rounds.title">جولات الاستثمار والتقييم</h2><p data-i18n="rounds.desc">أدخل التقييم قبل الجولة ومبلغ الاستثمار؛ اترك الاستثمار صفرًا لتخطي الجولة.</p></div>
+    </div>
+    <div class="rounds" id="roundCards">
+      <div class="round">
+        <h3><span class="chip">01</span><span data-i18n="round.seed">جولة التأسيس / Seed</span></h3>
+        <div class="fields">
+          <label><span data-i18n="round.pre">التقييم قبل الجولة</span><input id="r1Pre" type="number" min="0" step="100000" value="6000000"></label>
+          <label><span data-i18n="round.inv">مبلغ الاستثمار</span><input id="r1Inv" type="number" min="0" step="100000" value="1000000"></label>
+          <label><span data-i18n="round.pool">توسيع خيارات الموظفين بعد الجولة %</span><input id="r1Pool" type="number" min="0" max="30" step="1" value="0"></label>
+        </div>
+        <div class="round-out" id="r1Out"></div>
+      </div>
+      <div class="round">
+        <h3><span class="chip">02</span><span data-i18n="round.a">الجولة A</span></h3>
+        <div class="fields">
+          <label><span data-i18n="round.pre">التقييم قبل الجولة</span><input id="r2Pre" type="number" min="0" step="100000" value="20000000"></label>
+          <label><span data-i18n="round.inv">مبلغ الاستثمار</span><input id="r2Inv" type="number" min="0" step="100000" value="5000000"></label>
+          <label><span data-i18n="round.pool">توسيع خيارات الموظفين بعد الجولة %</span><input id="r2Pool" type="number" min="0" max="30" step="1" value="0"></label>
+        </div>
+        <div class="round-out" id="r2Out"></div>
+      </div>
+      <div class="round">
+        <h3><span class="chip">03</span><span data-i18n="round.b">الجولة B</span></h3>
+        <div class="fields">
+          <label><span data-i18n="round.pre">التقييم قبل الجولة</span><input id="r3Pre" type="number" min="0" step="100000" value="60000000"></label>
+          <label><span data-i18n="round.inv">مبلغ الاستثمار</span><input id="r3Inv" type="number" min="0" step="100000" value="15000000"></label>
+          <label><span data-i18n="round.pool">توسيع خيارات الموظفين بعد الجولة %</span><input id="r3Pool" type="number" min="0" max="30" step="1" value="0"></label>
+        </div>
+        <div class="round-out" id="r3Out"></div>
+      </div>
+    </div>
+    <div class="weights" style="margin-top:12px;grid-template-columns:240px">
+      <label><span data-i18n="esop.init">خيارات الموظفين عند التأسيس %</span><input id="esopInit" type="number" min="0" max="50" step="1" value="10"></label>
+    </div>
+    <p class="hint" data-i18n="rounds.hint">نسبة المستثمر = الاستثمار ÷ (التقييم قبل الجولة + الاستثمار). توسيع الخيارات يُنشأ قبل الجولة ويخفف المؤسسين، ولا يغيّر نسبة المستثمر.</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="own.title">جدول الملكية بعد كل جولة</h2><p data-i18n="own.desc">تخفيف كل طرف عبر الجولات، محسوبًا على الأسهم.</p></div>
+      </div>
+      <div class="table-wrap">
+        <table id="ownTable">
+          <thead id="ownHead"></thead>
+          <tbody id="ownBody"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="own.hint">إجمالي الأسهم يزداد مع كل جولة واستحقاق خيارات؛ النسب وحدها لا تكفي لمقارنة الصفقات.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div><h2 data-i18n="stack.title">تطور الملكية</h2><p data-i18n="stack.desc">مرّر على الأجزاء لرؤية النسبة الدقيقة.</p></div>
+      </div>
+      <div id="stackChart" class="chart-box"></div>
+      <div class="stack-legend" id="stackLegend"></div>
+    </section>
+  </div>
+
+  <section class="card" id="valCard">
+    <div class="card-head">
+      <div><h2 data-i18n="val.title">مسار التقييم</h2><p data-i18n="val.desc">التقييم قبل وبعد كل جولة — والمؤشرات تُحدَّث مع أرقامك.</p></div>
+    </div>
+    <svg class="line-chart" id="valChart" viewBox="0 0 680 260" role="img" aria-label="Valuation by round"></svg>
+    <div class="line-legend" id="valLegend"></div>
+    <p class="chart-note" data-i18n="val.hint">كل القيم بعملة القالب الحالية. الجولات التي مبلغ استثمارها صفر لا تظهر.</p>
+    <p class="note" data-i18n="note">النماذج تفترض أسهمًا عادية وجولة نقدية بسيطة دون سندات قابلة للتحويل أو شروط تفضيلية. راجع مستشارك قبل أي اتفاق ملزم.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">جدول الملكية وجولات الاستثمار — أداة تقديرية تعمل بلا خادم، وليست نصيحة قانونية أو مالية.</span></footer>
+<div class="chart-tip" id="chartTip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { decimals: 2 }, AED: { decimals: 2 }, KWD: { decimals: 3 },
+    QAR: { decimals: 2 }, OMR: { decimals: 3 }, BHD: { decimals: 3 }
+  };
+
+  var COLORS = ["#3b5bdb", "#0f766e", "#b0822f", "#7048b6", "#c2410c", "#0e7490", "#9d174d", "#4d7c0f"];
+  var ESOP_COLOR = "#8a93a6";
+  var INVESTOR_COLORS = ["#17325c", "#0e7490", "#9d174d"];
+
+  var I18N = {
+    ar: {
+      brand: "جدول الملكية وجولات الاستثمار", tagline: "حصص المؤسسين · التقييم · التخفيف",
+      currency: "العملة", print: "طباعة", reset: "استعادة المثال",
+      "fair.title": "توزيع الحصص العادل بين المؤسسين",
+      "fair.desc": "وزّن عوامل المساهمة، ثم قيّم كل مؤسس — تُحسب الحصة النهائية من نسبته في كل عامل.",
+      "w.cap": "وزن رأس المال", "w.time": "وزن الوقت والالتزام",
+      "w.exp": "وزن الخبرة والمهارة", "w.role": "وزن الدور والمسؤولية",
+      "fair.hint": "تُطبَّع الأوزان تلقائيًا إلى 100%. الخبرة والدور تُقيَّمان من 1 إلى 10، والوقت بالساعات الأسبوعية، ورأس المال بالمبلغ المدفوع فعليًا.",
+      "sum.ok": "مجموع الأوزان {sum}% — سيتم تطبيعه إلى 100%",
+      "sum.zero": "أوزان صفرية: سيتم التوزيع بالتساوي",
+      "founders.title": "المؤسسون ومساهماتهم",
+      "founders.desc": "أضف كل مؤسس وقيّم مساهمته؛ الحصة تتحدث فورًا.",
+      "founders.add": "+ مؤسس", "founders.hint": "الحصص الناتجة مؤشر للتفاوض وليست بديلًا عن اتفاقية مؤسسين مكتوبة. يُنصح باستحقاق على 4 سنوات مع سنة انتظار (Cliff).",
+      "th.founder": "المؤسس", "th.capital": "رأس المال", "th.hours": "ساعات/أسبوع",
+      "th.exp": "الخبرة /10", "th.role": "الدور /10", "th.share": "الحصة",
+      "f.namePh": "اسم المؤسس", "f.nameEnPh": "English name (optional)",
+      "split.title": "الحصص الناتجة", "split.desc": "توزيع نسبي بناءً على الأوزان والمساهمات.",
+      "split.balance": "توازن الحصص مع الوقت",
+      "warn.title": "نقاط تستحق المراجعة:",
+      "warn.high": "{name}: حصته أعلى من حصته الزمنية بـ {pts} نقطة — اربط الفرق بخبرة أو رأس مال أو دور واضح.",
+      "warn.low": "{name}: حصته أقل من حصته الزمنية بـ {pts} نقطة — راجع إن كان يستحق تعويضًا أو استحقاقًا أسرع.",
+      "kpi.post": "التقييم بعد آخر جولة", "kpi.founders": "حصص المؤسسين بعد الجولات",
+      "kpi.esop": "خيارات الموظفين", "kpi.investors": "حصص المستثمرين",
+      "kpi.raised": "إجمالي الاستثمار", "kpi.dilution": "تخفيف المؤسسين",
+      "rounds.title": "جولات الاستثمار والتقييم",
+      "rounds.desc": "أدخل التقييم قبل الجولة ومبلغ الاستثمار؛ اترك الاستثمار صفرًا لتخطي الجولة.",
+      "round.seed": "جولة التأسيس / Seed", "round.a": "الجولة A", "round.b": "الجولة B",
+      "round.pre": "التقييم قبل الجولة", "round.inv": "مبلغ الاستثمار",
+      "round.pool": "توسيع خيارات الموظفين بعد الجولة %",
+      "round.post": "التقييم بعد الجولة", "round.investorPct": "نسبة المستثمر",
+      "round.price": "سعر السهم", "round.poolAdd": "أسهم خيارات جديدة",
+      "rounds.hint": "نسبة المستثمر = الاستثمار ÷ (التقييم قبل الجولة + الاستثمار). توسيع الخيارات يُنشأ قبل الجولة ويخفف المؤسسين، ولا يغيّر نسبة المستثمر.",
+      "esop.init": "خيارات الموظفين عند التأسيس %",
+      "own.title": "جدول الملكية بعد كل جولة",
+      "own.desc": "تخفيف كل طرف عبر الجولات، محسوبًا على الأسهم.",
+      "own.hint": "إجمالي الأسهم يزداد مع كل جولة واستحقاق خيارات؛ النسب وحدها لا تكفي لمقارنة الصفقات.",
+      "own.stakeholder": "الطرف", "stage.init": "التأسيس",
+      "stage.round": "بعد الجولة {n}",
+      "stack.title": "تطور الملكية", "stack.desc": "مرّر على الأجزاء لرؤية النسبة الدقيقة.",
+      "val.title": "مسار التقييم", "val.desc": "التقييم قبل وبعد كل جولة — والمؤشرات تُحدَّث مع أرقامك.",
+      "val.pre": "قبل الجولة", "val.post": "بعد الجولة", "val.hint": "كل القيم بعملة القالب الحالية. الجولات التي مبلغ استثمارها صفر لا تظهر.",
+      "val.empty": "أضف استثمارًا في جولة واحدة على الأقل لعرض مسار التقييم.",
+      "note": "النماذج تفترض أسهمًا عادية وجولة نقدية بسيطة دون سندات قابلة للتحويل أو شروط تفضيلية. راجع مستشارك قبل أي اتفاق ملزم.",
+      "footer": "جدول الملكية وجولات الاستثمار — أداة تقديرية تعمل بلا خادم، وليست نصيحة قانونية أو مالية.",
+      "confirm.reset": "استبدال بياناتك بالمثال الافتراضي؟", "confirm.delete": "حذف هذا المؤسس؟",
+      "toast.added": "تمت إضافة المؤسس.", "toast.deleted": "تم حذف المؤسس.",
+      "toast.reset": "تمت استعادة المثال.", "toast.one": "يجب بقاء مؤسس واحد على الأقل.",
+      "esop.label": "خيارات الموظفين", "investor.label": "مستثمر الجولة {n}",
+      "total.row": "الإجمالي"
+    },
+    en: {
+      brand: "Startup Cap Table OS", tagline: "Founder equity · Valuation · Dilution",
+      currency: "Currency", print: "Print", reset: "Restore sample",
+      "fair.title": "Fair equity split between founders",
+      "fair.desc": "Weight the contribution factors, then score each founder — the final equity follows their share of every factor.",
+      "w.cap": "Capital weight", "w.time": "Time & commitment weight",
+      "w.exp": "Expertise weight", "w.role": "Role & responsibility weight",
+      "fair.hint": "Weights are normalised to 100%. Expertise and role are scored 1–10, time in weekly hours, and capital as cash actually contributed.",
+      "sum.ok": "Weight total {sum}% — normalised to 100%",
+      "sum.zero": "All weights are zero: split will be equal",
+      "founders.title": "Founders and contributions",
+      "founders.desc": "Add each founder and score their contribution; equity updates instantly.",
+      "founders.add": "+ Founder", "founders.hint": "The resulting split is a negotiation benchmark, not a substitute for a written founders' agreement. Four-year vesting with a one-year cliff is recommended.",
+      "th.founder": "Founder", "th.capital": "Capital", "th.hours": "Hours/week",
+      "th.exp": "Expertise /10", "th.role": "Role /10", "th.share": "Equity",
+      "f.namePh": "Founder name", "f.nameEnPh": "English name (optional)",
+      "split.title": "Resulting equity", "split.desc": "Relative split from your weights and contributions.",
+      "split.balance": "Equity vs time balance",
+      "warn.title": "Points worth reviewing:",
+      "warn.high": "{name}: equity is {pts} points above their time share — tie the difference to clear expertise, capital or role.",
+      "warn.low": "{name}: equity is {pts} points below their time share — consider extra compensation or faster vesting.",
+      "kpi.post": "Post-money, latest round", "kpi.founders": "Founder equity after rounds",
+      "kpi.esop": "Employee options", "kpi.investors": "Investor ownership",
+      "kpi.raised": "Total invested", "kpi.dilution": "Founder dilution",
+      "rounds.title": "Investment rounds and valuation",
+      "rounds.desc": "Enter pre-money valuation and investment; leave investment at zero to skip a round.",
+      "round.seed": "Seed round", "round.a": "Series A", "round.b": "Series B",
+      "round.pre": "Pre-money valuation", "round.inv": "Investment",
+      "round.pool": "Post-round option pool top-up %",
+      "round.post": "Post-money valuation", "round.investorPct": "Investor ownership",
+      "round.price": "Price per share", "round.poolAdd": "New option shares",
+      "rounds.hint": "Investor ownership = investment ÷ (pre-money + investment). A pool top-up is created pre-money, dilutes founders, and does not change investor ownership.",
+      "esop.init": "Initial employee option pool %",
+      "own.title": "Ownership table after each round",
+      "own.desc": "Each party's dilution across rounds, calculated on shares.",
+      "own.hint": "Total shares grow with each round and option grant; percentages alone are not enough to compare deals.",
+      "own.stakeholder": "Stakeholder", "stage.init": "Incorporation",
+      "stage.round": "After round {n}",
+      "stack.title": "Ownership over time", "stack.desc": "Hover a segment for the exact percentage.",
+      "val.title": "Valuation path", "val.desc": "Pre- and post-money for each round — updated with your numbers.",
+      "val.pre": "Pre-money", "val.post": "Post-money", "val.hint": "All values in the template's current currency. Rounds with zero investment are hidden.",
+      "val.empty": "Add an investment in at least one round to see the valuation path.",
+      "note": "The model assumes ordinary shares and a simple cash round, without convertible notes or preference terms. Consult your adviser before any binding agreement.",
+      "footer": "Startup Cap Table OS — an indicative, serverless tool, not legal or financial advice.",
+      "confirm.reset": "Replace your data with the default sample?", "confirm.delete": "Delete this founder?",
+      "toast.added": "Founder added.", "toast.deleted": "Founder deleted.",
+      "toast.reset": "Sample restored.", "toast.one": "Keep at least one founder.",
+      "esop.label": "Employee options", "investor.label": "Round {n} investor",
+      "total.row": "Total"
+    }
+  };
+
+  var KEY = "pb_cap_table_v1";
+  var LANG_KEY = "pb_cap_table_lang";
+  var BASE_SHARES = 10000000;
+  var DEFAULT_FOUNDERS = [
+    { name: "سارة العتيبي", nameEn: "Sarah Alotaibi", capital: 150000, hours: 50, expertise: 9, role: 10 },
+    { name: "خالد الحربي", nameEn: "Khalid Alharbi", capital: 100000, hours: 40, expertise: 8, role: 8 },
+    { name: "ليان القحطاني", nameEn: "Layan Alqahtani", capital: 50000, hours: 25, expertise: 7, role: 7 }
+  ];
+  var DEFAULT_ROUNDS = { pre: [6000000, 20000000, 60000000], inv: [1000000, 5000000, 15000000], pool: [0, 0, 0] };
+
+  var state = { lang: "ar", currency: "SAR", founders: [], esop: 10, weights: { cap: 25, time: 30, exp: 25, role: 20 }, rounds: null };
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function n(v) { var x = parseFloat(v); return isFinite(x) ? x : 0; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toFixed(info.decimals) + " " + state.currency; }
+  }
+  function pct(v, d) { var digits = d == null ? 1 : d; return (Math.round((Number(v) || 0) * Math.pow(10, digits)) / Math.pow(10, digits)) + "%"; }
+  function compact(value) {
+    var v = Math.abs(Number(value) || 0);
+    if (v >= 1000000) return (Math.round(v / 100000) / 10) + "M";
+    if (v >= 1000) return Math.round(v / 1000) + "K";
+    return String(Math.round(v));
+  }
+  function founderName(f) { return state.lang === "en" && f.nameEn ? f.nameEn : (f.name || (state.lang === "en" ? "Founder" : "مؤسس")); }
+
+  // ---------- Founder fairness ----------
+  function readWeights() {
+    return {
+      cap: Math.max(0, num("wCap")),
+      time: Math.max(0, num("wTime")),
+      exp: Math.max(0, num("wExp")),
+      role: Math.max(0, num("wRole"))
+    };
+  }
+
+  function computeSplit() {
+    var weights = readWeights();
+    var wSum = weights.cap + weights.time + weights.exp + weights.role;
+    var totalCap = state.founders.reduce(function (s, f) { return s + Math.max(0, n(f.capital)); }, 0);
+    var totalHours = state.founders.reduce(function (s, f) { return s + Math.max(0, n(f.hours)); }, 0);
+    var totalExp = state.founders.reduce(function (s, f) { return s + clamp(n(f.expertise), 0, 10); }, 0);
+    var totalRole = state.founders.reduce(function (s, f) { return s + clamp(n(f.role), 0, 10); }, 0);
+    var rows = state.founders.map(function (f, index) {
+      var capShare = totalCap > 0 ? Math.max(0, n(f.capital)) / totalCap : 0;
+      var timeShare = totalHours > 0 ? Math.max(0, n(f.hours)) / totalHours : 0;
+      var expShare = totalExp > 0 ? clamp(n(f.expertise), 0, 10) / totalExp : 0;
+      var roleShare = totalRole > 0 ? clamp(n(f.role), 0, 10) / totalRole : 0;
+      var raw = wSum > 0
+        ? (weights.cap * capShare + weights.time * timeShare + weights.exp * expShare + weights.role * roleShare) / wSum
+        : 1 / state.founders.length;
+      return { index: index, f: f, capShare: capShare, timeShare: timeShare, expShare: expShare, roleShare: roleShare, raw: raw };
+    });
+    var rawSum = rows.reduce(function (s, r) { return s + r.raw; }, 0);
+    rows.forEach(function (r) {
+      r.equity = rawSum > 0 ? r.raw / rawSum * 100 : 100 / rows.length;
+    });
+    var deviation = rows.length ? rows.reduce(function (s, r) { return s + Math.abs(r.equity - r.timeShare * 100); }, 0) / rows.length : 0;
+    return {
+      rows: rows, wSum: wSum, totalCap: totalCap, totalHours: totalHours,
+      balance: Math.max(0, Math.round((100 - deviation) * 10) / 10)
+    };
+  }
+
+  function renderFoundersEditor() {
+    $("foundersBody").innerHTML = state.founders.map(function (f, i) {
+      return "<tr>" +
+        '<td><input class="f-name" data-i="' + i + '" data-field="name" type="text" placeholder="' + esc(t("f.namePh")) + '" value="' + esc(f.name) + '">' +
+        '<input class="f-nameEn" data-i="' + i + '" data-field="nameEn" type="text" data-i18n-ph="f.nameEnPh" placeholder="' + esc(t("f.nameEnPh")) + '" value="' + esc(f.nameEn || "") + '"></td>' +
+        '<td><input class="f-cap" data-i="' + i + '" data-field="capital" type="number" min="0" step="1000" value="' + esc(f.capital) + '"></td>' +
+        '<td><input class="f-hours" data-i="' + i + '" data-field="hours" type="number" min="0" max="168" step="1" value="' + esc(f.hours) + '"></td>' +
+        '<td><input class="f-exp" data-i="' + i + '" data-field="expertise" type="number" min="1" max="10" step="1" value="' + esc(f.expertise) + '"></td>' +
+        '<td><input class="f-role" data-i="' + i + '" data-field="role" type="number" min="1" max="10" step="1" value="' + esc(f.role) + '"></td>' +
+        '<td class="share-cell" data-share="' + i + '">—</td>' +
+        '<td class="no-print"><button type="button" class="icon-btn" data-del-founder="' + i + '" title="' + esc(t("confirm.delete")) + '">×</button></td>' +
+      "</tr>";
+    }).join("");
+  }
+
+  function syncFounders() {
+    var rows = document.querySelectorAll("#foundersBody tr");
+    state.founders = Array.prototype.map.call(rows, function (row) {
+      return {
+        name: row.querySelector(".f-name").value,
+        nameEn: row.querySelector(".f-nameEn").value,
+        capital: Math.max(0, n(row.querySelector(".f-cap").value)),
+        hours: Math.max(0, n(row.querySelector(".f-hours").value)),
+        expertise: clamp(n(row.querySelector(".f-exp").value), 1, 10),
+        role: clamp(n(row.querySelector(".f-role").value), 1, 10)
+      };
+    });
+  }
+
+  function renderSplit() {
+    var split = computeSplit();
+    var rows = split.rows;
+    $("weightSum").textContent = split.wSum > 0 ? t("sum.ok", { sum: Math.round(split.wSum) }) : t("sum.zero");
+    $("weightSum").className = "sum-pill" + (split.wSum > 0 ? "" : " bad");
+
+    // donut
+    var C = 2 * Math.PI * 70;
+    var offset = 0;
+    var donut = rows.map(function (r, i) {
+      var len = C * r.equity / 100;
+      var color = COLORS[i % COLORS.length];
+      var circle = '<circle class="donut-seg" cx="100" cy="100" r="70" fill="none" stroke="' + color + '" stroke-width="26" ' +
+        'stroke-dasharray="' + Math.max(0, len - 1.5) + " " + (C - Math.max(0, len - 1.5)) + '" ' +
+        'stroke-dashoffset="' + (-offset) + '" transform="rotate(-90 100 100)" ' +
+        'data-tip="' + esc(founderName(r.f) + " · " + pct(r.equity)) + '"></circle>';
+      offset += len;
+      return circle;
+    }).join("");
+    var center = '<text x="100" y="96" text-anchor="middle" font-size="11" fill="#5d6a7c">' + esc(t("split.title")) + "</text>" +
+      '<text x="100" y="116" text-anchor="middle" font-size="16" font-weight="800" fill="#101b2d">' + rows.length + " " + esc(state.lang === "ar" ? "شركاء" : "founders") + "</text>";
+    $("founderDonut").innerHTML = donut + center;
+
+    $("founderLegend").innerHTML = rows.map(function (r, i) {
+      return '<div class="legend-item"><span class="dot" style="background:' + COLORS[i % COLORS.length] + '"></span>' +
+        "<span>" + esc(founderName(r.f)) + "</span><b>" + pct(r.equity) + "</b></div>";
+    }).join("");
+
+    $("founderResults").innerHTML = rows.map(function (r, i) {
+      return '<div class="founder-line"><b>' + esc(founderName(r.f)) + '</b><span>' + pct(r.equity) + "</span>" +
+        '<div class="mini-bar"><i style="width:' + clamp(r.equity, 0, 100) + "%;background:" + COLORS[i % COLORS.length] + '"></i></div></div>';
+    }).join("");
+
+    rows.forEach(function (r) {
+      var cell = document.querySelector('[data-share="' + r.index + '"]');
+      if (cell) cell.textContent = pct(r.equity);
+    });
+
+    var score = $("fairScore");
+    score.textContent = rows.length > 1 ? pct(split.balance, 0) : "—";
+    score.className = "fair-score" + (split.balance < 80 ? " warn" : "");
+
+    var warnings = rows.filter(function (r) { return Math.abs(r.equity - r.timeShare * 100) > 15; }).map(function (r) {
+      var diff = r.equity - r.timeShare * 100;
+      return "<li>" + esc(t(diff > 0 ? "warn.high" : "warn.low", { name: founderName(r.f), pts: pct(Math.abs(diff), 0) })) + "</li>";
+    });
+    $("fairWarn").innerHTML = warnings.length
+      ? '<div class="warn-box"><strong>' + esc(t("warn.title")) + "</strong><ul>" + warnings.join("") + "</ul></div>"
+      : "";
+    return split;
+  }
+
+  // ---------- Cap table ----------
+  function readRounds() {
+    var rounds = { pre: [], inv: [], pool: [] };
+    for (var i = 1; i <= 3; i++) {
+      rounds.pre.push(Math.max(0, num("r" + i + "Pre")));
+      rounds.inv.push(Math.max(0, num("r" + i + "Inv")));
+      rounds.pool.push(clamp(num("r" + i + "Pool"), 0, 30));
+    }
+    return rounds;
+  }
+
+  function computeCap(split) {
+    var esopPct = clamp(num("esopInit"), 0, 50);
+    var total = BASE_SHARES;
+    var pool = total * esopPct / 100;
+    var owners = [];
+    split.rows.forEach(function (r, i) {
+      owners.push({ key: "f" + i, label: founderName(r.f), color: COLORS[i % COLORS.length], kind: "founder", shares: (total - pool) * r.equity / 100 });
+    });
+    var esopOwner = { key: "esop", label: t("esop.label"), color: ESOP_COLOR, kind: "esop", shares: pool };
+    owners.push(esopOwner);
+
+    var stages = [];
+    var stagesMeta = [];
+    function snapshot(label) {
+      stages.push({
+        label: label,
+        total: total,
+        shares: owners.reduce(function (map, o) { map[o.key] = o.shares; return map; }, {})
+      });
+    }
+    snapshot(t("stage.init"));
+
+    var roundsCfg = readRounds();
+    var active = [];
+    for (var i = 0; i < 3; i++) {
+      var pre = roundsCfg.pre[i];
+      var inv = roundsCfg.inv[i];
+      if (!(pre > 0) || !(inv > 0)) continue;
+      var p = (roundsCfg.pool[i] || 0) / 100;
+      var k = (pre + inv) / pre;
+      var addedPool = 0;
+      if (p > 0) {
+        var denom = 1 - p * k;
+        if (denom > 0.02) {
+          var need = (p * k * total - pool) / denom;
+          if (need > 0) { addedPool = need; total += addedPool; pool += addedPool; esopOwner.shares = pool; }
+        }
+      }
+      var price = pre / total;
+      var newShares = price > 0 ? inv / price : 0;
+      total += newShares;
+      var investorKey = "inv" + (i + 1);
+      owners.push({
+        key: investorKey, label: t("investor.label", { n: i + 1 }), color: INVESTOR_COLORS[i % INVESTOR_COLORS.length],
+        kind: "investor", shares: newShares
+      });
+      var stage = { round: i + 1, pre: pre, inv: inv, post: pre + inv, price: price, newShares: newShares, poolAdded: addedPool, investorPct: inv / (pre + inv) * 100, total: total };
+      active.push(stage);
+      stagesMeta.push(stage);
+      snapshot(t("stage.round", { n: i + 1 }));
+    }
+
+    return { esopPct: esopPct, owners: owners, stages: stages, rounds: active, total: total };
+  }
+
+  function renderCap(split) {
+    var cap = computeCap(split);
+    var latest = cap.stages[cap.stages.length - 1];
+    function sumKind(kind) {
+      return cap.owners.filter(function (o) { return o.kind === kind; }).reduce(function (s, o) {
+        return s + (latest.shares[o.key] || 0) / latest.total * 100;
+      }, 0);
+    }
+    var founderLatest = sumKind("founder");
+    var investorLatest = sumKind("investor");
+    var esopLatest = sumKind("esop");
+    var founderInit = cap.owners.filter(function (o) { return o.kind === "founder"; }).reduce(function (s, o) {
+      return s + (cap.stages[0].shares[o.key] || 0) / cap.stages[0].total * 100;
+    }, 0);
+    var raised = cap.rounds.reduce(function (s, r) { return s + r.inv; }, 0);
+    var lastPost = cap.rounds.length ? cap.rounds[cap.rounds.length - 1].post : 0;
+
+    $("capKpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.post")) + "</span><strong>" + (lastPost ? esc(money(lastPost)) : "—") + "</strong><small>" + esc(cap.rounds.length + (state.lang === "ar" ? " جولات" : " rounds")) + "</small></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.founders")) + "</span><strong>" + pct(founderLatest) + "</strong><small>" + esc(t("kpi.dilution")) + ": −" + esc(pct(Math.max(0, founderInit - founderLatest))) + "</small></div>",
+      '<div class="kpi teal"><span>' + esc(t("kpi.esop")) + "</span><strong>" + pct(esopLatest) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.investors")) + "</span><strong>" + pct(investorLatest) + "</strong></div>",
+      '<div class="kpi gold"><span>' + esc(t("kpi.raised")) + "</span><strong>" + esc(money(raised)) + "</strong></div>",
+      '<div class="kpi ' + (founderInit - founderLatest > 50 ? "bad" : "") + '"><span>' + esc(t("kpi.dilution")) + "</span><strong>−" + pct(Math.max(0, founderInit - founderLatest)) + "</strong><small>" + esc(pct(founderInit) + " → " + pct(founderLatest)) + "</small></div>"
+    ].join("");
+
+    // ownership table
+    $("ownHead").innerHTML = "<tr><th>" + esc(t("own.stakeholder")) + "</th>" +
+      cap.stages.map(function (s) { return "<th>" + esc(s.label) + "</th>"; }).join("") + "</tr>";
+    var bodyRows = cap.owners.map(function (o) {
+      return "<tr><td><span style=\"display:inline-block;width:9px;height:9px;border-radius:3px;background:" + o.color + ";margin-inline-end:6px\"></span>" + esc(o.label) + "</td>" +
+        cap.stages.map(function (s) { return "<td>" + pct((s.shares[o.key] || 0) / s.total * 100) + "</td>"; }).join("") + "</tr>";
+    }).join("");
+    $("ownBody").innerHTML = bodyRows +
+      '<tr><td><b>' + esc(t("total.row")) + "</b></td>" + cap.stages.map(function () { return "<td><b>100%</b></td>"; }).join("") + "</tr>";
+
+    // stacked bars
+    $("stackChart").innerHTML = cap.stages.map(function (s) {
+      var segs = cap.owners.map(function (o) {
+        var share = (s.shares[o.key] || 0) / s.total * 100;
+        if (share <= 0) return "";
+        return '<span style="width:' + share + "%;background:" + o.color + '" data-tip="' +
+          esc(o.label + " · " + s.label + " · " + pct(share)) + '"></span>';
+      }).join("");
+      return '<div class="stack-row"><span class="stack-label">' + esc(s.label) + '</span><div class="stack-bar">' + segs + '</div><span class="stack-total">100%</span></div>';
+    }).join("");
+
+    $("stackLegend").innerHTML = cap.owners.map(function (o) {
+      var share = (latest.shares[o.key] || 0) / latest.total * 100;
+      return '<span class="legend-item"><span class="dot" style="background:' + o.color + '"></span>' + esc(o.label) + " <b>" + pct(share) + "</b></span>";
+    }).join("");
+
+    // round outputs
+    for (var i = 1; i <= 3; i++) {
+      var stage = cap.rounds.filter(function (r) { return r.round === i; })[0];
+      var out = $("r" + i + "Out");
+      if (!stage) {
+        out.innerHTML = '<span class="hint" style="margin:0">' + esc(state.lang === "ar" ? "جولة متخطاة (استثمار صفر)" : "Skipped (no investment)") + "</span>";
+      } else {
+        out.innerHTML =
+          "<span>" + esc(t("round.post")) + ": <b>" + esc(money(stage.post)) + "</b></span>" +
+          "<span>" + esc(t("round.investorPct")) + ": <b>" + pct(stage.investorPct) + "</b></span>" +
+          "<span>" + esc(t("round.price")) + ": <b>" + esc(stage.price.toFixed(3)) + " " + state.currency + "</b></span>" +
+          (stage.poolAdded > 0.5 ? "<span>" + esc(t("round.poolAdd")) + ": <b>" + Math.round(stage.poolAdded).toLocaleString("en-US") + "</b></span>" : "");
+      }
+    }
+
+    renderValuationChart(cap);
+  }
+
+  // ---------- Charts ----------
+  function renderValuationChart(cap) {
+    var svg = $("valChart");
+    if (!cap.rounds.length) {
+      svg.innerHTML = '<text x="340" y="130" text-anchor="middle" font-size="13" fill="#5d6a7c">' + esc(t("val.empty")) + "</text>";
+      $("valLegend").innerHTML = "";
+      return;
+    }
+    var W = 680, H = 260, L = 64, R = 22, T = 20, B = 40;
+    var rounds = cap.rounds;
+    var maxV = Math.max.apply(null, rounds.map(function (r) { return r.post; }));
+    maxV = maxV > 0 ? maxV * 1.12 : 1;
+    var plotW = W - L - R, plotH = H - T - B;
+    function x(i) { return rounds.length === 1 ? L + plotW / 2 : L + i / (rounds.length - 1) * plotW; }
+    function y(v) { return T + plotH - (v / maxV) * plotH; }
+
+    var grid = "";
+    for (var g = 0; g <= 4; g++) {
+      var val = maxV / 4 * g;
+      var yy = y(val);
+      grid += '<line x1="' + L + '" y1="' + yy + '" x2="' + (W - R) + '" y2="' + yy + '" stroke="#e8edf4" stroke-width="1"></line>' +
+        '<text x="' + (L - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="10" fill="#8190a5">' + compact(val) + "</text>";
+    }
+    var labels = rounds.map(function (r, i) {
+      return '<text x="' + x(i) + '" y="' + (H - 18) + '" text-anchor="middle" font-size="10" fill="#5d6a7c">' + esc(t("stage.round", { n: r.round })) + "</text>" +
+        '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="9" fill="#8190a5">' + compact(r.post) + "</text>";
+    }).join("");
+    var prePts = rounds.map(function (r, i) { return x(i) + "," + y(r.pre); }).join(" ");
+    var postPts = rounds.map(function (r, i) { return x(i) + "," + y(r.post); }).join(" ");
+    var dots = rounds.map(function (r, i) {
+      return '<circle cx="' + x(i) + '" cy="' + y(r.post) + '" r="5" fill="#3b5bdb" stroke="#fff" stroke-width="2" data-tip="' +
+        esc(t("val.post") + " · " + money(r.post)) + '"></circle>' +
+        '<circle cx="' + x(i) + '" cy="' + y(r.pre) + '" r="4" fill="#b0822f" stroke="#fff" stroke-width="2" data-tip="' +
+        esc(t("val.pre") + " · " + money(r.pre)) + '"></circle>';
+    }).join("");
+
+    svg.innerHTML = grid +
+      '<polyline points="' + prePts + '" fill="none" stroke="#b0822f" stroke-width="2" stroke-dasharray="6 5"></polyline>' +
+      '<polyline points="' + postPts + '" fill="none" stroke="#3b5bdb" stroke-width="3" stroke-linejoin="round"></polyline>' +
+      dots + labels;
+
+    $("valLegend").innerHTML =
+      '<span class="legend-item"><span class="dot" style="background:#3b5bdb"></span>' + esc(t("val.post")) + "</span>" +
+      '<span class="legend-item"><span class="dot" style="background:#b0822f"></span>' + esc(t("val.pre")) + "</span>";
+  }
+
+  // ---------- render / lang ----------
+  function renderAll() {
+    var split = computeSplit();
+    renderSplit();
+    renderCap(split);
+    save();
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    renderAll();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, currency: state.currency, founders: state.founders,
+        esop: $("esopInit").value,
+        weights: { cap: $("wCap").value, time: $("wTime").value, exp: $("wExp").value, role: $("wRole").value },
+        rounds: readRounds()
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1800);
+  }
+
+  // tooltip
+  document.addEventListener("pointerover", function (event) {
+    var el = event.target.closest("[data-tip]");
+    if (!el) return;
+    var tip = $("chartTip");
+    tip.textContent = el.getAttribute("data-tip");
+    tip.classList.add("show");
+    tip.style.left = (event.clientX + 12) + "px";
+    tip.style.top = (event.clientY + 12) + "px";
+  });
+  document.addEventListener("pointermove", function (event) {
+    var tip = $("chartTip");
+    if (!tip.classList.contains("show")) return;
+    tip.style.left = (event.clientX + 12) + "px";
+    tip.style.top = (event.clientY + 12) + "px";
+  });
+  document.addEventListener("pointerout", function (event) {
+    if (event.target.closest && event.target.closest("[data-tip]")) $("chartTip").classList.remove("show");
+  });
+
+  // events
+  $("foundersBody").addEventListener("input", function (event) {
+    if (!event.target.closest("input")) return;
+    syncFounders();
+    renderAll();
+  });
+  $("foundersBody").addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-del-founder]");
+    if (!btn) return;
+    if (state.founders.length <= 1) { toast(t("toast.one")); return; }
+    if (!window.confirm(t("confirm.delete"))) return;
+    state.founders.splice(Number(btn.getAttribute("data-del-founder")), 1);
+    renderFoundersEditor();
+    toast(t("toast.deleted"));
+    renderAll();
+    save();
+  });
+  $("addFounder").addEventListener("click", function () {
+    state.founders.push({ name: state.lang === "ar" ? "مؤسس جديد" : "New founder", nameEn: "", capital: 0, hours: 20, expertise: 5, role: 5 });
+    renderFoundersEditor();
+    toast(t("toast.added"));
+    renderAll();
+    save();
+  });
+  ["wCap", "wTime", "wExp", "wRole", "esopInit", "r1Pre", "r1Inv", "r1Pool", "r2Pre", "r2Inv", "r2Pool", "r3Pre", "r3Inv", "r3Pool"].forEach(function (id) {
+    $(id).addEventListener("input", renderAll);
+  });
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) { return '<option value="' + code + '">' + code + "</option>"; }).join("");
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar"); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+  $("resetBtn").addEventListener("click", function () {
+    if (!window.confirm(t("confirm.reset"))) return;
+    state.founders = JSON.parse(JSON.stringify(DEFAULT_FOUNDERS));
+    state.weights = { cap: 25, time: 30, exp: 25, role: 20 };
+    $("wCap").value = 25; $("wTime").value = 30; $("wExp").value = 25; $("wRole").value = 20;
+    $("esopInit").value = 10;
+    for (var i = 0; i < 3; i++) {
+      $("r" + (i + 1) + "Pre").value = DEFAULT_ROUNDS.pre[i];
+      $("r" + (i + 1) + "Inv").value = DEFAULT_ROUNDS.inv[i];
+      $("r" + (i + 1) + "Pool").value = DEFAULT_ROUNDS.pool[i];
+    }
+    renderFoundersEditor();
+    toast(t("toast.reset"));
+    renderAll();
+  });
+
+  // init
+  state.currency = "SAR";
+  var storedLang = localStorage.getItem(LANG_KEY);
+  state.lang = storedLang === "en" ? "en" : "ar";
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+  state.founders = JSON.parse(JSON.stringify(DEFAULT_FOUNDERS));
+  if (raw) {
+    if (Array.isArray(raw.founders) && raw.founders.length) state.founders = raw.founders;
+    if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+    if (raw.esop != null) $("esopInit").value = raw.esop;
+    if (raw.weights) Object.keys(raw.weights).forEach(function (k) {
+      var id = { cap: "wCap", time: "wTime", exp: "wExp", role: "wRole" }[k];
+      if (id && raw.weights[k] != null) $(id).value = raw.weights[k];
+    });
+    if (raw.rounds && Array.isArray(raw.rounds.pre)) {
+      for (var i = 0; i < 3; i++) {
+        if (raw.rounds.pre[i] != null) $("r" + (i + 1) + "Pre").value = raw.rounds.pre[i];
+        if (raw.rounds.inv[i] != null) $("r" + (i + 1) + "Inv").value = raw.rounds.inv[i];
+        if (raw.rounds.pool[i] != null) $("r" + (i + 1) + "Pool").value = raw.rounds.pool[i];
+      }
+    }
+    if (raw.lang === "en" || raw.lang === "ar") state.lang = raw.lang;
+  }
+  $("currency").value = state.currency;
+  renderFoundersEditor();
+  applyLang(state.lang);
+})();
+</script>
+</body>
+</html>

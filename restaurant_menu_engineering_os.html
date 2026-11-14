@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>هندسة قوائم المطاعم — Restaurant Menu Engineering OS</title>
+<meta name="description" content="احسب تكلفة وصفاتك بدقة، واخصم الضريبة وعمولة التوصيل، وصنّف أصنافك حسب الربحية مع سعر مقترح — عربي/إنجليزي وعملات خليجية.">
+<style>
+:root{
+  --bg:#f7f2ea;--card:#fffdfa;--ink:#231a16;--muted:#75655c;
+  --espresso:#2b1d17;--espresso2:#3c2a21;--terra:#b4552d;--terra-2:#93401f;
+  --terra-soft:#fbeee7;--olive:#5f6b3a;--olive-soft:#eef2e2;
+  --gold:#b8892f;--gold-soft:#fbf1da;--bad:#a83a2f;--bad-soft:#fbeceb;
+  --ok:#2f6b46;--ok-soft:#e8f4ec;--line:#e9e0d6;--radius:16px;
+  --shadow:0 10px 30px rgba(43,29,23,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:
+  radial-gradient(1200px 500px at 90% -10%,#fdf6ec 0,transparent 60%),var(--bg);
+  color:var(--ink);line-height:1.7;font-size:15px}
+body.ltr{font-family:"Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:.9rem;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;outline:none}
+input[type=number]{direction:ltr;text-align:start}
+input:focus,select:focus{border-color:var(--terra);box-shadow:0 0 0 3px rgba(180,85,45,.12)}
+label>span{display:block;font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:650}
+.top{position:sticky;top:0;z-index:20;background:rgba(247,242,234,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1220px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--espresso),var(--terra));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.15rem}
+.brand strong{display:block;font-size:1rem}
+.brand small{color:var(--muted);font-size:.75rem}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls label{margin:0}.controls select{width:auto;min-width:112px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:750;font-size:.83rem;background:var(--espresso);color:#fff;transition:.16s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.1)}
+.btn.terra{background:var(--terra)}
+.btn.ghost{background:#fff;color:var(--espresso);border:1px solid var(--line)}
+.btn.small{padding:5px 9px;font-size:.74rem;border-radius:8px}
+.btn.danger{background:var(--bad-soft);color:var(--bad);border:1px solid #eccbc6}
+main{max-width:1220px;margin:0 auto;padding:18px 20px 50px;display:grid;gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.card-head h2{font-size:1.02rem}
+.card-head p{margin:3px 0 0;color:var(--muted);font-size:.8rem;max-width:780px}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:700px){.settings{grid-template-columns:1fr 1fr}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:.73rem;color:var(--muted);margin-bottom:2px}
+.kpi strong{font-size:1.05rem;font-variant-numeric:tabular-nums;display:block}
+.kpi small{font-size:.68rem;color:var(--muted);font-weight:600}
+.kpi.hero{background:linear-gradient(135deg,var(--espresso),var(--terra));border:0;color:#fff}
+.kpi.hero span,.kpi.hero small{color:#f1dccf}.kpi.hero strong{color:#fff}
+.kpi.olive{background:var(--olive-soft);border-color:#dfe6cd}
+.kpi.gold{background:var(--gold-soft);border-color:#ecdfc2}
+.kpi.bad{background:var(--bad-soft);border-color:#eccbc6}.kpi.bad strong{color:var(--bad)}
+.layout{display:grid;grid-template-columns:390px minmax(0,1fr);gap:15px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fields .wide{grid-column:1/-1}
+.ing-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0 6px}
+.ing-head strong{font-size:.8rem}
+.ing-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.ing-table th{font-size:.68rem;color:var(--muted);font-weight:700;text-align:start;padding:2px 3px}
+.ing-table td{padding:2px 3px;vertical-align:middle}
+.ing-table input{padding:6px 7px;font-size:.78rem;border-radius:7px}
+.ing-table td:last-child{width:26px}
+.icon-btn{border:0;background:transparent;color:var(--bad);font-size:1rem;line-height:1;padding:4px;border-radius:6px}
+.icon-btn:hover{background:var(--bad-soft)}
+.recipe-total{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding:8px 10px;background:var(--terra-soft);border:1px solid #f0dbd0;border-radius:9px;font-size:.82rem;font-weight:750}
+.editor-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.editor-actions .btn{flex:1 1 auto}
+.hint{color:var(--muted);font-size:.76rem;margin:8px 0 0}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table.menu{width:100%;border-collapse:collapse;font-size:.82rem;min-width:920px}
+.menu th{font-size:.68rem;color:var(--muted);text-align:start;padding:8px 7px;background:#fbf7f1;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:750}
+.menu td{padding:9px 7px;border-bottom:1px solid #f0e9e0;vertical-align:middle;white-space:nowrap;font-variant-numeric:tabular-nums}
+.menu tbody tr:last-child td{border-bottom:0}
+.menu tbody tr:hover td{background:#fdf9f4}
+.dish{white-space:normal;min-width:150px}
+.dish b{display:block;font-size:.86rem}
+.dish small{color:var(--muted);font-size:.7rem}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:800;white-space:nowrap}
+.badge.star{background:var(--gold-soft);color:#7a560f;border:1px solid #ecd9ac}
+.badge.plow{background:#e9eef6;color:#334d73;border:1px solid #d5deec}
+.badge.puzzle{background:var(--olive-soft);color:#4b562b;border:1px solid #dbe3c7}
+.badge.dog{background:var(--bad-soft);color:var(--bad);border:1px solid #eccbc6}
+.sug{display:block;font-weight:800}
+.delta{font-size:.68rem;font-weight:800}
+.delta.up{color:var(--bad)}.delta.down{color:var(--ok)}.delta.ok{color:var(--muted)}
+.actions{display:flex;gap:4px}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.rec{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fdfaf5}
+.rec h3{font-size:.86rem;display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rec p{margin:0;font-size:.79rem;color:var(--muted)}
+.rec .count{font-size:.68rem;font-weight:800;color:var(--muted);margin-top:6px;display:block}
+.empty{padding:26px;text-align:center;color:var(--muted);font-size:.85rem}
+.note{background:var(--gold-soft);border:1px solid #ecdfc2;border-radius:10px;padding:9px 11px;font-size:.77rem;color:#6d5011;margin-top:10px}
+.toast{position:fixed;inset-block-end:20px;inset-inline-start:50%;transform:translateX(-50%);background:var(--espresso);color:#fff;padding:9px 16px;border-radius:99px;font-size:.82rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:80}
+body[dir="rtl"] .toast{transform:translateX(50%)}
+.toast.show{opacity:1;inset-block-end:30px}
+footer{text-align:center;color:var(--muted);font-size:.77rem;padding:0 20px 26px}
+@media print{
+  .top,.controls,.no-print,footer,.toast,#editorCard{display:none!important}
+  body{background:#fff}
+  main{max-width:none;padding:0}
+  .card{box-shadow:none;border-color:#ddd;break-inside:avoid}
+  .layout{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .menu{min-width:0;font-size:10px}
+  .menu th,.menu td{padding:4px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="logo">🍽</span>
+      <div><strong data-i18n="brand">هندسة قوائم المطاعم</strong><small data-i18n="tagline">تكلفة الوصفة · الضريبة والتوصيل · الربحية والتسعير</small></div>
+    </div>
+    <div class="controls">
+      <label><span data-i18n="currency">العملة</span><select id="currency"></select></label>
+      <button type="button" class="btn ghost" id="langBtn">English</button>
+      <button type="button" class="btn ghost no-print" id="printBtn" data-i18n="print">طباعة</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <div><h2 data-i18n="settings.title">إعدادات التشغيل</h2><p data-i18n="settings.desc">تُطبَّق على كل الأصناف: الضريبة، عمولة التطبيقات، ونسبة تكلفة الطعام التي تسعّر عليها.</p></div>
+    </div>
+    <div class="settings">
+      <label><span data-i18n="s.vat">ضريبة القيمة المضافة %</span><input id="vat" type="number" min="0" max="30" step="0.5" value="15"></label>
+      <label><span data-i18n="s.comm">عمولة تطبيقات التوصيل %</span><input id="comm" type="number" min="0" max="60" step="0.5" value="25"></label>
+      <label><span data-i18n="s.target">نسبة تكلفة الطعام المستهدفة %</span><input id="target" type="number" min="5" max="80" step="1" value="30"></label>
+    </div>
+    <p class="hint" data-i18n="settings.hint">السعر المعروض في القائمة يشمل الضريبة. تُخصم الضريبة (التزام ضريبي) وعمولة التوصيل من السعر للوصول إلى صافي إيراد الصنف.</p>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="layout">
+    <section class="card" id="editorCard">
+      <div class="card-head">
+        <div><h2 id="editorTitle" data-i18n="e.addTitle">إضافة صنف جديد</h2><p data-i18n="e.desc">اكتب مكونات الوصفة بكمياتها وتكلفة الوحدة — تُحسب التكلفة تلقائيًا.</p></div>
+      </div>
+      <div class="fields">
+        <label class="wide"><span data-i18n="e.name">اسم الصنف (عربي)</span><input id="iName" type="text" data-i18n-ph="e.namePh"></label>
+        <label class="wide"><span data-i18n="e.nameEn">اسم الصنف (إنجليزي — اختياري)</span><input id="iNameEn" type="text" data-i18n-ph="e.nameEnPh"></label>
+        <label><span data-i18n="e.price">سعر البيع شامل الضريبة</span><input id="iPrice" type="number" min="0" step="0.5" value=""></label>
+        <label><span data-i18n="e.units">عدد المبيعات شهريًا</span><input id="iUnits" type="number" min="0" step="1" value=""></label>
+        <label><span data-i18n="e.channel">قناة البيع</span><select id="iChannel"></select></label>
+        <label><span data-i18n="e.extra">تكاليف إضافية للوحدة</span><input id="iExtra" type="number" min="0" step="0.25" value=""></label>
+      </div>
+      <div class="ing-head">
+        <strong data-i18n="e.ingredients">مكونات الوصفة</strong>
+        <button type="button" class="btn ghost small" id="addIng" data-i18n="e.addRow">+ مكوّن</button>
+      </div>
+      <table class="ing-table">
+        <thead><tr>
+          <th data-i18n="e.ingName">المكوّن</th>
+          <th data-i18n="e.ingQty">الكمية</th>
+          <th data-i18n="e.ingCost">تكلفة الوحدة</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="ingBody"></tbody>
+      </table>
+      <div class="recipe-total"><span data-i18n="e.recipeTotal">تكلفة الوصفة</span><b id="recipePreview">—</b></div>
+      <div class="editor-actions">
+        <button type="button" class="btn terra" id="saveItem" data-i18n="e.save">حفظ الصنف</button>
+        <button type="button" class="btn ghost" id="cancelEdit" data-i18n="e.cancel">إلغاء</button>
+      </div>
+      <p class="hint" data-i18n="e.hint">التكاليف الإضافية تشمل التغليف والعمالة المباشرة والحصص التالفة — وليس الإيجار أو الرواتب الثابتة.</p>
+    </section>
+
+    <section class="card" id="menuCard">
+      <div class="card-head">
+        <div><h2 data-i18n="table.title">أصناف القائمة وربحيتها</h2><p data-i18n="table.desc">التصنيف يعتمد على هامش المساهمة وشعبية الصنف مقارنة بمتوسط القائمة.</p></div>
+        <button type="button" class="btn ghost small no-print" id="resetBtn" data-i18n="reset">استعادة القائمة التجريبية</button>
+      </div>
+      <div class="table-wrap">
+        <table class="menu">
+          <thead><tr>
+            <th data-i18n="th.item">الصنف</th>
+            <th data-i18n="th.channel">القناة</th>
+            <th data-i18n="th.recipe">الوصفة</th>
+            <th data-i18n="th.unit">التكلفة للوحدة</th>
+            <th data-i18n="th.price">السعر</th>
+            <th data-i18n="th.net">صافي الإيراد</th>
+            <th data-i18n="th.contribution">هامش المساهمة</th>
+            <th data-i18n="th.margin">الهامش</th>
+            <th data-i18n="th.units">المبيعات</th>
+            <th data-i18n="th.class">التصنيف</th>
+            <th data-i18n="th.suggested">السعر المقترح</th>
+            <th class="no-print"></th>
+          </tr></thead>
+          <tbody id="menuBody"></tbody>
+        </table>
+      </div>
+      <p class="hint" data-i18n="table.hint">«صافي الإيراد» = السعر − الضريبة − عمولة التوصيل. «هامش المساهمة» = صافي الإيراد − تكلفة الوحدة.</p>
+    </section>
+  </div>
+
+  <section class="card" id="recCard">
+    <div class="card-head">
+      <div><h2 data-i18n="rec.title">توصيات حسب تصنيف القائمة</h2><p data-i18n="rec.desc">حرّك الصنف بين الفئات بتغيير السعر أو التكلفة أو طريقة الترويج.</p></div>
+    </div>
+    <div class="rec-grid" id="recGrid"></div>
+    <p class="note" data-i18n="note">الأسعار المقترحة مبنية على نسبة تكلفة الطعام المستهدفة، ولا تأخذ مرونة الطلب أو أسعار المنافسين في الحسبان — راجعها قبل النشر.</p>
+  </section>
+</main>
+
+<footer><span data-i18n="footer">هندسة قوائم المطاعم — أداة تقديرية تعمل بلا خادم، ولا تحل محل محاسبك أو مستشارك الضريبي.</span></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = {
+    SAR: { decimals: 2 }, AED: { decimals: 2 }, KWD: { decimals: 3 },
+    QAR: { decimals: 2 }, OMR: { decimals: 3 }, BHD: { decimals: 3 }
+  };
+
+  var SAMPLE = [
+    { id: "s1", name: "برجر أنجوس", nameEn: "Angus Burger", price: 42, units: 320, channel: "dinein", extra: 2.5,
+      ingredients: [
+        { name: "لحم أنجوس", qty: 0.18, cost: 38 },
+        { name: "خبز برجر", qty: 1, cost: 2.2 },
+        { name: "جبن شيدر", qty: 2, cost: 1.5 },
+        { name: "صوص خاص", qty: 0.05, cost: 12 },
+        { name: "بطاطس جانبية", qty: 0.15, cost: 8 }
+      ] },
+    { id: "s2", name: "دجاج مشوي مع الأرز", nameEn: "Grilled chicken & rice", price: 36, units: 210, channel: "delivery", extra: 3,
+      ingredients: [
+        { name: "صدور دجاج", qty: 0.25, cost: 14 },
+        { name: "أرز بسمتي", qty: 0.2, cost: 6 },
+        { name: "خضار موسمية", qty: 0.1, cost: 10 },
+        { name: "صوص ثوم", qty: 0.05, cost: 8 }
+      ] },
+    { id: "s3", name: "سلطة كينوا وأفوكادو", nameEn: "Quinoa avocado salad", price: 28, units: 90, channel: "dinein", extra: 1.5,
+      ingredients: [
+        { name: "كينوا", qty: 0.08, cost: 22 },
+        { name: "أفوكادو", qty: 0.15, cost: 18 },
+        { name: "خضار طازجة", qty: 0.15, cost: 10 },
+        { name: "زيت زيتون", qty: 0.02, cost: 30 }
+      ] },
+    { id: "s4", name: "قهوة مثلجة", nameEn: "Iced coffee", price: 19, units: 410, channel: "takeaway", extra: 1.2,
+      ingredients: [
+        { name: "قهوة مختصة", qty: 0.018, cost: 120 },
+        { name: "حليب", qty: 0.15, cost: 7 },
+        { name: "سيرب", qty: 0.02, cost: 15 },
+        { name: "ثلج", qty: 0.1, cost: 1 }
+      ] },
+    { id: "s5", name: "كيك الشوكولاتة", nameEn: "Chocolate cake", price: 24, units: 60, channel: "delivery", extra: 2,
+      ingredients: [
+        { name: "طحين", qty: 0.08, cost: 4 },
+        { name: "شوكولاتة", qty: 0.06, cost: 45 },
+        { name: "زبدة", qty: 0.05, cost: 32 },
+        { name: "كريمة", qty: 0.06, cost: 18 }
+      ] }
+  ];
+
+  var I18N = {
+    ar: {
+      brand: "هندسة قوائم المطاعم", tagline: "تكلفة الوصفة · الضريبة والتوصيل · الربحية والتسعير",
+      currency: "العملة", print: "طباعة",
+      "settings.title": "إعدادات التشغيل",
+      "settings.desc": "تُطبَّق على كل الأصناف: الضريبة، عمولة التطبيقات، ونسبة تكلفة الطعام التي تسعّر عليها.",
+      "s.vat": "ضريبة القيمة المضافة %", "s.comm": "عمولة تطبيقات التوصيل %",
+      "s.target": "نسبة التكلفة المستهدفة للوحدة %",
+      "settings.hint": "السعر المعروض في القائمة يشمل الضريبة. تُخصم الضريبة (التزام ضريبي) وعمولة التوصيل من السعر للوصول إلى صافي إيراد الصنف. النسبة المستهدفة تُقاس على تكلفة الوحدة الكاملة: المكونات + التغليف + العمالة المباشرة.",
+      "kpi.net": "صافي الإيرادات الشهرية", "kpi.contribution": "هامش المساهمة الشهري",
+      "kpi.food": "متوسط تكلفة الطعام", "kpi.comm": "عمولات التوصيل",
+      "kpi.vat": "الضريبة المستحقة", "kpi.stars": "أصناف نجوم",
+      "e.addTitle": "إضافة صنف جديد", "e.editTitle": "تعديل الصنف",
+      "e.desc": "اكتب مكونات الوصفة بكمياتها وتكلفة الوحدة — تُحسب التكلفة تلقائيًا.",
+      "e.name": "اسم الصنف (عربي)", "e.namePh": "مثال: برجر لحم",
+      "e.nameEn": "اسم الصنف (إنجليزي — اختياري)", "e.nameEnPh": "e.g. Beef burger",
+      "e.price": "سعر البيع شامل الضريبة", "e.units": "عدد المبيعات شهريًا",
+      "e.channel": "قناة البيع", "e.extra": "تكاليف إضافية للوحدة",
+      "e.ingredients": "مكونات الوصفة", "e.addRow": "+ مكوّن",
+      "e.ingName": "المكوّن", "e.ingQty": "الكمية", "e.ingCost": "تكلفة الوحدة",
+      "e.ingNamePh": "مثال: لحم", "e.recipeTotal": "تكلفة الوصفة",
+      "e.save": "حفظ الصنف", "e.update": "تحديث الصنف", "e.cancel": "إلغاء",
+      "e.hint": "التكاليف الإضافية تشمل التغليف والعمالة المباشرة والحصص التالفة — وليس الإيجار أو الرواتب الثابتة.",
+      "ch.dinein": "صالة", "ch.takeaway": "سفري", "ch.delivery": "توصيل",
+      "table.title": "أصناف القائمة وربحيتها",
+      "table.desc": "التصنيف يعتمد على هامش المساهمة وشعبية الصنف مقارنة بمتوسط القائمة.",
+      "reset": "استعادة القائمة التجريبية", "th.item": "الصنف", "th.channel": "القناة",
+      "th.recipe": "الوصفة", "th.unit": "التكلفة للوحدة", "th.price": "السعر",
+      "th.net": "صافي الإيراد", "th.contribution": "هامش المساهمة", "th.margin": "الهامش",
+      "th.units": "المبيعات", "th.class": "التصنيف", "th.suggested": "السعر المقترح",
+      "table.hint": "«صافي الإيراد» = السعر − الضريبة − عمولة التوصيل. «هامش المساهمة» = صافي الإيراد − تكلفة الوحدة.",
+      "cls.star": "نجوم", "cls.plow": "خيول العمل", "cls.puzzle": "ألغاز", "cls.dog": "أصناف ضعيفة",
+      "rec.title": "توصيات حسب تصنيف القائمة", "rec.desc": "حرّك الصنف بين الفئات بتغيير السعر أو التكلفة أو طريقة الترويج.",
+      "rec.star.title": "النجوم — حافظ عليها",
+      "rec.star.text": "أصناف تحقق ربحًا وشعبية معًا. ثبّت الجودة والحصة، ولا ترفع السعر بقوة، ودرّب الفريق على بيعها.",
+      "rec.plow.title": "خيول العمل — حسّن الهامش",
+      "rec.plow.text": "مطلوبة لكن ربحها منخفض. ارفع السعر تدريجيًا 3–5%، أو أعد هندسة الحصة أو اشترِ المكونات بسعر أفضل.",
+      "rec.puzzle.title": "ألغاز — سوّقها أكثر",
+      "rec.puzzle.text": "هامش جيد وشعبية ضعيفة. ضعها في مكان بارز، أضف صورة وتوصية من الموظف، أو اجعلها ضمن عرض مشترك.",
+      "rec.dog.title": "أصناف ضعيفة — أعد النظر فيها",
+      "rec.dog.text": "ربح وشعبية منخفضان. احذفها أو أعد تصميمها (تكلفة أقل أو عرض أكبر)، ولا تُبقِها لمجرد تنويع القائمة.",
+      "rec.count": "{n} صنف",
+      "suggest.sample": "{name} بسعر {price} — مقارنةً بسعرك الحالي {current}",
+      "note": "الأسعار المقترحة مبنية على نسبة التكلفة المستهدفة للوحدة، ولا تأخذ مرونة الطلب أو أسعار المنافسين في الحسبان — راجعها قبل النشر.",
+      "footer": "هندسة قوائم المطاعم — أداة تقديرية تعمل بلا خادم، ولا تحل محل محاسبك أو مستشارك الضريبي.",
+      "empty": "لا توجد أصناف بعد. أضف أول صنف من المحرر.",
+      "confirm.delete": "حذف هذا الصنف من القائمة؟", "confirm.reset": "استبدال القائمة الحالية بالقائمة التجريبية؟",
+      "toast.added": "تمت إضافة الصنف.", "toast.updated": "تم تحديث الصنف.", "toast.deleted": "تم حذف الصنف.",
+      "toast.reset": "تمت استعادة القائمة التجريبية.", "toast.need": "أدخل اسم الصنف وسعرًا أكبر من صفر.",
+      "toast.notarget": "نسبة التكلفة المستهدفة غير صالحة — عدّل الإعدادات.",
+      "delete": "حذف", "edit": "تعديل", "perUnit": "للوحدة"
+    },
+    en: {
+      brand: "Restaurant Menu Engineering", tagline: "Recipe cost · Tax & delivery · Profitability & pricing",
+      currency: "Currency", print: "Print",
+      "settings.title": "Operating settings",
+      "settings.desc": "Applied to every item: VAT, delivery app commission, and the food-cost ratio you price against.",
+      "s.vat": "VAT %", "s.comm": "Delivery app commission %",
+      "s.target": "Target unit cost %",
+      "settings.hint": "Menu prices include VAT. VAT (a tax liability) and delivery commission are deducted from the price to reach the item's net revenue. The target ratio uses the full unit cost: ingredients + packaging + direct labour.",
+      "kpi.net": "Monthly net revenue", "kpi.contribution": "Monthly contribution",
+      "kpi.food": "Average food cost", "kpi.comm": "Delivery commissions",
+      "kpi.vat": "VAT due", "kpi.stars": "Star items",
+      "e.addTitle": "Add a new item", "e.editTitle": "Edit item",
+      "e.desc": "Enter each recipe component with quantity and unit cost — the cost is calculated automatically.",
+      "e.name": "Item name (Arabic)", "e.namePh": "e.g. Beef burger",
+      "e.nameEn": "Item name (English — optional)", "e.nameEnPh": "e.g. Beef burger",
+      "e.price": "Selling price incl. VAT", "e.units": "Units sold per month",
+      "e.channel": "Sales channel", "e.extra": "Extra cost per unit",
+      "e.ingredients": "Recipe ingredients", "e.addRow": "+ Ingredient",
+      "e.ingName": "Ingredient", "e.ingQty": "Qty", "e.ingCost": "Unit cost",
+      "e.ingNamePh": "e.g. Beef", "e.recipeTotal": "Recipe cost",
+      "e.save": "Save item", "e.update": "Update item", "e.cancel": "Cancel",
+      "e.hint": "Extra costs cover packaging, direct labour and waste — not rent or fixed salaries.",
+      "ch.dinein": "Dine-in", "ch.takeaway": "Takeaway", "ch.delivery": "Delivery",
+      "table.title": "Menu items and profitability",
+      "table.desc": "Classification uses contribution margin and item popularity against the menu average.",
+      "reset": "Restore sample menu", "th.item": "Item", "th.channel": "Channel",
+      "th.recipe": "Recipe", "th.unit": "Unit cost", "th.price": "Price",
+      "th.net": "Net revenue", "th.contribution": "Contribution", "th.margin": "Margin",
+      "th.units": "Units", "th.class": "Class", "th.suggested": "Suggested price",
+      "table.hint": "Net revenue = price − VAT − delivery commission. Contribution = net revenue − unit cost.",
+      "cls.star": "Stars", "cls.plow": "Plowhorses", "cls.puzzle": "Puzzles", "cls.dog": "Dogs",
+      "rec.title": "Recommendations by menu class", "rec.desc": "Move items between classes by changing price, cost or promotion.",
+      "rec.star.title": "Stars — protect them",
+      "rec.star.text": "Both profitable and popular. Keep quality and portion consistent, avoid sharp price rises, and train staff to sell them.",
+      "rec.plow.title": "Plowhorses — improve the margin",
+      "rec.plow.text": "Popular but low profit. Raise price 3–5% gradually, re-engineer the portion, or negotiate better ingredient costs.",
+      "rec.puzzle.title": "Puzzles — promote them",
+      "rec.puzzle.text": "Good margin, low popularity. Give them menu prominence, add a photo and staff recommendation, or bundle them with a star.",
+      "rec.dog.title": "Dogs — rethink them",
+      "rec.dog.text": "Low profit and low popularity. Remove them or redesign (cheaper build or larger offer); variety alone is not a reason to keep them.",
+      "rec.count": "{n} items",
+      "suggest.sample": "{name} at {price} vs your current {current}",
+      "note": "Suggested prices are based on your target unit-cost ratio and ignore demand elasticity and competitor pricing — review before publishing.",
+      "footer": "Restaurant Menu Engineering — an indicative, serverless tool; it does not replace your accountant or tax adviser.",
+      "empty": "No items yet. Add your first item in the editor.",
+      "confirm.delete": "Delete this item from the menu?", "confirm.reset": "Replace the current menu with the sample menu?",
+      "toast.added": "Item added.", "toast.updated": "Item updated.", "toast.deleted": "Item deleted.",
+      "toast.reset": "Sample menu restored.", "toast.need": "Enter an item name and a price above zero.",
+      "toast.notarget": "Target food cost is not valid — adjust the settings.",
+      "delete": "Delete", "edit": "Edit", "perUnit": "per unit"
+    }
+  };
+
+  var KEY = "pb_menu_os_v1";
+  var LANG_KEY = "pb_menu_os_lang";
+  var state = { lang: "ar", currency: "SAR", items: [], editingId: null };
+  var channels = ["dinein", "takeaway", "delivery"];
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+  function n(v) { var x = parseFloat(v); return isFinite(x) ? x : 0; }
+  function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function t(key, vars) {
+    var table = I18N[state.lang] || I18N.ar;
+    var text = table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+    Object.keys(vars || {}).forEach(function (k) { text = text.split("{" + k + "}").join(vars[k]); });
+    return text;
+  }
+  function money(value) {
+    var info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    try {
+      return new Intl.NumberFormat(state.lang === "ar" ? "ar-SA" : "en-US", {
+        style: "currency", currency: state.currency,
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(Number(value) || 0);
+    } catch (err) { return (Number(value) || 0).toFixed(info.decimals) + " " + state.currency; }
+  }
+  function pct(v) { return (Math.round((Number(v) || 0) * 10) / 10) + "%"; }
+  function itemName(it) { return state.lang === "en" && it.nameEn ? it.nameEn : it.name; }
+
+  function settings() {
+    return {
+      vat: Math.max(0, Math.min(30, num("vat"))) / 100,
+      comm: Math.max(0, Math.min(60, num("comm"))) / 100,
+      target: Math.max(0, Math.min(80, num("target"))) / 100
+    };
+  }
+
+  function recipeCost(item) {
+    return (item.ingredients || []).reduce(function (sum, ing) { return sum + Math.max(0, n(ing.qty)) * Math.max(0, n(ing.cost)); }, 0);
+  }
+
+  function calcItem(item, s) {
+    var recipe = recipeCost(item);
+    var unit = recipe + Math.max(0, n(item.extra));
+    var price = Math.max(0, n(item.price));
+    var delivery = item.channel === "delivery";
+    var exVat = price / (1 + s.vat);
+    var vatAmt = price - exVat;
+    var commAmt = delivery ? price * s.comm : 0;
+    var net = price - vatAmt - commAmt;
+    var contribution = net - unit;
+    var margin = net > 0 ? contribution / net * 100 : -100;
+    var factor = delivery ? (1 / (1 + s.vat) - s.comm) : (1 / (1 + s.vat));
+    var floor = factor > 0.01 ? unit / factor : 0;
+    var suggested = 0;
+    if (s.target > 0) {
+      var denom = delivery ? s.target * factor : s.target / (1 + s.vat);
+      suggested = denom > 0.001 ? unit / denom : 0;
+    }
+    return { recipe: recipe, unit: unit, price: price, vat: vatAmt, comm: commAmt, net: net,
+      contribution: contribution, margin: margin, floor: floor, suggested: suggested, delivery: delivery };
+  }
+
+  function analyze() {
+    var s = settings();
+    var ca = state.items.map(function (item) { return calcItem(item, s); });
+    var nItems = state.items.length;
+    var totalUnits = ca.reduce(function (sum, c, i) { return sum + Math.max(0, n(state.items[i].units)); }, 0);
+    var avgUnits = nItems ? totalUnits / nItems : 0;
+    var avgContribution = nItems ? ca.reduce(function (sum, c) { return sum + c.contribution; }, 0) / nItems : 0;
+    var counts = { star: 0, plow: 0, puzzle: 0, dog: 0 };
+    var rows = state.items.map(function (item, i) {
+      var c = ca[i];
+      var units = Math.max(0, n(item.units));
+      var popular = avgUnits > 0 && units >= avgUnits * 0.7;
+      var profitable = c.contribution >= avgContribution;
+      var cls = popular && profitable ? "star" : popular && !profitable ? "plow" : !popular && profitable ? "puzzle" : "dog";
+      counts[cls]++;
+      return { item: item, c: c, units: units, cls: cls, popular: popular, profitable: profitable };
+    });
+    var totals = { net: 0, contribution: 0, food: 0, vat: 0, comm: 0 };
+    rows.forEach(function (r) {
+      totals.contribution += r.c.contribution * r.units;
+    });
+    totals.net = rows.reduce(function (sum, r) { return sum + r.c.net * r.units; }, 0);
+    totals.vat = rows.reduce(function (sum, r) { return sum + r.c.vat * r.units; }, 0);
+    totals.comm = rows.reduce(function (sum, r) { return sum + r.c.comm * r.units; }, 0);
+    totals.recipe = rows.reduce(function (sum, r) { return sum + r.c.recipe * r.units; }, 0);
+    totals.foodPct = totals.net > 0 ? totals.recipe / totals.net * 100 : 0;
+    return { rows: rows, counts: counts, avgContribution: avgContribution, avgUnits: avgUnits, totals: totals, units: totalUnits };
+  }
+
+  function renderKpis(a) {
+    var c = a.counts;
+    $("kpis").innerHTML = [
+      '<div class="kpi hero"><span>' + esc(t("kpi.net")) + "</span><strong>" + esc(money(a.totals.net)) + "</strong><small>" + esc(a.units + (state.lang === "ar" ? " وحدة" : " units")) + "</small></div>",
+      '<div class="kpi olive"><span>' + esc(t("kpi.contribution")) + "</span><strong>" + esc(money(a.totals.contribution)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.food")) + "</span><strong>" + esc(pct(a.totals.foodPct)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.comm")) + "</span><strong>" + esc(money(a.totals.comm)) + "</strong></div>",
+      '<div class="kpi gold"><span>' + esc(t("kpi.vat")) + "</span><strong>" + esc(money(a.totals.vat)) + "</strong></div>",
+      '<div class="kpi"><span>' + esc(t("kpi.stars")) + "</span><strong>" + c.star + " / " + a.rows.length + "</strong></div>"
+    ].join("");
+  }
+
+  function renderMenu(a) {
+    var body = $("menuBody");
+    if (!a.rows.length) {
+      body.innerHTML = '<tr><td colspan="12"><div class="empty">' + esc(t("empty")) + "</div></td></tr>";
+      return;
+    }
+    body.innerHTML = a.rows.map(function (r) {
+      var it = r.item, c = r.c;
+      var delta = c.suggested > 0 && c.price > 0 ? (c.suggested - c.price) / c.price * 100 : 0;
+      var deltaCls = Math.abs(delta) <= 3 ? "ok" : delta > 0 ? "up" : "down";
+      var suggestCell = c.suggested > 0
+        ? '<span class="sug">' + esc(money(c.suggested)) + '</span><span class="delta ' + deltaCls + '">' + (delta >= 0 ? "+" : "") + esc(pct(delta)) + "</span>"
+        : "—";
+      return "<tr>" +
+        '<td class="dish"><b>' + esc(itemName(it)) + "</b><small>" + esc(t("ch." + it.channel)) + "</small></td>" +
+        "<td>" + esc(t("ch." + it.channel)) + "</td>" +
+        "<td>" + esc(money(c.recipe)) + "</td>" +
+        "<td>" + esc(money(c.unit)) + "</td>" +
+        "<td>" + esc(money(c.price)) + "</td>" +
+        "<td>" + esc(money(c.net)) + "</td>" +
+        '<td style="font-weight:' + (c.contribution < 0 ? "800;color:var(--bad)" : "650") + '">' + esc(money(c.contribution)) + "</td>" +
+        "<td>" + esc(pct(c.margin)) + "</td>" +
+        "<td>" + esc(r.units) + "</td>" +
+        '<td><span class="badge ' + r.cls + '">' + esc(t("cls." + r.cls)) + "</span></td>" +
+        "<td>" + suggestCell + "</td>" +
+        '<td class="no-print"><div class="actions">' +
+          '<button type="button" class="btn ghost small" data-edit="' + esc(it.id) + '">' + esc(t("edit")) + "</button>" +
+          '<button type="button" class="btn danger small" data-del="' + esc(it.id) + '">' + esc(t("delete")) + "</button>" +
+        "</div></td>" +
+      "</tr>";
+    }).join("");
+  }
+
+  function renderRecs(a) {
+    var order = ["star", "plow", "puzzle", "dog"];
+    $("recGrid").innerHTML = order.map(function (key) {
+      return '<div class="rec"><h3><span class="badge ' + key + '">' + esc(t("cls." + key)) + "</span></h3>" +
+        "<p>" + esc(t("rec." + key + ".text")) + "</p>" +
+        '<span class="count">' + esc(t("rec.count", { n: a.counts[key] })) + "</span></div>";
+    }).join("");
+  }
+
+  function renderChannelOptions() {
+    var select = $("iChannel");
+    var current = select.value || "dinein";
+    select.innerHTML = channels.map(function (key) {
+      return '<option value="' + key + '">' + esc(t("ch." + key)) + "</option>";
+    }).join("");
+    select.value = channels.indexOf(current) >= 0 ? current : "dinein";
+  }
+
+  function renderAll() {
+    var a = analyze();
+    renderKpis(a);
+    renderMenu(a);
+    renderRecs(a);
+    updateRecipePreview();
+    save();
+  }
+
+  function updateRecipePreview() {
+    var total = 0;
+    document.querySelectorAll("#ingBody tr").forEach(function (row) {
+      total += Math.max(0, n(row.querySelector(".ing-qty").value)) * Math.max(0, n(row.querySelector(".ing-cost").value));
+    });
+    $("recipePreview").textContent = money(total);
+  }
+
+  function addIngredientRow(name, qty, cost) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td><input class="ing-name" type="text" placeholder="' + esc(t("e.ingNamePh")) + '" value="' + esc(name || "") + '"></td>' +
+      '<td><input class="ing-qty" type="number" min="0" step="0.001" value="' + esc(qty != null ? qty : "") + '"></td>' +
+      '<td><input class="ing-cost" type="number" min="0" step="0.01" value="' + esc(cost != null ? cost : "") + '"></td>' +
+      '<td><button type="button" class="icon-btn" data-remove-ing title="' + esc(t("delete")) + '">×</button></td>';
+    $("ingBody").appendChild(tr);
+    return tr;
+  }
+
+  function resetEditor() {
+    state.editingId = null;
+    $("iName").value = ""; $("iNameEn").value = "";
+    $("iPrice").value = ""; $("iUnits").value = ""; $("iExtra").value = "";
+    $("iChannel").value = "dinein";
+    $("ingBody").innerHTML = "";
+    addIngredientRow("", "", "");
+    $("editorTitle").textContent = t("e.addTitle");
+    $("saveItem").textContent = t("e.save");
+    updateRecipePreview();
+  }
+
+  function startEdit(id) {
+    var item = state.items.find(function (x) { return x.id === id; });
+    if (!item) return;
+    state.editingId = id;
+    $("iName").value = item.name || "";
+    $("iNameEn").value = item.nameEn || "";
+    $("iPrice").value = item.price;
+    $("iUnits").value = item.units;
+    $("iExtra").value = item.extra;
+    $("iChannel").value = channels.indexOf(item.channel) >= 0 ? item.channel : "dinein";
+    $("ingBody").innerHTML = "";
+    (item.ingredients || []).forEach(function (ing) { addIngredientRow(ing.name, ing.qty, ing.cost); });
+    if (!(item.ingredients || []).length) addIngredientRow("", "", "");
+    $("editorTitle").textContent = t("e.editTitle");
+    $("saveItem").textContent = t("e.update");
+    updateRecipePreview();
+    $("editorCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function saveItem() {
+    var name = $("iName").value.trim();
+    var price = n($("iPrice").value);
+    if (!name || price <= 0) { toast(t("toast.need")); return; }
+    var ingredients = [];
+    document.querySelectorAll("#ingBody tr").forEach(function (row) {
+      var ingName = row.querySelector(".ing-name").value.trim();
+      var qty = n(row.querySelector(".ing-qty").value);
+      var cost = n(row.querySelector(".ing-cost").value);
+      if (qty > 0 && cost > 0) ingredients.push({ name: ingName, qty: qty, cost: cost });
+    });
+    var payload = {
+      name: name,
+      nameEn: $("iNameEn").value.trim(),
+      price: Math.max(0, price),
+      units: Math.max(0, Math.round(n($("iUnits").value))),
+      channel: $("iChannel").value,
+      extra: Math.max(0, n($("iExtra").value)),
+      ingredients: ingredients
+    };
+    if (state.editingId) {
+      var index = state.items.findIndex(function (x) { return x.id === state.editingId; });
+      if (index >= 0) state.items[index] = Object.assign({ id: state.editingId }, payload);
+      toast(t("toast.updated"));
+    } else {
+      payload.id = "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      state.items.push(payload);
+      toast(t("toast.added"));
+    }
+    resetEditor();
+    renderAll();
+  }
+
+  function removeItem(id) {
+    if (!window.confirm(t("confirm.delete"))) return;
+    state.items = state.items.filter(function (x) { return x.id !== id; });
+    if (state.editingId === id) resetEditor();
+    toast(t("toast.deleted"));
+    renderAll();
+  }
+
+  function resetSample() {
+    if (!window.confirm(t("confirm.reset"))) return;
+    state.items = JSON.parse(JSON.stringify(SAMPLE));
+    resetEditor();
+    toast(t("toast.reset"));
+    renderAll();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        lang: state.lang, currency: state.currency,
+        settings: { vat: $("vat").value, comm: $("comm").value, target: $("target").value },
+        items: state.items
+      }));
+    } catch (err) { /* تجاهل */ }
+  }
+
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { el.classList.remove("show"); }, 1800);
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === "en" ? "en" : "ar";
+    document.documentElement.lang = state.lang;
+    document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ltr", state.lang === "en");
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langBtn").textContent = state.lang === "ar" ? "English" : "العربية";
+    $("editorTitle").textContent = state.editingId ? t("e.editTitle") : t("e.addTitle");
+    $("saveItem").textContent = state.editingId ? t("e.update") : t("e.save");
+    renderChannelOptions();
+    renderAll();
+  }
+
+  document.querySelectorAll("#vat, #comm, #target").forEach(function (input) {
+    input.addEventListener("input", renderAll);
+  });
+  $("ingBody").addEventListener("input", function (event) {
+    if (event.target.classList.contains("ing-qty") || event.target.classList.contains("ing-cost")) updateRecipePreview();
+  });
+  $("ingBody").addEventListener("click", function (event) {
+    if (event.target.closest("[data-remove-ing]")) {
+      event.target.closest("tr").remove();
+      if (!$("ingBody").children.length) addIngredientRow("", "", "");
+      updateRecipePreview();
+    }
+  });
+  $("addIng").addEventListener("click", function () { addIngredientRow("", "", ""); });
+  $("saveItem").addEventListener("click", saveItem);
+  $("cancelEdit").addEventListener("click", resetEditor);
+  $("resetBtn").addEventListener("click", resetSample);
+  $("menuBody").addEventListener("click", function (event) {
+    var edit = event.target.closest("[data-edit]");
+    var del = event.target.closest("[data-del]");
+    if (edit) startEdit(edit.getAttribute("data-edit"));
+    if (del) removeItem(del.getAttribute("data-del"));
+  });
+  $("currency").innerHTML = Object.keys(CURRENCIES).map(function (code) {
+    return '<option value="' + code + '">' + code + "</option>";
+  }).join("");
+  $("currency").addEventListener("change", function (event) {
+    if (CURRENCIES[event.target.value]) state.currency = event.target.value;
+    renderAll();
+  });
+  $("langBtn").addEventListener("click", function () { applyLang(state.lang === "ar" ? "en" : "ar"); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+
+  // تهيئة
+  state.currency = "SAR";
+  var storedLang = localStorage.getItem(LANG_KEY);
+  state.lang = storedLang === "en" ? "en" : "ar";
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) { raw = null; }
+  if (raw && Array.isArray(raw.items) && raw.items.length) {
+    state.items = raw.items;
+    if (raw.currency && CURRENCIES[raw.currency]) state.currency = raw.currency;
+    if (raw.settings) {
+      if (raw.settings.vat != null) $("vat").value = raw.settings.vat;
+      if (raw.settings.comm != null) $("comm").value = raw.settings.comm;
+      if (raw.settings.target != null) $("target").value = raw.settings.target;
+    }
+    state.lang = raw.lang === "en" ? "en" : state.lang;
+  } else {
+    state.items = JSON.parse(JSON.stringify(SAMPLE));
+  }
+  $("currency").value = state.currency;
+  resetEditor();
+  applyLang(state.lang);
+})();
+</script>
+</body>
+</html>
