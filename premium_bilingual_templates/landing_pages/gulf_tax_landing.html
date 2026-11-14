@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نظام الفواتير والامتثال الضريبي الخليجي — Arab Templates</title>
+<meta name="description" content="قالب جاهز للفواتير الإلكترونية برمز QR وحساب ضريبة القيمة المضافة والإقرار الضريبي — للشركات والمكاتب المحاسبية في السعودية والإمارات والكويت وقطر وعُمان والبحرين.">
+<style>
+:root{--bg:#f5f6f9;--ink:#0b1a2a;--muted:#5b6a7a;--navy:#0b2740;--navy2:#14405f;--gold:#c1912f;--gold2:#e3b45c;--teal:#0f766e;--line:#e3e7ef;--card:#fff;--radius:20px;--shadow:0 16px 40px rgba(11,39,64,.09)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15.5px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;line-height:1.25;letter-spacing:-.2px}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+ul{margin:0;padding:0;list-style:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 24px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;transition:.18s;background:var(--gold);color:#221a05;box-shadow:0 10px 24px rgba(193,145,47,.28)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(193,145,47,.36)}
+.btn.navy{background:var(--navy);color:#fff;box-shadow:0 10px 24px rgba(11,39,64,.24)}
+.btn.ghost{background:transparent;color:var(--navy);border:1px solid #cfd8e4;box-shadow:none}
+.btn.ghost:hover{border-color:var(--navy2);box-shadow:none}
+.btn.sm{padding:9px 16px;font-size:.84rem;border-radius:10px}
+header{position:sticky;top:0;z-index:30;background:rgba(245,246,249,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:18px;justify-content:space-between;padding:12px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--gold));color:#fff;display:grid;place-items:center;font-weight:900;font-size:.9rem}
+.brand small{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
+nav.menu{display:flex;gap:20px;font-size:.9rem;color:var(--muted);font-weight:600}
+nav.menu a:hover{color:var(--navy)}
+.head-actions{display:flex;align-items:center;gap:9px}
+select.cur{border:1px solid #cfd8e4;background:#fff;border-radius:10px;padding:8px 10px;font:inherit;font-size:.84rem;font-weight:700;color:var(--navy);cursor:pointer}
+.lang{border:1px solid #cfd8e4;background:#fff;border-radius:10px;padding:8px 14px;font:inherit;font-size:.84rem;font-weight:700;color:var(--navy);cursor:pointer}
+.lang:hover{border-color:var(--navy2)}
+@media(max-width:900px){nav.menu{display:none}}
+section{padding:70px 0}
+.hero{position:relative;overflow:hidden;padding:64px 0 40px}
+.hero::before{content:"";position:absolute;inset-inline-end:-160px;top:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(193,145,47,.2),transparent 65%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:30px}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:800;color:var(--teal);background:#e7f4f1;padding:6px 13px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--gold);position:relative}
+.hero p.lead{font-size:1.05rem;color:var(--muted);max-width:560px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-net{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:.82rem}
+.hero-net b{color:var(--ink)}
+.mock{background:linear-gradient(160deg,#0b2740,#14405f);border-radius:22px;padding:22px;color:#eaf2f8;box-shadow:0 30px 60px rgba(11,39,64,.32);position:relative}
+.mock .ticket{background:#fff;color:var(--ink);border-radius:16px;padding:18px}
+.mock .t-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:12px}
+.mock .t-head strong{font-size:.95rem}
+.mock .t-head span{font-size:.72rem;color:var(--muted)}
+.mock .row{display:flex;justify-content:space-between;font-size:.85rem;padding:5px 0;color:var(--muted)}
+.mock .row b{color:var(--ink)}
+.mock .total{display:flex;justify-content:space-between;border-top:2px solid var(--gold);margin-top:10px;padding-top:9px;font-weight:900;font-size:1rem}
+.mock .qrline{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:12px;font-size:.72rem;color:var(--muted)}
+.qr{width:46px;height:46px;background:repeating-conic-gradient(var(--navy) 0 25%,#fff 0 50%);background-size:11px 11px;border:3px solid var(--navy);border-radius:6px}
+.floating{position:absolute;bottom:-16px;inset-inline-start:-14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);font-size:.78rem;font-weight:700;color:var(--navy)}
+.floating span{color:var(--teal)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:880px){.grid2{grid-template-columns:1fr}}
+.sec-head{max-width:720px;margin-bottom:30px}
+.sec-head h2{font-size:clamp(1.45rem,2.6vw,2.05rem);margin-bottom:10px}
+.sec-head p{color:var(--muted)}
+.kicker{font-size:.76rem;font-weight:800;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.problem{border-inline-start:4px solid #d36b52}
+.solution{border-inline-start:4px solid var(--teal)}
+.list{display:grid;gap:12px;margin-top:14px}
+.list li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted)}
+.list li b{color:var(--ink)}
+.ic{flex:0 0 auto;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:.72rem;font-weight:900;margin-top:2px}
+.ic.bad{background:#fbebe7;color:#b3482c}
+.ic.good{background:#e6f4ef;color:#0b6b52}
+.feature{display:flex;flex-direction:column;gap:8px}
+.feature .ico{width:40px;height:40px;border-radius:12px;background:#eef3f9;display:grid;place-items:center;font-size:1.05rem;color:var(--navy)}
+.feature h3{font-size:1rem}
+.feature p{font-size:.88rem;color:var(--muted)}
+.compare{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);font-size:.9rem}
+.compare th,.compare td{padding:13px 14px;text-align:center;border-bottom:1px solid var(--line)}
+.compare th:first-child,.compare td:first-child{text-align:start;font-weight:700}
+.compare thead th{background:var(--navy);color:#fff;font-size:.82rem;font-weight:700}
+.compare thead th.us{background:var(--gold);color:#221a05}
+.compare td.us{background:#fffaf0;font-weight:800}
+.compare tr:last-child td{border-bottom:0}
+.yes{color:var(--teal);font-weight:900}
+.no{color:#b3482c;font-weight:900}
+.part{color:var(--gold);font-weight:800}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:stretch}
+.plan{position:relative;display:flex;flex-direction:column;gap:12px}
+.plan.best{border:2px solid var(--gold);box-shadow:0 22px 46px rgba(193,145,47,.2)}
+.plan .tag{position:absolute;top:-13px;inset-inline-start:22px;background:var(--gold);color:#221a05;font-size:.72rem;font-weight:900;padding:4px 12px;border-radius:999px}
+.plan h3{font-size:1.08rem}
+.plan .price{font-size:1.9rem;font-weight:900;color:var(--navy);line-height:1.2}
+.plan .price small{font-size:.82rem;font-weight:700;color:var(--muted)}
+.plan p.desc{font-size:.87rem;color:var(--muted);min-height:44px}
+.plan .btn{margin-top:auto}
+.plan .list li{font-size:.85rem}
+details.faq{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px}
+details.faq summary{cursor:pointer;font-weight:800;font-size:.95rem;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--gold);font-weight:900;font-size:1.2rem;line-height:1}
+details.faq[open] summary::after{content:"–"}
+details.faq p{margin-top:10px;color:var(--muted);font-size:.9rem}
+.final{background:linear-gradient(135deg,var(--navy),#123d5b);border-radius:24px;color:#fff;padding:44px 34px;display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;box-shadow:0 28px 60px rgba(11,39,64,.3)}
+.final h2{font-size:1.6rem;margin-bottom:8px}
+.final p{color:#c9dceb;font-size:.92rem}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:.82rem}
+.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+.note{font-size:.78rem;color:var(--muted);margin-top:10px}
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.mini{font-size:.74rem;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}
+@media print{header,.hero-cta,.plans .btn,.final .btn{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <span class="logo">GT</span>
+      <div>
+        <span data-i18n="brand">القالب الضريبي الخليجي</span>
+        <small data-i18n="brand.sub">فواتير · إقرار · امتثال</small>
+      </div>
+    </div>
+    <nav class="menu">
+      <a href="#problem" data-i18n="nav.problem">المشكلة والحل</a>
+      <a href="#compare" data-i18n="nav.compare">المقارنة</a>
+      <a href="#plans" data-i18n="nav.plans">الأسعار</a>
+      <a href="#faq" data-i18n="nav.faq">الأسئلة</a>
+    </nav>
+    <div class="head-actions">
+      <select class="cur" id="currency" aria-label="Currency"></select>
+      <button class="lang" id="langBtn" type="button">English</button>
+      <a class="btn sm" href="#plans" data-i18n="cta.order">اطلب الآن</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow" data-i18n="hero.eyebrow">● مصمّم للسوق الخليجي — ست دول، لغة واحدة للتشغيل</span>
+        <h1 data-i18n="hero.title">أصدر فاتورة ضريبية صحيحة من أول مرة، واحسب إقرارك في دقائق</h1>
+        <p class="lead" data-i18n="hero.lead">قالب واحد يغطي الفاتورة الإلكترونية برمز QR، حساب ضريبة القيمة المضافة، الإقرار الدوري، وسجل المشتريات — بالعربية والإنجليزية ودون أي إعداد معقّد.</p>
+        <div class="hero-cta">
+          <a class="btn" id="heroOrder" href="#plans" data-i18n="hero.cta">اطلب القالب الآن</a>
+          <a class="btn ghost" href="#compare" data-i18n="hero.secondary">قارن قبل أن تشتري</a>
+        </div>
+        <div class="hero-net">
+          <span><b data-i18n="hero.stat1n">6</b> <span data-i18n="hero.stat1">دول خليجية</span></span>
+          <span><b data-i18n="hero.stat2n">0</b> <span data-i18n="hero.stat2">مكتبات خارجية</span></span>
+          <span><b data-i18n="hero.stat3n">دقائق</b> <span data-i18n="hero.stat3">للتشغيل الأول</span></span>
+        </div>
+        <div class="badge-row">
+          <span class="mini" data-i18n="badge1">QR بصيغة ZATCA Phase 1</span>
+          <span class="mini" data-i18n="badge2">عربي/إنجليزي فوري</span>
+          <span class="mini" data-i18n="badge3">بياناتك عندك</span>
+        </div>
+      </div>
+      <div>
+        <div class="mock" aria-hidden="true">
+          <div class="ticket">
+            <div class="t-head">
+              <strong data-i18n="mock.title">فاتورة ضريبية</strong>
+              <span data-i18n="mock.no">INV-SA-2026-0148</span>
+            </div>
+            <div class="row"><span data-i18n="mock.net">الإجمالي قبل الضريبة</span><b id="mockNet">2,000.00</b></div>
+            <div class="row"><span data-i18n="mock.vat">ضريبة القيمة المضافة 15%</span><b id="mockVat">300.00</b></div>
+            <div class="total"><span data-i18n="mock.total">الإجمالي المستحق</span><span id="mockTotal">2,300.00</span></div>
+            <div class="qrline">
+              <div class="qr"></div>
+              <span data-i18n="mock.qr">رمز QR معتمد + تجزئة الفاتورة</span>
+            </div>
+          </div>
+          <div class="floating"><span>✓</span> <span data-i18n="mock.float">جاهزة للتقديم — بدون تعديل يدوي</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="problem">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" data-i18n="problem.kicker">لماذا نتحدث عن هذا؟</span>
+        <h2 data-i18n="problem.title">الفواتير اليدوية تكلّفك أكثر من غرامة التأخير</h2>
+        <p data-i18n="problem.sub">الشركات الخليجية لا تعاني من نقص الأنظمة، بل من فجوة بين الفاتورة والإقرار: ملفات إكسل، فواتير ناقصة الحقول، وضريبة تُحسب مرتين أو لا تُحسب.</p>
+      </div>
+      <div class="grid2">
+        <div class="card problem">
+          <h3 data-i18n="problem.cardTitle">الوضع اليوم</h3>
+          <ul class="list">
+            <li><span class="ic bad">✕</span><span data-i18n="problem.p1"><b>فواتير ناقصة:</b> رمز QR أو رقم ضريبي مفقود يعني فاتورة غير مقبولة عند التدقيق.</span></li>
+            <li><span class="ic bad">✕</span><span data-i18n="problem.p2"><b>حساب يدوي:</b> ضريبة المخرجات والمدخلات في ملفين منفصلين، والفرق يظهر متأخرًا.</span></li>
+            <li><span class="ic bad">✕</span><span data-i18n="problem.p3"><b>تعدد الدول:</b> نسبة 15٪ و5٪ و10٪ وصفر — وكل دولة بحقول ومواعيد مختلفة.</span></li>
+            <li><span class="ic bad">✕</span><span data-i18n="problem.p4"><b>الاعتماد على غيرك:</b> كل تعديل بسيط يمرّ على مبرمج أو انتظار ردّ.</span></li>
+          </ul>
+        </div>
+        <div class="card solution">
+          <h3 data-i18n="problem.solTitle">مع القالب الضريبي الخليجي</h3>
+          <ul class="list">
+            <li><span class="ic good">✓</span><span data-i18n="problem.s1"><b>فاتورة مكتملة:</b> بيانات البائع والمشتري، البنود، الضريبة، QR والتجزئة — في خطوة واحدة.</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="problem.s2"><b>إقرار محسوب:</b> مبيعات ومشتريات في سجل واحد، وصافي المستحق وموعد التقديم يظهران مباشرة.</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="problem.s3"><b>ست دول جاهزة:</b> بدّل الدولة فتتغير النسبة والعملة والفترة والموعد تلقائيًا.</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="problem.s4"><b>تحت سيطرتك:</b> ملف واحد تفتحه وتعدّله، وبياناتك تُحفظ عندك لا عند طرف ثالث.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" data-i18n="feat.kicker">ما تحصل عليه</span>
+        <h2 data-i18n="feat.title">أربع أدوات تعمل معًا بدل أربع ملفات منفصلة</h2>
+      </div>
+      <div class="grid3">
+        <article class="card feature">
+          <div class="ico">🧾</div>
+          <h3 data-i18n="feat.f1t">فاتورة إلكترونية برمز QR</h3>
+          <p data-i18n="feat.f1">بنود وخصومات، خيار «الأسعار تشمل الضريبة»، وترميز ZATCA TLV مع تجزئة SHA-256 وطباعة A4.</p>
+        </article>
+        <article class="card feature">
+          <div class="ico">📊</div>
+          <h3 data-i18n="feat.f2t">حاسبة صافي الإقرار</h3>
+          <p data-i18n="feat.f2">ضريبة المبيعات − ضريبة المشتريات، رصيد دائن للترحيل، وموعد تقديم محسوب حسب الدولة والفترة.</p>
+        </article>
+        <article class="card feature">
+          <div class="ico">📷</div>
+          <h3 data-i18n="feat.f3t">ماسح فواتير ذكي</h3>
+          <p data-i18n="feat.f3">أفلت صورة أو الصق نص واتساب، راجع الحقول المستخرجة، ثم أضفها لسجل المشتريات بضغطة.</p>
+        </article>
+        <article class="card feature">
+          <div class="ico">💬</div>
+          <h3 data-i18n="feat.f4t">مساعد ضريبي ومحاسب</h3>
+          <p data-i18n="feat.f4">أسئلة الامتثال الشائعة بقواعد معرفة خليجية، وتذاكر محاسب برقم مرجعي داخل النظام.</p>
+        </article>
+        <article class="card feature">
+          <div class="ico">🌐</div>
+          <h3 data-i18n="feat.f5t">عربي/إنجليزي وعملات خليجية</h3>
+          <p data-i18n="feat.f5">تبديل فوري مع اتجاه RTL/LTR، وسبع عملات، وأسعار صرف حيّة مع لقطة احتياطية عند انقطاع الشبكة.</p>
+        </article>
+        <article class="card feature">
+          <div class="ico">🔒</div>
+          <h3 data-i18n="feat.f6t">خصوصية افتراضية</h3>
+          <p data-i18n="feat.f6">لا يُخزَّن نص فاتورة خام، والمفتاح يبقى على الخادم، والسجلات على جهازك داخل مجلد المنتج.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" data-i18n="cmp.kicker">مقارنة صريحة</span>
+        <h2 data-i18n="cmp.title">لماذا القالب أسرع من البدائل؟</h2>
+        <p data-i18n="cmp.sub">قارنّاها مع الطريقة الأكثر شيوعًا: ملفات إكسل، وبرامج محاسبة جاهزة، وتكليف مكتب محاسبي بكل إصدار.</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th data-i18n="cmp.h0">المعيار</th>
+              <th class="us" data-i18n="cmp.h1">القالب الضريبي</th>
+              <th data-i18n="cmp.h2">إكسل / وورد</th>
+              <th data-i18n="cmp.h3">برنامج محاسبة</th>
+              <th data-i18n="cmp.h4">مكتب خارجي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td data-i18n="cmp.r1">فاتورة برمز QR معتمد</td><td class="us yes">✓</td><td class="no">✕</td><td class="part" data-i18n="cmp.partial">أحيانًا</td><td class="yes">✓</td></tr>
+            <tr><td data-i18n="cmp.r2">حساب الإقرار وموعده تلقائيًا</td><td class="us yes">✓</td><td class="part" data-i18n="cmp.manual">يدوي</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td data-i18n="cmp.r3">دول خليجية متعددة في نظام واحد</td><td class="us yes">✓</td><td class="no">✕</td><td class="part" data-i18n="cmp.extra">بإضافة</td><td class="yes">✓</td></tr>
+            <tr><td data-i18n="cmp.r4">تبديل عربي/إنجليزي فوري</td><td class="us yes">✓</td><td class="part" data-i18n="cmp.manual">يدوي</td><td class="part" data-i18n="cmp.partial">أحيانًا</td><td class="no">✕</td></tr>
+            <tr><td data-i18n="cmp.r5">تعديل الحركات والتصميم بنفسك</td><td class="us yes">✓</td><td class="yes">✓</td><td class="no">✕</td><td class="no">✕</td></tr>
+            <tr><td data-i18n="cmp.r6">تكلفة البداية</td><td class="us" data-i18n="cmp.cost.us">مرة واحدة</td><td data-i18n="cmp.cost.xl">وقت طويل</td><td data-i18n="cmp.cost.erp">اشتراك شهري</td><td data-i18n="cmp.cost.office">أتعاب لكل إصدار</td></tr>
+            <tr><td data-i18n="cmp.r7">ملكية البيانات</td><td class="us yes" data-i18n="cmp.own.us">كاملة عندك</td><td class="yes" data-i18n="cmp.own.xl">ملفاتك</td><td class="part" data-i18n="cmp.own.erp">لدى المزوّد</td><td class="part" data-i18n="cmp.own.office">لدى المكتب</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" data-i18n="plans.kicker">باقات واضحة</span>
+        <h2 data-i18n="plans.title">اختر الباقة التي تناسب حجم عملك</h2>
+        <p data-i18n="plans.sub">دفعة واحدة، بلا اشتراك شهري. السعر يظهر بعملتك المختارة من الشريط العلوي.</p>
+      </div>
+      <div class="plans">
+        <article class="card plan">
+          <h3 data-i18n="plan1.title">مكتب صغير</h3>
+          <div class="price"><span data-price="1490">—</span> <small data-i18n="plans.per">/ سنة</small></div>
+          <p class="desc" data-i18n="plan1.desc">لمحاسب مستقل أو شركة صغيرة تصدر فواتير محدودة شهريًا.</p>
+          <ul class="list">
+            <li><span class="ic good">✓</span><span data-i18n="plan1.f1">فاتورة إلكترونية + QR</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan1.f2">حاسبة الإقرار الشهرية والربع سنوية</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan1.f3">دولة واحدة وعملة واحدة</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan1.f4">دعم بالبريد لمدة 30 يومًا</span></li>
+          </ul>
+          <button class="btn ghost order" type="button" data-plan="plan1" data-i18n="plans.choose">اطلب هذه الباقة</button>
+        </article>
+
+        <article class="card plan best">
+          <span class="tag" data-i18n="plans.popular">الأكثر اختيارًا</span>
+          <h3 data-i18n="plan2.title">شركة / مكتب محاسبي</h3>
+          <div class="price"><span data-price="2990">—</span> <small data-i18n="plans.per">/ سنة</small></div>
+          <p class="desc" data-i18n="plan2.desc">لكل من يصدر فواتير لعملاء متعددين ويحتاج تقارير جاهزة للتدقيق.</p>
+          <ul class="list">
+            <li><span class="ic good">✓</span><span data-i18n="plan2.f1">كل ما في الباقة السابقة</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan2.f2">الدول الست وعملاتها</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan2.f3">ماسح فواتير وسجل مشتريات</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan2.f4">دعم أولوية 12 شهرًا + تحديثات</span></li>
+          </ul>
+          <button class="btn order" type="button" data-plan="plan2" data-i18n="plans.choose">اطلب هذه الباقة</button>
+        </article>
+
+        <article class="card plan">
+          <h3 data-i18n="plan3.title">وكالة / عدة فروع</h3>
+          <div class="price"><span data-price="5990">—</span> <small data-i18n="plans.per">/ سنة</small></div>
+          <p class="desc" data-i18n="plan3.desc">للمكاتب والوكالات التي تسلّم النظام بهويتها لعملائها.</p>
+          <ul class="list">
+            <li><span class="ic good">✓</span><span data-i18n="plan3.f1">ترخيص استخدام تجاري متعدد العملاء</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan3.f2">هوية بيضاء: شعارك ونطاقك</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan3.f3">تهيئة أولية وتدريب للفريق</span></li>
+            <li><span class="ic good">✓</span><span data-i18n="plan3.f4">قناة دعم مخصّصة للشريك</span></li>
+          </ul>
+          <button class="btn ghost order" type="button" data-plan="plan3" data-i18n="plans.choose">اطلب هذه الباقة</button>
+        </article>
+      </div>
+      <p class="note" data-i18n="plans.note">السعر لا يشمل ضريبة القيمة المضافة المطبّقة في بلدك. الأسعار بالعملة المختارة تقريبيًا وتُثبَّت عند إصدار العرض النهائي.</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" data-i18n="faq.kicker">أسئلة متكررة</span>
+        <h2 data-i18n="faq.title">ما يسأل عنه العملاء قبل الشراء</h2>
+      </div>
+      <details class="faq" open>
+        <summary data-i18n="faq.q1">هل القالب متوافق مع متطلبات هيئة الزكاة والضريبة (ZATCA)؟</summary>
+        <p data-i18n="faq.a1">القالب يولّد رمز QR بصيغة TLV المعتمدة في المرحلة الأولى (Phase 1) — وهي نفس بنية FTA في الإمارات — مع تجزئة SHA-256 للفاتورة. المرحلة الثانية (التوقيع الإلكتروني والختم) خارج نطاق القالب.</p>
+      </details>
+      <details class="faq">
+        <summary data-i18n="faq.q2">هل يحتاج تركيبًا أو مبرمجًا؟</summary>
+        <p data-i18n="faq.a2">لا. تشغّل ملف الخادم بأمر واحد، أو تفتح الواجهة مباشرة للعرض. كل التنسيق والسكربت مدمجان في ملف واحد، والتعديل على النصوص والألوان يتم من نفس الملف.</p>
+      </details>
+      <details class="faq">
+        <summary data-i18n="faq.q3">هل يعمل لعدة دول في نفس الوقت؟</summary>
+        <p data-i18n="faq.a3">نعم — السعودية والإمارات والكويت وقطر وعُمان والبحرين. تبديل الدولة يغيّر النسبة والعملة والفترة الضريبية وموعد التقديم تلقائيًا، مع أسعار صرف حيّة ولقطة احتياطية عند انقطاع الشبكة.</p>
+      </details>
+      <details class="faq">
+        <summary data-i18n="faq.q4">أين تُحفظ بياناتي وفواتيري؟</summary>
+        <p data-i18n="faq.a4">على جهازك داخل مجلد المنتج (`reports/gulf/`)، بلا نص فاتورة خام وبلا رفع إلى خدمة خارجية. مفتاح البريد يبقى على الخادم ولا يصل إلى المتصفح.</p>
+      </details>
+      <details class="faq">
+        <summary data-i18n="faq.q5">هل يمكنني تعديله وبيعه لعملائي؟</summary>
+        <p data-i18n="faq.a5">الاستخدام التجاري مسموح داخل مشروعك، وباقة «وكالة / عدة فروع» تمنحك الترخيص لتسليمه بهويتك لعملائك. إعادة بيع القالب نفسه كمنتج مستقل تحتاج اتفاقًا كتابيًا.</p>
+      </details>
+      <details class="faq">
+        <summary data-i18n="faq.q6">ماذا لو لم يناسبني؟</summary>
+        <p data-i18n="faq.a6">راجع الباقة قبل الشراء عبر عرض تجريبي، وأخبرنا بالمتطلبات الناقصة. نستبدل أو نعدّل خلال فترة الدعم، ونوضّح الحدود مقدمًا بدل وعود لا تُنفَّذ.</p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="final">
+        <div>
+          <h2 data-i18n="final.title">جاهز لإصدار فاتورتك الأولى اليوم؟</h2>
+          <p data-i18n="final.sub">أرسل لنا طلبك وسنعيد لك رابط العرض التجريبي وخطوات التشغيل في نفس يوم العمل.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn order" type="button" data-plan="plan2" data-i18n="final.cta">اطلب فورًا</button>
+          <a class="btn ghost" href="#compare" data-i18n="final.compare">راجع المقارنة</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span data-i18n="footer.copy">Arab Templates — القالب الضريبي الخليجي · جميع الحقوق محفوظة</span>
+    <span data-i18n="footer.note">الصفحة عرض تسويقي؛ تفاصيل الترخيص تُتفق عند الطلب.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // ضع رابط واتساب أو نموذج الطلب هنا؛ إن تُرك فارغًا يُستخدم بريد الطلبات.
+  const ORDER_URL = "";
+  const ORDER_EMAIL = "sales@arab-templates.example.com";
+
+  const CURRENCIES = {
+    SAR: { ar: "ريال سعودي", en: "Saudi riyal", rate: 1, decimals: 0 },
+    AED: { ar: "درهم إماراتي", en: "UAE dirham", rate: 0.98, decimals: 0 },
+    KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", rate: 0.082, decimals: 0 },
+    QAR: { ar: "ريال قطري", en: "Qatari riyal", rate: 0.97, decimals: 0 },
+    OMR: { ar: "ريال عماني", en: "Omani rial", rate: 0.103, decimals: 0 },
+    BHD: { ar: "دينار بحريني", en: "Bahraini dinar", rate: 0.1, decimals: 0 }
+  };
+
+  const I18N = {
+    ar: {
+      "brand": "القالب الضريبي الخليجي", "brand.sub": "فواتير · إقرار · امتثال",
+      "nav.problem": "المشكلة والحل", "nav.compare": "المقارنة", "nav.plans": "الأسعار", "nav.faq": "الأسئلة",
+      "cta.order": "اطلب الآن",
+      "hero.eyebrow": "● مصمّم للسوق الخليجي — ست دول، لغة واحدة للتشغيل",
+      "hero.title": "أصدر فاتورة ضريبية صحيحة من أول مرة، واحسب إقرارك في دقائق",
+      "hero.lead": "قالب واحد يغطي الفاتورة الإلكترونية برمز QR، حساب ضريبة القيمة المضافة، الإقرار الدوري، وسجل المشتريات — بالعربية والإنجليزية ودون أي إعداد معقّد.",
+      "hero.cta": "اطلب القالب الآن", "hero.secondary": "قارن قبل أن تشتري",
+      "hero.stat1n": "6", "hero.stat1": "دول خليجية",
+      "hero.stat2n": "0", "hero.stat2": "مكتبات خارجية",
+      "hero.stat3n": "دقائق", "hero.stat3": "للتشغيل الأول",
+      "badge1": "QR بصيغة ZATCA Phase 1", "badge2": "عربي/إنجليزي فوري", "badge3": "بياناتك عندك",
+      "mock.title": "فاتورة ضريبية", "mock.no": "INV-SA-2026-0148",
+      "mock.net": "الإجمالي قبل الضريبة", "mock.vat": "ضريبة القيمة المضافة 15%",
+      "mock.total": "الإجمالي المستحق", "mock.qr": "رمز QR معتمد + تجزئة الفاتورة",
+      "mock.float": "جاهزة للتقديم — بدون تعديل يدوي",
+      "problem.kicker": "لماذا نتحدث عن هذا؟",
+      "problem.title": "الفواتير اليدوية تكلّفك أكثر من غرامة التأخير",
+      "problem.sub": "الشركات الخليجية لا تعاني من نقص الأنظمة، بل من فجوة بين الفاتورة والإقرار: ملفات إكسل، فواتير ناقصة الحقول، وضريبة تُحسب مرتين أو لا تُحسب.",
+      "problem.cardTitle": "الوضع اليوم",
+      "problem.p1": "فواتير ناقصة: رمز QR أو رقم ضريبي مفقود يعني فاتورة غير مقبولة عند التدقيق.",
+      "problem.p2": "حساب يدوي: ضريبة المخرجات والمدخلات في ملفين منفصلين، والفرق يظهر متأخرًا.",
+      "problem.p3": "تعدد الدول: نسبة 15٪ و5٪ و10٪ وصفر — وكل دولة بحقول ومواعيد مختلفة.",
+      "problem.p4": "الاعتماد على غيرك: كل تعديل بسيط يمرّ على مبرمج أو انتظار ردّ.",
+      "problem.solTitle": "مع القالب الضريبي الخليجي",
+      "problem.s1": "فاتورة مكتملة: بيانات البائع والمشتري، البنود، الضريبة، QR والتجزئة — في خطوة واحدة.",
+      "problem.s2": "إقرار محسوب: مبيعات ومشتريات في سجل واحد، وصافي المستحق وموعد التقديم يظهران مباشرة.",
+      "problem.s3": "ست دول جاهزة: بدّل الدولة فتتغير النسبة والعملة والفترة والموعد تلقائيًا.",
+      "problem.s4": "تحت سيطرتك: ملف واحد تفتحه وتعدّله، وبياناتك تُحفظ عندك لا عند طرف ثالث.",
+      "feat.kicker": "ما تحصل عليه",
+      "feat.title": "أربع أدوات تعمل معًا بدل أربع ملفات منفصلة",
+      "feat.f1t": "فاتورة إلكترونية برمز QR",
+      "feat.f1": "بنود وخصومات، خيار «الأسعار تشمل الضريبة»، وترميز ZATCA TLV مع تجزئة SHA-256 وطباعة A4.",
+      "feat.f2t": "حاسبة صافي الإقرار",
+      "feat.f2": "ضريبة المبيعات − ضريبة المشتريات، رصيد دائن للترحيل، وموعد تقديم محسوب حسب الدولة والفترة.",
+      "feat.f3t": "ماسح فواتير ذكي",
+      "feat.f3": "أفلت صورة أو الصق نص واتساب، راجع الحقول المستخرجة، ثم أضفها لسجل المشتريات بضغطة.",
+      "feat.f4t": "مساعد ضريبي ومحاسب",
+      "feat.f4": "أسئلة الامتثال الشائعة بقواعد معرفة خليجية، وتذاكر محاسب برقم مرجعي داخل النظام.",
+      "feat.f5t": "عربي/إنجليزي وعملات خليجية",
+      "feat.f5": "تبديل فوري مع اتجاه RTL/LTR، وسبع عملات، وأسعار صرف حيّة مع لقطة احتياطية عند انقطاع الشبكة.",
+      "feat.f6t": "خصوصية افتراضية",
+      "feat.f6": "لا يُخزَّن نص فاتورة خام، والمفتاح يبقى على الخادم، والسجلات على جهازك داخل مجلد المنتج.",
+      "cmp.kicker": "مقارنة صريحة", "cmp.title": "لماذا القالب أسرع من البدائل؟",
+      "cmp.sub": "قارنّاها مع الطريقة الأكثر شيوعًا: ملفات إكسل، وبرامج محاسبة جاهزة، وتكليف مكتب محاسبي بكل إصدار.",
+      "cmp.h0": "المعيار", "cmp.h1": "القالب الضريبي", "cmp.h2": "إكسل / وورد", "cmp.h3": "برنامج محاسبة", "cmp.h4": "مكتب خارجي",
+      "cmp.r1": "فاتورة برمز QR معتمد", "cmp.r2": "حساب الإقرار وموعده تلقائيًا",
+      "cmp.r3": "دول خليجية متعددة في نظام واحد", "cmp.r4": "تبديل عربي/إنجليزي فوري",
+      "cmp.r5": "تعديل الحركات والتصميم بنفسك", "cmp.r6": "تكلفة البداية", "cmp.r7": "ملكية البيانات",
+      "cmp.partial": "أحيانًا", "cmp.manual": "يدوي", "cmp.extra": "بإضافة",
+      "cmp.cost.us": "مرة واحدة", "cmp.cost.xl": "وقت طويل", "cmp.cost.erp": "اشتراك شهري", "cmp.cost.office": "أتعاب لكل إصدار",
+      "cmp.own.us": "كاملة عندك", "cmp.own.xl": "ملفاتك", "cmp.own.erp": "لدى المزوّد", "cmp.own.office": "لدى المكتب",
+      "plans.kicker": "باقات واضحة", "plans.title": "اختر الباقة التي تناسب حجم عملك",
+      "plans.sub": "دفعة واحدة، بلا اشتراك شهري. السعر يظهر بعملتك المختارة من الشريط العلوي.",
+      "plans.per": "/ سنة", "plans.popular": "الأكثر اختيارًا", "plans.choose": "اطلب هذه الباقة",
+      "plans.note": "السعر لا يشمل ضريبة القيمة المضافة المطبّقة في بلدك. الأسعار بالعملة المختارة تقريبيًا وتُثبَّت عند إصدار العرض النهائي.",
+      "plan1.title": "مكتب صغير", "plan1.desc": "لمحاسب مستقل أو شركة صغيرة تصدر فواتير محدودة شهريًا.",
+      "plan1.f1": "فاتورة إلكترونية + QR", "plan1.f2": "حاسبة الإقرار الشهرية والربع سنوية",
+      "plan1.f3": "دولة واحدة وعملة واحدة", "plan1.f4": "دعم بالبريد لمدة 30 يومًا",
+      "plan2.title": "شركة / مكتب محاسبي", "plan2.desc": "لكل من يصدر فواتير لعملاء متعددين ويحتاج تقارير جاهزة للتدقيق.",
+      "plan2.f1": "كل ما في الباقة السابقة", "plan2.f2": "الدول الست وعملاتها",
+      "plan2.f3": "ماسح فواتير وسجل مشتريات", "plan2.f4": "دعم أولوية 12 شهرًا + تحديثات",
+      "plan3.title": "وكالة / عدة فروع", "plan3.desc": "للمكاتب والوكالات التي تسلّم النظام بهويتها لعملائها.",
+      "plan3.f1": "ترخيص استخدام تجاري متعدد العملاء", "plan3.f2": "هوية بيضاء: شعارك ونطاقك",
+      "plan3.f3": "تهيئة أولية وتدريب للفريق", "plan3.f4": "قناة دعم مخصّصة للشريك",
+      "faq.kicker": "أسئلة متكررة", "faq.title": "ما يسأل عنه العملاء قبل الشراء",
+      "faq.q1": "هل القالب متوافق مع متطلبات هيئة الزكاة والضريبة (ZATCA)؟",
+      "faq.a1": "القالب يولّد رمز QR بصيغة TLV المعتمدة في المرحلة الأولى (Phase 1) — وهي نفس بنية FTA في الإمارات — مع تجزئة SHA-256 للفاتورة. المرحلة الثانية (التوقيع الإلكتروني والختم) خارج نطاق القالب.",
+      "faq.q2": "هل يحتاج تركيبًا أو مبرمجًا؟",
+      "faq.a2": "لا. تشغّل ملف الخادم بأمر واحد، أو تفتح الواجهة مباشرة للعرض. كل التنسيق والسكربت مدمجان في ملف واحد، والتعديل على النصوص والألوان يتم من نفس الملف.",
+      "faq.q3": "هل يعمل لعدة دول في نفس الوقت؟",
+      "faq.a3": "نعم — السعودية والإمارات والكويت وقطر وعُمان والبحرين. تبديل الدولة يغيّر النسبة والعملة والفترة الضريبية وموعد التقديم تلقائيًا، مع أسعار صرف حيّة ولقطة احتياطية عند انقطاع الشبكة.",
+      "faq.q4": "أين تُحفظ بياناتي وفواتيري؟",
+      "faq.a4": "على جهازك داخل مجلد المنتج (reports/gulf/)، بلا نص فاتورة خام وبلا رفع إلى خدمة خارجية. مفتاح البريد يبقى على الخادم ولا يصل إلى المتصفح.",
+      "faq.q5": "هل يمكنني تعديله وبيعه لعملائي؟",
+      "faq.a5": "الاستخدام التجاري مسموح داخل مشروعك، وباقة «وكالة / عدة فروع» تمنحك الترخيص لتسليمه بهويتك لعملائك. إعادة بيع القالب نفسه كمنتج مستقل تحتاج اتفاقًا كتابيًا.",
+      "faq.q6": "ماذا لو لم يناسبني؟",
+      "faq.a6": "راجع الباقة قبل الشراء عبر عرض تجريبي، وأخبرنا بالمتطلبات الناقصة. نستبدل أو نعدّل خلال فترة الدعم، ونوضّح الحدود مقدمًا بدل وعود لا تُنفَّذ.",
+      "final.title": "جاهز لإصدار فاتورتك الأولى اليوم؟",
+      "final.sub": "أرسل لنا طلبك وسنعيد لك رابط العرض التجريبي وخطوات التشغيل في نفس يوم العمل.",
+      "final.cta": "اطلب فورًا", "final.compare": "راجع المقارنة",
+      "footer.copy": "Arab Templates — القالب الضريبي الخليجي · جميع الحقوق محفوظة",
+      "footer.note": "الصفحة عرض تسويقي؛ تفاصيل الترخيص تُتفق عند الطلب."
+    },
+    en: {
+      "brand": "Gulf Tax Template", "brand.sub": "Invoices · Returns · Compliance",
+      "nav.problem": "Problem & fix", "nav.compare": "Comparison", "nav.plans": "Pricing", "nav.faq": "FAQ",
+      "cta.order": "Order now",
+      "hero.eyebrow": "● Built for the Gulf — six countries, one workflow",
+      "hero.title": "Issue a compliant tax invoice first time, and file your return in minutes",
+      "hero.lead": "One template covering QR e-invoices, VAT calculation, periodic returns and a purchase ledger — in Arabic and English with no complicated setup.",
+      "hero.cta": "Order the template", "hero.secondary": "Compare first",
+      "hero.stat1n": "6", "hero.stat1": "Gulf countries",
+      "hero.stat2n": "0", "hero.stat2": "external libraries",
+      "hero.stat3n": "Minutes", "hero.stat3": "to first run",
+      "badge1": "ZATCA Phase 1 QR", "badge2": "Instant AR/EN", "badge3": "Your data stays yours",
+      "mock.title": "Tax invoice", "mock.no": "INV-SA-2026-0148",
+      "mock.net": "Net before VAT", "mock.vat": "VAT 15%",
+      "mock.total": "Amount due", "mock.qr": "Compliant QR + invoice hash",
+      "mock.float": "Filing-ready — no manual edits",
+      "problem.kicker": "Why this matters",
+      "problem.title": "Manual invoicing costs more than a late-filing fine",
+      "problem.sub": "Gulf businesses do not lack software; they lack a link between the invoice and the return: spreadsheets, missing fields, VAT counted twice or not at all.",
+      "problem.cardTitle": "Today",
+      "problem.p1": "Incomplete invoices: a missing QR or tax number is an invoice an auditor can reject.",
+      "problem.p2": "Manual maths: output and input VAT live in two files, and the gap shows up late.",
+      "problem.p3": "Multiple countries: 15%, 5%, 10% and zero — each with its own fields and deadlines.",
+      "problem.p4": "Dependence: every small change waits for a developer or a reply.",
+      "problem.solTitle": "With the Gulf tax template",
+      "problem.s1": "Complete invoice: seller and buyer data, lines, VAT, QR and hash — in one step.",
+      "problem.s2": "Calculated return: sales and purchases in one ledger, with net due and deadline shown live.",
+      "problem.s3": "Six countries ready: switch country and the rate, currency, period and deadline follow.",
+      "problem.s4": "Under your control: one file you can open and edit; your data stays on your machine.",
+      "feat.kicker": "What you get",
+      "feat.title": "Four tools that work together instead of four separate files",
+      "feat.f1t": "QR e-invoice",
+      "feat.f1": "Line items and discounts, VAT-inclusive pricing, ZATCA TLV encoding with a SHA-256 hash, A4 print.",
+      "feat.f2t": "Net VAT return calculator",
+      "feat.f2": "Output VAT minus input VAT, carry-forward credit, and a deadline calculated per country and period.",
+      "feat.f3t": "Smart invoice scanner",
+      "feat.f3": "Drop an image or paste WhatsApp text, review the extracted fields, then add it to the purchase ledger.",
+      "feat.f4t": "Tax assistant & accountant channel",
+      "feat.f4": "Gulf compliance answers from a local knowledge base, plus numbered accountant tickets inside the app.",
+      "feat.f5t": "Arabic/English and Gulf currencies",
+      "feat.f5": "Instant switching with RTL/LTR, seven currencies, live FX with a cached fallback when offline.",
+      "feat.f6t": "Privacy by default",
+      "feat.f6": "No raw invoice text stored, the email key stays server-side, and logs live in your own product folder.",
+      "cmp.kicker": "Honest comparison", "cmp.title": "Why the template moves faster than the alternatives",
+      "cmp.sub": "We compared it with the usual routes: spreadsheets, off-the-shelf accounting software, and paying an office per filing.",
+      "cmp.h0": "Criteria", "cmp.h1": "This template", "cmp.h2": "Excel / Word", "cmp.h3": "Accounting software", "cmp.h4": "External office",
+      "cmp.r1": "Compliant QR invoice", "cmp.r2": "Automatic return and deadline",
+      "cmp.r3": "Multiple Gulf countries in one system", "cmp.r4": "Instant Arabic/English switch",
+      "cmp.r5": "Edit layout and copy yourself", "cmp.r6": "Starting cost", "cmp.r7": "Data ownership",
+      "cmp.partial": "Sometimes", "cmp.manual": "Manual", "cmp.extra": "Add-on",
+      "cmp.cost.us": "One-off", "cmp.cost.xl": "Long setup", "cmp.cost.erp": "Monthly subscription", "cmp.cost.office": "Fee per filing",
+      "cmp.own.us": "Fully yours", "cmp.own.xl": "Your files", "cmp.own.erp": "With the vendor", "cmp.own.office": "With the office",
+      "plans.kicker": "Clear plans", "plans.title": "Pick the plan that fits your workload",
+      "plans.sub": "One payment, no monthly subscription. Prices follow the currency in the header.",
+      "plans.per": "/ year", "plans.popular": "Most chosen", "plans.choose": "Order this plan",
+      "plans.note": "VAT applicable in your country is not included. Converted prices are indicative and fixed when the final quote is issued.",
+      "plan1.title": "Small office", "plan1.desc": "For an independent accountant or a small firm issuing a limited number of invoices.",
+      "plan1.f1": "E-invoice + QR", "plan1.f2": "Monthly and quarterly return calculator",
+      "plan1.f3": "One country, one currency", "plan1.f4": "Email support for 30 days",
+      "plan2.title": "Company / accounting office", "plan2.desc": "For anyone invoicing multiple clients who needs audit-ready reports.",
+      "plan2.f1": "Everything in the previous plan", "plan2.f2": "All six countries and currencies",
+      "plan2.f3": "Invoice scanner and purchase ledger", "plan2.f4": "Priority support for 12 months + updates",
+      "plan3.title": "Agency / multi-branch", "plan3.desc": "For offices and agencies delivering the system under their own brand.",
+      "plan3.f1": "Commercial multi-client licence", "plan3.f2": "White label: your logo and domain",
+      "plan3.f3": "Initial setup and team training", "plan3.f4": "Dedicated partner support channel",
+      "faq.kicker": "FAQ", "faq.title": "What buyers ask before purchasing",
+      "faq.q1": "Is the template compliant with ZATCA requirements?",
+      "faq.a1": "It generates the TLV QR required in Phase 1 — the same structure used by the UAE FTA — with a SHA-256 invoice hash. Phase 2 (cryptographic stamping) is out of scope.",
+      "faq.q2": "Does it need installation or a developer?",
+      "faq.a2": "No. Start the server file with one command, or open the UI directly for a preview. Styling and script are inlined in a single file, so copy and colours are edited there.",
+      "faq.q3": "Does it work for several countries at once?",
+      "faq.a3": "Yes — Saudi Arabia, the UAE, Kuwait, Qatar, Oman and Bahrain. Switching country changes the rate, currency, tax period and filing deadline, with live FX and an offline fallback.",
+      "faq.q4": "Where is my data stored?",
+      "faq.a4": "On your machine inside the product folder (reports/gulf/), with no raw invoice text and no upload to a third party. The email key stays server-side and never reaches the browser.",
+      "faq.q5": "Can I customise and resell it to my clients?",
+      "faq.a5": "Commercial use inside your project is allowed, and the Agency plan licenses you to deliver it under your brand. Reselling the template itself as a standalone product needs a written agreement.",
+      "faq.q6": "What if it does not fit my business?",
+      "faq.a6": "Review the plan with a demo before buying and tell us what is missing. We replace or adjust during the support period, and we state limits upfront instead of promising what we cannot deliver.",
+      "final.title": "Ready to issue your first invoice today?",
+      "final.sub": "Send your request and we will reply with the demo link and setup steps the same business day.",
+      "final.cta": "Order now", "final.compare": "Review the comparison",
+      "footer.copy": "Arab Templates — Gulf Tax Template · All rights reserved",
+      "footer.note": "This page is a marketing overview; licence details are agreed on order."
+    }
+  };
+
+  const PRICES = { plan1: 1490, plan2: 2990, plan3: 5990 };
+  const state = { lang: "ar", currency: "SAR" };
+  const $ = (id) => document.getElementById(id);
+  const t = (key) => {
+    const table = I18N[state.lang] || I18N.ar;
+    return table[key] != null ? table[key] : (I18N.ar[key] != null ? I18N.ar[key] : key);
+  };
+
+  function renderCurrencyOptions() {
+    const select = $("currency");
+    const previous = select.value || state.currency;
+    select.innerHTML = Object.keys(CURRENCIES).map((code) =>
+      '<option value="' + code + '">' + code + " — " + CURRENCIES[code][state.lang] + "</option>").join("");
+    select.value = CURRENCIES[previous] ? previous : "SAR";
+    state.currency = select.value;
+  }
+
+  function money(sar) {
+    const info = CURRENCIES[state.currency] || CURRENCIES.SAR;
+    const value = sar * info.rate;
+    const locale = state.lang === "ar" ? "ar-SA-u-nu-latn" : "en-US";
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: "currency", currency: state.currency, currencyDisplay: "code",
+        minimumFractionDigits: info.decimals, maximumFractionDigits: info.decimals
+      }).format(value);
+    } catch (err) {
+      return Math.round(value).toLocaleString(locale) + " " + state.currency;
+    }
+  }
+
+  function renderPrices() {
+    document.querySelectorAll("[data-price]").forEach((el) => {
+      el.textContent = money(Number(el.getAttribute("data-price")));
+    });
+    $("mockNet").textContent = money(2000).replace(/[A-Z]{3}/g, "").trim();
+    $("mockVat").textContent = money(300).replace(/[A-Z]{3}/g, "").trim();
+    $("mockTotal").textContent = money(2300).replace(/[A-Z]{3}/g, "").trim();
+  }
+
+  function applyLang(lang, persist) {
+    state.lang = lang === "en" ? "en" : "ar";
+    const ar = state.lang === "ar";
+    document.documentElement.lang = ar ? "ar" : "en";
+    document.documentElement.dir = ar ? "rtl" : "ltr";
+    document.title = ar ? "نظام الفواتير والامتثال الضريبي الخليجي — Arab Templates"
+      : "Gulf Tax & Compliance Template — Arab Templates";
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    $("langBtn").textContent = ar ? "English" : "العربية";
+    renderCurrencyOptions();
+    renderPrices();
+    if (persist) localStorage.setItem("gt_landing_lang", state.lang);
+  }
+
+  function orderLink(plan) {
+    const planName = t(plan + ".title");
+    const price = money(PRICES[plan] || PRICES.plan2);
+    const message = state.lang === "ar"
+      ? "أرغب بطلب «" + t("brand") + "» — باقة " + planName + " (" + price + ")."
+      : "I would like to order “" + t("brand") + "” — " + planName + " plan (" + price + ").";
+    if (ORDER_URL) {
+      return ORDER_URL + (ORDER_URL.indexOf("?") === -1 ? "?" : "&") + "text=" + encodeURIComponent(message);
+    }
+    const subject = state.lang === "ar" ? "طلب شراء — " + planName : "Purchase request — " + planName;
+    return "mailto:" + ORDER_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message);
+  }
+
+  function bindOrder() {
+    document.querySelectorAll(".order").forEach((button) => {
+      button.addEventListener("click", () => {
+        window.location.href = orderLink(button.getAttribute("data-plan"));
+      });
+    });
+    $("heroOrder").addEventListener("click", (event) => {
+      event.preventDefault();
+      document.getElementById("plans").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  $("langBtn").addEventListener("click", () => applyLang(state.lang === "ar" ? "en" : "ar", true));
+  $("currency").addEventListener("change", (event) => { state.currency = event.target.value; renderPrices(); });
+  bindOrder();
+  const savedLang = localStorage.getItem("gt_landing_lang");
+  applyLang(savedLang === "en" ? "en" : "ar", false);
+})();
+</script>
+</body>
+</html>

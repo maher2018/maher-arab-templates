@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>متجر Arab Templates — قوالب عربية جاهزة</title>
+<meta name="description" content="قوالب عربية جاهزة: متاجر إلكترونية، لوحات متابعة، أنظمة فواتير ضريبية، حجوزات، ومواقع شخصية.">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#12263a;--muted:#5b6b7c;--accent:#0f3d5c;--gold:#c1912f;--line:#e4dfd4;--radius:16px;--shadow:0 10px 30px rgba(18,38,58,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+.site-header{position:sticky;top:0;z-index:10;background:rgba(246,244,239,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--gold));display:grid;place-items:center;color:#fff;font-weight:900}
+.nav{display:flex;gap:18px;font-size:.92rem}
+.nav a{color:var(--muted);text-decoration:none}
+.nav a:hover{color:var(--accent)}
+.hero{padding:56px 0 24px;text-align:center}
+.hero .badge{display:inline-block;margin-bottom:16px;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.85rem;color:var(--accent)}
+.hero h1{font-size:clamp(1.8rem,4vw,2.9rem);margin:0 0 12px;letter-spacing:-.5px}
+.hero p{max-width:640px;margin:0 auto;color:var(--muted);font-size:1.03rem}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:30px 0 20px}
+.search{flex:1 1 280px}
+.search input{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;color:inherit;outline:none}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,61,92,.08)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer;font:inherit;font-size:.88rem;transition:.18s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:20px;padding-bottom:32px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(18,38,58,.12)}
+.card .cat{align-self:flex-start;font-size:.75rem;background:#eef3f7;color:var(--accent);padding:4px 10px;border-radius:999px}
+.card h3{margin:0;font-size:1.08rem}
+.card p{margin:0;color:var(--muted);font-size:.92rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:14px;border-top:1px dashed var(--line)}
+.price{font-weight:800;color:var(--gold);font-size:1.05rem;white-space:nowrap}
+.price small{font-weight:600;color:var(--muted);font-size:.72rem}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;font-size:.88rem;font-weight:600;border:0;cursor:pointer;font-family:inherit}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.status{text-align:center;color:var(--muted);font-size:.88rem;padding:6px 0 40px}
+.status .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#3f9d6d;margin-inline-end:6px;vertical-align:middle}
+.status .dot.local{background:var(--gold)}
+.empty{grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted)}
+.skeleton{height:200px;border-radius:var(--radius);background:linear-gradient(90deg,#ece8df 25%,#f6f3ec 37%,#ece8df 63%);background-size:400% 100%;animation:sh 1.4s infinite}
+@keyframes sh{0%{background-position:100% 50%}100%{background-position:0 50%}}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
+.deep{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 18px;padding:16px 18px;border:1px solid var(--gold);border-radius:14px;background:#fffdf6}
+.deep[hidden]{display:none}
+.deep .eyebrow{font-size:.72rem;letter-spacing:.08em;color:var(--gold);font-weight:800}
+.deep strong{font-size:1.02rem}
+.deep .sub{color:var(--muted);font-size:.86rem}
+.deep .acts{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.card.suggested{border-color:var(--gold);box-shadow:0 0 0 2px rgba(193,145,47,.16),var(--shadow)}
+.card.focus{box-shadow:0 0 0 3px var(--gold),0 18px 40px rgba(18,38,58,.16);transform:translateY(-2px)}
+.pick{align-self:flex-start;font-size:.72rem;font-weight:700;color:#7a5610;background:#fbf1d8;padding:3px 10px;border-radius:999px}
+@media(max-width:600px){.hero{padding:36px 0 18px}.nav{display:none}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap bar">
+    <div class="brand"><span class="logo">ع</span><span>Arab Templates</span></div>
+    <nav class="nav">
+      <a href="#catalog">القوالب</a>
+      <a href="#how">كيف تعمل</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="badge">قوالب جاهزة للاستخدام على بابل</span>
+    <h1>قوالب عربية جاهزة تختصر عليك شهور التطوير</h1>
+    <p>متاجر إلكترونية، لوحات متابعة، أنظمة فواتير ضريبية وحجوزات — جاهزة للتخصيص في دقائق، بواجهة عربية من اليمين لليسار.</p>
+  </section>
+
+  <div class="controls" id="catalog">
+    <div class="search">
+      <input id="q" type="search" placeholder="ابحث باسم القالب أو الكلمة المفتاحية…" aria-label="بحث في القوالب">
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="deep" id="deep" hidden></div>
+  <section class="grid" id="grid" aria-live="polite"></section>
+  <p class="status" id="status">جارٍ تحميل القوالب…</p>
+
+  <section id="how" style="padding:10px 0 40px">
+    <h2 style="font-size:1.4rem;margin:0 0 14px">كيف تعمل؟</h2>
+    <ol style="color:var(--muted);margin:0;padding-inline-start:20px;line-height:2">
+      <li>اختر القالب المناسب واضغط «معاينة» لتجربته مباشرة.</li>
+      <li>تستلم نسخة من القالب مع دليل التركيب والتخصيص.</li>
+      <li>تعدّل الألوان والنصوص والبيانات، ويصبح جاهزًا للإطلاق.</li>
+    </ol>
+  </section>
+
+  <section id="contact" style="padding:0 0 50px">
+    <h2 style="font-size:1.4rem;margin:0 0 10px">تحتاج قالبًا مخصصًا؟</h2>
+    <p style="color:var(--muted);margin:0">نصمّم قوالب عربية حسب نشاطك وسوقك — اطلب عرضًا من صفحة التواصل أو عبر حساب المتجر.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Arab Templates — قوالب عربية جاهزة · الأسعار بالريال السعودي · جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+// ضع رابط واتساب/الدفع هنا ليظهر زر «اطلب» بجانب «معاينة».
+const ORDER_URL = "";
+const el = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const money = (n) => n == null ? "تواصل معنا" : new Intl.NumberFormat("ar-SA", {maximumFractionDigits: 0}).format(n) + " ريال";
+const params = new URLSearchParams(location.search);
+const deep = { q: (params.get("q") || "").trim(), cat: params.get("cat") || "", from: params.get("from") || "" };
+const state = { items: [], category: deep.cat || "all", q: deep.q };
+
+function normalize(row) {
+  const price = Number(String(row.price == null ? "" : row.price).replace(/[^\d.]/g, ""));
+  return {
+    id: row.id || "",
+    title: row.title || "بدون عنوان",
+    category: row.category || "غير مصنّف",
+    description: row.description || "",
+    price: Number.isFinite(price) && price > 0 ? price : null,
+    previewUrl: row.preview_url || ""
+  };
+}
+
+function renderChips() {
+  const cats = [];
+  state.items.forEach((i) => { if (cats.indexOf(i.category) === -1) cats.push(i.category); });
+  const all = ["all"].concat(cats);
+  el("chips").innerHTML = all.map((c) => {
+    const label = c === "all" ? "الكل" : c;
+    const active = state.category === c ? " active" : "";
+    return '<button class="chip' + active + '" data-cat="' + esc(c) + '">' + esc(label) + "</button>";
+  }).join("");
+  const buttons = el("chips").querySelectorAll(".chip");
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () {
+      state.category = this.getAttribute("data-cat");
+      renderChips(); render();
+    });
+  }
+}
+
+function filtered() {
+  const q = state.q.trim().toLowerCase();
+  return state.items.filter(function (i) {
+    const inCat = state.category === "all" || i.category === state.category;
+    const inText = !q || (i.title + " " + i.category + " " + i.description).toLowerCase().indexOf(q) !== -1;
+    return inCat && inText;
+  });
+}
+
+function matchesDeep(item) {
+  if (!deep.q) return false;
+  return (item.title + " " + item.category + " " + item.description).toLowerCase().indexOf(deep.q.toLowerCase()) !== -1;
+}
+
+function card(item) {
+  const preview = item.previewUrl
+    ? '<a class="btn ghost" href="' + esc(item.previewUrl) + '" target="_blank" rel="noopener">معاينة</a>'
+    : "";
+  const action = ORDER_URL
+    ? '<a class="btn" href="' + esc(ORDER_URL) + '?text=' + encodeURIComponent("أرغب بشراء " + item.title) + '" target="_blank" rel="noopener">اطلب</a>'
+    : preview;
+  const price = money(item.price) + (item.price == null ? "" : " <small>ر.س</small>");
+  const suggested = deep.from === "assistant" && matchesDeep(item);
+  return '<article class="card' + (suggested ? " suggested" : "") + '">' +
+    '<span class="cat">' + esc(item.category) + "</span>" +
+    (suggested ? '<span class="pick">مقترح من المساعد الذكي</span>' : "") +
+    "<h3>" + esc(item.title) + "</h3>" +
+    "<p>" + esc(item.description) + "</p>" +
+    '<div class="foot"><span class="price">' + price + "</span>" + action + "</div>" +
+    "</article>";
+}
+
+function render() {
+  const rows = filtered();
+  el("grid").innerHTML = rows.length
+    ? rows.map(card).join("")
+    : '<div class="empty">لا توجد قوالب مطابقة لهذا البحث.</div>';
+}
+
+function setStatus(html) { el("status").innerHTML = html; }
+
+function clearDeep() {
+  deep.q = "";
+  deep.cat = "";
+  state.q = "";
+  state.category = "all";
+  el("q").value = "";
+  history.replaceState(null, "", location.pathname + location.hash);
+  el("deep").hidden = true;
+  renderChips();
+  render();
+}
+
+function focusDeep() {
+  if (!deep.q && !deep.cat) return;
+  const rows = filtered();
+  const box = el("deep");
+  box.hidden = false;
+  if (!rows.length) {
+    box.innerHTML = '<strong>لا يوجد قالب مطابق للاقتراح بعد.</strong>' +
+      '<span class="acts"><button class="btn ghost" id="deepClear" type="button">عرض كل القوالب</button></span>';
+  } else {
+    const first = rows[0];
+    box.innerHTML = '<span class="eyebrow">اقتراح المساعد الذكي</span>' +
+      '<strong>«' + esc(first.title) + '»</strong>' +
+      '<span class="sub">' + rows.length + ' قالبًا مطابقًا — البطاقة المحددة هي المقترح.</span>' +
+      '<span class="acts">' +
+      (first.previewUrl ? '<a class="btn" href="' + esc(first.previewUrl) + '" target="_blank" rel="noopener">افتح معاينة القالب</a>' : "") +
+      '<button class="btn ghost" id="deepClear" type="button">عرض كل القوالب</button></span>';
+    const target = el("grid").querySelector(".card.suggested") || el("grid").querySelector(".card");
+    if (target) {
+      target.classList.add("focus");
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+  const clear = el("deepClear");
+  if (clear) clear.addEventListener("click", clearDeep);
+}
+
+function skeletons() {
+  let out = "";
+  for (let i = 0; i < 6; i++) out += '<div class="skeleton"></div>';
+  el("grid").innerHTML = out;
+}
+
+function load() {
+  skeletons();
+  setStatus("جارٍ تحميل القوالب…");
+  fetch("/api/templates", { cache: "no-store" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("استجابة غير متوقعة: " + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      state.items = (data.items || []).map(normalize);
+      el("q").value = deep.q;
+      renderChips();
+      render();
+      focusDeep();
+      const live = data.source === "bubble";
+      const when = data.updated_at ? " · آخر تحديث " + esc(data.updated_at.replace("T", " ")) : "";
+      setStatus('<span class="dot' + (live ? "" : " local") + '"></span>' +
+        state.items.length + " قالبًا · " + (live ? "بيانات حيّة من بابل" : "نسخة محلية") + when);
+    })
+    .catch(function (err) {
+      el("grid").innerHTML = '<div class="empty">تعذّر تحميل القوالب.<br><small>' + esc(err.message) + "</small></div>";
+      setStatus('<button class="chip" id="retry">إعادة المحاولة</button>');
+      const retry = el("retry");
+      if (retry) retry.addEventListener("click", load);
+    });
+}
+
+el("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
+load();
+</script>
+</body>
+</html>

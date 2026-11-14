@@ -1,0 +1,10 @@
+{
+  "entrypoint": "worker.js",
+  "compatibilityDate": "2026-11-11",
+  "modules": [
+    { "name": "worker.js", "type": "esm", "path": "./modules/worker.js" },
+    { "name": "fallback.json", "type": "text", "path": "./modules/fallback.json" }
+  ],
+  "assetsDirectory": "./assets",
+  "spa": true
+}
